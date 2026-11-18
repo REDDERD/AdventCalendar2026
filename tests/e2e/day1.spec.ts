@@ -86,8 +86,9 @@ test('M1: admin plays day 1 with choice and puzzle, reload resumes exactly, even
       'session_start', 'day_start', 'choice', 'puzzle_start', 'puzzle_attempt', 'puzzle_solved', 'day_complete',
     ]));
   const events = await listEvents();
-  const choice = events.find((e) => e.type === 'choice')!;
-  expect(JSON.stringify(choice.data)).toContain('d01.ellis');
+  const choices = JSON.stringify(events.filter((e) => e.type === 'choice').map((e) => e.data));
+  expect(choices).toContain('d01.ellis');
+  expect(choices).toContain('d01.secret');
   expect(events.filter((e) => e.type === 'puzzle_attempt')).toHaveLength(2);
 
   // Regression: every trunk tab works after a completed day

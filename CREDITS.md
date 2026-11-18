@@ -6,7 +6,7 @@ Herkunft und Lizenz aller fremden Dateien `[GFX-3]`. Jeder Eintrag erscheint auc
 
 | Datei | Autor | Quelle | Lizenz |
 | --- | --- | --- | --- |
-| Pixelify Sans (via `@fontsource/pixelify-sans`) | Stefie Justprince | https://fonts.google.com/specimen/Pixelify+Sans | SIL Open Font License 1.1 |
+| Jersey 10 (via `@fontsource/jersey-10`) | Sarah Cadigan-Fried | https://fonts.google.com/specimen/Jersey+10 | SIL Open Font License 1.1 |
 
 ## Grafiken
 

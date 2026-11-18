@@ -22,7 +22,7 @@
     "content:simulate": "npm run content:compile && tsx scripts/simulate.ts"
   },
   "dependencies": {
-    "@fontsource/pixelify-sans": "^5.3.0",
+    "@fontsource/jersey-10": "^5.3.0",
     "firebase": "^12.19.0",
     "inkjs": "^2.4.0",
     "qrcode": "^1.5.4",
