@@ -1,0 +1,59 @@
+{
+  "id": "p12",
+  "number": 12,
+  "title": "Das Sternbild",
+  "points": 40,
+  "type": "path",
+  "prompt": "Luna nennt das Sternbild „Der Ritter“. Er wacht nur auf, wenn man ihn in einem einzigen Zug nachzeichnet: jede Linie genau einmal, ohne abzusetzen. Wo du anfängst, ist dir überlassen.",
+  "config": {
+    "nodes": [
+      { "id": "A", "x": 118, "y": 22 },
+      { "id": "B", "x": 96, "y": 56 },
+      { "id": "C", "x": 140, "y": 56 },
+      { "id": "D", "x": 78, "y": 98 },
+      { "id": "E", "x": 158, "y": 98 },
+      { "id": "F", "x": 96, "y": 162 },
+      { "id": "G", "x": 140, "y": 162 },
+      { "id": "H", "x": 86, "y": 228 },
+      { "id": "I", "x": 150, "y": 228 },
+      { "id": "J", "x": 200, "y": 100 },
+      { "id": "K", "x": 236, "y": 26 },
+      { "id": "L", "x": 32, "y": 112 },
+      { "id": "M", "x": 48, "y": 176 }
+    ],
+    "edges": [
+      ["A", "B"],
+      ["A", "C"],
+      ["B", "C"],
+      ["B", "D"],
+      ["C", "E"],
+      ["D", "F"],
+      ["E", "G"],
+      ["F", "G"],
+      ["F", "H"],
+      ["G", "I"],
+      ["E", "J"],
+      ["J", "K"],
+      ["K", "E"],
+      ["D", "L"],
+      ["L", "M"],
+      ["M", "F"],
+      ["H", "I"],
+      ["D", "G"]
+    ],
+    "rule": "every_edge_once",
+    "style": "stars"
+  },
+  "solution": ["B", "A", "C", "B", "D", "F", "G", "D", "L", "M", "F", "H", "I", "G", "E", "J", "K", "E", "C"],
+  "hints": [
+    "Zähl bei jedem Stern, wie viele Linien dort zusammenkommen.",
+    "Fast überall ist die Zahl gerade. Nur an zwei Sternen nicht – dort musst du anfangen und aufhören.",
+    "Die beiden besonderen Sterne sitzen am Helm."
+  ],
+  "superHint": "Fang an einer unteren Helmecke an und zeichne zuerst den Helm zu Ende.",
+  "solutionText": "Nur die beiden unteren Helmecken haben drei Linien, alle anderen Sterne zwei oder vier. Also beginnt der Zug an der einen Helmecke und endet an der anderen.",
+  "intro": {
+    "speaker": "luna",
+    "text": "Der Ritter schläft. Man darf ihn nicht zweimal am selben Arm ziehen, das mag er nicht."
+  }
+}

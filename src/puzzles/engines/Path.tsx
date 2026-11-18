@@ -15,6 +15,15 @@ function arrowHead(p: Point, q: Point): string {
   return `${mx},${my} ${corner(1)} ${corner(-1)}`;
 }
 
+/** Five-pointed star around (x, y), for constellations. */
+function starPoints(x: number, y: number): string {
+  return Array.from({ length: 10 }, (_, i) => {
+    const r = i % 2 ? 3.5 : 8;
+    const a = (i * Math.PI) / 5 - Math.PI / 2;
+    return `${x + Math.cos(a) * r},${y + Math.sin(a) * r}`;
+  }).join(' ');
+}
+
 function PathEngine({ puzzle, state, setState, disabled }: EngineProps<PathState>) {
   const config = puzzle.config as PathConfig;
   const { ref, toLocal } = useLocalPoint<SVGSVGElement>();
@@ -95,8 +104,14 @@ function PathEngine({ puzzle, state, setState, disabled }: EngineProps<PathState
         })}
         {config.nodes.map((n) => (
           <g key={n.id} className={`path-node ${state.includes(n.id) ? 'visited' : ''} ${n.id === last ? 'current' : ''}`}>
-            <rect x={n.x - 9} y={n.y - 9} width={18} height={18} />
-            <text x={n.x} y={n.y + 4}>{n.label ?? n.id}</text>
+            {config.style === 'stars' ? (
+              <polygon className="path-star" points={starPoints(n.x, n.y)} />
+            ) : (
+              <>
+                <rect x={n.x - 9} y={n.y - 9} width={18} height={18} />
+                <text x={n.x} y={n.y + 4}>{n.label ?? n.id}</text>
+              </>
+            )}
           </g>
         ))}
       </svg>

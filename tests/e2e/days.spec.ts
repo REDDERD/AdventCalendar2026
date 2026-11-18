@@ -137,3 +137,27 @@ test('day 11: Hagrid, the rock cake and the boat (11 crossings)', async ({ page 
   await finishDay(page, 11, 40);
   await choicesLogged('d11.snow.search', 'd11.hagrid.eat');
 });
+
+test('day 12: Luna, the knight in one stroke and the route choice', async ({ page }) => {
+  await startDayAsAdmin(page, 12);
+  await choose(page, ['Ihm Mut machen.']);
+
+  await openPuzzle(page, 12);
+  const nodes: Record<string, [number, number]> = {
+    A: [118, 22], B: [96, 56], C: [140, 56], D: [78, 98], E: [158, 98], F: [96, 162], G: [140, 162],
+    H: [86, 228], I: [150, 228], J: [200, 100], K: [236, 26], L: [32, 112], M: [48, 176],
+  };
+  const box = (await page.locator('.path-board').boundingBox())!;
+  const at = (id: string) => ({ x: box.x + (nodes[id][0] * box.width) / 256, y: box.y + (nodes[id][1] * box.height) / 256 });
+  const stroke = ['B', 'A', 'C', 'B', 'D', 'F', 'G', 'D', 'L', 'M', 'F', 'H', 'I', 'G', 'E', 'J', 'K', 'E', 'C'];
+  await page.mouse.move(at(stroke[0]).x, at(stroke[0]).y);
+  await page.mouse.down();
+  for (const id of stroke.slice(1)) await page.mouse.move(at(id).x, at(id).y, { steps: 6 });
+  await page.mouse.up();
+  await page.getByRole('button', { name: 'Prüfen' }).click();
+  await expect(page.getByText('+40 Hauspunkte')).toBeVisible();
+  await page.getByRole('button', { name: 'Weiter' }).click();
+  await choose(page, ['Mit Ellis den Pfoten in den Wald.']);
+  await tapUntil(page, page.getByText('Kapitel 12 geschafft!'));
+  await choicesLogged('d12.courage.encourage', 'd12.route.forest');
+});

@@ -24,6 +24,8 @@ export const pathConfig = z.object({
   start: z.string().optional(),
   end: z.string().optional(),
   visitAll: z.boolean().default(false),
+  /** `stops`: labelled squares (stairs) · `stars`: unlabelled stars (constellation). */
+  style: z.enum(['stops', 'stars']).default('stops'),
 });
 export type PathConfig = z.infer<typeof pathConfig>;
 

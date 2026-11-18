@@ -42,7 +42,7 @@ const OWN = { license: 'own work', credit: 'Drawn by the agent (scripts/draw-spr
 
 /** LPC walk sheets: rows up/left/down/right × 9 frames; frame 18 = facing the viewer. */
 export const IDLE_FRAME = 18;
-const LPC_NPCS = ['quill', 'ellis', 'theo', 'maren', 'grimsby', 'aldous', 'thornbury', 'wandmaker', 'peeves', 'pince', 'hermione', 'slughorn', 'neville', 'nick', 'friar', 'grey_lady', 'baron', 'filch', 'hagrid'] as const;
+const LPC_NPCS = ['quill', 'ellis', 'theo', 'maren', 'grimsby', 'aldous', 'thornbury', 'wandmaker', 'peeves', 'pince', 'hermione', 'slughorn', 'neville', 'nick', 'friar', 'grey_lady', 'baron', 'filch', 'hagrid', 'luna'] as const;
 
 const npcs = Object.fromEntries(
   CHARACTERS.filter((id) => id !== 'player').map((id) => [

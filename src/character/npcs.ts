@@ -257,6 +257,22 @@ export const NPCS: Record<string, Recipe> = {
       { id: 'beard_winter', colors: { hair: 'dark_brown' } },
     ],
   },
+  // Luna Lovegood (cameo, days 12, 16, 24): long blonde hair, radish earrings, Ravenclaw cape
+  luna: {
+    body: 'female',
+    layers: [
+      { id: 'cape_bg', colors: { cloth: 'navy' } },
+      { id: 'body', colors: { body: 'light' } },
+      { id: 'head_female', colors: { body: 'light', eye: 'blue' } },
+      { id: 'shoes', colors: { cloth: 'blue' } },
+      { id: 'skirt', colors: { cloth: 'navy' } },
+      { id: 'sweater', colors: { cloth: 'sky' } },
+      { id: 'cape', colors: { cloth: 'navy' } },
+      { id: 'cape_trim', colors: { cloth: 'tan' } },
+      { id: 'hair_long_straight', colors: { hair: 'platinum' } },
+      { id: 'earrings' },
+    ],
+  },
   // The wandmaker
   wandmaker: {
     body: 'female',

@@ -22,4 +22,5 @@ export const SPEAKER_NAMES: Record<string, string> = {
   baron: "Der Blutige Baron",
   filch: "Argus Filch",
   hagrid: "Hagrid",
+  luna: "Luna",
 };

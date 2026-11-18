@@ -18,7 +18,7 @@ import { clueHolds, clueText, placementOf } from '../../src/puzzles/logic/gridCl
 import { equationHolds, readEquation, romanValue } from '../../src/puzzles/logic/roman';
 import { choiceLogic } from '../../src/puzzles/logic/choice';
 import { inputLogic } from '../../src/puzzles/logic/input';
-import { extendPath, pathLogic, type PathConfig, type PathState } from '../../src/puzzles/logic/path';
+import { allPaths, extendPath, pathLogic, type PathConfig, type PathState } from '../../src/puzzles/logic/path';
 import { bankSafe, crossLogic, crossOver, type CrossConfig, type CrossState } from '../../src/puzzles/logic/cross';
 import { pour, pourLogic, type PourConfig, type PourState } from '../../src/puzzles/logic/pour';
 import { slideLogic, slideTile } from '../../src/puzzles/logic/slide';
@@ -26,6 +26,7 @@ import { tapLogic, toggleMark, type TapState } from '../../src/puzzles/logic/tap
 import { solveToggle, toggleCell, toggleLogic, type ToggleConfig } from '../../src/puzzles/logic/toggle';
 import { parsePuzzle, type Puzzle } from '../../src/puzzles/schema';
 import { resolveVariant } from '../../src/puzzles/usePuzzle';
+import { personalValue } from '../../src/services/PersonalService';
 import type { SaveDoc } from '../../src/types';
 import { helpDueAt, HELP_AFTER_MS, HELP_REOFFER_MS, nextHint } from '../../src/puzzles/scoring';
 
@@ -377,5 +378,28 @@ describe('choice with a key matrix (p10)', () => {
   it('accepts only that card', () => {
     expect(choiceLogic.check(p, 1)).toBe(true);
     for (const wrong of [0, 2, 3]) expect(choiceLogic.check(p, wrong)).toBe(false);
+  });
+});
+
+describe('path with stars, free start (p12)', () => {
+  const p = load('p12');
+  const config = p.config as PathConfig;
+  it('only the two lower helmet corners have an odd number of lines', () => {
+    const degree: Record<string, number> = {};
+    for (const [a, b] of config.edges) for (const n of [a, b]) degree[n] = (degree[n] ?? 0) + 1;
+    expect(Object.keys(degree).filter((n) => degree[n] % 2).sort()).toEqual(['B', 'C']);
+  });
+  it('is solvable from a helmet corner and fails from elsewhere', () => {
+    expect(pathLogic.check(p, p.solution as PathState)).toBe(true);
+    expect(allPaths(config).every((path) => ['B', 'C'].includes(path[0]))).toBe(true);
+    expect(pathLogic.verify(p).info).toContain('384 valid lines');
+  });
+});
+
+describe('personal values used in the Ink files', () => {
+  it('fall back to the defaults of Section 12', () => {
+    expect(personalValue('patronus')).toBe('ein Fuchs');
+    expect(personalValue('favoriteSweet')).toBe('Schokofrosch');
+    expect(personalValue('insideJoke1')).toBe('');
   });
 });
