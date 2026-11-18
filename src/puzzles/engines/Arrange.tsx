@@ -143,27 +143,47 @@ function GridArrange({ config, state, setState, disabled }: ModeProps<GridConfig
 
   return (
     <div className="engine-center" {...containerProps}>
-      <div className="grid-board" style={{ gridTemplateColumns: `repeat(${cols}, ${cell}px)`, gridAutoRows: cell }}>
-        {state.cells.map((pieceId, i) => {
-          const fixed = boardChar(config, i);
-          if (fixed === '#') return <div key={i} className="grid-cell blocked" />;
-          if (fixed !== '.') return <div key={i} className="grid-cell fixed">{token(fixed, tokenSize)}</div>;
-          return (
-            <div
-              key={i}
-              className="grid-cell"
-              data-drop={`cell-${i}`}
-              aria-label={`Feld ${Math.floor(i / cols) + 1}-${(i % cols) + 1}`}
-              onClick={() => {
-                if (pieceId || disabled) return;
-                if (single && tray.length) place(tray[0].id, i);
-                else if (selected) place(selected, i);
-              }}
-            >
-              {pieceId && piece(pieceId)}
+      {/* Optional heads: labels above the columns, icons left of the rows (board padding 6 px, gap 2 px) */}
+      <div className="grid-wrap" style={{ gridTemplateColumns: config.rowIcons ? '20px auto' : 'auto' }}>
+        {config.colHeads && (
+          <>
+            {config.rowIcons && <span />}
+            <div className="grid-heads" style={{ gridTemplateColumns: `repeat(${cols}, ${cell}px)` }}>
+              {config.colHeads.map((h) => (
+                <span key={h} className="grid-head">{h}</span>
+              ))}
             </div>
-          );
-        })}
+          </>
+        )}
+        {config.rowIcons && (
+          <div className="grid-icons" style={{ gridAutoRows: cell }}>
+            {config.rowIcons.map((icon) => (
+              <AssetImage key={icon} id={icon} w={16} h={16} />
+            ))}
+          </div>
+        )}
+        <div className="grid-board" style={{ gridTemplateColumns: `repeat(${cols}, ${cell}px)`, gridAutoRows: cell }}>
+          {state.cells.map((pieceId, i) => {
+            const fixed = boardChar(config, i);
+            if (fixed === '#') return <div key={i} className="grid-cell blocked" />;
+            if (fixed !== '.') return <div key={i} className="grid-cell fixed">{token(fixed, tokenSize)}</div>;
+            return (
+              <div
+                key={i}
+                className="grid-cell"
+                data-drop={`cell-${i}`}
+                aria-label={`Feld ${Math.floor(i / cols) + 1}-${(i % cols) + 1}`}
+                onClick={() => {
+                  if (pieceId || disabled) return;
+                  if (single && tray.length) place(tray[0].id, i);
+                  else if (selected) place(selected, i);
+                }}
+              >
+                {pieceId && piece(pieceId)}
+              </div>
+            );
+          })}
+        </div>
       </div>
       {single ? (
         <div className="engine-status">

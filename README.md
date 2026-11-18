@@ -74,7 +74,7 @@ Repository → Settings → Pages → Source: **GitHub Actions**. Danach baut un
 ## Inhalte schreiben
 
 - Story: `src/content/ink/dayNN.ink`, bindet `globals.ink` ein. Konventionen: CONCEPT.md Abschnitt 15.1. Abweichung: `# choice_point: <id> <Frage>` ohne `|`.
-- Rätsel: `src/content/puzzles/<id>.json`. Grundschema in `src/puzzles/schema.ts`, `config`/`solution` je Engine in `src/puzzles/logic/<engine>.ts`. Danach `npm run puzzles:verify`. Als Admin: Truhe → Rätsel zeigt alle Rätsel zum Ausprobieren.
+- Rätsel: `src/content/puzzles/<id>.json`. Grundschema in `src/puzzles/schema.ts`, `config`/`solution` je Engine in `src/puzzles/logic/<engine>.ts`. Hinweise, die nicht in den Aufgabentext passen, kommen in `clues` (Knopf „Karte“); bei Logikrastern zusätzlich als Regeln in `config.logic`. Danach `npm run puzzles:verify`. Als Admin: Truhe → Rätsel zeigt alle Rätsel zum Ausprobieren.
 - Freischaltzeiten und Titel: `src/content/schedule.ts`. Dort steht auch `DOOR_MAGIC`: was am Tagesende aus dem Türchen fällt.
 - Storyboards: `storyboard/tag-NN.md` (vom Auftraggeber). Das Ink-Skript daraus wird nach `src/content/ink/dayNN.ink` übernommen; neue Sprecher in `src/types/index.ts` (`CHARACTERS`), `src/dialogue/speakers.ts` und `src/character/npcs.ts` (danach `npm run assets:npcs`).
 - Grafiken/Sounds: nur über IDs aus `src/assets/manifest.ts`; fehlende Dateien erscheinen als Platzhalter.

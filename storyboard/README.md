@@ -23,9 +23,9 @@ Ich habe die Skripte in eine **Kopie** des Repos (außerhalb des Projekts) kopie
 ## Offene Punkte (brauchen deine Entscheidung)
 
 1. **Cameos widersprechen `[RB-12]`** („keine bekannten Figuren aus Büchern/Filmen“). Du hast sie ausdrücklich gewünscht, deshalb sind sie drin. Wenn du sie übernimmst, gehört ein Eintrag in `DECISIONS.md` und eine Anpassung von `[RB-12]` dazu. Jeder Cameo ist streichbar (Bibel, Abschnitt 3).
-2. **Neue Sprecher-IDs** (`peeves`, `hermione`, `pince`, `slughorn`, `neville` bisher; später weitere): `CHARACTERS` und `speakers.ts` brauchen sie, sonst schlägt `content:lint` fehl (Liste in der Bibel, Abschnitt 6).
-3. **Vier Zusatz-Variablen** (`globals-zusatz.ink`) für Rückbezüge auf Ton-Entscheidungen. Sie ändern keine Enden und Hinweise. Außerdem sollte `scripts/simulate.ts` sie mitrandomisieren.
-4. **Optionaler Einzeiler in `day01.ink`** (`~ f_d01_watch = true`, siehe tag-01.md), damit Tag 9 auf `d01.secret.watch` anspielen kann. Ohne den Patch entfällt nur diese Anspielung.
+2. ~~Neue Sprecher-IDs~~ **Erledigt** für Tag 1–8: `peeves`, `pince`, `hermione`, `slughorn`, `neville` mit eigenen Figuren. Geister sind durchscheinend und bläulich (DECISIONS.md #47).
+3. **Zusatz-Variablen:** `f_d01_watch`, `peeves_friend` und `wrote_home` sind in `globals.ink` und werden in `content:simulate` mitgewürfelt. `ate_rockcake` kommt mit Tag 11.
+4. ~~Einzeiler in `day01.ink`~~ **Erledigt:** `d01.secret.watch` setzt `f_d01_watch`.
 5. ~~Türchen-Zählung~~ **Entschieden:** Tag 1 = erstes Türchen, der Prolog ist kein Tag (DECISIONS.md #42). Tag 1 und 2 sind entsprechend angepasst.
-6. **`personal("insideJokes")`** in Tag 7: Das Skript erwartet `""`, wenn nichts gepflegt ist (die Zeile entfällt dann). Prüfen, was `PersonalService` bei fehlenden Feldern liefert.
-7. **Rätsel schwerer gemacht** (DECISIONS.md #44): Die Rätsel-Abschnitte von Tag 2, 3, 4, 5 und 8 beschreiben jetzt die schwereren Fassungen aus `src/content/puzzles/`; in Tag 5 sind die Mengen im Dialog angepasst (14/9/5, zweimal sieben Maß). Tag 2 und 3 sind umgesetzt, ihre Skripte hier entsprechen `src/content/ink/`.
+6. ~~`personal("insideJokes")`~~ **Geprüft:** `PersonalService` liefert `""`, wenn nichts gepflegt ist; die Zeile entfällt dann.
+7. **Rätsel schwerer gemacht** (DECISIONS.md #44): Die Rätsel-Abschnitte von Tag 2, 3, 4, 5 und 8 beschreiben jetzt die schwereren Fassungen aus `src/content/puzzles/`; in Tag 5 sind die Mengen im Dialog angepasst (14/9/5, zweimal sieben Maß). Tag 1–8 sind umgesetzt; die Skripte hier entsprechen `src/content/ink/`. Auch `p06` (Logikraster mit Karte) und `p07` (Summe der drei davor) sind jetzt schwerer.

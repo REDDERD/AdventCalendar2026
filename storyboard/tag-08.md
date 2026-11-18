@@ -31,7 +31,7 @@ INCLUDE globals.ink
 === day08 ===
 # bg: greenhouse
 # music: outdoor
-# spark: d08.s1 30 30
+# spark: d08.s1 30 140
 Das Gewächshaus. Es ist dampfig, grün und ziemlich laut.
 Ein Mann in dicken Ohrenschützern pflanzt kleine, kreischende Wurzeln in Töpfe.
 # show: neville center

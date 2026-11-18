@@ -1,0 +1,25 @@
+{
+  "id": "p07",
+  "number": 7,
+  "title": "Eulen-Nummern",
+  "points": 30,
+  "type": "input",
+  "prompt": "Die Eulen sitzen nach Ringnummern, und die Nummern folgen einer festen Regel. Eine Stange ist leer – dort saß die Eule, die den Brief gebracht hat. Welche Nummer trägt sie?",
+  "config": {
+    "inputMode": "number",
+    "maxLength": 3,
+    "figure": { "image": "puzzle.p07", "height": 72 }
+  },
+  "solution": ["38"],
+  "hints": [
+    "Verdoppeln und eins abziehen passt bei 6 → 11 → 21. Aber nicht bei 4 → 6. Die Regel muss für alle Nummern gelten.",
+    "Schau nicht nur auf die Nummer davor. Schau auf mehrere.",
+    "1 + 4 + 6 = 11."
+  ],
+  "superHint": "Jede Nummer ist die Summe der drei Nummern davor.",
+  "solutionText": "38 = 6 + 11 + 21. Jede Ringnummer ist die Summe der drei davor: 1 + 4 + 6 = 11, 4 + 6 + 11 = 21. Wer verdoppelt und eins abzieht, landet bei 41 – das passt aber schon bei 4 und 6 nicht.",
+  "intro": {
+    "speaker": "quill",
+    "text": "Eulen sind ordentliche Wesen. Sie sitzen nach Ringnummer. Nur eine fehlt, und das war ihre Eule."
+  }
+}

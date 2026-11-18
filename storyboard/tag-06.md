@@ -8,9 +8,9 @@
 | **Entscheidungen** | `d06.boot` (`star` / `note`, Ton) · `d06.theo` (`report` −1 / `confront` +1 `trust_theo`) |
 | **Hinweis** | `k03` Theos Notizbuch mit Zahnradskizzen (automatisch, falsche Fährte) |
 | **Cameo** | **Harry und Ron** unter einem Tarnumhang. Nur zu hören, nie zu sehen (keine Sprecher-IDs nötig) |
-| **Rätsel** | `p06` Die Nikolausstiefel (`arrange`, Raster, 30 Punkte) |
+| **Rätsel** | `p06` Die Nikolausstiefel (`arrange`, Logikraster 5 × 5 mit Hinweiskarte, 30 Punkte) |
 | **Rückbezug** | `d05.ingredient` über `trust_theo`: Theo reagiert auf die Konfrontation je nach Vertrauen anders |
-| **Türchen-Zauber** | Die vier Stiefel füllen sich mit Nüssen, Mandarinen und Zimtsternen. Alle Türen im Korridor tragen für eine Nacht Tannenkränze |
+| **Türchen-Zauber** | Die fünf Stiefel füllen sich mit Nüssen, Mandarinen und Zimtsternen. Alle Türen im Korridor tragen für eine Nacht Tannenkränze |
 
 ## Beats
 
@@ -19,7 +19,7 @@
 3. Etwas poltert. Nichts ist zu sehen, aber zwei Stimmen zanken über einen Fuß. Zwei Paar Fußspuren im Staub wandern zur Bibliothek.
 4. Theo schleicht mit der Tasche zur Halle und lässt sein Notizbuch fallen (`k03`). Zahnrad Nummer zwölf hat ein Herz.
 5. **Entscheidung 2:** Quill alles melden oder Theo zur Rede stellen.
-6. Der Nikolaus kommt ohne Glockenschlag. Die Namensschilder wehen von den Stiefeln. Rätsel: wer bekam was?
+6. Der Nikolaus kommt ohne Glockenschlag. Die Namensschilder wehen von den Stiefeln. Rätsel: Wessen Stiefel steht vor welcher Tür, und was liegt darin?
 7. Morgens: Ellis findet deinen Gruß. Und aus der Halle dringt ein einzelnes Ticken, das sofort wieder verstummt.
 
 ## Skript
@@ -34,7 +34,7 @@ INCLUDE globals.ink
 # music: dungeon
 # spark: d06.s1 40 160
 Sechster Dezember, kurz nach Mitternacht. Nikolausnacht.
-Im Korridor stehen vier Stiefel vor vier Türen. Alle leer. Alle wartend.
+Im Korridor stehen fünf Stiefel vor fünf Türen. Einer ist deiner. Alle leer. Alle wartend.
 # show: ellis left
 ellis: Ich fange den Nikolaus. Für die Wissenschaft. Und für Süßigkeiten.
 ellis: Meine Falle: ein Faden aus Socken. Er stolpert, und wir stellen ihm Fragen.
@@ -96,7 +96,7 @@ Als ihr zurückkehrt, wartet die Morgendämmerung auf den Fensterbänken.
 { gift == "star": ellis: In meinem Stiefel war ein Zimtstern! Ich habe ihn noch nicht gegessen. Ich sehe ihn an. }
 { gift == "note": ellis: Du hast mir einen Zettel geschrieben! Ich laminiere ihn. Mit Zauberei. }
 # emote: ellis heart
-# spark: d06.s2 220 40
+# spark: d06.s2 220 140
 # sfx: blip
 Und dann, ganz leise, aus der Richtung der Halle: Tick.
 Nur ein einziges. Dann wieder Stille.
@@ -108,17 +108,21 @@ quill: Dann hören wir morgen weiter. Ich habe Post bekommen, und sie ist ausges
 
 ## Rätsel `p06` – Die Nikolausstiefel
 
-- **Engine:** `arrange`, Modus `grid`. Vier Personen (**Ellis, Maren, Theo, Quill**) als Zeilen, vier Leckereien (**Zimtstern, Mandarine, Nuss, Lakritz**) als Spalten. Jeder bekommt genau eine. Der Spieler setzt je ein Siegel pro Zeile.
-- **Hinweise auf der Karte (Brute-Force-Check: genau eine Lösung):**
-  1. Ellis hat nichts Hartes und nichts Schwarzes.
-  2. Quill hat nichts Zimtiges und nichts zum Knacken.
-  3. Theo hat nichts Fruchtiges, nichts Zimtiges und nichts zum Knacken.
-  4. Maren hat nichts Zimtiges und nichts Fruchtiges.
-- **Lösung:** Ellis `Zimtstern` · Maren `Nuss` · Theo `Lakritz` · Quill `Mandarine`.
-- **Intro (Ellis, ausnahmsweise):** „Wer bekommt was? Das ist ein Logikrätsel. Das sind die besten Rätsel. Neben denen mit Kuchen.“
-- **Hinweise:** 1) Theo hat nur eine einzige Möglichkeit übrig. 2) Wenn Theo sein Los hat, bleibt für Maren nur noch eine Sorte. 3) Quill hat die Mandarine, weil nur sie übrig ist.
-- **Super-Hinweis:** Fang bei Theo an.
-- **Lösungstext:** „Theo bekommt das Lakritz, weil bei ihm alles andere ausscheidet. Dann bleibt für Maren die Nuss, für Quill die Mandarine und für Ellis der Zimtstern.“
+> Deutlich schwerer als die erste Skizze (DECISIONS.md #44, #49). Umgesetzt in `src/content/puzzles/p06.json`.
+
+- **Engine:** `arrange`, Modus `grid` als **Logikraster 5 × 5**: Spalten = Türen 1–5 (von links nach rechts), Zeilen = Leckereien (Zimtstern, Mandarine, Nuss, Lakritz, Lebkuchen, als kleine Symbole). Fünf Namen (**Ellis, Maren, Theo, Quill, du**) kommen je auf ein Feld: jede Tür und jede Leckerei genau einmal.
+- **Quills Karte** (Knopf „Karte“, Hinweise lassen sich abhaken). Nur fünf Hinweise, kein einziger „X steht vor Tür n“:
+  1. In Quills Stiefel liegt keine Nuss.
+  2. Ellis' Stiefel steht zwei Türen links von dem Stiefel mit der Nuss.
+  3. Theos Stiefel steht zwei Türen links von deinem Stiefel.
+  4. Der Stiefel mit dem Zimtstern steht zwei Türen rechts von dem Stiefel mit der Mandarine.
+  5. Ellis' Stiefel steht direkt links neben dem Stiefel mit dem Lebkuchen.
+- **Geprüft:** Von 14 400 möglichen Anordnungen passt genau **eine**. Die Kartentexte werden aus den Regeln erzeugt und von `puzzles:verify` gegengeprüft.
+- **Lösung:** Tür 1 Quill (Mandarine) · Tür 2 Theo (Lakritz) · Tür 3 Ellis (Zimtstern) · Tür 4 du (Lebkuchen) · Tür 5 Maren (Nuss). Ellis hat den Zimtstern – passend zu seiner Zeile nach dem Rätsel.
+- **Intro (Ellis):** „Wer bekommt was? Das ist ein Logikrätsel. Das sind die besten Rätsel. Neben denen mit Kuchen.“
+- **Hinweise:** 1) Hinweis 2 und 5 hängen zusammen: Ellis, Lebkuchen, Nuss stehen direkt nebeneinander. 2) Ellis kann nur vor Tür 1, 2 oder 3 stehen – jede Möglichkeit mit Hinweis 3 und 4 prüfen. 3) Ellis steht vor Tür 3.
+- **Super-Hinweis:** Tür 1: Quill, Tür 2: Theo, Tür 3: Ellis.
+- **Lösungstext:** „Tür 1 Quill mit der Mandarine, Tür 2 Theo mit dem Lakritz, Tür 3 Ellis mit dem Zimtstern, Tür 4 du mit dem Lebkuchen, Tür 5 Maren mit der Nuss.“
 
 ## Setups und Payoffs
 

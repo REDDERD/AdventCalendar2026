@@ -14,6 +14,7 @@ import {
   type SticksState,
   stickSlots,
 } from '../../src/puzzles/logic/arrange';
+import { clueHolds, clueText, placementOf } from '../../src/puzzles/logic/gridClues';
 import { equationHolds, readEquation, romanValue } from '../../src/puzzles/logic/roman';
 import { choiceLogic } from '../../src/puzzles/logic/choice';
 import { inputLogic } from '../../src/puzzles/logic/input';
@@ -251,4 +252,40 @@ describe('hints and mentor help [PZL-4] [PZL-5]', () => {
     expect(helpDueAt({ attempts: 3, startedAt: 1000 })).toBe(0);
     expect(helpDueAt({ attempts: 5, startedAt: 1000, helpDeclinedAt: 9000 })).toBe(9000 + HELP_REOFFER_MS);
   });
+});
+
+describe('arrange: logic grid (p06)', () => {
+  const p = load('p06');
+  const config = p.config as GridConfig;
+  const start = arrangeLogic.initial(p) as GridState;
+  // rows = treats (star, mandarin, nut, licorice, gingerbread), columns = doors 1–5
+  const solved: Array<[string, number]> = [['E1', 2], ['Q1', 5], ['M1', 14], ['T1', 16], ['D1', 23]];
+  const put = (moves: Array<[string, number | null]>) => moves.reduce((s, [id, cell]) => placeGrid(config, s, id, cell), start);
+  it('is solvable', () => expect(arrangeLogic.check(p, put(solved))).toBe(true));
+  it('rejects a placement that breaks a clue', () => {
+    // Ellis and Theo swap doors
+    expect(arrangeLogic.check(p, put([['E1', 1], ['Q1', 5], ['M1', 14], ['T1', 17], ['D1', 23]]))).toBe(false);
+  });
+  it('swaps names instead of stacking them (rule)', () => {
+    const s = put([['E1', 2], ['T1', 2]]);
+    expect(s.cells[2]).toBe('T1');
+    expect(s.cells.includes('E1')).toBe(false);
+  });
+  it('the five clues allow exactly one placement and match the card', () => {
+    expect(arrangeLogic.verify(p).errors).toEqual([]);
+    const logic = config.logic!;
+    expect(logic.clues.map((c) => clueText(c, logic.names))).toEqual(p.clues);
+  });
+  it('evaluates clue types', () => {
+    const at = placementOf(p.solution as string[]);
+    expect(clueHolds({ type: 'next_to', a: { kind: 'E' }, b: { kind: 'D' } }, at)).toBe(true);
+    expect(clueHolds({ type: 'left_of', a: { kind: 'M' }, b: { kind: 'Q' } }, at)).toBe(false);
+    expect(clueHolds({ type: 'is', a: { item: 3 }, door: 1 }, at)).toBe(true);
+  });
+});
+
+describe('input with a trap (p07)', () => {
+  const p = load('p07');
+  it('is solvable', () => expect(inputLogic.check(p, '38')).toBe(true));
+  it('rejects the trap 41', () => expect(inputLogic.check(p, '41')).toBe(false));
 });

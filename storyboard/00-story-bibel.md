@@ -103,7 +103,7 @@ Jedes Rätsel öffnet ein Türchen, aus dem ein kleines Weihnachtswunder fällt.
 | 3 | Treppen schaukeln im Takt | 15 | Schokotaler regnen |
 | 4 | Bücher in Wollmützen | 16 | Der Tisch deckt sich selbst |
 | 5 | Kessel duften nach Lebkuchen | 17 | Schnee in Bonbonfarben |
-| 6 | Stiefel füllen sich | 18 | Der Raum wünscht jedem etwas Warmes |
+| 6 | Fünf Stiefel füllen sich | 18 | Der Raum wünscht jedem etwas Warmes |
 | 7 | Eulen mit roten Schleifen | 19 | Geister singen im Chor |
 | 8 | Mistelzweige singen | 20 | Zauberstäbe funkeln wie Wunderkerzen |
 | 9 | Kamine in den Hausfarben | 21 | Glockenspiel im Uhrturm |

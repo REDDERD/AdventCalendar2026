@@ -1,0 +1,109 @@
+{
+  "id": "p06",
+  "number": 6,
+  "title": "Die Nikolausstiefel",
+  "points": 30,
+  "type": "arrange",
+  "prompt": "Der Nikolaus hat die Namensschilder verweht. Fünf Stiefel stehen vor den Türen 1 bis 5 (Spalten), in jedem liegt etwas anderes (Zeilen). Setz jeden Namen auf sein Feld. Die Hinweise stehen auf Quills Karte.",
+  "config": {
+    "mode": "grid",
+    "board": [".....", ".....", ".....", ".....", "....."],
+    "pieces": { "E": 1, "M": 1, "T": 1, "Q": 1, "D": 1 },
+    "kinds": {
+      "E": { "label": "Ellis" },
+      "M": { "label": "Maren" },
+      "T": { "label": "Theo" },
+      "Q": { "label": "Quill" },
+      "D": { "label": "Du" }
+    },
+    "rules": ["distinct_rows", "distinct_cols"],
+    "colHeads": ["1", "2", "3", "4", "5"],
+    "rowIcons": [
+      "puzzle.treat.star",
+      "puzzle.treat.mandarin",
+      "puzzle.treat.nut",
+      "puzzle.treat.licorice",
+      "puzzle.treat.gingerbread"
+    ],
+    "logic": {
+      "names": {
+        "kinds": {
+          "E": "Ellis' Stiefel",
+          "M": "Marens Stiefel",
+          "T": "Theos Stiefel",
+          "Q": "Quills Stiefel",
+          "D": "dein Stiefel"
+        },
+        "items": [
+          {
+            "a": "ein Zimtstern",
+            "none": "kein Zimtstern",
+            "boot": "der Stiefel mit dem Zimtstern"
+          },
+          {
+            "a": "eine Mandarine",
+            "none": "keine Mandarine",
+            "boot": "der Stiefel mit der Mandarine"
+          },
+          { "a": "eine Nuss", "none": "keine Nuss", "boot": "der Stiefel mit der Nuss" },
+          { "a": "Lakritz", "none": "kein Lakritz", "boot": "der Stiefel mit dem Lakritz" },
+          {
+            "a": "ein Lebkuchen",
+            "none": "kein Lebkuchen",
+            "boot": "der Stiefel mit dem Lebkuchen"
+          }
+        ]
+      },
+      "clues": [
+        {
+          "type": "is_not",
+          "a": { "kind": "Q" },
+          "item": 2
+        },
+        {
+          "type": "offset",
+          "a": { "kind": "E" },
+          "b": { "item": 2 },
+          "by": -2
+        },
+        {
+          "type": "offset",
+          "a": { "kind": "T" },
+          "b": { "kind": "D" },
+          "by": -2
+        },
+        {
+          "type": "offset",
+          "a": { "item": 0 },
+          "b": { "item": 1 },
+          "by": 2
+        },
+        {
+          "type": "offset",
+          "a": { "kind": "E" },
+          "b": { "item": 4 },
+          "by": -1
+        }
+      ]
+    }
+  },
+  "solution": ["..E..", "Q....", "....M", ".T...", "...D."],
+  "clues": [
+    "In Quills Stiefel liegt keine Nuss.",
+    "Ellis' Stiefel steht zwei Türen links von dem Stiefel mit der Nuss.",
+    "Theos Stiefel steht zwei Türen links von deinem Stiefel.",
+    "Der Stiefel mit dem Zimtstern steht zwei Türen rechts von dem Stiefel mit der Mandarine.",
+    "Ellis' Stiefel steht direkt links neben dem Stiefel mit dem Lebkuchen."
+  ],
+  "hints": [
+    "Hinweis 2 und 5 hängen zusammen: Ellis' Stiefel, der Lebkuchen und die Nuss stehen direkt nebeneinander, genau in dieser Reihenfolge.",
+    "Ellis kann also nur vor Tür 1, 2 oder 3 stehen. Probier jede Möglichkeit mit Hinweis 3 und 4 durch.",
+    "Ellis steht vor Tür 3. Damit liegen der Lebkuchen vor Tür 4 und die Nuss vor Tür 5."
+  ],
+  "superHint": "Tür 1: Quill, Tür 2: Theo, Tür 3: Ellis.",
+  "solutionText": "Tür 1 Quill mit der Mandarine, Tür 2 Theo mit dem Lakritz, Tür 3 Ellis mit dem Zimtstern, Tür 4 du mit dem Lebkuchen, Tür 5 Maren mit der Nuss.",
+  "intro": {
+    "speaker": "ellis",
+    "text": "Wer bekommt was? Das ist ein Logikrätsel. Das sind die besten Rätsel. Neben denen mit Kuchen."
+  }
+}

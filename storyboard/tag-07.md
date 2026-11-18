@@ -32,7 +32,7 @@ INCLUDE globals.ink
 ~ temp joke = personal("insideJokes")
 # bg: owlery
 # music: outdoor
-# spark: d07.s1 212 40
+# spark: d07.s1 212 140
 Siebter Dezember. Die Eulerei steht offen, Schnee weht durch die Bögen.
 An den Sitzstangen hängen Schilder: „Hedwig – bitte nicht streicheln“.
 Daneben: „Errol – bitte nicht werfen“. Errol dreht sich im Schlaf und fällt vom Stab.
@@ -92,12 +92,15 @@ quill: Das ist nicht verdächtig, Ellis. Das ist Hufflepuff.
 
 ## Rätsel `p07` – Eulen-Nummern
 
-- **Engine:** `input` (Zahl, Pixel-Tastatur). Fünf Eulen sitzen mit Ringnummern **3, 6, 11, 18, 27** auf den Stangen, die sechste Stange ist leer. Gesucht: ihre Nummer.
-- **Lösung:** `38` (die Abstände 3, 5, 7, 9 wachsen um 2; der nächste Abstand ist 11. Alternativ: n² + 2). Beide Deutungen treffen dieselbe Zahl, das Rätsel ist deshalb eindeutig.
+> Schwerer als die erste Skizze (DECISIONS.md #44, #49). Umgesetzt in `src/content/puzzles/p07.json`. Die Antwort bleibt **38**, weil das Skript sie braucht.
+
+- **Engine:** `input` (Zahl, Pixel-Tastatur) mit Bild: fünf Eulen auf einer Stange mit den Ringnummern **1, 4, 6, 11, 21**, der sechste Platz ist leer („?“).
+- **Regel:** Jede Nummer ist die **Summe der drei davor** (1 + 4 + 6 = 11, 4 + 6 + 11 = 21, 6 + 11 + 21 = **38**).
+- **Falle:** „Verdoppeln und eins abziehen“ passt bei 6 → 11 → 21 und ergibt 41 – scheitert aber schon bei 4 → 6.
 - **Intro (Quill):** „Eulen sind ordentliche Wesen. Sie sitzen nach Ringnummer. Nur eine fehlt, und das war ihre Eule.“
-- **Hinweise:** 1) Wie weit sind die Nummern jeweils voneinander entfernt? 2) Die Abstände sind 3, 5, 7, 9. 3) Der nächste Abstand ist 11.
-- **Super-Hinweis:** 27 plus etwas Elfartiges.
-- **Lösungstext:** „Die Abstände wachsen immer um zwei: 3, 5, 7, 9, 11. Also 27 plus 11 = 38.“
+- **Hinweise:** 1) Verdoppeln und eins abziehen passt bei 6 → 11 → 21, aber nicht bei 4 → 6. 2) Schau nicht nur auf die Nummer davor. 3) 1 + 4 + 6 = 11.
+- **Super-Hinweis:** Jede Nummer ist die Summe der drei Nummern davor.
+- **Lösungstext:** „38 = 6 + 11 + 21. Jede Ringnummer ist die Summe der drei davor. Wer verdoppelt und eins abzieht, landet bei 41 – das passt aber schon bei 4 und 6 nicht.“
 
 ## Rückbezüge und Hinweise für die Umsetzung
 

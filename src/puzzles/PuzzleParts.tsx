@@ -120,6 +120,35 @@ export function NotesLayer({ active, clearSignal }: { active: boolean; clearSign
   );
 }
 
+/** Clue card ("Karte"): tap a clue to cross it off – handy for logic grids. */
+export function ClueCard({ clues, crossed, onToggle, onClose }: {
+  clues: readonly string[];
+  crossed: ReadonlySet<number>;
+  onToggle: (i: number) => void;
+  onClose: () => void;
+}) {
+  return (
+    <div className="puzzle-overlay clue-card">
+      <div className="overlay-head">
+        <span>Quills Karte</span>
+        <span className="muted-light">antippen = abhaken</span>
+        <button type="button" className="overlay-close" aria-label="Karte schließen" onClick={onClose}>
+          ✕
+        </button>
+      </div>
+      <ol className="clue-list">
+        {clues.map((clue, i) => (
+          <li key={i}>
+            <button type="button" className={crossed.has(i) ? 'crossed' : ''} aria-pressed={crossed.has(i)} onClick={() => onToggle(i)}>
+              {clue}
+            </button>
+          </li>
+        ))}
+      </ol>
+    </div>
+  );
+}
+
 /** [PZL-5] "Sollen wir es gemeinsam durchgehen?" */
 export function HelpOffer({ onAccept, onDecline }: { onAccept: () => void; onDecline: () => void }) {
   return (

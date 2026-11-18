@@ -86,3 +86,40 @@ export async function playPrologue(page: Page, { house, reloadAfterMirror }: Pro
   await tapUntil(page, page.getByRole('button', { name: 'Zum Kalender' }));
   await page.getByRole('button', { name: 'Zum Kalender' }).click();
 }
+
+/** Admin with a finished prologue jumps straight into `day` [DAY-7]. */
+export async function startDayAsAdmin(page: Page, day: number): Promise<void> {
+  await page.goto('./');
+  await login(page, 'daniel');
+  await page.getByRole('button', { name: 'Verstanden' }).click();
+  await setDebugDate(page, `2026-12-${String(day).padStart(2, '0')}T10:00`);
+  await playPrologue(page, { house: 'hufflepuff' });
+  await page.getByRole('button', { name: 'Truhe' }).click();
+  await page.getByRole('button', { name: 'Optionen' }).click();
+  await page.locator('select').selectOption(String(day));
+  await page.getByRole('button', { name: 'Start', exact: true }).click();
+  await page.getByText('Tippen zum Beginnen').click();
+}
+
+/** Tap through the dialogue and take each choice in turn. */
+export async function choose(page: Page, labels: string[]): Promise<void> {
+  for (const label of labels) {
+    const button = page.getByRole('button', { name: label });
+    await tapUntil(page, button);
+    await button.click();
+  }
+}
+
+/** Open the puzzle from its intro card. */
+export async function openPuzzle(page: Page, number: number): Promise<void> {
+  await tapUntil(page, page.getByText(`Rätsel ${String(number).padStart(2, '0')}`));
+  await page.locator('.puzzle-intro').click();
+}
+
+/** Check, accept the solution and play to the end of the day. */
+export async function finishDay(page: Page, day: number, points: number): Promise<void> {
+  await page.getByRole('button', { name: 'Prüfen' }).click();
+  await expect(page.getByText(`+${points} Hauspunkte`)).toBeVisible();
+  await page.getByRole('button', { name: 'Weiter' }).click();
+  await tapUntil(page, page.getByText(`Kapitel ${day} geschafft!`));
+}

@@ -9,7 +9,7 @@ Wörter = längster und kürzester Pfad laut `content:simulate`-Logik (500 Zufal
 | [3](tag-03.md) | Die wandernden Treppen | `staircases` | `d03.cold` (`k02` / +`bond_ellis`), `d03.portrait` | `k02` (optional) | – | `p03` Die Treppen (30) | 337–351 |
 | [4](tag-04.md) | Die Bibliothek | `library` | `d04.pince`, `d04.help` (+`bond_ellis` / `bookmark`) | `bookmark` (optional) | Pince, Hermine | `p04` Das Regal (30) | 435–474 |
 | [5](tag-05.md) | Der Enteisungstrank | `potions` | `d05.slughorn`, `d05.ingredient` (+`trust_theo`) | – | Slughorn, Snape-Porträt | `p05` Drei Flaschen (40) | 310–347 |
-| [6](tag-06.md) | Die Nikolausnacht | `dorm_corridor` | `d06.boot`, `d06.theo` (±`trust_theo`) | `k03` | Harry und Ron (Tarnumhang) | `p06` Die Nikolausstiefel (30) | 371–398 |
+| [6](tag-06.md) | Die Nikolausnacht | `dorm_corridor` | `d06.boot`, `d06.theo` (±`trust_theo`) | `k03` | Harry und Ron (Tarnumhang) | `p06` Die Nikolausstiefel (30) | 374–401 |
 | [7](tag-07.md) | Die Eulerei | `owlery` | `d07.letter` (`anonymous_letter`), `d07.home` (`wrote_home`) | `anonymous_letter` (optional) | Hedwig, Errol | `p07` Eulen-Nummern (30) | 340–364 |
 | [8](tag-08.md) | Das Gewächshaus | `greenhouse` | `d08.neville`, `d08.maren` (+`trust_maren`) | – | Neville (+ Trevor) | `p08` Alraunen (40) | 323–387 |
 
@@ -24,8 +24,8 @@ Wörter = längster und kürzester Pfad laut `content:simulate`-Logik (500 Zufal
 | `p03` Treppen | 13 Treppen, 6 Einbahn, Absatz A | 28 Wege, ~6 % Trefferquote beim Raten |
 | `p04` Regal | 6 Bücher, 5 indirekte Hinweise | genau eine Reihenfolge |
 | `p05` Flaschen | 14/9/5 → 7/7 | kürzeste Lösung 13 Züge (BFS) |
-| `p06` Stiefel | noch Storyboard-Stand | wird mit Tag 6 geprüft |
-| `p07` Eulen | noch Storyboard-Stand | wird mit Tag 7 geprüft |
+| `p06` Stiefel | Logikraster 5 × 5, 5 Hinweise auf der Karte | genau eine von 14 400 Anordnungen |
+| `p07` Eulen | 1, 4, 6, 11, 21 → Summe der drei davor | `38` (Falle 41) |
 | `p08` Alraunen | 6 × 6 mit Steinen | genau eine Lösung: 6 3 5 1 4 2 |
 
-Alle Rätsel sind knackiger als in der ersten Fassung (Vorgabe Auftraggeber, DECISIONS.md #44). Tag 1–3 sind umgesetzt.
+Alle Rätsel sind knackiger als in der ersten Fassung (Vorgabe Auftraggeber, DECISIONS.md #44). Tag 1–8 sind umgesetzt.

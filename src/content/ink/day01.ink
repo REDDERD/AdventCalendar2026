@@ -50,6 +50,7 @@ thornbury: Das gilt auch für Sie, Mr. Wren. Kein. Wort.
 ellis: Ich bin verschwiegen wie ein Grab. Ein sehr gesprächiges Grab, aber trotzdem.
 # choice_point: d01.secret Die Schulleiterin bittet, das Geheimnis zu wahren.
 * [Ich passe auf Ellis auf.] # cid: d01.secret.watch
+    ~ f_d01_watch = true
     thornbury: Ausgezeichnet. Das ist eine Lebensaufgabe, aber ich glaube an Sie.
     # emote: ellis !
     ellis: Hey!

@@ -122,6 +122,60 @@ export const NPCS: Record<string, Recipe> = {
       { id: 'christmas_hat' },
     ],
   },
+  // Madam Pince – librarian (cameo, day 4): thin, grey bun, dark robe
+  pince: {
+    body: 'female',
+    layers: [
+      { id: 'body', colors: { body: 'light' } },
+      { id: 'head_female_elderly', colors: { body: 'light', eye: 'gray' } },
+      { id: 'shoes', colors: { cloth: 'black' } },
+      { id: 'robe_black' },
+      { id: 'hair_bangs_bun', colors: { hair: 'gray' } },
+      { id: 'glasses' },
+    ],
+  },
+  // Hermine (cameo, day 4): bushy brown hair, Gryffindor cape
+  hermione: {
+    body: 'female',
+    layers: [
+      { id: 'cape_bg', colors: { cloth: 'maroon' } },
+      { id: 'body', colors: { body: 'light' } },
+      { id: 'head_female', colors: { body: 'light', eye: 'brown' } },
+      { id: 'shoes', colors: { cloth: 'black' } },
+      { id: 'skirt', colors: { cloth: 'charcoal' } },
+      { id: 'sweater', colors: { cloth: 'gray' } },
+      { id: 'cape', colors: { cloth: 'maroon' } },
+      { id: 'cape_trim', colors: { cloth: 'yellow' } },
+      { id: 'hair_curly_short', colors: { hair: 'chestnut' } },
+    ],
+  },
+  // Prof. Slughorn (cameo, day 5): round, balding, walrus whiskers, green waistcoat look
+  slughorn: {
+    body: 'male',
+    layers: [
+      { id: 'body', colors: { body: 'light' } },
+      { id: 'head_male_elderly', colors: { body: 'light', eye: 'green' } },
+      { id: 'shoes', colors: { cloth: 'brown' } },
+      { id: 'pants', colors: { cloth: 'forest' } },
+      { id: 'sweater', colors: { cloth: 'green' } },
+      { id: 'vest_brown' },
+      { id: 'hair_balding', colors: { hair: 'sandy' } },
+      { id: 'beard_winter', colors: { hair: 'sandy' } },
+    ],
+  },
+  // Neville (cameo, day 8): Herbology teacher from later, earthy colours, Gryffindor scarf
+  neville: {
+    body: 'male',
+    layers: [
+      { id: 'body', colors: { body: 'light' } },
+      { id: 'head_male', colors: { body: 'light', eye: 'brown' } },
+      { id: 'shoes', colors: { cloth: 'brown' } },
+      { id: 'pants', colors: { cloth: 'walnut' } },
+      { id: 'sweater', colors: { cloth: 'forest' } },
+      { id: 'scarf', colors: { cloth: 'maroon' } },
+      { id: 'hair_plain', colors: { hair: 'dark_brown' } },
+    ],
+  },
   // The wandmaker
   wandmaker: {
     body: 'female',

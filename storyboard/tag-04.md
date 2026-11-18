@@ -31,7 +31,7 @@ INCLUDE globals.ink
 === day04 ===
 # bg: library
 # music: castle
-# spark: d04.s1 230 20
+# spark: d04.s1 230 130
 Die Bibliothek. Es riecht nach Pergament, Staub und gedämpfter Strenge.
 # show: quill right
 # show: ellis left
@@ -60,6 +60,7 @@ hermione: Wo bin ich eigentlich? Ich hatte gleich Arithmantik. Vor drei Wochen?
 quill: Es ist Dezember, Miss. Aber es ist ein sehr unsicherer Dezember.
 hermione: Ach so. Dann danke. Ich muss … irgendwohin. Pünktlich. Davor.
 # hide: hermione
+# show: quill right
 Sie rauscht davon. Der Bücherturm folgt ihr widerwillig.
 quill: Das waren die Zeitfransen. Wenn die Adventsuhr steht, leiht sich die Zeit Gäste aus.
 ellis: Zeitfransen? Aber das ist Theorie eins! Zeitmotten! Ich hatte recht!
@@ -104,6 +105,7 @@ aldous: Ihr sucht nach Isolde? Ihr … sucht nach Isolde Tickwell. Verzeihung.
 # emote: quill ?
 aldous: Ich muss … die Halle bewachen. Die Uhr schläft. Und sie schläft nicht gut.
 # hide: aldous
+# show: quill right
 # music: castle
 ellis: Hast du gehört, wie er „Isolde“ sagte? So spricht man von jemandem, den man vermisst.
 quill: Ein Hausgeist von dreihundert Jahren kennt die Geschichte, Ellis. Das ist alles.

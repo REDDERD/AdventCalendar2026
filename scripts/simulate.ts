@@ -35,6 +35,8 @@ function randomState(): Record<string, InkVarValue> {
     route: pick(['forest', 'archive']),
     maren_covered: Math.random() < 0.5,
     peeves_friend: Math.random() < 0.5,
+    f_d01_watch: Math.random() < 0.5,
+    wrote_home: Math.random() < 0.5,
   };
 }
 

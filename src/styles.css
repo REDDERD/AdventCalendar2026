@@ -674,6 +674,15 @@ img {
 
 .puzzle-actions .pbtn.active { background: var(--parchment); color: var(--ink); }
 .check-btn { margin-left: auto; }
+.puzzle-actions .pbtn-small { min-width: 0; padding: 2px 6px; }
+.clue-list { margin: 0; padding-left: 16px; }
+.clue-list li { margin-bottom: 3px; }
+.clue-list button { padding: 0; border: 0; background: transparent; color: inherit; text-align: left; }
+.clue-list button.crossed { color: var(--stone-light); text-decoration: line-through; }
+.grid-wrap { display: grid; gap: 2px; align-items: center; justify-items: center; }
+.grid-head { font-size: 13px; line-height: 14px; color: var(--parchment); text-align: center; }
+.grid-heads { display: grid; gap: 2px; padding: 0 6px; }
+.grid-icons { display: grid; gap: 2px; padding: 6px 0; align-items: center; justify-items: center; }
 
 .practice-head { flex: none; display: flex; align-items: center; justify-content: space-between; height: 24px; padding: 0 6px; background: var(--wood-dark); color: var(--candle-light); }
 

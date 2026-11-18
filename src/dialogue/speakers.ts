@@ -12,4 +12,8 @@ export const SPEAKER_NAMES: Record<string, string> = {
   wandmaker: 'Zauberstabmacherin',
   player: 'Du',
   peeves: 'Peeves',
+  pince: 'Madam Pince',
+  hermione: 'Hermine',
+  slughorn: 'Prof. Slughorn',
+  neville: 'Neville',
 };

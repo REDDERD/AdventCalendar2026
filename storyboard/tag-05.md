@@ -31,7 +31,7 @@ INCLUDE globals.ink
 === day05 ===
 # bg: potions
 # music: dungeon
-# spark: d05.s1 22 40
+# spark: d05.s1 22 140
 Der Zaubertrank-Kerker. Kessel blubbern. Es riecht nach Schwefel und alten Socken.
 An der Wand hängt ein Porträt: schwarze Haare, schmale Lippen, ein Naserümpfen.
 Es sagt nichts. Es sagt es sehr laut.
@@ -74,6 +74,7 @@ theo: Ihr braut gegen Eis. Mit der alten Rezeptur? Die versagt ohne Messingöl.
 * [Wir kommen allein klar.] # cid: d05.ingredient.decline
     theo: Wie ihr wollt. Ich bin nur ein Slytherin mit Messingöl. Nichts weiter.
 - # hide: theo
+# show: quill right
 quill: Dann los. Wir brauchen genau sieben Maß und noch einmal sieben.
 { pet == "owl": Deine Eule sitzt auf dem Kesselrand und schüttelt den Kopf. Dreimal: vierzehn ist zu viel. }
 { pet == "cat": Deine Katze patscht gegen die mittlere Flasche. Sie meint die kleine. Oder die große. }

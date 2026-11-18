@@ -535,6 +535,101 @@ function clockFace(): Canvas {
   return c;
 }
 
+/** p06 treats (16 × 16): row icons of the boot grid. */
+function treat(kind: 'star' | 'mandarin' | 'nut' | 'licorice' | 'gingerbread'): Canvas {
+  const c = new Canvas(16, 16);
+  if (kind === 'star') {
+    for (let y = 0; y < 16; y++) {
+      for (let x = 0; x < 16; x++) {
+        const a = Math.atan2(y - 8, x - 8);
+        const r = Math.hypot(x - 7.5, y - 8);
+        const edge = 4 + 3.5 * Math.max(0, Math.cos(5 * (a + Math.PI / 2)));
+        if (r <= edge) c.set(x, y, r < edge - 1.5 ? '#fff8ea' : '#a8743c');
+      }
+    }
+  } else if (kind === 'mandarin') {
+    c.ellipse(8, 9, 6, 5.5, (u, v) => (u + v < -0.6 ? '#ffb05a' : '#e8781e'));
+    c.rect(7, 2, 2, 2, '#4f8a3c');
+    c.rect(9, 2, 3, 1, '#7ab84a');
+  } else if (kind === 'nut') {
+    c.ellipse(8, 8, 5.5, 6.5, (u, v) => (Math.abs(u) < 0.12 ? '#6b4226' : u + v < -0.5 ? '#c9a66b' : '#9a6a3c'));
+    for (let y = 4; y < 13; y += 3) c.rect(5, y, 6, 1, '#7a4c2c');
+  } else if (kind === 'licorice') {
+    // licorice snail: a spiral with visible gaps
+    c.ellipse(8, 8, 7, 7, '#3a3440');
+    for (let a = 0; a < Math.PI * 5; a += 0.02) {
+      const r = 0.6 + (a / (Math.PI * 5)) * 6;
+      c.set(8 + Math.cos(a) * r, 8 + Math.sin(a) * r, '#1a1423');
+    }
+  } else {
+    // gingerbread heart with icing
+    for (let y = 0; y < 16; y++) {
+      for (let x = 0; x < 16; x++) {
+        const u = (x - 7.5) / 6.5;
+        const v = (7 - y) / 6.5;
+        const heart = (u * u + v * v - 0.6) ** 3 - u * u * v * v * v < 0;
+        if (heart) c.set(x, y, '#9a5a2c');
+      }
+    }
+    for (const [x, y] of [[5, 6], [7, 8], [9, 6], [11, 8]]) c.set(x, y, '#fff8ea');
+  }
+  c.outline('#2b1a10');
+  return c;
+}
+
+/** 3 × 5 digits and "?" for number plates. */
+const DIGITS: Record<string, string[]> = {
+  0: ['###', '#.#', '#.#', '#.#', '###'],
+  1: ['.#.', '##.', '.#.', '.#.', '###'],
+  2: ['###', '..#', '###', '#..', '###'],
+  3: ['###', '..#', '.##', '..#', '###'],
+  4: ['#.#', '#.#', '###', '..#', '..#'],
+  5: ['###', '#..', '###', '..#', '###'],
+  6: ['###', '#..', '###', '#.#', '###'],
+  7: ['###', '..#', '.#.', '.#.', '.#.'],
+  8: ['###', '#.#', '###', '#.#', '###'],
+  9: ['###', '#.#', '###', '..#', '###'],
+  '?': ['###', '..#', '.##', '...', '.#.'],
+};
+function digits(c: Canvas, text: string, cx: number, y: number, color: string, scale = 2): void {
+  const w = text.length * 4 * scale - scale;
+  [...text].forEach((ch, k) =>
+    DIGITS[ch].forEach((row, j) =>
+      [...row].forEach((p, i) => p === '#' && c.rect(cx - w / 2 + (k * 4 + i) * scale, y + j * scale, scale, scale, color)),
+    ),
+  );
+}
+
+/** p07 (256 × 72): five owls with ring numbers on a perch, the sixth place is empty. */
+function owlPerch(): Canvas {
+  const c = new Canvas(256, 72);
+  for (let y = 0; y < 72; y++) for (let x = 0; x < 256; x++) c.set(x, y, (x * 3 + y * 7) % 23 === 0 ? '#2a3a66' : '#1b2a4e');
+  c.rect(0, 40, 256, 4, '#6b4226'); // perch
+  c.rect(0, 40, 256, 1, '#9a6a3c');
+  const owl = PNG.sync.read(fs.readFileSync(path.join(OUT, 'sprites/pet_owl.png')));
+  const numbers = ['1', '4', '6', '11', '21', '?'];
+  numbers.forEach((n, i) => {
+    const cx = 22 + i * 42;
+    if (n !== '?') {
+      for (let y = 0; y < 32; y++) {
+        for (let x = 0; x < 32; x++) {
+          const k = (y * 32 + x) * 4;
+          if (owl.data[k + 3] > 0) c.set(cx - 16 + x, 10 + y, `#${[0, 1, 2].map((j) => owl.data[k + j].toString(16).padStart(2, '0')).join('')}`);
+        }
+      }
+    }
+    c.rect(cx - 13, 50, 26, 16, n === '?' ? '#c4512a' : '#e8d5a6');
+    c.rect(cx - 13, 50, 26, 1, '#3b2414');
+    c.rect(cx - 13, 65, 26, 1, '#3b2414');
+    digits(c, n, cx, 53, n === '?' ? '#fff1c2' : '#1a1423');
+  });
+  return c;
+}
+
+owlPerch().save(path.join(OUT, 'puzzles/p07.png'));
+for (const kind of ['star', 'mandarin', 'nut', 'licorice', 'gingerbread'] as const) {
+  treat(kind).save(path.join(OUT, `puzzles/treat_${kind}.png`));
+}
 clockFace().save(path.join(OUT, 'puzzles/p01.png'));
 door().save(path.join(OUT, 'puzzles/p18_door.png'));
 gearTrain().save(path.join(OUT, 'puzzles/p21_gears.png'));

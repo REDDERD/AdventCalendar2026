@@ -10,7 +10,7 @@ import { Layout } from '../ui/Layout';
 import { PixelButton } from '../ui/PixelButton';
 import { engineFor } from './engines';
 import type { Engine } from './engines/types';
-import { HelpOffer, HintPanel, NotesLayer } from './PuzzleParts';
+import { ClueCard, HelpOffer, HintPanel, NotesLayer } from './PuzzleParts';
 import type { Puzzle } from './schema';
 import { helpDueAt, hintCost, nextHint, pointsFor, SUPER_HINT } from './scoring';
 
@@ -60,6 +60,8 @@ function PuzzleRun({ puzzle, practice, engine }: Props & { engine: Engine<unknow
   const [notesOn, setNotesOn] = useState(false);
   const [notesCleared, setNotesCleared] = useState(0);
   const [helpOpen, setHelpOpen] = useState(false);
+  const [cardOpen, setCardOpen] = useState(false);
+  const [crossed, setCrossed] = useState<Set<number>>(new Set());
   const [practiceRun, setPracticeRun] = useState({ attempts: 0, hints: [] as number[], solved: false });
   const started = useRef(false);
 
@@ -210,6 +212,18 @@ function PuzzleRun({ puzzle, practice, engine }: Props & { engine: Engine<unknow
             Wischen
           </button>
         )}
+        {cardOpen && puzzle.clues && (
+          <ClueCard
+            clues={puzzle.clues}
+            crossed={crossed}
+            onToggle={(i) => setCrossed((prev) => {
+              const next = new Set(prev);
+              if (!next.delete(i)) next.add(i);
+              return next;
+            })}
+            onClose={() => setCardOpen(false)}
+          />
+        )}
         {hintsOpen && (
           <HintPanel
             puzzle={puzzle}
@@ -243,6 +257,11 @@ function PuzzleRun({ puzzle, practice, engine }: Props & { engine: Engine<unknow
         <PixelButton small aria-pressed={hintsOpen} onClick={() => setHintsOpen(!hintsOpen)}>
           Hinweis
         </PixelButton>
+        {puzzle.clues && (
+          <PixelButton small aria-pressed={cardOpen} className={cardOpen ? 'active' : ''} onClick={() => { setCardOpen(!cardOpen); setHintsOpen(false); }}>
+            Karte
+          </PixelButton>
+        )}
         <PixelButton small aria-pressed={notesOn} className={notesOn ? 'active' : ''} onClick={() => setNotesOn(!notesOn)}>
           Notiz
         </PixelButton>

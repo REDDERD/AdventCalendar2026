@@ -25,7 +25,9 @@ VAR ending = ""
 VAR maren_covered = false
 
 // Tone flags for later callbacks (storyboard/globals-zusatz.ink); no effect on clues or endings
+VAR f_d01_watch = false     // d01.secret.watch – day 9
 VAR peeves_friend = false   // d02.peeves.join – day 19
+VAR wrote_home = false      // d07.home.write – day 24
 
 // Set by the app after each puzzle [ARC-3]
 VAR last_puzzle_first_try = false

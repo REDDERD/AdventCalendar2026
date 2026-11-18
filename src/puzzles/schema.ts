@@ -21,6 +21,8 @@ export const puzzleBaseSchema = z.object({
   superHint: z.string(),
   solutionText: z.string(),
   intro: z.object({ speaker: z.string(), text: z.string() }),
+  /** Clues on a card the player can open from the action bar ("Karte"), e.g. a logic grid. */
+  clues: z.array(z.string().min(1).max(140)).max(10).optional(),
   /** [PLAN-2] The pet comments on the puzzle and unlocks hint 1 for free (days 5, 13, 21). */
   petHint: petLines.optional(),
   variants: z.record(z.string(), z.record(z.string(), z.unknown())).optional(),

@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import type { Puzzle } from '../schema';
+import { allPlacements, clueHolds, clueText, gridLogic, placementOf } from './gridClues';
 import { equationHolds, readEquation, romanSlots, sticksFor, type RomanSlot } from './roman';
 import { permutations, result, sameArray, sameSet, type EngineLogic, type VerifyResult } from './types';
 
@@ -37,6 +38,11 @@ const gridConfig = z.object({
   pieces: z.record(z.string().length(1), z.number().int().min(1).max(8)),
   kinds: z.record(z.string().length(1), z.object({ label: z.string(), sprite: z.string().optional() })),
   rules: z.array(z.enum(['distinct_rows', 'distinct_cols', 'no_touch'])).optional(),
+  /** Labels above the columns (text) and icons left of the rows (asset ids). */
+  colHeads: z.array(z.string()).optional(),
+  rowIcons: z.array(z.string()).optional(),
+  /** Logic-grid clues (one piece per kind, distinct rows and columns), see gridClues.ts. */
+  logic: gridLogic.optional(),
 });
 
 /**
@@ -177,7 +183,29 @@ export function gridRulesHold(rules: GridConfig['rules'], rows: readonly string[
   return true;
 }
 
-function verifyGrid(config: GridConfig, solution: string[]): VerifyResult {
+/** Logic grid: enumerate every placement, the clues must leave exactly the solution; card text must match. */
+function verifyLogicGrid(config: GridConfig, solution: string[], cardText: readonly string[] = []): VerifyResult {
+  const logic = config.logic!;
+  const errors: string[] = [];
+  const kinds = Object.keys(config.pieces);
+  const { rows, cols } = gridSize(config);
+  if (rows !== cols || kinds.length !== rows || kinds.some((k) => config.pieces[k] !== 1)) {
+    errors.push('a logic grid needs one piece per kind and as many kinds as rows and columns');
+    return result(errors);
+  }
+  const target = JSON.stringify(placementOf(solution));
+  const matches = [...allPlacements(kinds, rows)].filter((p) => logic.clues.every((c) => clueHolds(c, p)));
+  if (matches.length !== 1) errors.push(`${matches.length} placements satisfy the clues, expected exactly 1`);
+  else if (JSON.stringify(Object.fromEntries(Object.entries(matches[0]).sort())) !== JSON.stringify(Object.fromEntries(Object.entries(JSON.parse(target)).sort()))) {
+    errors.push('the clues lead to a different placement than the solution');
+  }
+  const expected = logic.clues.map((c) => clueText(c, logic.names));
+  if (JSON.stringify(expected) !== JSON.stringify(cardText)) errors.push(`the card text must be: ${JSON.stringify(expected)}`);
+  return result(errors, [`${matches.length} placement(s) fit ${logic.clues.length} clues`]);
+}
+
+function verifyGrid(config: GridConfig, solution: string[], cardText?: readonly string[]): VerifyResult {
+  if (config.logic) return verifyLogicGrid(config, solution, cardText);
   const errors: string[] = [];
   const { rows, cols } = gridSize(config);
   if (config.board.some((r) => r.length !== cols)) errors.push('board rows differ in length');
@@ -359,7 +387,7 @@ export const arrangeLogic: EngineLogic<ArrangeState> = {
   verify: (puzzle: Puzzle) => {
     const config = puzzle.config as ArrangeConfig;
     if (config.mode === 'row') return verifyRow(config, puzzle.solution as string[]);
-    if (config.mode === 'grid') return verifyGrid(config, puzzle.solution as string[]);
+    if (config.mode === 'grid') return verifyGrid(config, puzzle.solution as string[], puzzle.clues);
     if (config.roman) return verifyRoman(config, puzzle.solution as string[]);
     return verifySticks(config, puzzle.solution as string[][]);
   },
