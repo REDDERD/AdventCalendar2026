@@ -31,13 +31,18 @@ export function isCrop(def: AssetDef): def is CropAsset {
   return 'from' in def;
 }
 
-// Backgrounds: 256 × 512, anchored to the bottom of the scene (DECISIONS.md #32)
-const backgrounds = Object.fromEntries(
-  LOCATIONS.map((id) => [`bg.${id}`, { file: `assets/bg/${id}.png`, w: 256, h: 512 } satisfies FileAsset]),
-);
-
 const LPC_LICENSE = 'CC-BY-SA 3.0 / GPL 3.0 / OGA-BY 3.0';
 const LPC_CREDIT = 'Liberated Pixel Cup contributors, composed by npm run assets:npcs (see CREDITS.md)';
+const LPC_TILES_CREDIT = 'LPC Base Assets (Lanea Zimmerman, Daniel Armstrong), composed by npm run assets:maps (see CREDITS.md)';
+
+// Backgrounds: 256 × 512, anchored to the bottom of the scene (DECISIONS.md #32), drawn
+// from LPC tiles by scripts/maps/scenes.ts (DECISIONS.md #53)
+const backgrounds = Object.fromEntries(
+  LOCATIONS.map((id) => [
+    `bg.${id}`,
+    { file: `assets/bg/${id}.png`, w: 256, h: 512, license: LPC_LICENSE, credit: LPC_TILES_CREDIT } satisfies FileAsset,
+  ]),
+);
 const OWN = { license: 'own work', credit: 'Drawn by the agent (scripts/draw-sprites.ts)' };
 
 /** LPC walk sheets: rows up/left/down/right × 9 frames; frame 18 = facing the viewer. */

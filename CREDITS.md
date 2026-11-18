@@ -60,7 +60,16 @@ Quelle: https://github.com/LiberatedPixelCup/Universal-LPC-Spritesheet-Character
 | Vest (`torso/clothes/vest`) | vest_brown.male.png | bluecarrot16, Thane Brimhall (pennomi), laetissima, Stephen Challener (Redshrike), Johannes Sjölund (wulax) | CC-BY-SA 3.0 / GPL 3.0 | [1](https://opengameart.org/content/lpc-2-characters) [2](https://opengameart.org/content/lpc-gentleman) [3](https://opengameart.org/content/lpc-pirates) |
 <!-- lpc:end -->
 
-Noch keine. Alle Grafiken werden bis zur Lieferung als Platzhalter gerendert (`npm run assets:check`).
+### Liberated Pixel Cup (LPC Base Assets, Kacheln)
+
+Quelle: https://opengameart.org/content/liberated-pixel-cup-lpc-base-assets-sprites-map-tiles · Lizenz: CC-BY-SA 3.0 / GPL 3.0, die Kacheln von Lanea Zimmerman auch OGA-BY 3.0. Die Original-Kachelbögen und ihre `CREDITS.TXT` liegen in `assets-src/tilesets/lpc/`.
+
+| Kachelbögen | Autor |
+| --- | --- |
+| inside, cabinets, stairs, dungeon, treetop, trunk, grass, water, chests, barrel, buckets, kitchen, dirt | Lanea Zimmerman (Sharm) |
+| castlewalls, castlefloors, castle_outside, castlefloors_outside, castle_lightsources | Daniel Armstrong (HughSpectrum) |
+
+Die Hintergründe in `public/assets/bg/` sind aus diesen Kacheln und eigenen Zeichnungen zusammengesetzt (`npm run assets:maps`, DECISIONS.md #53) und stehen unter denselben Lizenzen (CC-BY-SA 3.0 / GPL 3.0).
 
 ### Eigene Grafiken
 
@@ -70,4 +79,4 @@ Die NPC-Sprites in `public/assets/sprites/` (Quill, Ellis, Theo, Maren, Grimsby,
 
 ## Musik und Effekte
 
-Noch keine.
+Keine fremden Dateien: Musik und Effekte werden in der App per WebAudio erzeugt (`src/audio/`, DECISIONS.md #52), Melodien sind eigene Kompositionen.
