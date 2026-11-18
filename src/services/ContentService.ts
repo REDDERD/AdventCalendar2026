@@ -22,6 +22,14 @@ export function hasPuzzle(id: string): boolean {
   return `../content/puzzles/${id}.json` in puzzles;
 }
 
+/** Every puzzle in the bundle, e.g. ["p01", "p02", …, "p13a", "p13w"]. */
+export function listPuzzleIds(): string[] {
+  return Object.keys(puzzles)
+    .map((path) => path.match(/(p\d{2}[wa]?)\.json$/)?.[1])
+    .filter((id): id is string => !!id)
+    .sort();
+}
+
 export async function loadPuzzle(id: string): Promise<Puzzle> {
   const loader = puzzles[`../content/puzzles/${id}.json`];
   if (!loader) throw new Error(`No puzzle ${id}`);

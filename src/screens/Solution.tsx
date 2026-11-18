@@ -21,7 +21,7 @@ export function SolutionScreen() {
   return (
     <Layout>
       <div className="center-msg">
-        <div className="stamp stamp-correct stamp-static">Richtig!</div>
+        <div className="stamp stamp-correct stamp-static">{result.solvedBy === 'help' ? 'Gelöst' : 'Richtig!'}</div>
         <Frame className="solution-text">{puzzle.solutionText}</Frame>
         <Frame className="msg-frame">
           <div className="points-big">+{result.points} Hauspunkte</div>

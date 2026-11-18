@@ -20,6 +20,7 @@
     "admin:set-password": "tsx scripts/set-password.ts",
     "test:e2e": "npm run content:compile && playwright test",
     "content:simulate": "npm run content:compile && tsx scripts/simulate.ts",
+    "puzzles:verify": "tsx scripts/verify-puzzles.ts",
     "assets:import-lpc": "tsx scripts/import-lpc.ts",
     "assets:npcs": "tsx scripts/build-npcs.ts",
     "assets:draw": "tsx scripts/draw-sprites.ts"

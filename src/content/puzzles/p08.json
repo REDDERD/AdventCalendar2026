@@ -1,0 +1,27 @@
+{
+  "id": "p08",
+  "number": 8,
+  "title": "Alraunen",
+  "points": 40,
+  "type": "arrange",
+  "prompt": "Alraunen schreien, wenn sie sich zu nah sind. Setz drei weitere Töpfe ins Beet: keine zwei in derselben Reihe oder Spalte, und keine zwei dürfen sich berühren – auch nicht über Eck. Ein Topf steht schon.",
+  "config": {
+    "mode": "grid",
+    "board": [".M..", "....", "....", "...."],
+    "pieces": { "M": 3 },
+    "kinds": { "M": { "label": "Alraune", "sprite": "puzzle.mandrake" } },
+    "rules": ["distinct_rows", "distinct_cols", "no_touch"]
+  },
+  "solution": [".M..", "...M", "M...", "..M."],
+  "hints": [
+    "In jede Reihe gehört genau ein Topf.",
+    "In der zweiten Reihe darf der Topf nicht neben oder schräg unter dem ersten stehen.",
+    "Die zweite Reihe hat nur noch einen freien Platz."
+  ],
+  "superHint": "Der Topf der zweiten Reihe steht ganz rechts.",
+  "solutionText": "Spalte 2, 4, 1, 3. Nach dem ersten Topf bleibt in der zweiten Reihe nur die rechte Ecke, danach ergibt sich alles von selbst.",
+  "intro": {
+    "speaker": "maren",
+    "text": "Bitte vorsichtig. Wenn eine schreit, schreien alle. Und dann hört man drei Tage nichts mehr."
+  }
+}

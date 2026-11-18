@@ -43,6 +43,12 @@ test('M1: admin plays day 1 with choice and puzzle, reload resumes exactly, even
   await page.getByRole('button', { name: 'OK' }).click();
   await expect(page.getByText('Leider falsch')).toBeVisible();
   await page.waitForTimeout(1000);
+  // [PZL-4] hint 1 costs one spark (3 → 2) and does not lower the points
+  await page.getByRole('button', { name: 'Hinweis', exact: true }).click();
+  await page.getByRole('button', { name: 'Hinweis 1 öffnen · 1 Funke' }).click();
+  await expect(page.locator('.hint-open')).toContainText('Um 12:00');
+  await expect(page.getByLabel('Zauberfunken')).toHaveText('2');
+  await page.getByRole('button', { name: 'Hinweise schließen' }).click();
   await page.getByRole('button', { name: '1', exact: true }).click();
   await page.getByRole('button', { name: '1', exact: true }).click();
   await page.getByRole('button', { name: 'OK' }).click();
@@ -58,7 +64,7 @@ test('M1: admin plays day 1 with choice and puzzle, reload resumes exactly, even
   await expect
     .poll(async () => (await listEvents()).map((e) => e.type), { timeout: 10_000 })
     .toEqual(expect.arrayContaining([
-      'session_start', 'day_start', 'choice', 'puzzle_start', 'puzzle_attempt', 'puzzle_solved', 'day_complete',
+      'session_start', 'day_start', 'choice', 'puzzle_start', 'puzzle_attempt', 'puzzle_hint', 'puzzle_solved', 'day_complete',
     ]));
   const events = await listEvents();
   const choices = JSON.stringify(events.filter((e) => e.type === 'choice').map((e) => e.data));
@@ -70,7 +76,7 @@ test('M1: admin plays day 1 with choice and puzzle, reload resumes exactly, even
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));
   await page.getByRole('button', { name: 'Truhe' }).click();
-  for (const tab of ['Tagebuch', 'Inventar', 'Hinweise', 'Steckbrief', 'Optionen']) {
+  for (const tab of ['Tagebuch', 'Rätsel', 'Inventar', 'Hinweise', 'Steckbrief', 'Optionen']) {
     await page.getByRole('button', { name: tab }).click();
     await expect(page.locator('.trunk')).toBeVisible();
   }

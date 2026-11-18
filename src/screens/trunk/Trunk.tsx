@@ -1,24 +1,37 @@
 import { useState } from 'react';
 import { useStore } from '../../core/store';
-import { Diary } from './Diary';
+import { PuzzleHost } from '../../puzzles/PuzzleHost';
+import type { Puzzle } from '../../puzzles/schema';
 import { Collection } from './Collection';
+import { Diary } from './Diary';
 import { Profile } from './Profile';
+import { PuzzleCollection } from './PuzzleCollection';
 import { SettingsPanel } from './Settings';
 
-type Tab = 'diary' | 'inventory' | 'clues' | 'profile' | 'settings';
+type Tab = 'diary' | 'puzzles' | 'inventory' | 'clues' | 'profile' | 'settings';
 
 const TABS: Array<[Tab, string]> = [
   ['diary', 'Tagebuch'],
+  ['puzzles', 'Rätsel'],
   ['inventory', 'Inventar'],
   ['clues', 'Hinweise'],
   ['profile', 'Steckbrief'],
   ['settings', 'Optionen'],
 ];
 
-/** Section 2 "Truhe": the main menu overlay. Puzzle collection follows in M4. */
+/** Section 2 "Truhe": the main menu overlay. */
 export function Trunk() {
   const setTrunkOpen = useStore((s) => s.setTrunkOpen);
   const [tab, setTab] = useState<Tab>('diary');
+  const [practice, setPractice] = useState<Puzzle | null>(null);
+
+  if (practice) {
+    return (
+      <div className="trunk">
+        <PuzzleHost key={practice.id} puzzle={practice} practice={{ onClose: () => setPractice(null) }} />
+      </div>
+    );
+  }
 
   return (
     <div className="trunk">
@@ -37,6 +50,7 @@ export function Trunk() {
       </div>
       <div className="trunk-body">
         {tab === 'diary' && <Diary />}
+        {tab === 'puzzles' && <PuzzleCollection onPlay={setPractice} />}
         {tab === 'inventory' && <Collection kind="items" />}
         {tab === 'clues' && <Collection kind="clues" />}
         {tab === 'profile' && <Profile />}

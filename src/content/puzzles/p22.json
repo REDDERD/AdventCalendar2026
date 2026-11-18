@@ -1,0 +1,42 @@
+{
+  "id": "p22",
+  "number": 22,
+  "title": "Römische Stäbe",
+  "points": 60,
+  "type": "arrange",
+  "prompt": "Im Pendel steht eine falsche Rechnung aus Holzstäben: V + I = IV. Leg genau einen Stab um, damit sie stimmt. Tippe einen Stab an, dann seinen neuen Platz.",
+  "config": {
+    "mode": "sticks",
+    "slots": [
+      { "id": "a1", "x1": 20, "y1": 98, "x2": 20, "y2": 158 },
+      { "id": "v1", "x1": 34, "y1": 98, "x2": 46, "y2": 158 },
+      { "id": "v2", "x1": 58, "y1": 98, "x2": 46, "y2": 158 },
+      { "id": "ph", "x1": 70, "y1": 128, "x2": 96, "y2": 128 },
+      { "id": "pv", "x1": 83, "y1": 115, "x2": 83, "y2": 141 },
+      { "id": "i1", "x1": 112, "y1": 98, "x2": 112, "y2": 158 },
+      { "id": "e1", "x1": 128, "y1": 120, "x2": 154, "y2": 120 },
+      { "id": "e2", "x1": 128, "y1": 136, "x2": 154, "y2": 136 },
+      { "id": "r1", "x1": 172, "y1": 98, "x2": 172, "y2": 158 },
+      { "id": "w1", "x1": 186, "y1": 98, "x2": 198, "y2": 158 },
+      { "id": "w2", "x1": 210, "y1": 98, "x2": 198, "y2": 158 },
+      { "id": "r2", "x1": 226, "y1": 98, "x2": 226, "y2": 158 }
+    ],
+    "start": ["v1", "v2", "ph", "pv", "i1", "e1", "e2", "r1", "w1", "w2"],
+    "moves": 1
+  },
+  "solution": [
+    ["v1", "v2", "ph", "pv", "i1", "e1", "e2", "w1", "w2", "r2"],
+    ["a1", "v1", "v2", "ph", "pv", "i1", "e1", "e2", "w1", "w2"]
+  ],
+  "hints": [
+    "Die linke Seite ist sechs. Die rechte ist vier.",
+    "Ein I links von einem V zieht ab, rechts davon zählt es dazu.",
+    "Der Stab, der wandern muss, steht rechts vom Gleichheitszeichen."
+  ],
+  "superHint": "Das I vor dem rechten V darf die Seite wechseln.",
+  "solutionText": "V + I = VI: Das I wandert hinter das V. Es geht auch andersherum: IV + I = V. Beides stimmt.",
+  "intro": {
+    "speaker": "ellis",
+    "text": "Römische Zahlen. Die Römer hatten keine Null. Kein Wunder, dass ihr Reich untergegangen ist."
+  }
+}

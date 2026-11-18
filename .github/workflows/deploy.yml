@@ -41,6 +41,9 @@ jobs:
       - name: Content simulation (paths, length)
         run: npm run content:simulate
 
+      - name: Puzzles solvable [PLAN-3]
+        run: npm run puzzles:verify
+
       - name: Asset licences [GFX-3]
         run: npm run assets:check
 

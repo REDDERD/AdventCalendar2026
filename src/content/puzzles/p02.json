@@ -1,0 +1,26 @@
+{
+  "id": "p02",
+  "number": 2,
+  "title": "Schwebende Kerzen",
+  "points": 20,
+  "type": "toggle",
+  "prompt": "Peeves hat alle Kerzen ausgeblasen. Tippst du eine Kerze an, wechselt sie zwischen an und aus – und ihre Nachbarn oben, unten, links und rechts ebenso. Bring alle neun zum Brennen.",
+  "config": {
+    "rows": 3,
+    "cols": 3,
+    "lit": [],
+    "sprites": { "on": "puzzle.candle_on", "off": "puzzle.candle_off" }
+  },
+  "solution": [0, 2, 4, 6, 8],
+  "hints": [
+    "Jede Kerze musst du höchstens einmal berühren. Zweimal ist wie keinmal.",
+    "Die Reihenfolge ist egal.",
+    "Eine Kante gehört zu drei Berührungen, wenn du richtig anfängst: zwei Ecken und die Mitte."
+  ],
+  "superHint": "Fünf Berührungen reichen.",
+  "solutionText": "Die vier Ecken und die Mitte. Jede Kante wird von zwei Ecken und der Mitte berührt, also dreimal, und dreimal heißt: an. Die Ecken und die Mitte selbst nur einmal.",
+  "intro": {
+    "speaker": "quill",
+    "text": "Eine Kerze, die man berührt, steckt ihre Nachbarn an. Eine alte Regel, nach der auch Gerüchte funktionieren."
+  }
+}

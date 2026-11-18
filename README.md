@@ -31,10 +31,11 @@ Die App läuft dann unter http://localhost:5173/AdventCalendar2026/. Am Rechner 
 | `test:e2e` | Playwright (iPhone-13-Viewport) gegen Emulator + Dev-Server; vorher einmalig `npx playwright install chromium` |
 | `content:compile` | Ink → JSON, Entscheidungs-Katalog `choices.generated.json` |
 | `content:lint` | Statische Prüfung von Ink und Rätsel-JSON |
+| `puzzles:verify` | Jedes Rätsel per Skript lösen: eindeutig, erreichbar, Mindestzüge `[PLAN-3]` |
 | `assets:check` | Fehlende/unbenutzte Assets, fehlende Lizenzen |
 | `assets:import-lpc -- <lpc-repo>` | LPC-Ebenen aus `scripts/lpc/catalog.ts` importieren (Laufanimation, Paletten, Credits); `--list` zeigt die benötigten Dateien für einen Sparse-Checkout des [Generator-Repos](https://github.com/LiberatedPixelCup/Universal-LPC-Spritesheet-Character-Generator) |
 | `assets:npcs` | NPC-Sprites aus den LPC-Ebenen bauen (`src/character/npcs.ts`) |
-| `assets:draw` | Eigene Sprites zeichnen (Hut, Haustiere, Zauberstäbe, Wappen, Emotes) |
+| `assets:draw` | Eigene Sprites zeichnen (Hut, Haustiere, Zauberstäbe, Wappen, Emotes, Rätselteile) |
 | `admin:set-uid -- <uid>` | Admin-UID in `src/config.ts` und `firestore.rules` eintragen |
 | `admin:set-password -- <eulenname> <zauberwort>` | Zauberwort zurücksetzen `[AUTH-11]` |
 
@@ -73,7 +74,7 @@ Repository → Settings → Pages → Source: **GitHub Actions**. Danach baut un
 ## Inhalte schreiben
 
 - Story: `src/content/ink/dayNN.ink`, bindet `globals.ink` ein. Konventionen: CONCEPT.md Abschnitt 15.1. Abweichung: `# choice_point: <id> <Frage>` ohne `|`.
-- Rätsel: `src/content/puzzles/<id>.json` (Schema in `src/puzzles/schema.ts`).
+- Rätsel: `src/content/puzzles/<id>.json`. Grundschema in `src/puzzles/schema.ts`, `config`/`solution` je Engine in `src/puzzles/logic/<engine>.ts`. Danach `npm run puzzles:verify`. Als Admin: Truhe → Rätsel zeigt alle Rätsel zum Ausprobieren.
 - Freischaltzeiten und Titel: `src/content/schedule.ts`.
 - Grafiken/Sounds: nur über IDs aus `src/assets/manifest.ts`; fehlende Dateien erscheinen als Platzhalter.
 - Bildschirm: 256 logische Pixel breit, 448–560 hoch (DECISIONS.md #32). Hintergründe sind 256 × 512 und unten verankert; Funken (`# spark: id x y`) liegen in diesen Koordinaten zwischen y 100 und 400. Rätsel-Engines bekommen mindestens 256 × 256.

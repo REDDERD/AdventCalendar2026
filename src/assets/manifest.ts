@@ -112,6 +112,11 @@ export const assets: Record<string, AssetDef> = {
   'ui.seal': { file: 'assets/ui/seal.png', w: 24, h: 24 },
   // Puzzle images: 256 × 64 (shown below the prompt)
   'puzzle.p01': { file: 'assets/puzzles/p01.png', w: 256, h: 64 },
+  // Engine pictures and pieces (own sprites, scripts/draw-sprites.ts)
+  'puzzle.candle_on': { file: 'assets/puzzles/candle_on.png', w: 32, h: 32, ...OWN },
+  'puzzle.candle_off': { file: 'assets/puzzles/candle_off.png', w: 32, h: 32, ...OWN },
+  'puzzle.mandrake': { file: 'assets/puzzles/mandrake.png', w: 16, h: 16, ...OWN },
+  'puzzle.p11.snow': { file: 'assets/puzzles/p11.png', w: 256, h: 232, ...OWN },
   // Phase 2 overrides go below, e.g.
   // 'portrait.quill': { file: 'assets/portraits/quill.png', moods: { happy: '...' } },
 };

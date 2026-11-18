@@ -1,0 +1,27 @@
+import { AssetImage } from '../../ui/AssetImage';
+import { choiceLogic, type ChoiceConfig, type ChoiceState } from '../logic/choice';
+import type { Engine, EngineProps } from './types';
+
+function ChoiceEngine({ puzzle, state, setState, disabled }: EngineProps<ChoiceState>) {
+  const { options, columns } = puzzle.config as ChoiceConfig;
+  return (
+    <div className={`engine-choice cols-${columns}`}>
+      {options.map((option, i) => (
+        <button
+          key={i}
+          type="button"
+          className={`answer-card ${state === i ? 'selected' : ''}`}
+          aria-pressed={state === i}
+          disabled={disabled}
+          onClick={() => setState(state === i ? null : i)}
+        >
+          <span className="answer-letter">{String.fromCharCode(65 + i)}</span>
+          {option.image && <AssetImage id={option.image} w={48} h={48} />}
+          <span>{option.label}</span>
+        </button>
+      ))}
+    </div>
+  );
+}
+
+export const choiceEngine: Engine<ChoiceState> = { logic: choiceLogic, Component: ChoiceEngine, submit: 'check' };

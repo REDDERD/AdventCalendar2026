@@ -1,16 +1,20 @@
 import type { ComponentType } from 'react';
+import type { EngineLogic } from '../logic/types';
 import type { Puzzle } from '../schema';
 
-export interface EngineProps {
+export interface EngineProps<S> {
   puzzle: Puzzle;
+  /** The host owns the state so "Zurücksetzen" and "Prüfen" work for every engine [PZL-6]. */
+  state: S;
+  setState: (next: S) => void;
   disabled: boolean;
-  /** Submit an attempt; the host checks it with the engine's `check`. */
-  onSubmit: (input: unknown) => void;
+  /** Only for `direct` engines, which submit themselves (keyboard OK). */
+  onSubmit: (state: S) => void;
 }
 
-export interface Engine {
-  Component: ComponentType<EngineProps>;
-  check: (puzzle: Puzzle, input: unknown) => boolean;
-  /** Human-readable attempt for the event log [PZL-8]. */
-  describe: (input: unknown) => string;
+export interface Engine<S = never> {
+  logic: EngineLogic<S>;
+  Component: ComponentType<EngineProps<S>>;
+  /** `check`: the action bar's "Prüfen" submits; `direct`: the engine submits itself. */
+  submit: 'check' | 'direct';
 }

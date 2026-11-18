@@ -1,0 +1,31 @@
+{
+  "id": "p11",
+  "number": 11,
+  "title": "Spuren im Schnee",
+  "points": 40,
+  "type": "tap",
+  "prompt": "Vier Fährten führen vom Uhrturm weg. Drei davon reißen irgendwo ab, nur eine geht ohne Lücke durch. Tippe an, wo sie endet.",
+  "config": {
+    "image": "puzzle.p11.snow",
+    "height": 232,
+    "targets": [
+      { "id": "forest", "x": 12, "y": 188, "w": 40, "h": 32 },
+      { "id": "hut", "x": 78, "y": 192, "w": 36, "h": 30 },
+      { "id": "pond", "x": 140, "y": 196, "w": 40, "h": 26 },
+      { "id": "greenhouse", "x": 204, "y": 190, "w": 38, "h": 32 }
+    ],
+    "maxMarks": 1
+  },
+  "solution": ["greenhouse"],
+  "hints": [
+    "Folge einer Fährte mit dem Finger, Schritt für Schritt.",
+    "Wo sich Fährten kreuzen, geht jede geradeaus weiter.",
+    "Die Spur zum Wald und die zum See haben eine Lücke."
+  ],
+  "superHint": "Die Spur zur Hütte reißt kurz vor dem Ziel ab.",
+  "solutionText": "Zum Gewächshaus. Die anderen drei Fährten haben Lücken – dort ist jemand über den Schnee geflogen oder gesprungen.",
+  "intro": {
+    "speaker": "ellis",
+    "text": "Spuren! Ich liebe Spuren. Ich bin praktisch ein Spurenleser. Ich habe nur noch nie eine gelesen."
+  }
+}

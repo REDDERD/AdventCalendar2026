@@ -1,0 +1,36 @@
+{
+  "id": "p04",
+  "number": 4,
+  "title": "Das Regal",
+  "points": 30,
+  "type": "arrange",
+  "prompt": "Isoldes Bücher stehen durcheinander. PENDEL steht ganz rechts. RAD steht direkt rechts von ZEIT. FEDER steht links von STUNDE, aber nicht direkt daneben. Tausche die Bücher, bis alles stimmt.",
+  "config": {
+    "mode": "row",
+    "items": [
+      { "id": "zeit", "label": "ZEIT" },
+      { "id": "rad", "label": "RAD" },
+      { "id": "feder", "label": "FEDER" },
+      { "id": "stunde", "label": "STUNDE" },
+      { "id": "pendel", "label": "PENDEL" }
+    ],
+    "start": ["pendel", "stunde", "rad", "feder", "zeit"],
+    "rules": [
+      { "type": "at", "item": "pendel", "pos": -1 },
+      { "type": "right_of", "item": "rad", "of": "zeit" },
+      { "type": "left_of", "item": "feder", "of": "stunde", "gap": 2 }
+    ]
+  },
+  "solution": ["feder", "zeit", "rad", "stunde", "pendel"],
+  "hints": [
+    "Fang mit dem Buch an, das ganz rechts steht.",
+    "ZEIT und RAD bilden ein Paar.",
+    "FEDER braucht mindestens ein Buch Abstand zu STUNDE."
+  ],
+  "superHint": "Das Paar ZEIT–RAD steht in der Mitte.",
+  "solutionText": "Feder, Zeit, Rad, Stunde, Pendel: von der ersten Skizze bis zur letzten Schraube. Das Pendel ist immer das Letzte, was sich bewegt.",
+  "intro": {
+    "speaker": "quill",
+    "text": "Isolde ordnete ihre Bücher in der Reihenfolge, in der sie arbeitete. Von der Feder bis zum Pendel."
+  }
+}

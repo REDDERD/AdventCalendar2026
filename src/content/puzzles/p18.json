@@ -1,0 +1,24 @@
+{
+  "id": "p18",
+  "number": 18,
+  "title": "Die Tür, die erscheint",
+  "points": 50,
+  "type": "slide",
+  "prompt": "Die Tür besteht aus acht verschobenen Platten. Schieb sie zurück in die Reihenfolge 1 bis 8, die Lücke unten rechts.",
+  "config": {
+    "size": 3,
+    "start": [6, 1, 2, 4, 0, 3, 5, 7, 8]
+  },
+  "solution": [1, 2, 3, 4, 5, 6, 7, 8, 0],
+  "hints": [
+    "Bring zuerst die obere Reihe in Ordnung und rühr sie danach nicht mehr an.",
+    "Die 1 muss zuerst nach oben links. Die 6 steht ihr im Weg.",
+    "Für die untere Reihe musst du die 7 und die 8 im Kreis um die Lücke wandern lassen."
+  ],
+  "superHint": "Mit 18 Zügen geht es am kürzesten.",
+  "solutionText": "Reihe für Reihe: erst 1-2-3 oben, dann den Rest im Kreis schieben, bis die Lücke unten rechts landet.",
+  "intro": {
+    "speaker": "quill",
+    "text": "Ein Raum, der erscheint, wenn man ihn braucht. Und eine Tür, die erst gebraucht werden will."
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "id": "p21",
+  "number": 21,
+  "title": "Zahnräder",
+  "points": 60,
+  "type": "choice",
+  "prompt": "Sieben Zahnräder bilden einen geschlossenen Ring, jedes greift in seine beiden Nachbarn. Quill will Rad 1 im Uhrzeigersinn drehen. Was macht Rad 4?",
+  "config": {
+    "options": [
+      { "label": "Es dreht sich im Uhrzeigersinn." },
+      { "label": "Es dreht sich gegen den Uhrzeigersinn." },
+      { "label": "Es dreht sich abwechselnd hin und her." },
+      { "label": "Nichts – der Ring klemmt." }
+    ]
+  },
+  "solution": 3,
+  "hints": [
+    "Zwei Räder, die ineinandergreifen, drehen sich immer gegensinnig.",
+    "Geh einmal im Kreis: Rad 2 gegen, Rad 3 mit, Rad 4 gegen … und Rad 7?",
+    "Rad 7 greift auch in Rad 1. Passt das zusammen?"
+  ],
+  "superHint": "Ein Ring aus einer ungeraden Zahl von Rädern kann sich nicht drehen.",
+  "solutionText": "Der Ring klemmt. Nachbarn drehen gegensinnig, die Richtungen wechseln sich also ab. Bei sieben Rädern müssten Rad 7 und Rad 1 beide im Uhrzeigersinn laufen – und sie greifen ineinander. Nichts bewegt sich.",
+  "intro": {
+    "speaker": "quill",
+    "text": "Zahnräder lügen nicht. Sie drehen sich, oder sie tun es nicht. Menschen sind da komplizierter."
+  }
+}

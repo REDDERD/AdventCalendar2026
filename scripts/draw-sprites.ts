@@ -265,6 +265,112 @@ function emote(name: string): Canvas {
 }
 for (const name of ['exclaim', 'question', 'heart', 'sweat', 'note', 'dots']) emote(name).save(path.join(OUT, `emotes/${name}.png`));
 
+// ---------- Puzzle pieces ----------
+
+/** Floating candle (32 × 32): lit with a flame, unlit with a curl of smoke – differs by shape, not only colour. */
+function candle(lit: boolean): Canvas {
+  const c = new Canvas(32, 32);
+  const wax = lit ? ['#e8d5a6', '#f6ead0', '#fff8ea'] : ['#a89a80', '#c9b994', '#ddd0b0'];
+  for (let y = 14; y < 30; y++) for (let x = 12; x < 20; x++) c.set(x, y, ramp(wax, (x - 12) / 8));
+  c.rect(12, 14, 8, 1, wax[2]);
+  c.rect(13, 15, 2, 3, wax[2]); // wax drip
+  c.rect(15, 11, 1, 3, '#3a3440'); // wick
+  if (lit) {
+    c.ellipse(15.5, 7.5, 3, 5, (u, v) => (Math.abs(u) < 0.45 && v > -0.2 ? '#fff1c2' : v < -0.4 ? '#ff9a3c' : '#ffd27a'));
+  } else {
+    for (const [x, y] of [[16, 9], [17, 8], [17, 7], [16, 6], [15, 5], [15, 4], [16, 3]]) c.set(x, y, '#9aa0b0');
+  }
+  c.outline('#2b2a33');
+  return c;
+}
+
+/** Mandrake in a pot (16 × 16). */
+function mandrake(): Canvas {
+  const c = new Canvas(16, 16);
+  for (let y = 9; y < 15; y++) {
+    const inset = Math.floor((y - 9) / 3);
+    for (let x = 3 + inset; x < 13 - inset; x++) c.set(x, y, x < 6 ? '#a8502c' : x > 10 - inset ? '#7a3420' : '#c4683c');
+  }
+  c.rect(2, 8, 12, 2, '#d47a48');
+  c.ellipse(8, 7, 3, 2, '#c9a66b'); // the root's head peeking out
+  c.set(7, 7, '#3a3440');
+  c.set(9, 7, '#3a3440');
+  for (const [x0, lean] of [[6, -1], [8, 0], [10, 1]]) {
+    for (let i = 0; i < 4; i++) c.set(x0 + Math.round((lean * i) / 2), 4 - i, i > 1 ? '#7ab84a' : '#4f8a3c');
+  }
+  c.outline('#2b1a10');
+  return c;
+}
+
+/** p11 "Spuren im Schnee" (256 × 232): four trails from the clock tower, only one never breaks. */
+function snowTrails(): Canvas {
+  const c = new Canvas(256, 232);
+  // snow with a little texture
+  let seed = 11;
+  const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+  c.rect(0, 0, 256, 232, '#eef3fa');
+  for (let i = 0; i < 900; i++) c.set(rnd() * 256, rnd() * 232, rnd() < 0.5 ? '#dfe8f4' : '#ffffff');
+  // clock tower foot at the top
+  c.rect(104, 0, 48, 18, '#7a7788');
+  for (let y = 0; y < 18; y += 6) for (let x = 104 + ((y / 6) % 2) * 6; x < 152; x += 12) c.rect(x, y, 1, 6, '#4a4856');
+  c.rect(120, 4, 16, 14, '#3b2414');
+  c.rect(127, 4, 1, 14, '#6b4226');
+
+  const bez = (p: number[][], t: number) => {
+    const m = 1 - t;
+    return [0, 1].map((k) => m * m * m * p[0][k] + 3 * m * m * t * p[1][k] + 3 * m * t * t * p[2][k] + t * t * t * p[3][k]);
+  };
+  const trail = (p: number[][], gaps: Array<[number, number]>) => {
+    let prev = bez(p, 0);
+    let walked = 0;
+    let step = 0;
+    for (let i = 1; i <= 400; i++) {
+      const t = i / 400;
+      const at = bez(p, t);
+      walked += Math.hypot(at[0] - prev[0], at[1] - prev[1]);
+      const dx = at[0] - prev[0];
+      const dy = at[1] - prev[1];
+      prev = at;
+      if (walked < 7) continue;
+      walked = 0;
+      step++;
+      if (gaps.some(([a, b]) => t >= a && t <= b)) continue;
+      const len = Math.hypot(dx, dy) || 1;
+      const side = step % 2 ? 2 : -2;
+      const x = at[0] + (-dy / len) * side;
+      const y = at[1] + (dx / len) * side;
+      c.rect(x - 1, y - 1, 2, 3, '#7a8aa8');
+    }
+  };
+  const start = [128, 22];
+  trail([start, [-20, 90], [300, 120], [160, 196]], [[0.55, 0.63]]); // → pond, broken
+  trail([start, [300, 70], [-40, 130], [32, 196]], [[0.3, 0.38]]); // → forest, broken
+  trail([start, [200, 100], [20, 110], [96, 196]], [[0.8, 0.88]]); // → hut, broken
+  trail([start, [40, 60], [300, 100], [224, 196]], []); // → greenhouse, unbroken
+
+  // destinations along the bottom
+  for (let k = 0; k < 3; k++) {
+    const x = 18 + k * 10;
+    for (let j = 0; j < 14; j++) c.rect(x + 6 - j / 2.4, 196 + j, 1 + j / 1.2, 1, j % 4 === 3 ? '#2e5a2a' : '#3d7a35');
+    c.rect(x + 5, 210, 2, 4, '#5a3a20');
+  }
+  c.rect(84, 204, 24, 14, '#8a5a34'); // hut
+  for (let j = 0; j < 8; j++) c.rect(82 + j, 204 - j, 28 - 2 * j, 1, '#5a3a20');
+  c.rect(94, 210, 5, 8, '#3b2414');
+  c.ellipse(160, 210, 16, 7, (u, v) => (u + v < -0.5 ? '#ffffff' : '#a9cbe8')); // frozen pond
+  c.rect(210, 200, 28, 18, '#bfe0d8'); // greenhouse
+  for (let x = 210; x <= 238; x += 7) c.rect(x, 200, 1, 18, '#4f6b3a');
+  c.rect(210, 200, 28, 1, '#4f6b3a');
+  c.rect(210, 208, 28, 1, '#4f6b3a');
+  for (let j = 0; j < 6; j++) c.rect(212 + j * 2, 199 - j, 24 - j * 4, 1, '#4f6b3a');
+  return c;
+}
+
+candle(true).save(path.join(OUT, 'puzzles/candle_on.png'));
+candle(false).save(path.join(OUT, 'puzzles/candle_off.png'));
+mandrake().save(path.join(OUT, 'puzzles/mandrake.png'));
+snowTrails().save(path.join(OUT, 'puzzles/p11.png'));
+
 sortingHat().save(path.join(OUT, 'sprites/hat.png'));
 owl().save(path.join(OUT, 'sprites/pet_owl.png'));
 cat().save(path.join(OUT, 'sprites/pet_cat.png'));

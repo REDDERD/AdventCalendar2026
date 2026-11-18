@@ -79,6 +79,7 @@ export const saveDocSchema = z.object({
       points: z.number(),
       durationSec: z.number().optional(),
       startedAt: z.number().optional(),
+      helpDeclinedAt: z.number().optional(),
     }),
   ),
   housePoints: z.number(),

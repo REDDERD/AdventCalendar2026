@@ -116,6 +116,8 @@ export interface PuzzleResult {
   durationSec?: number;
   /** When the puzzle was first opened; basis for durationSec across reloads. */
   startedAt?: Millis;
+  /** [PZL-5] Last time the player declined Quill's help. */
+  helpDeclinedAt?: Millis;
 }
 
 export interface Settings {
