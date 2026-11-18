@@ -1,0 +1,19 @@
+{
+  "id": "p01",
+  "number": 1,
+  "title": "Die Zeiger",
+  "points": 20,
+  "type": "input",
+  "prompt": "Zwischen 12 Uhr mittags und Mitternacht: Wie oft liegen Stunden- und Minutenzeiger genau übereinander?",
+  "image": "puzzle.p01",
+  "config": { "inputMode": "number", "maxLength": 2 },
+  "solution": ["11"],
+  "hints": [
+    "Um 12:00 liegen sie schon übereinander. Zählst du das mit?",
+    "Der Minutenzeiger überholt den Stundenzeiger etwa einmal pro Stunde …",
+    "… aber nicht genau einmal. Zwischen 11 und 12 Uhr klappt es nicht."
+  ],
+  "superHint": "Es ist eine Zahl kleiner als 12.",
+  "solutionText": "11 Mal. Der Minutenzeiger braucht etwas mehr als eine Stunde, um den Stundenzeiger einzuholen.",
+  "intro": { "speaker": "quill", "text": "Eine Uhr, die steht, ist immer noch zweimal am Tag richtig. Aber dies hier …" }
+}

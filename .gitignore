@@ -1,0 +1,12 @@
+node_modules/
+dist/
+.secrets/
+src/content/generated/
+*.log
+.firebase/
+firebase-debug.log
+firestore-debug.log
+ui-debug.log
+test-results/
+playwright-report/
+.env.local

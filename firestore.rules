@@ -1,0 +1,41 @@
+rules_version = '2';
+// [ADM-2] Security comes from these rules, not from hiding UI in the client.
+// ADMIN_UID must match src/config.ts (use `npm run admin:set-uid -- <uid>`).
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() { return request.auth != null; }
+    function isAdmin()  { return signedIn() && request.auth.uid == 'ObgMRpvygJdMKKbabQHZuvho7992'; }
+    function isSelf(uid) { return signedIn() && request.auth.uid == uid; }
+    function isActiveMember() {
+      return signedIn()
+        && exists(/databases/$(database)/documents/users/$(request.auth.uid))
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.active == true;
+    }
+
+    match /users/{uid} {
+      allow read: if isAdmin() || isSelf(uid);
+      allow create, delete: if isAdmin();
+      allow update: if isAdmin()
+        || (isSelf(uid)
+            && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['lastSeenAt'])
+            && request.resource.data.lastSeenAt == request.time);
+    }
+    match /usernames/{username} {
+      allow read, write: if isAdmin();
+    }
+    match /saves/{uid} {
+      allow read, write: if isAdmin() || (isSelf(uid) && isActiveMember());
+    }
+    match /personal/{uid} {
+      allow read: if isAdmin() || (isSelf(uid) && isActiveMember());
+      allow write: if isAdmin();
+    }
+    match /events/{eventId} {
+      allow create: if isActiveMember()
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.at == request.time;
+      allow read: if isAdmin();
+      allow update, delete: if false;
+    }
+  }
+}
