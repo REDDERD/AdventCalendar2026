@@ -462,16 +462,16 @@ Alle Enden sind schön und keines bestraft.
 | 8 | `greenhouse` | `maren` nervös, Rascheln im Schuppen. Ende Akt I | `d08.maren`: `ask` +trust · `leave` Ton | `p08` Alraunen: 4 Töpfe in 4×4, keine zwei in Reihe/Spalte/Nachbarschaft (`arrange` Raster) | 40 |
 | 9 | `common_room` | Hausabend, Tratsch über Verdächtige | `d09.secret`: `share` → `house_token` · `keep` | `p09` Das Passwort: hausspezifisches Worträtsel, 4 Varianten (`input`) | 30 |
 | 10 | `caretaker_office` | `grimsby` befragen | `d10.grimsby`: `kind` → `k08` +trust · `strict` −trust | `p10` Der Schlüsselbund: Musterlogik (`choice`) | 40 |
-| 11 | `grounds_snow` | Spuren führen vom Uhrturm weg | `d11.snow`: `play` +bond · `search` +1 Funke | `p11` Spuren im Schnee: die durchgehende Fährte antippen (`tap`) | 40 |
+| 11 | `grounds_snow` | Zwei Fährten führen vom Uhrturm weg; am See braucht Hagrid Hilfe mit seiner Herde | `d11.snow`: `play` +bond · `search` +1 Funke; `d11.hagrid`: `eat` → `ate_rockcake` · `decline` | `p11` Das Boot: 3 Hippogreife und 3 Frettchen über den See, Boot für 2, Überzahl verboten („Wolves and Chicks“, `custom:cross`) | 40 |
 | 12 | `astronomy_tower` | `ellis` hat Höhenangst. Zwei Spuren | `d12.courage`: `encourage` +bond · `alone`; `d12.route`: `forest` · `archive` | `p12` Das Sternbild: in einem Zug nachzeichnen (`path`) | 40 |
 | 13w | `forest_edge` | Mit `ellis` in den Wald. Haustier-Hinweis 2 | `d13w.lantern`: `on` → `lantern` · `off` +1 Funke | `p13w` Zentaurenpfeile: Zahlenlogik an Bäumen (`input`) | 40 |
-| 13a | `archive` | Mit `quill` ins Archiv. `k06`. Haustier-Hinweis 2 | `d13a.theo`: `ask` +trust\_theo · `alone` → `archive_key` | `p13a` Die Ablage: Akte über Katalogcode finden (`input`) | 40 |
+| 13a | `archive` | Mit `quill` ins Archiv. `k06`. Haustier-Hinweis 2 | `d13a.theo`: `ask` +trust\_theo · `alone` → `archive_key` | `p13a` Der Stammbaum: sieben Karteikarten nach Hinweisen von der ältesten bis zur jüngsten Generation ordnen, bis Theo (`arrange` Reihe) | 40 |
 | 14w | `forest_clearing` | Goldenes Zahnrad im Nest. `k04` | `d14w.gear`: `take` · `watch` Ton | `p14w` Das Spinnennetz: Weg ohne Fäden zu kreuzen (`path`) | 50 |
 | 14a | `dungeon_corridor` | Notizen in Spiegelschrift | `d14a.tone`: Ton | `p14a` Spiegelschrift entziffern (`input`) | 50 |
 | 15w | `niffler_burrow` | `knopf` gefunden. `k05`. Spur zu `maren` | `d15w.knopf`: `gentle` · `chase` | `p15w` Was glänzt?: echte Galleonen antippen, keine Fälschungen (`tap`) | 50 |
 | 15a | `portrait_gallery` | Porträt 1726: `aldous` lebend. `k07` | `d15a.aldous`: `ask` +trust\_aldous · `silent` | `p15a` Das Porträt: 5 Unterschiede (`tap`) | 50 |
 | 16 | `great_hall` | Ballvorbereitung, Routen treffen sich, `maren` gesteht | `d16.maren`: `cover` · `report` | `p16` Die Tischordnung: 6 Gäste nach Bedingungen (`arrange` Reihe) | 50 |
-| 17 | `hogsmeade` | Geschenke kaufen | `d17.gift`: `ellis` → `gift_scarf` · `aldous` → `gift_music_box` | `p17` Wechselgeld: 1 Galleone = 17 Sickel, 1 Sickel = 29 Knut (`input`) | 40 |
+| 17 | `hogsmeade` | Geschenke kaufen | `d17.gift`: `ellis` → `gift_scarf` · `aldous` → `gift_music_box` | `p17` Knallbonbons: Nim mit drei Haufen (3, 4, 5) gegen Fred und George, wer das letzte nimmt, gewinnt (`custom:nim`) | 40 |
 | 18 | `room_of_requirement` | Erinnerung der Uhrmacherin, `k07` falls fehlend, persönliches Foto (Abschnitt 12) | `d18.token`: `use` (nur mit `house_token`) Bonus-Szene · `skip` | `p18` Die Tür, die erscheint: Schiebepuzzle 3×3 (`slide`) | 50 |
 | 19 | `ghost_corridor` | Geisterparade, `aldous` traurig | `d19.aldous`: `comfort` +trust\_aldous · `press` Ton | `p19` Die Parade: Geister nach Jahrhundert ordnen (`arrange` Reihe) | 50 |
 | 20 | `dueling_club` | Duelltraining, ggf. `k06` von Theo | `d20.duel`: `ally` · `oppose` (+ Stab-Option) | `p20` Zauberduell: Spruch-Logik wie Schere-Stein-Papier (`choice`) | 50 |
@@ -482,7 +482,7 @@ Alle Enden sind schön und keines bestraft.
 
 - `[PLAN-1]` MUSS: Tag 24: Kapitel + Rätsel ≤ 5 Minuten. Danach Abspann (Ende, Hauspokal, Epilog, Brief, Credits) 3–4 Minuten, überspringbar außer dem Brief.
 - `[PLAN-2]` MUSS: Haustier-Hinweise an Tag 5, 13 und 21: Das Haustier kommentiert das Rätsel und schaltet Hinweis 1 gratis frei.
-- `[PLAN-3]` MUSS: Alle Rätsel müssen eindeutig lösbar sein. Der Agent löst jedes Rätsel per Skript/Test, bevor es als fertig gilt (z. B. BFS für `slide` und `pour`).
+- `[PLAN-3]` MUSS: Alle Rätsel müssen eindeutig lösbar sein. Der Agent löst jedes Rätsel per Skript/Test, bevor es als fertig gilt (z. B. BFS für `slide`, `pour` und `cross`, Spielbaum für `nim`).
 
 ## 10. Rätsel-Engine
 
@@ -491,13 +491,13 @@ Alle 27 Rätsel laufen über **8 Engine-Typen**, die nur per JSON konfiguriert w
 | Typ | Interaktion | Prüfung | Tage |
 | --- | --- | --- | --- |
 | `choice` | 2–6 Antwortkarten antippen | Index | 10, 20, 21 |
-| `input` | Zahl oder Wort über eigene Pixel-Tastatur (keine System-Tastatur) | normalisierter Textvergleich | 1, 7, 9, 13w, 13a, 14a, 17 |
-| `tap` | Stellen im Bild antippen | Menge der Ziel-Hotspots | 11, 15w, 15a |
-| `arrange` | Ziehen & Ablegen; Modi `row`, `grid`, `sticks` | Zielzustand oder Regelfunktion | 4, 6, 8, 16, 19, 22 |
+| `input` | Zahl oder Wort über eigene Pixel-Tastatur (keine System-Tastatur) | normalisierter Textvergleich | 1, 7, 9, 13w, 14a |
+| `tap` | Stellen im Bild antippen | Menge der Ziel-Hotspots | 15w, 15a |
+| `arrange` | Ziehen & Ablegen; Modi `row`, `grid`, `sticks` | Zielzustand oder Regelfunktion | 4, 6, 8, 13a, 16, 19, 22 |
 | `slide` | Schiebepuzzle | Zielzustand | 18 |
 | `toggle` | Felder an/aus, Nachbarn schalten mit | alle an | 2 |
 | `path` | Linie Punkt zu Punkt ziehen | Regelfunktion | 3, 12, 14w |
-| `custom` | Eigene Komponente: `pour`, `accuse`, `finale` | eigene Logik | 5, 23, 24 |
+| `custom` | Eigene Komponente: `pour`, `cross`, `nim`, `accuse`, `finale` | eigene Logik | 5, 11, 17, 23, 24 |
 
 ### 10.1 Datenformat
 
@@ -932,7 +932,7 @@ hogwarts-advent/
 │  ├─ scene/           SceneRenderer.tsx, Hotspot.tsx, Weather.tsx
 │  ├─ puzzles/         PuzzleHost.tsx, schema.ts, scoring.ts,
 │  │                   engines/{Choice,Input,Tap,Arrange,Slide,Toggle,Path}.tsx,
-│  │                   custom/{Pour,Accuse,Finale}.tsx, NotesOverlay.tsx
+│  │                   custom/{Pour,Cross,Nim,Accuse,Finale}.tsx, NotesOverlay.tsx
 │  ├─ screens/         Login, Onboarding, prologue/*, Calendar, ChapterCard, Scene,
 │  │                   PuzzleIntro, Puzzle, Solution, DayEnd, trunk/*, Ending,
 │  │                   Letter, Credits, Blocked

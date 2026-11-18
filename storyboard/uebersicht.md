@@ -28,4 +28,8 @@ Wörter = längster und kürzester Pfad laut `content:simulate`-Logik (500 Zufal
 | `p07` Eulen | 1, 4, 6, 11, 21 → Summe der drei davor | `38` (Falle 41) |
 | `p08` Alraunen | 6 × 6 mit Steinen | genau eine Lösung: 6 3 5 1 4 2 |
 
+Tag 11 liegt einzeln vor ([tag-11.md](tag-11.md)): „Das Boot“, Rätsel `p11` (`custom:cross`, 40 Punkte), 330–339 Wörter, Cameo Hagrid.
+
+Geänderter Rätselplan ab Tag 13a und 17 (kein Skript, nur Spezifikation in Bibel Abschnitt 8): `p13a` Der Stammbaum (`arrange` Reihe, 7 Karten, 1 Lösung von 120) und `p17` Knallbonbons (Nim 3/4/5, `custom:nim`, 1 Gewinnzug, Zufall gewinnt ca. 0,7 %).
+
 Alle Rätsel sind knackiger als in der ersten Fassung (Vorgabe Auftraggeber, DECISIONS.md #44). Tag 1–8 sind umgesetzt.
