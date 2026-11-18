@@ -1,3 +1,4 @@
+import { useMusic } from '../../audio/useMusic';
 import { useEffect, useState } from 'react';
 import { CharacterSprite } from '../../character/CharacterSprite';
 import { DEFAULT_LOOK } from '../../character/layers';
@@ -20,6 +21,7 @@ const CHEER: Record<string, string> = {
 
 /** Section 6.1 step 7: the grey robe takes on the house colours [CHAR-2]. */
 export function RevealScreen() {
+  useMusic('finale');
   const draft = useDraft();
   const [phase, setPhase] = useState<0 | 1 | 2>(0);
   const house = draft.house;

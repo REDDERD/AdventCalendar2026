@@ -1,3 +1,4 @@
+import { useMusic } from '../../audio/useMusic';
 import { useRef, useState } from 'react';
 import { CharacterSprite } from '../../character/CharacterSprite';
 import { buildForPronoun, DEFAULT_LOOK, OPTIONS, randomLook, type Direction } from '../../character/layers';
@@ -27,6 +28,7 @@ const SWIPE_PX = 20;
 
 /** Section 6.1 step 2: choose the look in the robe shop's mirror [CHAR-1]. */
 export function MirrorScreen() {
+  useMusic('title');
   const draft = useDraft();
   const updateSave = useStore((s) => s.updateSave);
   const build = buildForPronoun(draft.pronoun);

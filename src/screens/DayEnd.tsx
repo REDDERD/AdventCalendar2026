@@ -1,3 +1,4 @@
+import { useMusic } from '../audio/useMusic';
 import { CLUES, ITEMS } from '../content/catalog';
 import { DOOR_MAGIC, getEntry, LAST_DAY } from '../content/schedule';
 import { DaySession } from '../core/DaySession';
@@ -11,6 +12,7 @@ import { PixelButton } from '../ui/PixelButton';
 
 /** Section 4, step 8: points, sparks, new clues/items, countdown to the next chapter. */
 export function DayEndScreen() {
+  useMusic('title');
   const save = useStore((s) => s.save)!;
   const summary = DaySession.lastSummary;
   const day = summary?.day ?? 0;

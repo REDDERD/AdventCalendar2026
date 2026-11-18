@@ -87,11 +87,10 @@ const emotes = Object.fromEntries(
   EMOTES.map((id) => [`emote.${id}`, { file: `assets/emotes/${emoteFile[id]}.png`, w: 16, h: 16, ...OWN } satisfies FileAsset]),
 );
 
+// Audio is synthesised by src/audio (DECISIONS.md #52); these ids are what Ink may name in # sfx / # music.
 const SFX = ['blip', 'select', 'correct', 'wrong', 'spark', 'door', 'stamp'] as const;
-const sfx = Object.fromEntries(SFX.map((id) => [`sfx.${id}`, { file: `audio/sfx/${id}.ogg` } satisfies FileAsset]));
 
 const MUSIC = ['title', 'castle', 'outdoor', 'dungeon', 'puzzle', 'finale', 'letter'] as const;
-const music = Object.fromEntries(MUSIC.map((id) => [`music.${id}`, { file: `audio/music/${id}.ogg` } satisfies FileAsset]));
 
 export const assets: Record<string, AssetDef> = {
   ...backgrounds,
@@ -104,8 +103,6 @@ export const assets: Record<string, AssetDef> = {
   'npc.hat': { file: 'assets/sprites/hat.png', w: 64, h: 64, ...OWN },
   'portrait.hat': { from: 'npc.hat', crop: [16, 20, 32, 32], scale: 2 },
   ...emotes,
-  ...sfx,
-  ...music,
   'ui.clock': { file: 'assets/ui/clock.png', w: 96, h: 120, ...OWN },
   'ui.frame.parchment': { file: 'assets/ui/parchment.png', nineSlice: [8, 8, 8, 8] },
   'ui.frame.wood': { file: 'assets/ui/wood.png', nineSlice: [8, 8, 8, 8] },

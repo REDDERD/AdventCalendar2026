@@ -1,3 +1,4 @@
+import { useMusic } from '../audio/useMusic';
 import { DaySession } from '../core/DaySession';
 import { go } from '../core/ScreenMachine';
 import { useStore } from '../core/store';
@@ -7,6 +8,7 @@ import { Layout } from '../ui/Layout';
 
 /** Section 4, step 4: "Rätsel 07 · 30 Hauspunkte" (Layton style), introduced by a character. */
 export function PuzzleIntroScreen() {
+  useMusic('puzzle');
   const puzzle = useCurrentPuzzle();
   const textSpeed = useStore((s) => s.save?.settings.textSpeed ?? 'normal');
   if (!puzzle) return <Layout />;

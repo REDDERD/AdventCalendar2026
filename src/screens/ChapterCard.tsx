@@ -1,3 +1,4 @@
+import { useMusic } from '../audio/useMusic';
 import { resolveDay } from '../content/schedule';
 import { DaySession } from '../core/DaySession';
 import { go } from '../core/ScreenMachine';
@@ -7,6 +8,7 @@ import { Layout } from '../ui/Layout';
 
 /** Section 4, step 2: "Kapitel 7 – Die Eulerei". */
 export function ChapterCardScreen() {
+  useMusic('title');
   const day = useStore((s) => s.activeDay) ?? 0;
   const route = useStore((s) => s.save?.vars.route);
   const { title } = resolveDay(day, typeof route === 'string' ? route : undefined);

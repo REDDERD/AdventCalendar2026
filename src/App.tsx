@@ -1,5 +1,6 @@
 import type { User } from 'firebase/auth';
 import { lazy, Suspense, useEffect, useState, type ReactNode } from 'react';
+import { unlockAudio } from './audio/AudioService';
 import { DaySession } from './core/DaySession';
 import { routeAfterLogin } from './core/flow';
 import { PixelStage } from './core/PixelStage';
@@ -166,8 +167,18 @@ const SCREENS: Record<Screen, () => ReactNode> = {
   credits: () => <CalendarScreen />,
 };
 
+/** [SND-3] Audio may only start after a touch. */
+function useAudioUnlock(): void {
+  useEffect(() => {
+    const unlock = () => unlockAudio();
+    window.addEventListener('pointerdown', unlock);
+    return () => window.removeEventListener('pointerdown', unlock);
+  }, []);
+}
+
 export function App() {
   useAuthFlow();
+  useAudioUnlock();
   const screen = useStore((s) => s.screen);
   const trunkOpen = useStore((s) => s.trunkOpen);
   const user = useStore((s) => s.user);

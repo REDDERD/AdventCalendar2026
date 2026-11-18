@@ -1,3 +1,5 @@
+import { playSfx } from '../audio/AudioService';
+import { useMusic } from '../audio/useMusic';
 import { useEffect, useState } from 'react';
 import { HOUSE_COLORS } from '../assets/palette';
 import { LAST_DAY } from '../content/schedule';
@@ -25,6 +27,7 @@ function useNow(): number {
 
 /** Section 4, step 1: the Advent clock with 24 doors. */
 export function CalendarScreen() {
+  useMusic('title');
   const save = useStore((s) => s.save)!;
   const showToast = useStore((s) => s.showToast);
   const t = useNow();
@@ -46,6 +49,7 @@ export function CalendarScreen() {
     } else if (!hasStory(day)) {
       showToast('Dieses Kapitel wird gerade noch geschrieben …');
     } else {
+      playSfx('door');
       void startDay(day);
     }
   };

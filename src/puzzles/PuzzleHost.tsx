@@ -1,4 +1,6 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
+import { playSfx } from '../audio/AudioService';
+import { useMusic } from '../audio/useMusic';
 import { DaySession } from '../core/DaySession';
 import { go } from '../core/ScreenMachine';
 import { useStore } from '../core/store';
@@ -113,6 +115,8 @@ function PuzzleRun({ puzzle, practice, engine }: Props & { engine: Engine<unknow
     const correct = engine.logic.check(puzzle, input);
     const attempt = attempts + 1;
     setStamp(correct ? 'correct' : 'wrong');
+    playSfx('stamp');
+    playSfx(correct ? 'correct' : 'wrong');
     navigator.vibrate?.(correct ? 30 : [40, 60, 40]);
 
     if (practice) {
@@ -150,6 +154,7 @@ function PuzzleRun({ puzzle, practice, engine }: Props & { engine: Engine<unknow
 
   const buyHint = (level: number) => {
     if (nextHint(bought) !== level) return;
+    playSfx('select');
     if (practice) return setPracticeRun((r) => ({ ...r, hints: [...r.hints, level] }));
     const cost = hintCost(level);
     if (save.sparks < cost) return;
@@ -189,6 +194,7 @@ function PuzzleRun({ puzzle, practice, engine }: Props & { engine: Engine<unknow
     setHelpOpen(false);
   };
 
+  useMusic('puzzle');
   const busy = !!stamp || solved;
 
   return (

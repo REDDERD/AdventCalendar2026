@@ -1,3 +1,4 @@
+import { useMusic } from '../../audio/useMusic';
 import { useState } from 'react';
 import { SPEAKER_NAMES } from '../../dialogue/speakers';
 import { SceneRenderer } from '../../scene/SceneRenderer';
@@ -22,6 +23,7 @@ const STAGE = { bg: 'wand_shop', music: null, actors: [{ id: 'wandmaker', pos: '
 
 /** Section 6.1 step 3: three wands on velvet; tap → sparks → confirm. */
 export function WandScreen() {
+  useMusic('castle');
   const draft = useDraft();
   const [selected, setSelected] = useState<WandId | null>(draft.wand ?? null);
   const wand = WANDS.find((w) => w.id === selected);

@@ -1,3 +1,4 @@
+import { useMusic } from '../audio/useMusic';
 import { DaySession } from '../core/DaySession';
 import { go } from '../core/ScreenMachine';
 import { useStore } from '../core/store';
@@ -8,6 +9,7 @@ import { PixelButton } from '../ui/PixelButton';
 
 /** Section 4, step 6: stamp, explanation, points awarded. */
 export function SolutionScreen() {
+  useMusic('puzzle');
   const puzzle = useCurrentPuzzle();
   const result = useStore((s) => (puzzle ? s.save?.puzzles[puzzle.id] : undefined));
   if (!puzzle || !result) return <Layout />;

@@ -1,3 +1,4 @@
+import { useMusic } from '../audio/useMusic';
 import { useState, type FormEvent } from 'react';
 import { useStore } from '../core/store';
 import { login, LOGIN_ERROR_TEXT } from '../services/AuthService';
@@ -12,6 +13,7 @@ function prefilledUsername(): string {
 
 /** [AUTH-8] */
 export function LoginScreen() {
+  useMusic('title');
   const [username, setUsername] = useState(prefilledUsername);
   const [password, setPassword] = useState('');
   // A failed invitation link (wrong or outdated Zauberwort) lands here with a notice.

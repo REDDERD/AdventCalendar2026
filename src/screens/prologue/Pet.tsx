@@ -1,3 +1,4 @@
+import { useMusic } from '../../audio/useMusic';
 import { useState } from 'react';
 import { logEvent } from '../../services/EventLogger';
 import type { PetId } from '../../types';
@@ -15,6 +16,7 @@ const PETS: Array<{ id: PetId; name: string; text: string }> = [
 
 /** Section 6.1 step 4: owl, cat or toad (`pet`). */
 export function PetScreen() {
+  useMusic('castle');
   const draft = useDraft();
   const [selected, setSelected] = useState<PetId | null>(draft.pet ?? null);
   const pet = PETS.find((p) => p.id === selected);

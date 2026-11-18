@@ -1,3 +1,4 @@
+import { useMusic } from '../../audio/useMusic';
 import { useMemo, useState, type ReactNode } from 'react';
 import { evaluateSorting, HAT_LINES, shuffled, SORTING_QUESTIONS } from '../../content/sortingQuiz';
 import { useStore } from '../../core/store';
@@ -25,6 +26,7 @@ type Phase =
 
 /** Section 6.3: five questions, verdict, and the chance to object [HAT-1] [HAT-2]. */
 export function SortingScreen() {
+  useMusic('castle');
   const draft = useDraft();
   const updateSave = useStore((s) => s.updateSave);
   const textSpeed = useStore((s) => s.save?.settings.textSpeed ?? 'normal');

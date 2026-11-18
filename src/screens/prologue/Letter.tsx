@@ -1,3 +1,4 @@
+import { useMusic } from '../../audio/useMusic';
 import { useState } from 'react';
 import { useStore } from '../../core/store';
 import { logEvent } from '../../services/EventLogger';
@@ -15,6 +16,7 @@ const PRONOUNS: Array<[Pronoun, string]> = [
 
 /** Section 6.1 step 1: the sealed letter; signing sets `name` and `pronoun`. */
 export function LetterScreen() {
+  useMusic('title');
   const user = useStore((s) => s.user);
   const draft = useDraft();
   const [opened, setOpened] = useState(!!draft.name);

@@ -1,4 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { playSfx } from '../audio/AudioService';
+import { useMusic } from '../audio/useMusic';
 import { DaySession, type StepEffects } from '../core/DaySession';
 import { go } from '../core/ScreenMachine';
 import { useStore } from '../core/store';
@@ -23,6 +25,7 @@ export function SceneScreen() {
   const applyEffects = useCallback(
     (effects: StepEffects) => {
       effects.toasts.forEach(showToast);
+      effects.sfx.forEach((id) => playSfx(id));
       if (effects.emotes.length) {
         setEmotes((prev) => {
           const next = { ...prev };
@@ -71,9 +74,12 @@ export function SceneScreen() {
     advance();
   }, [session, advance]);
 
+  useMusic(stage?.music ?? 'castle');
+
   if (!session || !stage) return null;
 
   const choose = (index: number) => {
+    playSfx('select');
     session.choose(index);
     advance();
   };
@@ -82,6 +88,7 @@ export function SceneScreen() {
     session.collectSpark(id);
     setStage(session.stage);
     showToast('Ein Zauberfunke! +1');
+    playSfx('spark');
     navigator.vibrate?.(20);
   };
 

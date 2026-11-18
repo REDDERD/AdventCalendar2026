@@ -1,3 +1,4 @@
+import { playSfx } from '../audio/AudioService';
 import { useEffect, useRef, useState } from 'react';
 import type { Settings } from '../types';
 import { AssetImage } from '../ui/AssetImage';
@@ -22,6 +23,8 @@ export function DialogueBox({ speaker, text, textSpeed, emote, onAdvance }: Prop
   const [shown, setShown] = useState(textSpeed === 'instant' ? text.length : 0);
   const done = shown >= text.length;
   const raf = useRef(0);
+  // [SND-2] a blip every other letter while the text types
+  const lastBlip = useRef(0);
 
   useEffect(() => {
     const cps = CHARS_PER_SEC[textSpeed];
@@ -30,9 +33,14 @@ export function DialogueBox({ speaker, text, textSpeed, emote, onAdvance }: Prop
       return;
     }
     setShown(0);
+    lastBlip.current = 0;
     const start = performance.now();
     const tick = (t: number) => {
       const n = Math.min(text.length, Math.floor(((t - start) / 1000) * cps));
+      if (n > lastBlip.current + 1 && n < text.length) {
+        lastBlip.current = n;
+        playSfx('blip', speaker ?? undefined);
+      }
       setShown(n);
       if (n < text.length) raf.current = requestAnimationFrame(tick);
     };
