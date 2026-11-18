@@ -129,7 +129,8 @@ function InviteResult({ invite, onClose }: { invite: InviteData; onClose: () => 
     };
   }, [invite]);
 
-  const text = `Eine Einladung nach Hogwarts für ${invite.displayName}! ${inviteUrl(invite.username)}`;
+  const link = inviteUrl(invite.username, invite.password);
+  const text = `Eine Einladung nach Hogwarts für ${invite.displayName}! ${link}`;
 
   return (
     <section className="admin-card invite-result">
@@ -143,6 +144,27 @@ function InviteResult({ invite, onClose }: { invite: InviteData; onClose: () => 
           <small>Das Zauberwort wird nur jetzt angezeigt und nirgends gespeichert.</small>
         </p>
       )}
+      {/* Not a clickable link: opening it here would sign the admin in as the player. */}
+      <div className="admin-form">
+        <label>
+          {invite.password ? 'Direktlink (loggt sofort ein)' : 'Link (Eulenname vorausgefüllt)'}
+          <input readOnly value={link} data-testid="invite-link" onFocus={(e) => e.currentTarget.select()} />
+        </label>
+        <button
+          type="button"
+          className="admin-btn"
+          onClick={async () => {
+            try {
+              await navigator.clipboard.writeText(link);
+              setStatus('Link kopiert.');
+            } catch {
+              setStatus('Kopieren nicht möglich – bitte das Feld lange antippen.');
+            }
+          }}
+        >
+          Link kopieren
+        </button>
+      </div>
       {preview ? <img className="invite-preview" src={preview} alt="Einladungsbild" /> : <p className="admin-muted">Male Einladung …</p>}
       <div className="admin-row">
         <button

@@ -24,9 +24,14 @@ const C = {
 
 const FONT = '"Jersey 10", monospace';
 
-/** `<app-url>/?u=<username>` – prefills the owl name on the login screen [AUTH-8]. */
-export function inviteUrl(username: string): string {
-  return `${location.origin}${import.meta.env.BASE_URL}?u=${encodeURIComponent(username)}`;
+/**
+ * `<app-url>/?u=<username>` prefills the owl name [AUTH-8]. With a password the
+ * link logs in directly: `#z=<password>` – the fragment never reaches the
+ * server and the app removes it right after reading (DECISIONS.md #31).
+ */
+export function inviteUrl(username: string, password?: string): string {
+  const base = `${location.origin}${import.meta.env.BASE_URL}?u=${encodeURIComponent(username)}`;
+  return password ? `${base}#z=${encodeURIComponent(password)}` : base;
 }
 
 function centered(ctx: CanvasRenderingContext2D, text: string, y: number, size: number, color: string): void {
@@ -78,9 +83,9 @@ export async function renderInvite(data: InviteData): Promise<HTMLCanvasElement>
   centered(ctx, 'Ab dem 30. November, 18 Uhr, öffnet sich', 510, 40, C.ink);
   centered(ctx, 'jeden Tag ein neues Kapitel.', 556, 40, C.ink);
 
-  // QR code to the app with the owl name prefilled
+  // QR code: logs in directly when the invitation carries the Zauberwort
   const qr = document.createElement('canvas');
-  await QRCode.toCanvas(qr, inviteUrl(data.username), {
+  await QRCode.toCanvas(qr, inviteUrl(data.username, data.password), {
     width: 400,
     margin: 2,
     color: { dark: C.ink, light: C.parchmentLight },

@@ -27,6 +27,10 @@ test('M3: admin invites a player, the player logs in, the feed shows it live [AD
   const password = (await page.getByTestId('new-password').textContent())!.trim();
   expect(password).toMatch(/^[a-z]+-[a-z]+-[a-z]+-\d{2}$/); // [AUTH-6]
   await expect(page.getByAltText('Einladungsbild')).toBeVisible(); // [AUTH-7]
+  // The QR code / direct link carries the Zauberwort in the fragment (DECISIONS.md #31)
+  const link = await page.getByTestId('invite-link').inputValue();
+  expect(link).toMatch(/\?u=lena#z=/);
+  expect(decodeURIComponent(link.split('#z=')[1])).toBe(password);
   await page.getByRole('button', { name: 'Fertig' }).click();
   await expect(page.getByText('@lena')).toBeVisible();
 
@@ -34,14 +38,14 @@ test('M3: admin invites a player, the player logs in, the feed shows it live [AD
   await page.getByRole('link', { name: 'Eulenpost' }).click();
   await expect(page.getByRole('heading', { name: 'Eulenpost' })).toBeVisible();
 
-  // The new player logs in on another "phone"
+  // The new player scans the QR code on another "phone": signed in without typing
   const player = await browser.newContext({ ...devices['iPhone 13'], baseURL });
   const phone = await player.newPage();
-  await phone.goto('./?u=lena');
-  await expect(phone.getByLabel('Eulenname')).toHaveValue('lena');
-  await phone.getByLabel('Zauberwort').fill(password);
-  await phone.getByRole('button', { name: 'Eintreten' }).click();
+  const path = link.slice(link.indexOf('/AdventCalendar2026/') + '/AdventCalendar2026/'.length);
+  await phone.goto(`./${path}`);
   await expect(phone.getByRole('button', { name: 'Verstanden' })).toBeVisible();
+  expect(phone.url()).not.toContain('#z=');
+  expect(phone.url()).not.toContain(encodeURIComponent(password));
 
   // [ADM-12] live feed without reloading
   await expect(page.getByText(/Lena Müller hat das Spiel geöffnet/)).toBeVisible({ timeout: 15_000 });
@@ -68,6 +72,14 @@ test('M3: admin invites a player, the player logs in, the feed shows it live [AD
   await expect(row).toContainText('Durchlauf 2');
 
   await player.close();
+});
+
+test('a link with a wrong Zauberwort ends on the login screen with a notice', async ({ page }) => {
+  await createAccount('player-lena', 'lena', PASSWORD);
+  await page.goto('./?u=lena#z=falsch-falsch-falsch-11');
+  await expect(page.getByLabel('Eulenname')).toHaveValue('lena');
+  await expect(page.locator('.login .error')).toContainText(/Zauberwort|Eulenname/);
+  expect(page.url()).not.toContain('#z=');
 });
 
 test('non-admins are sent from #/admin back to the game [ADM-1]', async ({ page }) => {

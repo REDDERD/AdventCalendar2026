@@ -1,3 +1,4 @@
+import type { User } from 'firebase/auth';
 import { lazy, Suspense, useEffect, useState, type ReactNode } from 'react';
 import { DaySession } from './core/DaySession';
 import { routeAfterLogin } from './core/flow';
@@ -6,6 +7,8 @@ import { go } from './core/ScreenMachine';
 import { useStore, type Screen } from './core/store';
 import { loadUserDoc, onAuthChange } from './services/AuthService';
 import { clearEventContext, detectPlatform, logEvent, setEventContext } from './services/EventLogger';
+import { auth } from './services/firebase';
+import { isInviteLoginPending, runInviteLogin } from './services/inviteLogin';
 import { loadSave } from './services/SaveService';
 import { enableDebugDate, measureServerOffset } from './services/UnlockService';
 import { BlockedScreen, OrientationBlock } from './screens/Blocked';
@@ -74,42 +77,64 @@ function useHashRoute(): string {
   return hash;
 }
 
+/** Counts auth-flow runs; a newer sign-in makes older runs stop. */
+let flowRun = 0;
+
 /** Login → users/{uid} → server time → save → route [AUTH-3] [DAY-2]. */
+async function handleAuth(fbUser: User | null): Promise<void> {
+  const run = ++flowRun;
+  const current = () => run === flowRun;
+  const s = useStore.getState();
+  if (!fbUser) {
+    clearEventContext();
+    DaySession.current = null;
+    s.setUser(null);
+    s.setSave(null);
+    s.setActiveDay(null);
+    s.setTrunkOpen(false);
+    go('login');
+    return;
+  }
+  go('boot');
+  try {
+    const user = await loadUserDoc(fbUser.uid);
+    if (!current()) return;
+    if (!user || !user.active) {
+      s.setBlocked(user ? 'inactive' : 'unknown_user');
+      go('blocked');
+      return;
+    }
+    s.setUser(user);
+    setEventContext(user.uid, user.runId);
+    enableDebugDate(user.role === 'admin');
+    await measureServerOffset(user.uid);
+    if (!current()) return;
+    logEvent('session_start', null, detectPlatform());
+    const save = await loadSave(user.uid, user.runId);
+    if (!current()) return;
+    s.setSave(save);
+    await routeAfterLogin();
+  } catch (e) {
+    console.error('Login flow failed', e);
+    if (!current()) return;
+    s.setBlocked('unknown_user');
+    go('blocked');
+  }
+}
+
 function useAuthFlow(): void {
   useEffect(() => {
-    return onAuthChange(async (fbUser) => {
-      const s = useStore.getState();
-      if (!fbUser) {
-        clearEventContext();
-        DaySession.current = null;
-        s.setUser(null);
-        s.setSave(null);
-        s.setActiveDay(null);
-        s.setTrunkOpen(false);
-        go('login');
-        return;
-      }
-      go('boot');
-      try {
-        const user = await loadUserDoc(fbUser.uid);
-        if (!user || !user.active) {
-          s.setBlocked(user ? 'inactive' : 'unknown_user');
-          go('blocked');
-          return;
-        }
-        s.setUser(user);
-        setEventContext(user.uid, user.runId);
-        enableDebugDate(user.role === 'admin');
-        await measureServerOffset(user.uid);
-        logEvent('session_start', null, detectPlatform());
-        s.setSave(await loadSave(user.uid, user.runId));
-        await routeAfterLogin();
-      } catch (e) {
-        console.error('Login flow failed', e);
-        s.setBlocked('unknown_user');
-        go('blocked');
-      }
+    const unsubscribe = onAuthChange((fbUser) => {
+      // While an invitation link logs in, wait for its result (handled below).
+      if (isInviteLoginPending()) return;
+      void handleAuth(fbUser);
     });
+    void runInviteLogin().then(({ attempted, error }) => {
+      if (!attempted) return;
+      if (error) useStore.getState().setLoginNotice(error);
+      void handleAuth(auth.currentUser);
+    });
+    return unsubscribe;
   }, []);
 }
 

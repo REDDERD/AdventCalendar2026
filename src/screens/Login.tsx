@@ -1,4 +1,5 @@
 import { useState, type FormEvent } from 'react';
+import { useStore } from '../core/store';
 import { login, LOGIN_ERROR_TEXT } from '../services/AuthService';
 import { AssetImage } from '../ui/AssetImage';
 import { Frame } from '../ui/Frame';
@@ -13,7 +14,8 @@ function prefilledUsername(): string {
 export function LoginScreen() {
   const [username, setUsername] = useState(prefilledUsername);
   const [password, setPassword] = useState('');
-  const [error, setError] = useState<string | null>(null);
+  // A failed invitation link (wrong or outdated Zauberwort) lands here with a notice.
+  const [error, setError] = useState<string | null>(() => useStore.getState().loginNotice);
   const [busy, setBusy] = useState(false);
 
   const submit = async (e: FormEvent) => {

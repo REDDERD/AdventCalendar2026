@@ -33,6 +33,8 @@ interface GameStore {
   blocked: BlockedReason | null;
   trunkOpen: boolean;
   toasts: Toast[];
+  /** Message for the login screen, e.g. a failed invitation link. */
+  loginNotice: string | null;
   /** Day currently being played, null outside of a day. */
   activeDay: number | null;
   /** Bumped on every debug-date change so countdowns re-render. */
@@ -43,6 +45,7 @@ interface GameStore {
   setSave: (save: SaveDoc | null) => void;
   setBlocked: (reason: BlockedReason | null) => void;
   setTrunkOpen: (open: boolean) => void;
+  setLoginNotice: (notice: string | null) => void;
   setActiveDay: (day: number | null) => void;
   bumpClock: () => void;
   /** Mutate a copy of the save and persist it [DAY-4]. */
@@ -60,6 +63,7 @@ export const useStore = create<GameStore>((set, get) => ({
   blocked: null,
   trunkOpen: false,
   toasts: [],
+  loginNotice: null,
   activeDay: null,
   clockVersion: 0,
 
@@ -68,6 +72,7 @@ export const useStore = create<GameStore>((set, get) => ({
   setSave: (save) => set({ save }),
   setBlocked: (blocked) => set({ blocked }),
   setTrunkOpen: (trunkOpen) => set({ trunkOpen }),
+  setLoginNotice: (loginNotice) => set({ loginNotice }),
   setActiveDay: (activeDay) => set({ activeDay }),
   bumpClock: () => set({ clockVersion: get().clockVersion + 1 }),
   updateSave: (mutate, opts) => {
