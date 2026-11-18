@@ -230,6 +230,19 @@ export const NPCS: Record<string, Recipe> = {
       { id: 'beard_winter', colors: { hair: 'black' } },
     ],
   },
+  // Argus Filch – caretaker from another time (cameo, days 10, 24): gaunt, grey hair, brown coat
+  filch: {
+    body: 'male',
+    layers: [
+      { id: 'body', colors: { body: 'taupe' } },
+      { id: 'head_male_elderly', colors: { body: 'taupe', eye: 'gray' } },
+      { id: 'shoes', colors: { cloth: 'black' } },
+      { id: 'pants', colors: { cloth: 'charcoal' } },
+      { id: 'sweater', colors: { cloth: 'walnut' } },
+      { id: 'vest_brown' },
+      { id: 'hair_long', colors: { hair: 'gray' } },
+    ],
+  },
   // The wandmaker
   wandmaker: {
     body: 'female',

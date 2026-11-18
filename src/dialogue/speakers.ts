@@ -20,4 +20,5 @@ export const SPEAKER_NAMES: Record<string, string> = {
   friar: "Der Fette Mönch",
   grey_lady: "Die Graue Dame",
   baron: "Der Blutige Baron",
+  filch: "Argus Filch",
 };

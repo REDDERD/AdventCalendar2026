@@ -1,0 +1,30 @@
+{
+  "id": "p10",
+  "number": 10,
+  "title": "Der Schlüsselbund",
+  "points": 40,
+  "type": "choice",
+  "prompt": "Grimsby hängt seine Schlüssel nach einem System auf: drei Reihen, drei Haken. Filch hat einen Schlüssel abgenommen. Welcher gehört an den leeren Haken?",
+  "config": {
+    "figure": { "image": "puzzle.p10", "height": 120 },
+    "columns": 2,
+    "options": [
+      { "label": "eckig · 1 Zahn · Messing", "image": "puzzle.p10.key_a" },
+      { "label": "eckig · 1 Zahn · Eisen", "image": "puzzle.p10.key_b" },
+      { "label": "rund · 1 Zahn · Eisen", "image": "puzzle.p10.key_c" },
+      { "label": "eckig · 2 Zähne · Eisen", "image": "puzzle.p10.key_d" }
+    ]
+  },
+  "solution": 1,
+  "hints": [
+    "Schau dir nicht die einzelnen Schlüssel an, sondern die Reihen.",
+    "In jeder Reihe gibt es jede Bartform genau einmal. Bei den Zähnen auch.",
+    "Und beim Metall. In der dritten Reihe fehlen also: eckig, ein Zahn, Eisen."
+  ],
+  "superHint": "Der fehlende Schlüssel hat einen eckigen Bart und ist aus Eisen.",
+  "solutionText": "Eckiger Bart, ein Zahn, Eisen. Grimsbys System: In jeder Reihe und jeder Spalte kommt jede Bartform, jede Zahnzahl und jedes Metall genau einmal vor.",
+  "intro": {
+    "speaker": "grimsby",
+    "text": "Dreißig Jahre, ein System. Und dann kommt einer aus einer anderen Zeit und hängt um."
+  }
+}

@@ -318,3 +318,26 @@ describe('input with house variants (p09)', () => {
     }
   });
 });
+
+describe('choice with a key matrix (p10)', () => {
+  const p = load('p10');
+  // bow, teeth, metal per hook; the last one is missing
+  const board = [
+    ['round', 1, 'brass'], ['square', 2, 'iron'], ['heart', 3, 'silver'],
+    ['square', 3, 'iron'], ['heart', 1, 'silver'], ['round', 2, 'brass'],
+    ['heart', 2, 'silver'], ['round', 3, 'brass'],
+  ] as const;
+  it('exactly one key completes every row and column', () => {
+    const fits: string[] = [];
+    for (const bow of ['round', 'square', 'heart']) for (const teeth of [1, 2, 3]) for (const metal of ['brass', 'silver', 'iron']) {
+      const full = [...board, [bow, teeth, metal]];
+      const lines = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8]];
+      if (lines.every((l) => [0, 1, 2].every((attr) => new Set(l.map((i) => full[i][attr])).size === 3))) fits.push(`${bow}/${teeth}/${metal}`);
+    }
+    expect(fits).toEqual(['square/1/iron']);
+  });
+  it('accepts only that card', () => {
+    expect(choiceLogic.check(p, 1)).toBe(true);
+    for (const wrong of [0, 2, 3]) expect(choiceLogic.check(p, wrong)).toBe(false);
+  });
+});

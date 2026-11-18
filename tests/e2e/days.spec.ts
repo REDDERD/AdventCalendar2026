@@ -111,3 +111,14 @@ test('day 9: house evening, the Hufflepuff password, house token and the house g
   await expect(page.locator('.dayend-frame')).toContainText('Neuer Gegenstand: Hausgegenstand');
   await choicesLogged('d09.secret.share', 'd09.ghost.ask');
 });
+
+test('day 10: Filch, clue k08 and the key board', async ({ page }) => {
+  await startDayAsAdmin(page, 10);
+  await choose(page, ['Mrs. Norris streicheln.', 'Freundlich nachfragen.']);
+  await openPuzzle(page, 10);
+  await expect(page.locator('.choice-figure')).toBeVisible();
+  await page.getByRole('button', { name: /eckig · 1 Zahn · Eisen/ }).click();
+  await finishDay(page, 10, 40);
+  await expect(page.locator('.dayend-frame')).toContainText('Neuer Hinweis: Grimsbys Logbuch');
+  await choicesLogged('d10.cat.pet', 'd10.grimsby.kind');
+});

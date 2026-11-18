@@ -626,6 +626,69 @@ function owlPerch(): Canvas {
   return c;
 }
 
+/** A key (24 × 24): bow shape, number of teeth, metal (p10). */
+const METALS: Record<string, string[]> = {
+  brass: ['#7a5a1c', '#d4a73a', '#f2d675'],
+  silver: ['#6a6878', '#c0c8d0', '#f4f8ff'],
+  iron: ['#2b2a33', '#5a5866', '#8a889a'],
+};
+function keySprite(bow: 'round' | 'square' | 'heart', teeth: number, metal: keyof typeof METALS): Canvas {
+  const c = new Canvas(24, 24);
+  const [dark, mid, light] = METALS[metal];
+  const shade = (u: number, v: number) => (u + v < -0.5 ? light : u + v > 0.6 ? dark : mid);
+  if (bow === 'round') c.ellipse(6, 12, 5.5, 5.5, shade);
+  else if (bow === 'square') for (let y = 6; y < 18; y++) for (let x = 1; x < 12; x++) c.set(x, y, shade((x - 6) / 6, (y - 12) / 6));
+  else {
+    for (let y = 5; y < 19; y++) {
+      for (let x = 0; x < 13; x++) {
+        const u = (x - 6) / 6;
+        const v = (12 - y) / 6.5;
+        if ((u * u + v * v - 0.55) ** 3 - u * u * v * v * v < 0) c.set(x, y, shade(u, -v));
+      }
+    }
+  }
+  for (let x = 5; x < 8; x++) for (let y = 11; y < 14; y++) c.set(x, y, null); // the hole
+  c.rect(11, 11, 12, 3, mid); // shaft
+  c.rect(11, 11, 12, 1, light);
+  for (let t = 0; t < teeth; t++) c.rect(20 - t * 4, 14, 2, 4 - (t % 2), mid);
+  c.outline('#1a1423');
+  return c;
+}
+
+/** p10 (256 × 120): Grimsby's key board, 3 × 3 hooks, the bottom right one empty. */
+function keyBoard(grid: Array<[string, number, string] | null>): Canvas {
+  const c = new Canvas(256, 120);
+  for (let y = 0; y < 120; y++) for (let x = 0; x < 256; x++) c.set(x, y, (y % 12 === 0 ? '#5a3a20' : (x * 5 + y * 3) % 31 === 0 ? '#7a4c2c' : '#6b4226'));
+  c.rect(60, 4, 136, 112, '#9a6a3c'); // board
+  c.rect(60, 4, 136, 2, '#c99a5c');
+  c.rect(60, 114, 136, 2, '#3b2414');
+  grid.forEach((key, i) => {
+    const cx = 84 + (i % 3) * 44;
+    const cy = 10 + Math.floor(i / 3) * 36;
+    c.rect(cx - 1, cy, 3, 4, '#2b2a33'); // hook
+    if (key) {
+      const sprite = keySprite(key[0] as 'round', key[1], key[2] as 'brass');
+      for (let y = 0; y < 24; y++) for (let x = 0; x < 24; x++) {
+        const hex = sprite.get(x, y);
+        if (hex) c.set(cx - 6 + x, cy + 3 + y, hex);
+      }
+    } else {
+      digits(c, '?', cx + 6, cy + 9, '#fff1c2');
+    }
+  });
+  return c;
+}
+
+const P10: Array<[string, number, string] | null> = [
+  ['round', 1, 'brass'], ['square', 2, 'iron'], ['heart', 3, 'silver'],
+  ['square', 3, 'iron'], ['heart', 1, 'silver'], ['round', 2, 'brass'],
+  ['heart', 2, 'silver'], ['round', 3, 'brass'], null,
+];
+keyBoard(P10).save(path.join(OUT, 'puzzles/p10.png'));
+for (const [name, bow, teeth, metal] of [
+  ['a', 'square', 1, 'brass'], ['b', 'square', 1, 'iron'], ['c', 'round', 1, 'iron'], ['d', 'square', 2, 'iron'],
+] as const) keySprite(bow, teeth, metal).save(path.join(OUT, `puzzles/p10_key_${name}.png`));
+
 owlPerch().save(path.join(OUT, 'puzzles/p07.png'));
 for (const kind of ['star', 'mandarin', 'nut', 'licorice', 'gingerbread'] as const) {
   treat(kind).save(path.join(OUT, `puzzles/treat_${kind}.png`));
