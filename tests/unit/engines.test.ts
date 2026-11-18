@@ -24,6 +24,8 @@ import { slideLogic, slideTile } from '../../src/puzzles/logic/slide';
 import { tapLogic, toggleMark, type TapState } from '../../src/puzzles/logic/tap';
 import { solveToggle, toggleCell, toggleLogic, type ToggleConfig } from '../../src/puzzles/logic/toggle';
 import { parsePuzzle, type Puzzle } from '../../src/puzzles/schema';
+import { resolveVariant } from '../../src/puzzles/usePuzzle';
+import type { SaveDoc } from '../../src/types';
 import { helpDueAt, HELP_AFTER_MS, HELP_REOFFER_MS, nextHint } from '../../src/puzzles/scoring';
 
 const load = (id: string): Puzzle =>
@@ -288,4 +290,31 @@ describe('input with a trap (p07)', () => {
   const p = load('p07');
   it('is solvable', () => expect(inputLogic.check(p, '38')).toBe(true));
   it('rejects the trap 41', () => expect(inputLogic.check(p, '41')).toBe(false));
+});
+
+describe('input with house variants (p09)', () => {
+  const p = load('p09');
+  const forHouse = (house: string) => resolveVariant(p, { profile: { house } } as unknown as SaveDoc);
+  it('each house gets its own password', () => {
+    expect(inputLogic.check(forHouse('gryffindor'), 'Mistelzweig')).toBe(true);
+    expect(inputLogic.check(forHouse('hufflepuff'), 'zimtstern')).toBe(true);
+    expect(inputLogic.check(forHouse('ravenclaw'), 'STERN')).toBe(true);
+    expect(inputLogic.check(forHouse('slytherin'), 'Silber')).toBe(true);
+    expect(inputLogic.check(forHouse('slytherin'), 'Stern')).toBe(false);
+  });
+  it('the hidden letter rules really spell the passwords', () => {
+    const first = 'Meine Igel singen tagsüber, eigentlich lieber zu Weihnachten, eher im Garten'.split(/[ ,]+/).map((w) => w[0]);
+    const last = ['Salz', 'Kiwi', 'Lamm', 'Brot', 'Kürbis', 'Kompott', 'Kaffee', 'Zucker', 'Bohnen'].map((w) => w.at(-1));
+    const second = ['Asche', 'Wiesel', 'Alraune', 'Ebbe', 'Regen', 'Orden'].map((w) => w[1]);
+    const only = (a: string, b: string) => [...new Set(a.toLowerCase())].filter((c) => !b.toLowerCase().includes(c));
+    const pairs = [['Sand', 'Hand'], ['Tor', 'Ohr'], ['Eis', 'Mais'], ['Raben', 'Gaben'], ['Nuss', 'Kuss']];
+    expect(pairs.every(([a, b]) => only(a, b).length === 1)).toBe(true);
+    expect(first.join('').toUpperCase()).toBe('MISTELZWEIG');
+    expect(last.join('').toUpperCase()).toBe('ZIMTSTERN');
+    expect(second.join('').toUpperCase()).toBe('SILBER');
+    expect(pairs.map(([a, b]) => only(a, b)[0]).join('').toUpperCase()).toBe('STERN');
+    for (const [house, word] of [['gryffindor', 'Igel'], ['hufflepuff', 'Kompott'], ['ravenclaw', 'Raben'], ['slytherin', 'Wiesel']]) {
+      expect(forHouse(house).prompt).toContain(word);
+    }
+  });
 });

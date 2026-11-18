@@ -79,7 +79,7 @@ Drinnen prasselt das Feuer. Alle wollen wissen, was du über die Uhr weißt.
 { house == "ravenclaw": An der Tafel hängen schon zwölf Theorien. Neun davon in Ellis' Schrift. }
 { house == "slytherin": Alle tun, als interessiere sie die Uhr nicht. Alle sitzen sehr nah am Feuer. }
 Ein Mitschüler flüstert: Theo schleicht nachts mit Werkzeug herum. Zahnräder im Notizbuch!
-Eine andere: Maren schickt ständig Eulen. Und sie backt. Wer so viel backt, verbirgt etwas.
+Eine andere: Maren schickt ständig Eulen. Und sie backt. Wer so viel backt, verbirgt was.
 Und Grimsby? Der pfeift neuerdings. Er pfeift im Takt einer Uhr, die nicht mehr tickt.
 # choice_point: d09.secret Alle sehen dich erwartungsvoll an.
 * [Erzählen, was wir wissen.] # cid: d09.secret.share
@@ -90,7 +90,7 @@ Und Grimsby? Der pfeift neuerdings. Er pfeift im Takt einer Uhr, die nicht mehr 
     { house == "slytherin": Zum Dank drückt man dir einen grünen Glücksstein in die Hand. Er ist kühl. }
     # toast: Neuer Gegenstand: Hausgegenstand
 * [Schweigen. Es ist Quills Fall.] # cid: d09.secret.keep
-    Du lächelst geheimnisvoll. Das macht alles noch schlimmer. Jetzt gibt es Gerüchte über dich.
+    Du lächelst geheimnisvoll. Das macht es schlimmer. Jetzt gibt es Gerüchte über dich.
     Später flüstert dir jemand zu: „Gut so. Wer schweigt, hört mehr.“
 - Der Hausgeist schwebt näher. Er sieht müde aus. Für einen Geist sehr müde.
 # choice_point: d09.ghost Der Hausgeist wirkt nachdenklich.
@@ -99,13 +99,13 @@ Und Grimsby? Der pfeift neuerdings. Er pfeift im Takt einer Uhr, die nicht mehr 
     { house == "hufflepuff": friar: Der arme Aldous. Er zählt die Tage. Dreihundert Jahre, und er hat Angst vor dem letzten. }
     { house == "ravenclaw": grey_lady: Aldous zählt. Dreihundert Jahre. Manche Versprechen sind schwerer als Ketten. }
     { house == "slytherin": baron: Aldous zählt die Tage wie ein Gefangener. Dreihundert. Er wird es dir nicht sagen. }
-    Der Geist verstummt, als hätte er schon zu viel gesagt. Er sieht zum Fenster, Richtung Uhrturm.
+    Der Geist verstummt, als hätte er zu viel gesagt. Er sieht hinüber zum Uhrturm.
 * [Ihn in Ruhe lassen.] # cid: d09.ghost.leave
     Der Geist nickt dankbar und summt eine alte Melodie. Es klingt wie ein Uhrwerk.
 - # sfx: spark
-Im Kamin färben sich die Flammen in den Hausfarben. Alle jubeln, als wäre es ihr Verdienst.
+Die Flammen im Kamin färben sich in den Hausfarben. Alle jubeln, als wäre es ihr Werk.
 # spark: d09.s2 40 200
-Eine Eule pickt ans Fenster. Ein Zettel in Ellis' Schrift: „Morgen: Grimsbys Büro. Nimm Kekse mit.“
+Eine Eule pickt ans Fenster. Ellis schreibt: „Morgen: Grimsbys Büro. Nimm Kekse mit.“
 -> END
 ```
 

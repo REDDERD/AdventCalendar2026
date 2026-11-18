@@ -176,6 +176,60 @@ export const NPCS: Record<string, Recipe> = {
       { id: 'hair_plain', colors: { hair: 'dark_brown' } },
     ],
   },
+  // Fast Kopfloser Nick – Gryffindor house ghost (cameo, days 9, 19): ruff, doublet, ghost
+  nick: {
+    body: 'male',
+    ghost: true,
+    layers: [
+      { id: 'body', colors: { body: 'light' } },
+      { id: 'head_male', colors: { body: 'light', eye: 'gray' } },
+      { id: 'shoes', colors: { cloth: 'black' } },
+      { id: 'pants', colors: { cloth: 'maroon' } },
+      { id: 'sweater', colors: { cloth: 'maroon' } },
+      { id: 'vest_brown' },
+      { id: 'bowtie', colors: { cloth: 'white' } },
+      { id: 'hair_parted', colors: { hair: 'dark_brown' } },
+    ],
+  },
+  // The Fat Friar – Hufflepuff house ghost (cameo, days 9, 19): monk's habit, tonsure, ghost
+  friar: {
+    body: 'male',
+    ghost: true,
+    layers: [
+      { id: 'body', colors: { body: 'light' } },
+      { id: 'head_male_elderly', colors: { body: 'light', eye: 'brown' } },
+      { id: 'shoes', colors: { cloth: 'brown' } },
+      { id: 'pants', colors: { cloth: 'brown' } },
+      { id: 'sweater', colors: { cloth: 'brown' } },
+      { id: 'scarf', colors: { cloth: 'leather' } },
+      { id: 'hair_balding', colors: { hair: 'chestnut' } },
+    ],
+  },
+  // The Grey Lady – Ravenclaw house ghost (cameo, days 9, 19): long hair, long robe, ghost
+  grey_lady: {
+    body: 'female',
+    ghost: true,
+    layers: [
+      { id: 'body', colors: { body: 'light' } },
+      { id: 'head_female', colors: { body: 'light', eye: 'gray' } },
+      { id: 'shoes', colors: { cloth: 'gray' } },
+      { id: 'robe_purple' },
+      { id: 'hair_long_straight', colors: { hair: 'dark_brown' } },
+    ],
+  },
+  // The Bloody Baron – Slytherin house ghost (cameo, days 9, 19): armour, long hair, beard, ghost
+  baron: {
+    body: 'male',
+    ghost: true,
+    layers: [
+      { id: 'body', colors: { body: 'light' } },
+      { id: 'head_male', colors: { body: 'light', eye: 'gray' } },
+      { id: 'legs_armour' },
+      { id: 'armour' },
+      { id: 'hair_long', colors: { hair: 'black' } },
+      { id: 'beard_winter', colors: { hair: 'black' } },
+    ],
+  },
   // The wandmaker
   wandmaker: {
     body: 'female',

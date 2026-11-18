@@ -34,6 +34,12 @@ for (const file of fs.readdirSync(PUZZLE_DIR).filter((f) => f.endsWith('.json'))
     const puzzle = parsePuzzle(JSON.parse(fs.readFileSync(path.join(PUZZLE_DIR, file), 'utf8')));
     if (puzzle.id !== id) errors.push(`puzzles/${file}: id "${puzzle.id}" does not match file name`);
     if (!characters.has(puzzle.intro.speaker)) errors.push(`puzzles/${file}: unknown intro speaker ${puzzle.intro.speaker}`);
+    for (const [key, v] of Object.entries(puzzle.variants ?? {})) {
+      const intro = (v as { intro?: { speaker: string } }).intro;
+      if (intro && !characters.has(intro.speaker)) errors.push(`puzzles/${file}: variant ${key}: unknown intro speaker ${intro.speaker}`);
+      const prompt = (v as { prompt?: string }).prompt;
+      if (prompt && prompt.length > 280) errors.push(`puzzles/${file}: variant ${key}: prompt longer than 280 chars`);
+    }
     puzzleIds.add(id);
   } catch (e) {
     errors.push(`puzzles/${file}: ${(e as Error).message}`);

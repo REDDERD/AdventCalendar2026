@@ -16,4 +16,8 @@ export const SPEAKER_NAMES: Record<string, string> = {
   hermione: 'Hermine',
   slughorn: 'Prof. Slughorn',
   neville: 'Neville',
+  nick: "Fast Kopfloser Nick",
+  friar: "Der Fette Mönch",
+  grey_lady: "Die Graue Dame",
+  baron: "Der Blutige Baron",
 };

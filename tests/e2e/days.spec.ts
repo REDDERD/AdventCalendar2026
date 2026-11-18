@@ -96,3 +96,18 @@ test('day 8: Neville, Maren and the 6 × 6 mandrake bed', async ({ page }) => {
   await finishDay(page, 8, 40);
   await choicesLogged('d08.neville.help', 'd08.maren.ask');
 });
+
+test('day 9: house evening, the Hufflepuff password, house token and the house ghost', async ({ page }) => {
+  await startDayAsAdmin(page, 9);
+  await openPuzzle(page, 9);
+  await expect(page.locator('.puzzle-prompt')).toContainText('Neun Fässer');
+  for (const key of 'ZIMTSTERN') await page.getByRole('button', { name: key, exact: true }).click();
+  await page.getByRole('button', { name: 'OK' }).click();
+  await expect(page.getByText('+30 Hauspunkte')).toBeVisible();
+  await page.getByRole('button', { name: 'Weiter' }).click();
+  await choose(page, ['Erzählen, was wir wissen.', 'Nach Sir Aldous fragen.']);
+  await expect(page.getByText('Der arme Aldous', { exact: false })).toBeVisible();
+  await tapUntil(page, page.getByText('Kapitel 9 geschafft!'));
+  await expect(page.locator('.dayend-frame')).toContainText('Neuer Gegenstand: Hausgegenstand');
+  await choicesLogged('d09.secret.share', 'd09.ghost.ask');
+});

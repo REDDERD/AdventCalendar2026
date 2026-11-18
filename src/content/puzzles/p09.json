@@ -1,0 +1,68 @@
+{
+  "id": "p09",
+  "number": 9,
+  "title": "Das Passwort",
+  "points": 30,
+  "type": "input",
+  "prompt": "Die Fette Dame singt: „Meine Igel singen tagsüber, eigentlich lieber zu Weihnachten, eher im Garten.“ Dann zwinkert sie: „Mut fängt immer vorne an.“ Wie lautet das Passwort?",
+  "config": { "inputMode": "text", "maxLength": 12 },
+  "solution": ["Mistelzweig"],
+  "hints": [
+    "Die Fette Dame verrät mit ihrem Motto, wo du suchen musst.",
+    "Es kommt nur auf einen einzigen Buchstaben pro Wort an.",
+    "Das Passwort beginnt mit MIS."
+  ],
+  "superHint": "Nimm von jedem Wort des Liedes den ersten Buchstaben.",
+  "solutionText": "MISTELZWEIG: die ersten Buchstaben von „Meine Igel singen tagsüber, eigentlich lieber zu Weihnachten, eher im Garten“. Mut fängt eben vorne an.",
+  "intro": {
+    "speaker": "nick",
+    "text": "Die Dame singt seit Stunden dasselbe Lied. Ich glaube, sie will, dass jemand zuhört."
+  },
+  "variants": {
+    "hufflepuff": {
+      "prompt": "Neun Fässer stehen neben der Küche: Salz · Kiwi · Lamm · Brot · Kürbis · Kompott · Kaffee · Zucker · Bohnen. Auf dem obersten steht: „Wer fleißig ist, bleibt bis zum Schluss.“ Wie lautet das Passwort?",
+      "solution": ["Zimtstern"],
+      "hints": [
+        "Das Schild auf dem obersten Fass verrät, wo du suchen musst.",
+        "Es kommt nur auf einen einzigen Buchstaben pro Wort an.",
+        "Das Passwort beginnt mit ZIM."
+      ],
+      "superHint": "Nimm von jedem Fass den letzten Buchstaben.",
+      "solutionText": "ZIMTSTERN: die letzten Buchstaben von Salz, Kiwi, Lamm, Brot, Kürbis, Kompott, Kaffee, Zucker und Bohnen. Wer bis zum Schluss bleibt, bekommt Gebäck.",
+      "intro": {
+        "speaker": "friar",
+        "text": "Neun Fässer, ein Wort. Und wer es findet, bekommt hinterher Kakao. So ist das bei uns."
+      }
+    },
+    "ravenclaw": {
+      "prompt": "Der Adler fragt: „Mein Erstes steckt im Sand, doch nicht in der Hand. Mein Zweites im Tor, doch nicht im Ohr. Mein Drittes im Eis, doch nicht im Mais. Mein Viertes in Raben, doch nicht in Gaben. Mein Letztes in der Nuss, doch nicht im Kuss.“",
+      "solution": ["Stern"],
+      "hints": [
+        "Jede Zeile beschreibt einen Buchstaben. Vergleiche die beiden Wörter einer Zeile.",
+        "Sand und Hand unterscheiden sich in genau einem Buchstaben.",
+        "Das Passwort beginnt mit STE."
+      ],
+      "superHint": "Such in jeder Zeile den einen Buchstaben, den nur das erste Wort hat.",
+      "solutionText": "STERN: S aus Sand (nicht in Hand), T aus Tor, E aus Eis, R aus Raben, N aus Nuss. Jedes Mal genau ein Buchstabe, den das zweite Wort nicht hat.",
+      "intro": {
+        "speaker": "grey_lady",
+        "text": "Der Adler fragt nie zweimal dasselbe. Aber er wartet. Er hat Zeit. Wir alle haben Zeit."
+      }
+    },
+    "slytherin": {
+      "prompt": "In die Steinwand sind sechs Wörter geritzt: Asche · Wiesel · Alraune · Ebbe · Regen · Orden. Darunter: „Salazar schätzt, wer als Zweiter kommt.“ Wie lautet das Passwort?",
+      "solution": ["Silber"],
+      "hints": [
+        "Der Spruch unter den Wörtern verrät, wo du suchen musst.",
+        "Es kommt nur auf einen einzigen Buchstaben pro Wort an.",
+        "Das Passwort beginnt mit SIL."
+      ],
+      "superHint": "Nimm von jedem Wort den zweiten Buchstaben.",
+      "solutionText": "SILBER: die zweiten Buchstaben von Asche, Wiesel, Alraune, Ebbe, Regen und Orden. Wer als Zweiter kommt, sieht mehr.",
+      "intro": {
+        "speaker": "baron",
+        "text": "Die Wand spricht nicht. Sie verlangt. Zeig ihr, dass du lesen kannst."
+      }
+    }
+  }
+}
