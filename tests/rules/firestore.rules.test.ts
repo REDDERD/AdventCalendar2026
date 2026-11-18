@@ -134,7 +134,8 @@ describe('[SEC-1] events', () => {
 
   it('denies events for another uid or with client time', async () => {
     await assertFails(addDoc(collection(as('alice'), 'events'), event('bob')));
-    await assertFails(addDoc(collection(as('alice'), 'events'), { ...event('alice'), at: Timestamp.now() }));
+    const forged = Timestamp.fromMillis(Date.now() - 60_000);
+    await assertFails(addDoc(collection(as('alice'), 'events'), { ...event('alice'), at: forged }));
   });
 
   it('denies players reading events', async () => {
@@ -168,7 +169,10 @@ describe('[SEC-1] users', () => {
 
   it('allows a player to set only lastSeenAt to server time [DAY-2]', async () => {
     await assertSucceeds(updateDoc(doc(as('alice'), 'users', 'alice'), { lastSeenAt: serverTimestamp() }));
-    await assertFails(updateDoc(doc(as('alice'), 'users', 'alice'), { lastSeenAt: Timestamp.now() }));
+    // A forged client time. Not Timestamp.now(): on a fast runner it can land in the
+    // same millisecond as request.time and pass the equality check by chance.
+    const forged = Timestamp.fromMillis(Date.now() - 60_000);
+    await assertFails(updateDoc(doc(as('alice'), 'users', 'alice'), { lastSeenAt: forged }));
   });
 
   it('denies players creating user or username documents', async () => {
