@@ -14,6 +14,7 @@ Wörter = längster und kürzester Pfad laut `content:simulate`-Logik (500 Zufal
 | [8](tag-08.md) | Das Gewächshaus | `greenhouse` | `d08.neville`, `d08.maren` (+`trust_maren`) | – | Neville (+ Trevor) | `p08` Alraunen (40) | 323–387 |
 | [9](tag-09.md) | Der Hausabend | `common_room` | `d09.secret` (`house_token`), `d09.ghost` | `house_token` (optional) | Hausgeister (je Haus einer), Fette Dame | `p09` Das Passwort (30, 4 Varianten) | 297–333 |
 | [10](tag-10.md) | Das Hausmeisterbüro | `caretaker_office` | `d10.cat`, `d10.grimsby` (±`trust_grimsby`) | `k08` (optional) | Filch, Mrs. Norris | `p10` Der Schlüsselbund (40) | 309–361 |
+| [12](tag-12.md) | Der Astronomieturm | `astronomy_tower` | `d12.courage` (+`bond_ellis`), `d12.route` (Wald/Archiv) | – | Luna | `p12` Das Sternbild (40) | 334–341 |
 
 **Mindestgrenzen eingehalten:** Jeder Tag hat zwei Entscheidungen. Kein Ermittlungshinweis hängt an etwas anderem als in CONCEPT Abschnitt 8.3. Jeder Tag hat mindestens einen Rückbezug (siehe Kopftabelle der Tage).
 
