@@ -1,16 +1,20 @@
 import {
   collection,
   doc,
+  getDoc,
   getDocs,
   limit,
   onSnapshot,
   orderBy,
   query,
+  setDoc,
   updateDoc,
   type Unsubscribe,
 } from 'firebase/firestore';
 import { parseUserDoc } from '../services/AuthService';
 import { db, toMillis } from '../services/firebase';
+import { toPatch, type PersonalForm } from './personal';
+import type { PersonalDoc } from '../services/PersonalService';
 import { parseSave } from '../services/SaveService';
 import type { EventDoc, EventType, SaveDoc, UserDoc } from '../types';
 
@@ -67,4 +71,15 @@ export function subscribeFeed(onEvents: (events: FeedEvent[]) => void, onError: 
 /** [ADM-7] [ADM-10] */
 export function updateUser(uid: string, patch: Partial<Pick<UserDoc, 'active' | 'displayName' | 'note'>>): Promise<void> {
   return updateDoc(doc(db, 'users', uid), patch);
+}
+
+/** Section 12 */
+export async function loadPersonalDoc(uid: string): Promise<PersonalDoc> {
+  const snap = await getDoc(doc(db, 'personal', uid));
+  return snap.exists() ? (snap.data() as PersonalDoc) : {};
+}
+
+/** Merge keeps the mirror photo, which this editor does not touch. */
+export function savePersonalDoc(uid: string, form: PersonalForm): Promise<void> {
+  return setDoc(doc(db, 'personal', uid), toPatch(form), { merge: true });
 }

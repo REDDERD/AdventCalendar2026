@@ -6,10 +6,10 @@ export function MoreView() {
         <strong>Spieler verwalten</strong>
         <span className="admin-muted">Einladen, pausieren, zurücksetzen</span>
       </a>
-      <div className="admin-card more-item disabled">
+      <a className="admin-card more-item" href="#/admin/personal">
         <strong>Persönliches</strong>
-        <span className="admin-muted">Briefe, Foto und persönliche Bausteine – folgt in Meilenstein 6</span>
-      </div>
+        <span className="admin-muted">Düfte, Witze, Patronus, Brief (Foto folgt in Meilenstein 6)</span>
+      </a>
       <a className="admin-card more-item" href="#/admin/tools">
         <strong>Werkzeuge</strong>
         <span className="admin-muted">Version, Debug-Datum, Export</span>

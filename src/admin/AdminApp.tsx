@@ -3,11 +3,12 @@ import { loadPlayers, type AdminPlayer } from './data';
 import { FeedView } from './views/Feed';
 import { MoreView } from './views/More';
 import { OverviewView } from './views/Overview';
+import { PersonalView } from './views/Personal';
 import { PlaceholderView } from './views/Placeholder';
 import { ToolsView } from './views/Tools';
 import { UsersView } from './views/Users';
 
-type Route = 'overview' | 'feed' | 'decisions' | 'puzzles' | 'more' | 'users' | 'tools';
+type Route = 'overview' | 'feed' | 'decisions' | 'puzzles' | 'more' | 'users' | 'personal' | 'tools';
 
 const TABS: Array<[Route, string]> = [
   ['overview', 'Übersicht'],
@@ -24,11 +25,12 @@ const TITLES: Record<Route, string> = {
   puzzles: 'Rätsel',
   more: 'Mehr',
   users: 'Spieler verwalten',
+  personal: 'Persönliches',
   tools: 'Werkzeuge',
 };
 
 /** Pages under "Mehr" keep the "Mehr" tab highlighted. */
-const PARENT: Partial<Record<Route, Route>> = { users: 'more', tools: 'more' };
+const PARENT: Partial<Record<Route, Route>> = { users: 'more', personal: 'more', tools: 'more' };
 
 function routeFromHash(): Route {
   const part = location.hash.replace(/^#\/admin\/?/, '').split('/')[0];
@@ -76,7 +78,7 @@ export default function AdminApp() {
         <div className="admin-kicker">Büro der Schulleitung</div>
         <h1>{TITLES[route]}</h1>
       </header>
-      <PullToRefresh onRefresh={refresh} disabled={route === 'feed'}>
+      <PullToRefresh onRefresh={refresh} disabled={route === 'feed' || route === 'personal'}>
         {error && <div className="admin-error">{error}</div>}
         {route === 'overview' && <OverviewView players={players} />}
         {route === 'feed' && <FeedView players={players} />}
@@ -84,6 +86,7 @@ export default function AdminApp() {
         {route === 'puzzles' && <PlaceholderView text="Die Rätsel-Statistik folgt in Meilenstein 6." />}
         {route === 'more' && <MoreView />}
         {route === 'users' && <UsersView players={players} onChanged={refresh} />}
+        {route === 'personal' && <PersonalView players={players} />}
         {route === 'tools' && <ToolsView />}
       </PullToRefresh>
       <nav className="admin-tabs">

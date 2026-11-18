@@ -88,10 +88,15 @@ export async function playPrologue(page: Page, { house, reloadAfterMirror }: Pro
 }
 
 /** Admin with a finished prologue jumps straight into `day` [DAY-7]. */
-export async function startDayAsAdmin(page: Page, day: number): Promise<void> {
+/** `beforeStart` runs right after the login, e.g. to edit personal content in the console. */
+export async function startDayAsAdmin(page: Page, day: number, beforeStart?: () => Promise<void>): Promise<void> {
   await page.goto('./');
   await login(page, 'daniel');
   await page.getByRole('button', { name: 'Verstanden' }).click();
+  if (beforeStart) {
+    await beforeStart();
+    await page.goto('./');
+  }
   await setDebugDate(page, `2026-12-${String(day).padStart(2, '0')}T10:00`);
   await playPrologue(page, { house: 'hufflepuff' });
   await page.getByRole('button', { name: 'Truhe' }).click();

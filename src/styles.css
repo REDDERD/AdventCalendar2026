@@ -1059,10 +1059,17 @@ main > .admin-btn-primary { width: 100%; margin-bottom: 12px; }
 .admin-row-wrap { flex-wrap: wrap; }
 .admin-row-wrap > .admin-btn { flex: 1 1 45%; }
 .admin-form { display: flex; flex-direction: column; gap: 8px; }
+.admin-ok { background: #1e4d2b; color: #d9ffe0; padding: 8px 10px; border-radius: 6px; }
+.personal-pick { display: flex; align-items: center; gap: 10px; width: 100%; font: inherit; text-align: left; }
+.personal-pick strong { flex: 1; font-family: var(--pixel-font); font-size: 20px; font-weight: 400; }
+.personal-title { font-family: var(--pixel-font); font-size: 26px; font-weight: 400; color: var(--gold-light); }
+.personal-letter { resize: vertical; min-height: 180px; }
+.personal-preview { font-style: italic; font-size: 13px; color: #6b5a44; border-left: 3px solid var(--gold); padding-left: 8px; }
 .admin-form label,
 .danger-zone label { display: flex; flex-direction: column; gap: 2px; font-size: 13px; color: var(--wood); }
 .admin input:not([type="checkbox"]),
-.admin select {
+.admin select,
+.admin textarea {
   font: inherit;
   font-size: 16px; /* 16px avoids the iOS zoom on focus */
   padding: 8px 10px;

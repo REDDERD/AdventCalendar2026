@@ -64,7 +64,7 @@ export function personalValue(key: string): string {
   }
 }
 
-function joinGerman(parts: string[]): string {
+export function joinGerman(parts: string[]): string {
   if (parts.length <= 1) return parts.join('');
   return `${parts.slice(0, -1).join(', ')} und ${parts[parts.length - 1]}`;
 }
