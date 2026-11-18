@@ -1,0 +1,23 @@
+/** [AUTH-6] ~200 harmless German words without umlauts for generated Zauberwörter. */
+export const WORDS = [
+  'zimt', 'eule', 'lumos', 'kerze', 'stern', 'mond', 'schnee', 'tanne', 'apfel', 'nuss',
+  'keks', 'tee', 'honig', 'besen', 'kessel', 'feder', 'tinte', 'buch', 'uhr', 'glocke',
+  'mantel', 'schal', 'kamin', 'funke', 'zauber', 'drache', 'einhorn', 'kater', 'kroete', 'rabe',
+  'fuchs', 'igel', 'hase', 'reh', 'otter', 'dachs', 'biber', 'falke', 'taube', 'fink',
+  'birke', 'eiche', 'linde', 'ahorn', 'weide', 'moos', 'farn', 'distel', 'mistel', 'beere',
+  'kirsche', 'pflaume', 'birne', 'quitte', 'mandel', 'vanille', 'kakao', 'karamell', 'zucker', 'marzipan',
+  'brezel', 'krapfen', 'waffel', 'kuchen', 'torte', 'pudding', 'suppe', 'kekse', 'plaetzchen', 'stollen',
+  'laterne', 'kompass', 'karte', 'schatz', 'truhe', 'schluessel', 'tuer', 'turm', 'burg', 'bruecke',
+  'treppe', 'fenster', 'spiegel', 'bild', 'rahmen', 'regal', 'kissen', 'decke', 'teppich', 'sessel',
+  'wolke', 'regen', 'nebel', 'frost', 'wind', 'sturm', 'blitz', 'sonne', 'himmel', 'komet',
+  'planet', 'nordlicht', 'polarstern', 'galaxie', 'rakete', 'anker', 'segel', 'welle', 'insel', 'hafen',
+  'berg', 'tal', 'see', 'fluss', 'quelle', 'wiese', 'garten', 'wald', 'pfad', 'lichtung',
+  'rose', 'tulpe', 'lilie', 'veilchen', 'mohn', 'lavendel', 'salbei', 'minze', 'thymian', 'kamille',
+  'harfe', 'floete', 'geige', 'trommel', 'lied', 'tanz', 'reigen', 'walzer', 'melodie', 'chor',
+  'ritter', 'koenig', 'krone', 'zepter', 'wappen', 'banner', 'schild', 'helm', 'fahne', 'lanze',
+  'raetsel', 'puzzle', 'wuerfel', 'murmel', 'kreisel', 'drachen', 'ballon', 'schlitten', 'ski', 'iglu',
+  'mammut', 'pinguin', 'robbe', 'walross', 'eisbaer', 'luchs', 'wolf', 'elch', 'rentier', 'schneehase',
+  'kristall', 'perle', 'gold', 'silber', 'bronze', 'kupfer', 'rubin', 'saphir', 'smaragd', 'opal',
+  'lampe', 'leuchte', 'fackel', 'docht', 'wachs', 'siegel', 'brief', 'paket', 'schleife', 'geschenk',
+  'socke', 'muetze', 'handschuh', 'stiefel', 'pantoffel', 'pulli', 'jacke', 'weste', 'knopf', 'nadel',
+] as const;

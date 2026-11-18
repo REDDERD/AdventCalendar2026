@@ -9,7 +9,7 @@
     "emulators": "firebase emulators:start --only auth,firestore --project demo-hogwarts",
     "build": "npm run content:compile && vite build",
     "preview": "vite preview",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "npm run content:compile && tsc --noEmit",
     "lint": "npm run typecheck && npm run content:lint",
     "test": "npm run content:compile && vitest run",
     "test:rules": "firebase emulators:exec --only firestore --project demo-hogwarts \"vitest run -c vitest.rules.config.ts\"",

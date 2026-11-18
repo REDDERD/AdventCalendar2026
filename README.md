@@ -58,6 +58,14 @@ Die Web-App „Hogwarts Adventskalender“ ist im Projekt bereits registriert; i
    firebase deploy --only firestore:rules,firestore:indexes
    ```
 
+## Admin-Konsole
+
+Mit dem Admin-Konto einloggen, dann Truhe → Optionen → „Admin-Konsole öffnen“ (oder direkt `<app-url>/#/admin`).
+
+- **Spieler einladen:** Mehr → Spieler verwalten → „Neuen Spieler einladen“. Das Zauberwort erscheint nur in diesem Moment, zusammen mit dem Einladungsbild (Teilen/Speichern). Der QR-Code öffnet die App mit vorausgefülltem Eulennamen.
+- **Zauberwort vergessen:** `npm run admin:set-password -- <eulenname> <neues-zauberwort>` (braucht den Service-Account, siehe oben), danach „Einladung erneut erzeugen“.
+- **Eulenpost:** die letzten 100 Ereignisse aller Spieler, live.
+
 ## GitHub Pages
 
 Repository → Settings → Pages → Source: **GitHub Actions**. Danach baut und veröffentlicht `.github/workflows/deploy.yml` jeden Push auf `main` (Lint, Unit-Tests, Rules-Tests, Build, Deploy).

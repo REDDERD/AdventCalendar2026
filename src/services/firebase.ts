@@ -15,7 +15,8 @@ import {
 import { firebaseConfig, USE_EMULATOR } from '../config';
 
 // The emulator runs a demo project so local data can never touch production.
-export const app = initializeApp(USE_EMULATOR ? { ...firebaseConfig, projectId: 'demo-hogwarts' } : firebaseConfig);
+export const appOptions = USE_EMULATOR ? { ...firebaseConfig, projectId: 'demo-hogwarts' } : firebaseConfig;
+export const app = initializeApp(appOptions);
 
 // [AUTH-4] Stay signed in permanently.
 export const auth = initializeAuth(app, {
