@@ -32,7 +32,7 @@ INCLUDE globals.ink
 === day11 ===
 # bg: grounds_snow
 # music: outdoor
-# spark: d11.s1 30 60
+# spark: d11.s1 30 140
 Es hat die ganze Nacht geschneit. Der Uhrturm trägt eine Zipfelmütze aus Schnee.
 Von ihm führen zwei Fährten weg. Kleine Pfoten, die glitzern, zum Wald.
 Feste Schuhe zum Archiv.

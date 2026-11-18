@@ -1,32 +1,27 @@
 {
   "id": "p11",
   "number": 11,
-  "title": "Spuren im Schnee",
+  "title": "Das Boot",
   "points": 40,
-  "type": "tap",
-  "prompt": "Fünf Fährten führen vom Uhrturm weg. Vier setzen irgendwo einen einzigen Schritt aus – dort ist jemand gesprungen oder geflogen. Nur eine geht ohne Lücke durch. Tippe an, wo sie endet.",
+  "type": "custom",
+  "prompt": "Drei Hippogreife und drei Frettchen sollen über den See. Das Boot trägt zwei. Wo ein Frettchen steht, dürfen nie mehr Hippogreife stehen als Frettchen.",
   "config": {
-    "image": "puzzle.p11.snow",
-    "height": 232,
-    "targets": [
-      { "id": "forest", "x": 6, "y": 188, "w": 38, "h": 32 },
-      { "id": "hut", "x": 60, "y": 192, "w": 32, "h": 30 },
-      { "id": "pond", "x": 110, "y": 198, "w": 36, "h": 24 },
-      { "id": "greenhouse", "x": 162, "y": 190, "w": 36, "h": 32 },
-      { "id": "owlery", "x": 218, "y": 184, "w": 28, "h": 38 }
-    ],
-    "maxMarks": 1
+    "component": "cross",
+    "capacity": 2,
+    "predators": { "label": "Hippogreife", "count": 3 },
+    "prey": { "label": "Frettchen", "count": 3 },
+    "banks": ["Schlossufer", "Winterquartier"]
   },
-  "solution": ["greenhouse"],
+  "solution": [0, 0],
   "hints": [
-    "Folge jeder Fährte langsam mit dem Finger. Eine Lücke ist nur einen einzigen Schritt lang.",
-    "Wo sich Fährten kreuzen, geht jede gerade weiter. Keine biegt ab.",
-    "Die Fährten zum Wald und zum See setzen schon in der oberen Hälfte aus."
+    "Wo kein Frettchen steht, ist alles erlaubt. Dort können Hippogreife allein stehen.",
+    "Zuerst müssen die Hippogreife rüber, einer fährt als Rückfahrer zurück. Erst dann sind die Frettchen dran.",
+    "Nach vier Fahrten stehen zwei Hippogreife rechts und alles andere links. Dann fahren die Frettchen zu zweit."
   ],
-  "superHint": "Die Fährten zur Hütte und zur Eulerei reißen erst kurz vor dem Ziel ab.",
-  "solutionText": "Zum Gewächshaus. Die anderen vier Fährten setzen je einen Schritt aus – dort ist jemand über den Schnee gesprungen oder ein Stück geflogen.",
+  "superHint": "Zwei Hippogreife hin, einer zurück, zwei hin, einer zurück. Dann zwei Frettchen hin.",
+  "solutionText": "11 Überfahrten: 2 Hippogreife hin, 1 zurück, 2 hin, 1 zurück, 2 Frettchen hin, 1 Hippogreif und 1 Frettchen zurück, 2 Frettchen hin, 1 Hippogreif zurück, 2 hin, 1 zurück, 2 hin.",
   "intro": {
-    "speaker": "ellis",
-    "text": "Spuren! Ich liebe Spuren. Ich bin praktisch ein Spurenleser. Ich habe nur noch nie eine gelesen."
+    "speaker": "hagrid",
+    "text": "Ich hab sechs Tiere, ein Boot und kein Talent fürs Rechnen. Aber ich hab euch."
   }
 }

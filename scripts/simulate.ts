@@ -37,6 +37,7 @@ function randomState(): Record<string, InkVarValue> {
     peeves_friend: Math.random() < 0.5,
     f_d01_watch: Math.random() < 0.5,
     wrote_home: Math.random() < 0.5,
+    ate_rockcake: Math.random() < 0.5,
   };
 }
 

@@ -1,6 +1,7 @@
 import type { PuzzleType } from '../schema';
 import { arrangeLogic } from './arrange';
 import { choiceLogic } from './choice';
+import { crossLogic } from './cross';
 import { inputLogic } from './input';
 import { pathLogic } from './path';
 import { pourLogic } from './pour';
@@ -12,9 +13,10 @@ import type { EngineLogic } from './types';
 /** State types differ per engine; the registry erases them. */
 type AnyEngineLogic = EngineLogic<any>;
 
-/** `custom` puzzles name their component in `config.component`; accuse and finale follow in M8. */
+/** `custom` puzzles name their component in `config.component`; accuse and finale follow with days 23/24. */
 export const CUSTOM_LOGIC: Record<string, AnyEngineLogic> = {
   pour: pourLogic,
+  cross: crossLogic,
 };
 
 const LOGIC: Record<Exclude<PuzzleType, 'custom'>, AnyEngineLogic> = {

@@ -38,7 +38,7 @@ const rows: Row[] = [
   [8, 'Das Gewächshaus', 'greenhouse', ['p08']],
   [9, 'Der Hausabend', 'common_room', ['p09']],
   [10, 'Das Hausmeisterbüro', 'caretaker_office', ['p10']],
-  [11, 'Spuren im Schnee', 'grounds_snow', ['p11']],
+  [11, 'Das Boot', 'grounds_snow', ['p11']],
   [12, 'Der Astronomieturm', 'astronomy_tower', ['p12']],
   [13, 'Zwei Wege', 'forest_edge', ['p13w', 'p13a']],
   [14, 'Tiefer hinein', 'forest_clearing', ['p14w', 'p14a']],

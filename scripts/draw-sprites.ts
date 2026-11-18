@@ -302,75 +302,6 @@ function mandrake(): Canvas {
   return c;
 }
 
-/** p11 "Spuren im Schnee" (256 × 232): four trails from the clock tower, only one never breaks. */
-function snowTrails(): Canvas {
-  const c = new Canvas(256, 232);
-  // snow with a little texture
-  let seed = 11;
-  const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
-  c.rect(0, 0, 256, 232, '#eef3fa');
-  for (let i = 0; i < 900; i++) c.set(rnd() * 256, rnd() * 232, rnd() < 0.5 ? '#dfe8f4' : '#ffffff');
-  // clock tower foot at the top
-  c.rect(104, 0, 48, 18, '#7a7788');
-  for (let y = 0; y < 18; y += 6) for (let x = 104 + ((y / 6) % 2) * 6; x < 152; x += 12) c.rect(x, y, 1, 6, '#4a4856');
-  c.rect(120, 4, 16, 14, '#3b2414');
-  c.rect(127, 4, 1, 14, '#6b4226');
-
-  const bez = (p: number[][], t: number) => {
-    const m = 1 - t;
-    return [0, 1].map((k) => m * m * m * p[0][k] + 3 * m * m * t * p[1][k] + 3 * m * t * t * p[2][k] + t * t * t * p[3][k]);
-  };
-  const trail = (p: number[][], gaps: Array<[number, number]>) => {
-    let prev = bez(p, 0);
-    let walked = 0;
-    let step = 0;
-    for (let i = 1; i <= 400; i++) {
-      const t = i / 400;
-      const at = bez(p, t);
-      walked += Math.hypot(at[0] - prev[0], at[1] - prev[1]);
-      const dx = at[0] - prev[0];
-      const dy = at[1] - prev[1];
-      prev = at;
-      if (walked < 7) continue;
-      walked = 0;
-      step++;
-      if (gaps.some(([a, b]) => t >= a && t <= b)) continue;
-      const len = Math.hypot(dx, dy) || 1;
-      const side = step % 2 ? 2 : -2;
-      const x = at[0] + (-dy / len) * side;
-      const y = at[1] + (dx / len) * side;
-      c.rect(x - 1, y - 1, 2, 3, '#7a8aa8');
-    }
-  };
-  const start = [128, 22];
-  // Five trails; four miss a single step somewhere, only the one to the greenhouse never breaks.
-  trail([start, [260, 60], [-60, 150], [24, 192]], [[0.52, 0.545]]); // → forest
-  trail([start, [-40, 80], [300, 120], [76, 192]], [[0.7, 0.725]]); // → hut
-  trail([start, [220, 40], [20, 170], [128, 194]], [[0.34, 0.365]]); // → pond
-  trail([start, [0, 110], [260, 90], [180, 192]], []); // → greenhouse, unbroken
-  trail([start, [60, 40], [180, 180], [232, 192]], [[0.84, 0.865]]); // → owlery
-
-  // destinations along the bottom
-  for (let k = 0; k < 3; k++) {
-    const x = 10 + k * 9;
-    for (let j = 0; j < 14; j++) c.rect(x + 6 - j / 2.4, 196 + j, 1 + j / 1.2, 1, j % 4 === 3 ? '#2e5a2a' : '#3d7a35');
-    c.rect(x + 5, 210, 2, 4, '#5a3a20');
-  }
-  c.rect(64, 204, 24, 14, '#8a5a34'); // hut
-  for (let j = 0; j < 8; j++) c.rect(62 + j, 204 - j, 28 - 2 * j, 1, '#5a3a20');
-  c.rect(74, 210, 5, 8, '#3b2414');
-  c.ellipse(128, 210, 16, 7, (u, v) => (u + v < -0.5 ? '#ffffff' : '#a9cbe8')); // frozen pond
-  c.rect(166, 200, 28, 18, '#bfe0d8'); // greenhouse
-  for (let x = 166; x <= 194; x += 7) c.rect(x, 200, 1, 18, '#4f6b3a');
-  c.rect(166, 200, 28, 1, '#4f6b3a');
-  c.rect(166, 208, 28, 1, '#4f6b3a');
-  for (let j = 0; j < 6; j++) c.rect(168 + j * 2, 199 - j, 24 - j * 4, 1, '#4f6b3a');
-  c.rect(224, 196, 16, 22, '#7a7788'); // owlery tower
-  for (let j = 0; j < 9; j++) c.rect(222 + j, 196 - j, 20 - 2 * j, 1, '#5a3a20');
-  c.rect(230, 202, 4, 5, '#1a1423');
-  return c;
-}
-
 /** p18 "Die Tür, die erscheint" (105 × 105 = 3 × 3 tiles of 35 px, shown at 2×). */
 function door(): Canvas {
   const c = new Canvas(105, 105);
@@ -684,6 +615,34 @@ const P10: Array<[string, number, string] | null> = [
   ['square', 3, 'iron'], ['heart', 1, 'silver'], ['round', 2, 'brass'],
   ['heart', 2, 'silver'], ['round', 3, 'brass'], null,
 ];
+/** p11 animals (16 × 16, shown at 2×): a hippogriff and a ferret. */
+function hippogriff(): Canvas {
+  const c = new Canvas(16, 16);
+  c.ellipse(9, 10, 5, 3.5, (_u, v) => (v < -0.3 ? '#b4b2c2' : '#8a889a')); // horse body
+  for (const x of [5, 7, 11, 13]) c.rect(x, 12, 1, 3, '#6a6878'); // legs
+  c.rect(13, 8, 2, 2, '#8a889a'); // tail
+  c.ellipse(4.5, 6, 2.8, 3, (u, v) => (u + v < -0.4 ? '#f4f8ff' : '#c0c8d0')); // eagle head
+  c.rect(1, 6, 2, 1, '#d4a73a'); // beak
+  c.set(1, 7, '#d4a73a');
+  c.set(4, 5, '#1a1423'); // eye
+  for (let i = 0; i < 5; i++) c.rect(7 + i, 7 - Math.floor(i / 2), 1, 3, '#a8a6b8'); // wing
+  c.outline('#2b2a33');
+  return c;
+}
+function ferret(): Canvas {
+  const c = new Canvas(16, 16);
+  c.ellipse(8, 11, 6, 2.5, (_u, v) => (v < -0.2 ? '#f6ead0' : '#e2cc98')); // long body
+  c.ellipse(3, 9, 2.5, 2.2, '#f6ead0'); // head
+  c.rect(1, 8, 2, 2, '#c9a66b'); // mask
+  c.set(2, 8, '#1a1423'); // eye
+  c.set(0, 10, '#d8405a'); // nose
+  c.rect(13, 10, 3, 1, '#c9a66b'); // tail
+  for (const x of [4, 6, 10, 12]) c.rect(x, 13, 1, 2, '#c9a66b');
+  c.outline('#3b2414');
+  return c;
+}
+hippogriff().save(path.join(OUT, 'puzzles/hippogriff.png'));
+ferret().save(path.join(OUT, 'puzzles/ferret.png'));
 keyBoard(P10).save(path.join(OUT, 'puzzles/p10.png'));
 for (const [name, bow, teeth, metal] of [
   ['a', 'square', 1, 'brass'], ['b', 'square', 1, 'iron'], ['c', 'round', 1, 'iron'], ['d', 'square', 2, 'iron'],
@@ -699,7 +658,6 @@ gearTrain().save(path.join(OUT, 'puzzles/p21_gears.png'));
 candle(true).save(path.join(OUT, 'puzzles/candle_on.png'));
 candle(false).save(path.join(OUT, 'puzzles/candle_off.png'));
 mandrake().save(path.join(OUT, 'puzzles/mandrake.png'));
-snowTrails().save(path.join(OUT, 'puzzles/p11.png'));
 
 sortingHat().save(path.join(OUT, 'sprites/hat.png'));
 owl().save(path.join(OUT, 'sprites/pet_owl.png'));

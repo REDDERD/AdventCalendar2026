@@ -181,7 +181,7 @@ Kurz-Skizze, damit die nächsten Tage dieselbe Linie halten. Jeder Tag bekommt e
 
 ## 8. Rätselplan (Stand 18.11.2026)
 
-Gilt zusammen mit CONCEPT Abschnitt 9 und DECISIONS #50/#51. ✅ = Storyboard geschrieben. Die Engines `cross`, `nim` und die Stammbaum-Konfiguration sind noch nicht in `src/` gebaut.
+Gilt zusammen mit CONCEPT Abschnitt 9 und DECISIONS #50/#51. ✅ = Storyboard geschrieben. `cross` ist gebaut (Tag 11); `nim` und die Stammbaum-Konfiguration folgen mit Tag 17 und 13a.
 
 | Tag | Rätsel | Engine | Stand |
 | --- | --- | --- | --- |

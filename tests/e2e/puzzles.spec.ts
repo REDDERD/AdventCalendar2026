@@ -115,14 +115,6 @@ test('M4: the workshop lists every puzzle and each engine can be played', async 
   await expect(page.locator('.engine-status')).toContainText('noch 0');
   await expectSolved(page);
 
-  // tap: mark the greenhouse
-  await play(page, 'Spuren im Schnee');
-  const picture = page.locator('.tap-picture');
-  const greenhouse = await at(picture, 180, 205, 232);
-  await page.mouse.click(greenhouse.x, greenhouse.y);
-  await expect(page.locator('.tap-mark')).toHaveCount(1);
-  await expectSolved(page);
-
   // choice with the gear picture
   await play(page, 'Zahnräder');
   await expect(page.locator('.choice-figure')).toBeVisible();

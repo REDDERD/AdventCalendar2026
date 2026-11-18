@@ -19,6 +19,7 @@ import { equationHolds, readEquation, romanValue } from '../../src/puzzles/logic
 import { choiceLogic } from '../../src/puzzles/logic/choice';
 import { inputLogic } from '../../src/puzzles/logic/input';
 import { extendPath, pathLogic, type PathConfig, type PathState } from '../../src/puzzles/logic/path';
+import { bankSafe, crossLogic, crossOver, type CrossConfig, type CrossState } from '../../src/puzzles/logic/cross';
 import { pour, pourLogic, type PourConfig, type PourState } from '../../src/puzzles/logic/pour';
 import { slideLogic, slideTile } from '../../src/puzzles/logic/slide';
 import { tapLogic, toggleMark, type TapState } from '../../src/puzzles/logic/tap';
@@ -198,11 +199,22 @@ describe('slide (p18)', () => {
   });
 });
 
-describe('tap (p11)', () => {
-  const p = load('p11');
-  it('is solvable: mark the greenhouse', () => expect(tapLogic.check(p, [{ x: 180, y: 205 }])).toBe(true));
+// No tap puzzle until day 15 – the engine is tested with a small fixture.
+const tapFixture = parsePuzzle({
+  id: 'p15', number: 15, title: 'Fixture', points: 10, type: 'tap', prompt: 'Tippe die Ziele an.',
+  config: {
+    image: 'puzzle.fixture', height: 232,
+    targets: [{ id: 'a', x: 10, y: 190, w: 30, h: 30 }, { id: 'b', x: 160, y: 190, w: 40, h: 30 }],
+    maxMarks: 1,
+  },
+  solution: ['b'], hints: ['1', '2', '3'], superHint: 's', solutionText: 't', intro: { speaker: 'quill', text: 'i' },
+});
+
+describe('tap (fixture)', () => {
+  const p = tapFixture;
+  it('is solvable: mark the right target', () => expect(tapLogic.check(p, [{ x: 180, y: 205 }])).toBe(true));
   it('rejects a wrong place and an empty picture', () => {
-    expect(tapLogic.check(p, [{ x: 128, y: 208 }])).toBe(false);
+    expect(tapLogic.check(p, [{ x: 20, y: 200 }])).toBe(false);
     expect(tapLogic.check(p, [{ x: 128, y: 100 }])).toBe(false);
     expect(tapLogic.check(p, [])).toBe(false);
   });
@@ -210,6 +222,32 @@ describe('tap (p11)', () => {
     const one = toggleMark(p, [], 180, 205);
     expect(toggleMark(p, one, 30, 200)).toBe(one);
     expect(toggleMark(p, one, 182, 207)).toEqual([] as TapState);
+  });
+});
+
+describe('custom: cross (p11)', () => {
+  const p = load('p11');
+  const config = p.config as CrossConfig;
+  // [hippogriffs, ferrets] per crossing, alternating directions
+  const route: Array<[number, number]> = [[2, 0], [1, 0], [2, 0], [1, 0], [0, 2], [1, 1], [0, 2], [1, 0], [2, 0], [1, 0], [2, 0]];
+  it('is solvable in 11 crossings', () => {
+    const end = route.reduce<CrossState | null>((s, [h, f]) => (s ? crossOver(config, s, h, f) : null), crossLogic.initial(p));
+    expect(end).toEqual({ left: [0, 0], boatLeft: false, moves: 11 });
+    expect(crossLogic.check(p, end!)).toBe(true);
+    expect(crossLogic.verify(p).info).toContain('11 crossings minimum');
+  });
+  it('rejects a state that is not the goal', () => {
+    expect(crossLogic.check(p, { left: [0, 0], boatLeft: true, moves: 10 })).toBe(false);
+    expect(crossLogic.check(p, { left: [1, 0], boatLeft: false, moves: 9 })).toBe(false);
+  });
+  it('refuses outnumbered ferrets, an empty or overloaded boat (rule)', () => {
+    const start = crossLogic.initial(p);
+    expect(crossOver(config, start, 0, 2)).toBeNull(); // 3 hippogriffs vs 1 ferret left behind
+    expect(crossOver(config, start, 0, 0)).toBeNull();
+    expect(crossOver(config, start, 2, 1)).toBeNull();
+    expect(crossOver(config, { left: [3, 3], boatLeft: false, moves: 0 }, 1, 0)).toBeNull(); // nobody on the far bank
+    expect(bankSafe(3, 0)).toBe(true);
+    expect(bankSafe(2, 1)).toBe(false);
   });
 });
 

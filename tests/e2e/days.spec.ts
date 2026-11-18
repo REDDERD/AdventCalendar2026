@@ -117,8 +117,23 @@ test('day 10: Filch, clue k08 and the key board', async ({ page }) => {
   await choose(page, ['Mrs. Norris streicheln.', 'Freundlich nachfragen.']);
   await openPuzzle(page, 10);
   await expect(page.locator('.choice-figure')).toBeVisible();
-  await page.getByRole('button', { name: /eckig · 1 Zahn · Eisen/ }).click();
+  await page.getByRole('button', { name: /eckig · 1 · Eisen/ }).click();
   await finishDay(page, 10, 40);
   await expect(page.locator('.dayend-frame')).toContainText('Neuer Hinweis: Grimsbys Logbuch');
   await choicesLogged('d10.cat.pet', 'd10.grimsby.kind');
+});
+
+test('day 11: Hagrid, the rock cake and the boat (11 crossings)', async ({ page }) => {
+  await startDayAsAdmin(page, 11);
+  await choose(page, ['Die Fährten genauer ansehen.', 'Einen Felsenkuchen essen.']);
+  await openPuzzle(page, 11);
+  const route: Array<[number, number]> = [[2, 0], [1, 0], [2, 0], [1, 0], [0, 2], [1, 1], [0, 2], [1, 0], [2, 0], [1, 0], [2, 0]];
+  for (const [h, f] of route) {
+    for (let i = 0; i < h; i++) await page.locator('.cross-bank.boat-here').getByRole('button', { name: 'Hippogreife einsteigen' }).first().click();
+    for (let i = 0; i < f; i++) await page.locator('.cross-bank.boat-here').getByRole('button', { name: 'Frettchen einsteigen' }).first().click();
+    await page.getByRole('button', { name: 'Ablegen' }).click();
+  }
+  await expect(page.locator('.engine-status')).toContainText('Fahrten: 11');
+  await finishDay(page, 11, 40);
+  await choicesLogged('d11.snow.search', 'd11.hagrid.eat');
 });

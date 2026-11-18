@@ -4,15 +4,15 @@
   "title": "Der Schlüsselbund",
   "points": 40,
   "type": "choice",
-  "prompt": "Grimsby hängt seine Schlüssel nach einem System auf: drei Reihen, drei Haken. Filch hat einen Schlüssel abgenommen. Welcher gehört an den leeren Haken?",
+  "prompt": "Grimsby hängt seine Schlüssel nach einem System auf: drei Reihen, drei Haken. Filch hat einen abgenommen. Welcher gehört an den leeren Haken? (Bart · Zähne · Metall)",
   "config": {
     "figure": { "image": "puzzle.p10", "height": 120 },
     "columns": 2,
     "options": [
-      { "label": "eckig · 1 Zahn · Messing", "image": "puzzle.p10.key_a" },
-      { "label": "eckig · 1 Zahn · Eisen", "image": "puzzle.p10.key_b" },
-      { "label": "rund · 1 Zahn · Eisen", "image": "puzzle.p10.key_c" },
-      { "label": "eckig · 2 Zähne · Eisen", "image": "puzzle.p10.key_d" }
+      { "label": "eckig · 1 · Messing", "image": "puzzle.p10.key_a" },
+      { "label": "eckig · 1 · Eisen", "image": "puzzle.p10.key_b" },
+      { "label": "rund · 1 · Eisen", "image": "puzzle.p10.key_c" },
+      { "label": "eckig · 2 · Eisen", "image": "puzzle.p10.key_d" }
     ]
   },
   "solution": 1,

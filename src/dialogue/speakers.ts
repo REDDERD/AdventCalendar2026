@@ -21,4 +21,5 @@ export const SPEAKER_NAMES: Record<string, string> = {
   grey_lady: "Die Graue Dame",
   baron: "Der Blutige Baron",
   filch: "Argus Filch",
+  hagrid: "Hagrid",
 };

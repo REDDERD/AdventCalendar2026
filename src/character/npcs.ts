@@ -243,6 +243,20 @@ export const NPCS: Record<string, Recipe> = {
       { id: 'hair_long', colors: { hair: 'gray' } },
     ],
   },
+  // Hagrid – gamekeeper from another Tuesday (cameo, days 11, 16, 24): wild hair and beard, moleskin coat
+  hagrid: {
+    body: 'male',
+    layers: [
+      { id: 'body', colors: { body: 'light' } },
+      { id: 'head_male', colors: { body: 'light', eye: 'brown' } },
+      { id: 'shoes', colors: { cloth: 'brown' } },
+      { id: 'pants', colors: { cloth: 'walnut' } },
+      { id: 'sweater', colors: { cloth: 'leather' } },
+      { id: 'vest_brown' },
+      { id: 'hair_long', colors: { hair: 'dark_brown' } },
+      { id: 'beard_winter', colors: { hair: 'dark_brown' } },
+    ],
+  },
   // The wandmaker
   wandmaker: {
     body: 'female',

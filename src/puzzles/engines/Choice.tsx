@@ -17,8 +17,8 @@ function ChoiceEngine({ puzzle, state, setState, disabled }: EngineProps<ChoiceS
             disabled={disabled}
             onClick={() => setState(state === i ? null : i)}
           >
-            <span className="answer-letter">{String.fromCharCode(65 + i)}</span>
-            {option.image && <AssetImage id={option.image} w={48} h={48} />}
+            {/* Picture cards are told apart by the picture; text cards get a letter */}
+            {option.image ? <AssetImage id={option.image} w={48} h={48} /> : <span className="answer-letter">{String.fromCharCode(65 + i)}</span>}
             <span>{option.label}</span>
           </button>
         ))}
