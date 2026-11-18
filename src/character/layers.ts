@@ -1,4 +1,4 @@
-import type { HouseId, Look } from '../types';
+import type { HouseId, Look, Pronoun } from '../types';
 import lpc from './lpc.generated.json';
 import { colorMap, type ColorMap } from './recolor';
 
@@ -35,12 +35,18 @@ export const DEFAULT_LOOK: Look = {
   bottom: 'pants',
 };
 
-export function randomLook(rand: () => number = Math.random): Look {
+/** The body shape follows the pronoun: Hexe → slim, Zauberer → broad (DECISIONS.md #20). */
+export function buildForPronoun(pronoun: Pronoun | undefined): Look['build'] {
+  return pronoun === 'm' ? 'broad' : 'slim';
+}
+
+/** Random look for the mirror's "Zufall" button; the body shape is kept. */
+export function randomLook(build: Look['build'], rand: () => number = Math.random): Look {
   const pick = <K extends keyof Look>(key: K) => {
     const list = OPTIONS[key];
     return list[Math.floor(rand() * list.length)][0];
   };
-  return Object.fromEntries(LOOK_KEYS.map((k) => [k, pick(k)])) as unknown as Look;
+  return { ...(Object.fromEntries(LOOK_KEYS.map((k) => [k, pick(k)])) as unknown as Look), build };
 }
 
 /** [CHAR-2] Robe (cape) and trim colours per house, as ULPC cloth palette names. */

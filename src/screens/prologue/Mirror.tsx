@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 import { CharacterSprite } from '../../character/CharacterSprite';
-import { DEFAULT_LOOK, OPTIONS, randomLook, type Direction } from '../../character/layers';
+import { buildForPronoun, DEFAULT_LOOK, OPTIONS, randomLook, type Direction } from '../../character/layers';
 import { useStore } from '../../core/store';
 import { logEvent } from '../../services/EventLogger';
 import type { Look } from '../../types';
@@ -9,8 +9,8 @@ import { Layout } from '../../ui/Layout';
 import { PixelButton } from '../../ui/PixelButton';
 import { advancePrologue, useDraft } from './prologueFlow';
 
+// The body shape is not chosen here; it follows the pronoun from the letter.
 const CATEGORIES: Array<[keyof Look, string]> = [
-  ['build', 'Statur'],
   ['skin', 'Haut'],
   ['hair', 'Frisur'],
   ['hairColor', 'Haarfarbe'],
@@ -29,7 +29,8 @@ const SWIPE_PX = 20;
 export function MirrorScreen() {
   const draft = useDraft();
   const updateSave = useStore((s) => s.updateSave);
-  const [look, setLook] = useState<Look>({ ...DEFAULT_LOOK, ...draft.look });
+  const build = buildForPronoun(draft.pronoun);
+  const [look, setLook] = useState<Look>({ ...DEFAULT_LOOK, ...draft.look, build });
   const [category, setCategory] = useState(0);
   const [turn, setTurn] = useState(0);
   const swipeStart = useRef<number | null>(null);
@@ -105,7 +106,7 @@ export function MirrorScreen() {
             </button>
           </div>
           <div className="row-buttons">
-            <PixelButton onClick={() => update(randomLook())}>Zufall</PixelButton>
+            <PixelButton onClick={() => update(randomLook(build))}>Zufall</PixelButton>
             <PixelButton variant="wax" onClick={done}>
               Fertig
             </PixelButton>

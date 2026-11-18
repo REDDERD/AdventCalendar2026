@@ -561,7 +561,7 @@ img {
 .turn-left { left: 16px; }
 .turn-right { right: 16px; }
 .mirror-bottom { display: flex; flex-direction: column; gap: 6px; height: 192px; padding: 6px 8px; color: var(--snow); }
-.mirror-tabs { display: grid; grid-template-columns: repeat(5, 1fr); gap: 2px; }
+.mirror-tabs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px; }
 .mirror-tabs button { height: 22px; padding: 0; font-size: 12px; border: 1px solid var(--wood-light); background: var(--wood); color: var(--candle-light); }
 .mirror-tabs button.active { background: var(--parchment); color: var(--ink); }
 .mirror-option { display: flex; align-items: center; gap: 6px; }

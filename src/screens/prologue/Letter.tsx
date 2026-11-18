@@ -7,10 +7,10 @@ import { Layout } from '../../ui/Layout';
 import { PixelButton } from '../../ui/PixelButton';
 import { advancePrologue, useDraft } from './prologueFlow';
 
+// The pronoun also decides the body shape in the mirror (DECISIONS.md #20).
 const PRONOUNS: Array<[Pronoun, string]> = [
   ['f', 'Hexe'],
   ['m', 'Zauberer'],
-  ['n', 'Neutral'],
 ];
 
 /** Section 6.1 step 1: the sealed letter; signing sets `name` and `pronoun`. */
@@ -19,7 +19,7 @@ export function LetterScreen() {
   const draft = useDraft();
   const [opened, setOpened] = useState(!!draft.name);
   const [name, setName] = useState(draft.name ?? (user?.displayName ?? '').slice(0, 12));
-  const [pronoun, setPronoun] = useState<Pronoun | null>(draft.pronoun ?? null);
+  const [pronoun, setPronoun] = useState<Pronoun | null>(draft.pronoun === 'f' || draft.pronoun === 'm' ? draft.pronoun : null);
   const trimmed = name.trim();
   const valid = trimmed.length >= 1 && trimmed.length <= 12 && pronoun !== null;
 

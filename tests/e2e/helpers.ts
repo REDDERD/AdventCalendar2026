@@ -44,10 +44,12 @@ export async function playPrologue(page: Page, { house, reloadAfterMirror }: Pro
   // Letter
   await page.getByRole('button', { name: 'Siegel brechen' }).click();
   await page.getByLabel('Unterschrift (dein Name)').fill('Lena');
+  await expect(page.getByRole('button', { name: 'Neutral' })).toHaveCount(0); // DECISIONS.md #20
   await page.getByRole('button', { name: 'Hexe' }).click();
   await page.getByRole('button', { name: 'Unterschreiben' }).click();
 
-  // Mirror
+  // Mirror – the body shape follows the pronoun, no "Statur" tab
+  await expect(page.getByRole('button', { name: 'Statur' })).toHaveCount(0);
   await page.getByRole('button', { name: 'Frisur' }).click();
   await page.getByRole('button', { name: 'Weiter' }).click();
   await page.getByRole('button', { name: 'Fertig' }).click();

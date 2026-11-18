@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import {
-  DEFAULT_LOOK, frameIndex, HOUSE_CAPE, LOOK_KEYS, OPTIONS, playerRecipe, randomLook, resolveRecipe, UNSORTED_CAPE,
+  buildForPronoun, DEFAULT_LOOK, frameIndex, HOUSE_CAPE, LOOK_KEYS, OPTIONS, playerRecipe, randomLook, resolveRecipe, UNSORTED_CAPE,
 } from '../../src/character/layers';
 import { NPCS } from '../../src/character/npcs';
 import { blendOver, colorMap, recolorPixels } from '../../src/character/recolor';
@@ -46,11 +46,19 @@ describe('character options [CHAR-1] (Section 6.2 minimums)', () => {
     expect(ids.at(-1)).toBe('christmas_hat');
   });
 
-  it('randomLook only picks valid options', () => {
-    for (let i = 0; i < 50; i++) {
-      const look = randomLook();
-      for (const key of LOOK_KEYS) expect(OPTIONS[key].map(([id]) => id)).toContain(look[key]);
+  it('randomLook only picks valid options and keeps the body shape', () => {
+    for (const build of ['slim', 'broad']) {
+      for (let i = 0; i < 50; i++) {
+        const look = randomLook(build);
+        expect(look.build).toBe(build);
+        for (const key of LOOK_KEYS) expect(OPTIONS[key].map(([id]) => id)).toContain(look[key]);
+      }
     }
+  });
+
+  it('derives the body shape from the pronoun: Hexe → slim, Zauberer → broad', () => {
+    expect(buildForPronoun('f')).toBe('slim');
+    expect(buildForPronoun('m')).toBe('broad');
   });
 });
 
