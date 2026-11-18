@@ -10,7 +10,8 @@ import { compileAll, dayFromFile, INK_DIR, listStoryFiles } from './ink-compiler
 
 const PUZZLE_DIR = path.resolve('src/content/puzzles');
 const EMOTES = ['!', '?', 'heart', 'sweat', 'note', 'dots'];
-const MAX_WORDS = 250; // [RB-3]
+const MAX_WORDS = 500; // [RB-3], doubled on request (DECISIONS.md #16)
+const MIN_CHOICE_POINTS = 2; // per day (DECISIONS.md #16)
 const MAX_LINE_CHARS = 90; // [STY-2]
 const MAX_CHOICE_CHARS = 40; // [STY-3]
 
@@ -136,6 +137,11 @@ for (const stem of listStoryFiles()) {
     if (text.length > MAX_LINE_CHARS) warnings.push(`${at}: line has ${text.length} chars (max ~${MAX_LINE_CHARS})`);
     words += text.split(/\s+/).filter(Boolean).length;
   });
+
+  const choicePoints = source.match(/^\s*#\s*choice_point:/gm)?.length ?? 0;
+  if (day !== null && day > 0 && choicePoints < MIN_CHOICE_POINTS) {
+    errors.push(`${file}: ${choicePoints} choice points, at least ${MIN_CHOICE_POINTS} required`);
+  }
 
   // Upper bound: all lines of the file. Exact per-path counts: content:simulate.
   if (words > MAX_WORDS) warnings.push(`${file}: ${words} words in total – check the longest path with content:simulate`);

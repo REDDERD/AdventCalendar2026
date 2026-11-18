@@ -38,6 +38,9 @@ jobs:
       - name: Lint (types + content:lint)
         run: npm run lint
 
+      - name: Content simulation (paths, length)
+        run: npm run content:simulate
+
       - name: Unit tests
         run: npm test
 

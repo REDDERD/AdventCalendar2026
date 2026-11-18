@@ -59,6 +59,8 @@ test('M1: admin plays day 1 with choice and puzzle, reload resumes exactly, even
   await page.reload();
   await expect(line).toBeVisible();
 
+  await tapUntil(page, page.getByRole('button', { name: 'Ich passe auf Ellis auf.' }));
+  await page.getByRole('button', { name: 'Ich passe auf Ellis auf.' }).click();
   await tapUntil(page, page.getByText('Rätsel 01'));
   await page.locator('.puzzle-intro').click();
   await page.getByRole('button', { name: '1', exact: true }).click();
