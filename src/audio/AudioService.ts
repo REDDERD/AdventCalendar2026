@@ -151,6 +151,15 @@ export function playSfx(id: string, speaker?: string): void {
       noise(out, t, 0.08, 0.6);
       tone(out, 'triangle', 90, t, 0.12, 1);
       break;
+    case 'brawl':
+      // a cartoon scuffle: thumps, squeaks and screeches for about 1.5 s
+      for (let i = 0; i < 12; i++) {
+        const at = t + i * 0.12 + Math.random() * 0.05;
+        noise(out, at, 0.07, 0.5);
+        if (i % 2) tone(out, 'pulse12', 1400 + Math.random() * 900, at + 0.03, 0.05, 0.35);
+        else tone(out, 'square', 160 + Math.random() * 80, at, 0.06, 0.4);
+      }
+      break;
   }
 }
 

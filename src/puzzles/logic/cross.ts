@@ -22,19 +22,32 @@ export type CrossState = { left: [number, number]; boatLeft: boolean; moves: num
 export const bankSafe = (predators: number, prey: number): boolean => prey === 0 || predators <= prey;
 
 /**
- * Cross with `h` predators and `f` prey. Returns null on a rule violation:
- * empty or overloaded boat, animals that are not on the boat's bank, or a
- * bank where the predators outnumber the prey afterwards.
+ * Carry `h` predators and `f` prey across, without the bank rule. Returns null if the
+ * crossing is impossible (empty or overloaded boat, animals not on the boat's bank);
+ * otherwise the new state and which banks [left, right] are now unsafe.
  */
-export function crossOver(config: CrossConfig, state: CrossState, h: number, f: number): CrossState | null {
+export function crossAttempt(
+  config: CrossConfig,
+  state: CrossState,
+  h: number,
+  f: number,
+): { next: CrossState; unsafe: [boolean, boolean] } | null {
   const total = [config.predators.count, config.prey.count];
   if (![h, f].every((n) => Number.isInteger(n) && n >= 0) || h + f < 1 || h + f > config.capacity) return null;
   const here = state.boatLeft ? state.left : [total[0] - state.left[0], total[1] - state.left[1]];
   if (h > here[0] || f > here[1]) return null;
   const sign = state.boatLeft ? -1 : 1;
   const left: [number, number] = [state.left[0] + sign * h, state.left[1] + sign * f];
-  if (!bankSafe(left[0], left[1]) || !bankSafe(total[0] - left[0], total[1] - left[1])) return null;
-  return { left, boatLeft: !state.boatLeft, moves: state.moves + 1 };
+  return {
+    next: { left, boatLeft: !state.boatLeft, moves: state.moves + 1 },
+    unsafe: [!bankSafe(left[0], left[1]), !bankSafe(total[0] - left[0], total[1] - left[1])],
+  };
+}
+
+/** Cross with `h` predators and `f` prey; null on any rule violation, including an unsafe bank. */
+export function crossOver(config: CrossConfig, state: CrossState, h: number, f: number): CrossState | null {
+  const attempt = crossAttempt(config, state, h, f);
+  return attempt && !attempt.unsafe.some(Boolean) ? attempt.next : null;
 }
 
 function nextStates(config: CrossConfig, s: CrossState): CrossState[] {

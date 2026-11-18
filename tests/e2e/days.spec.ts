@@ -148,6 +148,14 @@ test('day 11: Hagrid, the rock cake and the boat (11 crossings)', async ({ page 
   await startDayAsAdmin(page, 11);
   await choose(page, ['Die Fährten genauer ansehen.', 'Einen Felsenkuchen essen.']);
   await openPuzzle(page, 11);
+  // A rule-breaking crossing is carried out, the scuffle plays, then the move is taken back
+  const bank = page.locator('.cross-bank.boat-here');
+  for (let i = 0; i < 2; i++) await bank.getByRole('button', { name: 'Frettchen einsteigen' }).first().click();
+  await page.getByRole('button', { name: 'Ablegen' }).click();
+  await expect(page.locator('.brawl')).toBeVisible();
+  await page.getByRole('button', { name: 'Zug rückgängig machen' }).click();
+  await expect(page.locator('.engine-status')).toContainText('Fahrten: 0');
+  for (let i = 0; i < 2; i++) await page.getByRole('button', { name: 'Frettchen aussteigen' }).first().click();
   const route: Array<[number, number]> = [[2, 0], [1, 0], [2, 0], [1, 0], [0, 2], [1, 1], [0, 2], [1, 0], [2, 0], [1, 0], [2, 0]];
   for (const [h, f] of route) {
     for (let i = 0; i < h; i++) await page.locator('.cross-bank.boat-here').getByRole('button', { name: 'Hippogreife einsteigen' }).first().click();

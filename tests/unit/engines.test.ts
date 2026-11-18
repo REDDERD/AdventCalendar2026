@@ -19,7 +19,7 @@ import { equationHolds, readEquation, romanValue } from '../../src/puzzles/logic
 import { choiceLogic } from '../../src/puzzles/logic/choice';
 import { inputLogic } from '../../src/puzzles/logic/input';
 import { allPaths, extendPath, pathLogic, type PathConfig, type PathState } from '../../src/puzzles/logic/path';
-import { bankSafe, crossLogic, crossOver, type CrossConfig, type CrossState } from '../../src/puzzles/logic/cross';
+import { bankSafe, crossAttempt, crossLogic, crossOver, type CrossConfig, type CrossState } from '../../src/puzzles/logic/cross';
 import { pour, pourLogic, type PourConfig, type PourState } from '../../src/puzzles/logic/pour';
 import { slideLogic, slideTile } from '../../src/puzzles/logic/slide';
 import { tapLogic, toggleMark, type TapState } from '../../src/puzzles/logic/tap';
@@ -249,6 +249,16 @@ describe('custom: cross (p11)', () => {
     expect(crossOver(config, { left: [3, 3], boatLeft: false, moves: 0 }, 1, 0)).toBeNull(); // nobody on the far bank
     expect(bankSafe(3, 0)).toBe(true);
     expect(bankSafe(2, 1)).toBe(false);
+  });
+  it('carries out a rule-breaking crossing first and names the bank (for the scuffle)', () => {
+    const start = crossLogic.initial(p);
+    expect(crossAttempt(config, start, 0, 2)).toEqual({ next: { left: [3, 1], boatLeft: false, moves: 1 }, unsafe: [true, false] });
+    // far bank 2/2, one ferret rows back: 2 hippogriffs vs 1 ferret stay behind
+    expect(crossAttempt(config, { left: [1, 1], boatLeft: false, moves: 4 }, 0, 1)).toEqual({
+      next: { left: [1, 2], boatLeft: true, moves: 5 },
+      unsafe: [false, true],
+    });
+    expect(crossAttempt(config, start, 0, 0)).toBeNull();
   });
 });
 

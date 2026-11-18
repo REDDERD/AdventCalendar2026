@@ -93,7 +93,7 @@ const emotes = Object.fromEntries(
 );
 
 // Audio is synthesised by src/audio (DECISIONS.md #52); these ids are what Ink may name in # sfx / # music.
-const SFX = ['blip', 'select', 'correct', 'wrong', 'spark', 'door', 'stamp'] as const;
+const SFX = ['blip', 'select', 'correct', 'wrong', 'spark', 'door', 'stamp', 'brawl'] as const;
 
 const MUSIC = ['title', 'castle', 'outdoor', 'dungeon', 'puzzle', 'finale', 'letter'] as const;
 
