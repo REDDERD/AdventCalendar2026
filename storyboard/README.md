@@ -35,10 +35,10 @@ Ich habe die Skripte in eine **Kopie** des Repos (außerhalb des Projekts) kopie
 
 ## Fragen an dich (gesammelt beim Schreiben ab Tag 9)
 
-Ich habe überall eine sinnvolle Annahme getroffen und weitergemacht. Bitte kurz bestätigen oder korrigieren.
+Beantwortet am 19.11.2026 – alle Annahmen bestätigt:
 
-1. **Tag 9, Hausgegenstände:** Gryffindor eine Löwenfeder, Hufflepuff ein Honigtöpfchen, Ravenclaw eine Adlerbrosche, Slytherin ein grüner Glücksstein. Passen die? (Tag 18 baut darauf eine Bonus-Szene.)
-2. **Tag 9, Hausgeister:** Jeder Spieler sieht nur den Geist seines Hauses (Nick, Mönch, Graue Dame, Baron). Ellis ist nur am Anfang dabei. In Ordnung?
-3. **Tag 10, Quill fehlt:** Ellis und die Spielfigur verhören Grimsby allein (Quill hat Unterricht). Der fehlende Uhrturm-Schlüssel ist eine neue Spur: Theo hat ihn „geliehen“ (Auflösung Tag 13a/20). Einverstanden, dass Theo der Schlüssel-Leiher ist?
-4. **Tag 7, Insider-Witz:** Tag 7 fragte `personal("insideJokes")` ab, die App kennt aber nur `insideJoke1`/`insideJoke2` (Konzept: Zeile 1 für Ellis an Tag 7, Zeile 2 für Quill an Tag 17). Die Zeile wäre nie erschienen. Ist korrigiert, `content:lint` prüft das jetzt. Nur zur Info.
-5. **Tag 12, Sternschnuppen „3 0 0“:** Die Sternschnuppen bilden kurz die Zahlen 3, 0, 0 als Vorgriff auf „CCC“ (Tag 22). Zu deutlich, oder genau richtig?
+1. ~~Tag 9, Hausgegenstände~~ **Bestätigt:** Löwenfeder, Honigtöpfchen, Adlerbrosche, Glücksstein (Bonus-Szene an Tag 18).
+2. ~~Tag 9, Hausgeister~~ **Bestätigt:** Jeder sieht nur den Geist seines Hauses; Ellis nur am Anfang (außer bei Ravenclaw).
+3. ~~Tag 10, Uhrturm-Schlüssel~~ **Bestätigt:** Theo hat ihn „geliehen“, um nachts zu reparieren; er gibt es an Tag 13a oder Tag 20 zu.
+4. ~~Tag 7, Insider-Witz~~ Behoben (`insideJoke1`), nur zur Info.
+5. ~~Tag 12, Sternschnuppen „3 0 0“~~ **Bestätigt:** bleibt so.
