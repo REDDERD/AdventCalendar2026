@@ -12,6 +12,7 @@ Wörter = längster und kürzester Pfad laut `content:simulate`-Logik (500 Zufal
 | [6](tag-06.md) | Die Nikolausnacht | `dorm_corridor` | `d06.boot`, `d06.theo` (±`trust_theo`) | `k03` | Harry und Ron (Tarnumhang) | `p06` Die Nikolausstiefel (30) | 374–401 |
 | [7](tag-07.md) | Die Eulerei | `owlery` | `d07.letter` (`anonymous_letter`), `d07.home` (`wrote_home`) | `anonymous_letter` (optional) | Hedwig, Errol | `p07` Eulen-Nummern (30) | 340–364 |
 | [8](tag-08.md) | Das Gewächshaus | `greenhouse` | `d08.neville`, `d08.maren` (+`trust_maren`) | – | Neville (+ Trevor) | `p08` Alraunen (40) | 323–387 |
+| [9](tag-09.md) | Der Hausabend | `common_room` | `d09.secret` (`house_token`), `d09.ghost` | `house_token` (optional) | Hausgeister (je Haus einer), Fette Dame | `p09` Das Passwort (30, 4 Varianten) | 297–333 |
 
 **Mindestgrenzen eingehalten:** Jeder Tag hat zwei Entscheidungen. Kein Ermittlungshinweis hängt an etwas anderem als in CONCEPT Abschnitt 8.3. Jeder Tag hat mindestens einen Rückbezug (siehe Kopftabelle der Tage).
 

@@ -32,3 +32,10 @@ Ich habe die Skripte in eine **Kopie** des Repos (außerhalb des Projekts) kopie
 8. **Tag 11 ersetzt den Entwurf `p11`** („Spuren im Schnee“, DECISIONS #40) durch „Das Boot“ (Wolves and Chicks). Die Engine `custom:cross` fehlt noch in `src/`; Spezifikation und `p11.json`-Entwurf stehen in tag-11.md. CONCEPT (Abschnitt 9/10) und DECISIONS (#50) sind angepasst. Mit umzuziehen: `schedule.ts` (Titel), Sprecher `hagrid`, Pixel-Assets, `puzzle.p11.snow` entfällt. Geprüft: 11 Überfahrten minimal, 4 kürzeste Lösungen; das Skript kompiliert, Lint 0/0, 330–339 Wörter. Das Rätsel ist mit nur 16 sicheren Zuständen eher leichter als `p05`; die knackigere Variante 5 + 5 mit Boot für 3 steht in tag-11.md.
 9. **Rätselplan geändert** (DECISIONS #51, Bibel Abschnitt 8): `p17` Wechselgeld wird **Nim** gegen Fred und George (`custom:nim`, Haufen 3/4/5, genau ein Gewinnzug), `p13a` Katalogcode wird der **Stammbaum** (`arrange` Reihe, 7 Karten, genau eine Reihenfolge, beides per Skript geprüft). Das Zauberduell von Tag 20 bleibt. `input` nutzen nur noch Tag 1, 7, 9, 13w, 14a. Neue Sprecher `fred`, `george`. Noch nicht in `src/`: Engines `cross` und `nim`, Rätsel-JSON von `p11`, `p13a`, `p17`.
 7. **Rätsel schwerer gemacht** (DECISIONS.md #44): Die Rätsel-Abschnitte von Tag 2, 3, 4, 5 und 8 beschreiben jetzt die schwereren Fassungen aus `src/content/puzzles/`; in Tag 5 sind die Mengen im Dialog angepasst (14/9/5, zweimal sieben Maß). Tag 1–8 sind umgesetzt; die Skripte hier entsprechen `src/content/ink/`. Auch `p06` (Logikraster mit Karte) und `p07` (Summe der drei davor) sind jetzt schwerer.
+
+## Fragen an dich (gesammelt beim Schreiben ab Tag 9)
+
+Ich habe überall eine sinnvolle Annahme getroffen und weitergemacht. Bitte kurz bestätigen oder korrigieren.
+
+1. **Tag 9, Hausgegenstände:** Gryffindor eine Löwenfeder, Hufflepuff ein Honigtöpfchen, Ravenclaw eine Adlerbrosche, Slytherin ein grüner Glücksstein. Passen die? (Tag 18 baut darauf eine Bonus-Szene.)
+2. **Tag 9, Hausgeister:** Jeder Spieler sieht nur den Geist seines Hauses (Nick, Mönch, Graue Dame, Baron). Ellis ist nur am Anfang dabei. In Ordnung?
