@@ -2,26 +2,25 @@ import type { ReactNode } from 'react';
 import { useStore } from '../core/store';
 
 interface Props {
-  top?: ReactNode;
-  bottom?: ReactNode;
-  nav?: ReactNode;
-  /** Hide points/sparks (login, prologue). */
+  children?: ReactNode;
+  /** Hide the status bar (login, prologue). */
   bare?: boolean;
+  className?: string;
 }
 
-/** Section 5.1: statusBar 24 · topScreen 192 · hinge 8 · bottomScreen 192 · navBar 32. */
-export function Layout({ top, bottom, nav, bare }: Props) {
+/**
+ * One big screen (DECISIONS.md #32): status bar (24) on top, the screen body
+ * fills the rest of the stage height.
+ */
+export function Layout({ children, bare, className }: Props) {
   return (
-    <>
-      <div className="region region-status">{!bare && <StatusBar />}</div>
-      <div className="region region-top">
-        {top}
+    <div className="layout">
+      {!bare && <StatusBar />}
+      <div className={`screen-body ${className ?? ''}`}>
+        {children}
         <Toasts />
       </div>
-      <div className="region region-hinge" />
-      <div className="region region-bottom">{bottom}</div>
-      <div className="region region-nav">{nav}</div>
-    </>
+    </div>
   );
 }
 
@@ -29,19 +28,22 @@ function StatusBar() {
   const save = useStore((s) => s.save);
   const activeDay = useStore((s) => s.activeDay);
   const setTrunkOpen = useStore((s) => s.setTrunkOpen);
-  if (!save) return null;
   return (
     <div className="statusbar">
-      <span className="stat" aria-label="Hauspunkte">
-        <span className="stat-icon stat-points" /> {save.housePoints}
-      </span>
-      <span className="stat" aria-label="Zauberfunken">
-        <span className="stat-icon stat-sparks" /> {save.sparks}
-      </span>
-      <span className="stat-day">{activeDay ? `Tag ${activeDay}` : ''}</span>
-      <button type="button" className="trunk-btn" onClick={() => setTrunkOpen(true)}>
-        Truhe
-      </button>
+      {save && (
+        <>
+          <span className="stat" aria-label="Hauspunkte">
+            <span className="stat-icon stat-points" /> {save.housePoints}
+          </span>
+          <span className="stat" aria-label="Zauberfunken">
+            <span className="stat-icon stat-sparks" /> {save.sparks}
+          </span>
+          <span className="stat-day">{activeDay ? `Tag ${activeDay}` : ''}</span>
+          <button type="button" className="trunk-btn" onClick={() => setTrunkOpen(true)}>
+            Truhe
+          </button>
+        </>
+      )}
     </div>
   );
 }

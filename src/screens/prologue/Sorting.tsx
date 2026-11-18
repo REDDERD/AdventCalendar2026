@@ -10,6 +10,9 @@ import { Layout } from '../../ui/Layout';
 import { PixelButton } from '../../ui/PixelButton';
 import { advancePrologue, HOUSE_LABEL, useDraft } from './prologueFlow';
 
+/** The hat sits above the question panel (four answers ≈ 200 px). */
+const HAT_FLOOR = 204;
+
 const STAGE = { bg: 'great_hall', music: null, actors: [{ id: 'hat', pos: 'center' as const }], sparks: [] };
 
 type Phase =
@@ -145,5 +148,10 @@ export function SortingScreen() {
     );
   }
 
-  return <Layout bare top={<SceneRenderer stage={STAGE} emotes={{}} />} bottom={bottom} />;
+  return (
+    <Layout bare>
+      <SceneRenderer stage={STAGE} emotes={{}} floor={HAT_FLOOR} />
+      {bottom}
+    </Layout>
+  );
 }

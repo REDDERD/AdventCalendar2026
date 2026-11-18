@@ -14,7 +14,10 @@ interface Props {
   onAdvance: () => void;
 }
 
-/** Dialogue with portrait and typewriter text. A tap completes the line, the next tap advances (Section 5.7). */
+/**
+ * Dialogue overlay at the bottom of the screen: portrait inside the box,
+ * typewriter text. A tap completes the line, the next tap advances (Section 5.7).
+ */
 export function DialogueBox({ speaker, text, textSpeed, emote, onAdvance }: Props) {
   const [shown, setShown] = useState(textSpeed === 'instant' ? text.length : 0);
   const done = shown >= text.length;
@@ -48,19 +51,21 @@ export function DialogueBox({ speaker, text, textSpeed, emote, onAdvance }: Prop
 
   return (
     <div className="dialogue" onClick={onTap}>
-      {speaker && (
-        <div className="dialogue-portrait">
-          <AssetImage id={`portrait.${speaker}`} w={64} h={64} />
-          {emote && (
-            <div className="emote emote-portrait">
-              <AssetImage id={`emote.${emote}`} w={16} h={16} />
-            </div>
-          )}
-        </div>
-      )}
       <div className={`dialogue-box ${speaker ? '' : 'dialogue-narration'}`}>
-        {speaker && <div className="dialogue-name">{SPEAKER_NAMES[speaker] ?? speaker}</div>}
-        <p className="dialogue-text">{text.slice(0, shown)}</p>
+        {speaker && (
+          <div className="dialogue-portrait">
+            <AssetImage id={`portrait.${speaker}`} w={64} h={64} />
+            {emote && (
+              <div className="emote emote-portrait">
+                <AssetImage id={`emote.${emote}`} w={16} h={16} />
+              </div>
+            )}
+          </div>
+        )}
+        <div className="dialogue-content">
+          {speaker && <div className="dialogue-name">{SPEAKER_NAMES[speaker] ?? speaker}</div>}
+          <p className="dialogue-text">{text.slice(0, shown)}</p>
+        </div>
         {done && <span className="dialogue-more">▼</span>}
       </div>
     </div>

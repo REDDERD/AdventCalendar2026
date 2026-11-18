@@ -139,7 +139,11 @@ function useAuthFlow(): void {
 }
 
 const SCREENS: Record<Screen, () => ReactNode> = {
-  boot: () => <Layout bare top={<div className="center-msg">Die Eule fliegt los …</div>} />,
+  boot: () => (
+    <Layout bare>
+      <div className="center-msg">Die Eule fliegt los …</div>
+    </Layout>
+  ),
   login: () => <LoginScreen />,
   blocked: () => <BlockedScreen />,
   onboarding: () => <OnboardingScreen />,

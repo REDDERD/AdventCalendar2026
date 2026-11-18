@@ -14,6 +14,9 @@ const MAX_WORDS = 500; // [RB-3], doubled on request (DECISIONS.md #16)
 const MIN_CHOICE_POINTS = 2; // per day (DECISIONS.md #16)
 const MAX_LINE_CHARS = 90; // [STY-2]
 const MAX_CHOICE_CHARS = 40; // [STY-3]
+// Sparks: on the shortest stage (448) the world is visible from y = 88; the dialogue box covers ~100 px.
+const SPARK_MIN_Y = 100;
+const SPARK_MAX_Y = 400;
 
 const errors: string[] = [];
 const warnings: string[] = [];
@@ -112,7 +115,10 @@ for (const stem of listStoryFiles()) {
           sparkIds.add(id);
           const nx = Number(x);
           const ny = Number(y);
-          if (!(nx >= 0 && nx < 256 && ny >= 0 && ny < 192)) errors.push(`${at}: spark outside the top screen`);
+          // World coordinates (256 × 512, bottom-anchored); visible on every screen above the dialogue box
+          if (!(nx >= 8 && nx <= 248 && ny >= SPARK_MIN_Y && ny <= SPARK_MAX_Y)) {
+            errors.push(`${at}: spark must be within x 8–248, y ${SPARK_MIN_Y}–${SPARK_MAX_Y}`);
+          }
           break;
         }
       }

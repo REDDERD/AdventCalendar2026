@@ -15,6 +15,9 @@ export const WANDS: Array<{ id: WandId; name: string; line: string }> = [
   { id: 'unicorn', name: 'Birke & Einhornhaar', line: 'Birke und Einhornhaar. Treu, sanft und erstaunlich geduldig.' },
 ];
 
+/** Height of the bottom panel; the scene floor sits on top of it. */
+const PANEL_H = 196;
+
 const STAGE = { bg: 'wand_shop', music: null, actors: [{ id: 'wandmaker', pos: 'center' as const }], sparks: [] };
 
 /** Section 6.1 step 3: three wands on velvet; tap → sparks → confirm. */
@@ -32,34 +35,31 @@ export function WandScreen() {
   };
 
   return (
-    <Layout
-      bare
-      top={<SceneRenderer stage={STAGE} emotes={wand ? { wandmaker: '!' } : {}} />}
-      bottom={
-        <div className="wand-bottom">
-          <Frame className="npc-line">
-            <div className="dialogue-name">{SPEAKER_NAMES.wandmaker}</div>
-            {wand?.line ?? 'Der Zauberstab wählt dich, nicht umgekehrt. Probier sie ruhig aus.'}
-          </Frame>
-          <div className="velvet">
-            {WANDS.map((w) => (
-              <button
-                key={w.id}
-                type="button"
-                className={`wand-slot ${selected === w.id ? 'selected' : ''}`}
-                aria-label={w.name}
-                onClick={() => setSelected(w.id)}
-              >
-                <AssetImage id={`ui.wand.${w.id}`} w={96} h={24} />
-                {selected === w.id && <span className="wand-sparks" />}
-              </button>
-            ))}
-          </div>
-          <PixelButton variant="wax" disabled={!selected} onClick={confirm}>
-            Diesen nehme ich
-          </PixelButton>
+    <Layout bare>
+      <SceneRenderer stage={STAGE} emotes={wand ? { wandmaker: '!' } : {}} floor={PANEL_H} />
+      <div className="wand-bottom">
+        <Frame className="npc-line">
+          <div className="dialogue-name">{SPEAKER_NAMES.wandmaker}</div>
+          {wand?.line ?? 'Der Zauberstab wählt dich, nicht umgekehrt. Probier sie ruhig aus.'}
+        </Frame>
+        <div className="velvet">
+          {WANDS.map((w) => (
+            <button
+              key={w.id}
+              type="button"
+              className={`wand-slot ${selected === w.id ? 'selected' : ''}`}
+              aria-label={w.name}
+              onClick={() => setSelected(w.id)}
+            >
+              <AssetImage id={`ui.wand.${w.id}`} w={96} h={24} />
+              {selected === w.id && <span className="wand-sparks" />}
+            </button>
+          ))}
         </div>
-      }
-    />
+        <PixelButton variant="wax" disabled={!selected} onClick={confirm}>
+          Diesen nehme ich
+        </PixelButton>
+      </div>
+    </Layout>
   );
 }

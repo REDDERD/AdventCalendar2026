@@ -37,40 +37,37 @@ export function RevealScreen() {
   const revealed = phase > 0;
 
   return (
-    <Layout
-      bare
-      top={
-        <div className={`reveal-top ${revealed ? 'revealed' : ''}`}>
-          <AssetImage id="bg.great_hall" w={256} h={192} className="scene-bg" />
-          <div className="reveal-figure">
-            <CharacterSprite
-              look={draft.look ?? DEFAULT_LOOK}
-              house={revealed ? house : null}
-              direction={phase === 2 ? 'down' : 'up'}
-              scale={2}
-            />
+    <Layout bare className="reveal-screen">
+      <div className={`reveal-top ${revealed ? 'revealed' : ''}`}>
+        <div className="scene-world">
+          <AssetImage id="bg.great_hall" w={256} h={512} />
+        </div>
+        <div className="reveal-figure">
+          <CharacterSprite
+            look={draft.look ?? DEFAULT_LOOK}
+            house={revealed ? house : null}
+            direction={phase === 2 ? 'down' : 'up'}
+            scale={2}
+          />
+        </div>
+        {revealed && (
+          <div className="reveal-crest">
+            <AssetImage id={`ui.crest.${house}`} w={48} h={56} />
           </div>
-          {revealed && (
-            <div className="reveal-crest">
-              <AssetImage id={`ui.crest.${house}`} w={48} h={56} />
-            </div>
-          )}
-          {revealed && <div className="reveal-sparkles" />}
-        </div>
-      }
-      bottom={
-        <div className="center-msg">
-          <Frame className="msg-frame">
-            <h2>{revealed ? `Willkommen in ${HOUSE_LABEL[house]}!` : '…'}</h2>
-            {revealed && <p>{CHEER[house]}</p>}
-          </Frame>
-          {phase === 2 && (
-            <PixelButton variant="wax" onClick={finishPrologue}>
-              Zum Kalender
-            </PixelButton>
-          )}
-        </div>
-      }
-    />
+        )}
+        {revealed && <div className="reveal-sparkles" />}
+      </div>
+      <div className="center-msg">
+        <Frame className="msg-frame">
+          <h2>{revealed ? `Willkommen in ${HOUSE_LABEL[house]}!` : '…'}</h2>
+          {revealed && <p>{CHEER[house]}</p>}
+        </Frame>
+        {phase === 2 && (
+          <PixelButton variant="wax" onClick={finishPrologue}>
+            Zum Kalender
+          </PixelButton>
+        )}
+      </div>
+    </Layout>
   );
 }

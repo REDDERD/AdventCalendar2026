@@ -76,3 +76,4 @@ Repository → Settings → Pages → Source: **GitHub Actions**. Danach baut un
 - Rätsel: `src/content/puzzles/<id>.json` (Schema in `src/puzzles/schema.ts`).
 - Freischaltzeiten und Titel: `src/content/schedule.ts`.
 - Grafiken/Sounds: nur über IDs aus `src/assets/manifest.ts`; fehlende Dateien erscheinen als Platzhalter.
+- Bildschirm: 256 logische Pixel breit, 448–560 hoch (DECISIONS.md #32). Hintergründe sind 256 × 512 und unten verankert; Funken (`# spark: id x y`) liegen in diesen Koordinaten zwischen y 100 und 400. Rätsel-Engines bekommen mindestens 256 × 256.

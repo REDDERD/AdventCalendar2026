@@ -15,19 +15,12 @@ export function BlockedScreen() {
       ? `Deine Eule macht gerade Pause. Melde dich bei ${ADMIN_NAME}.`
       : 'Diese Eule kenne ich nicht.';
   return (
-    <Layout
-      bare
-      top={
-        <div className="center-msg">
-          <Frame className="msg-frame">{text}</Frame>
-        </div>
-      }
-      bottom={
-        <div className="center-msg">
-          <PixelButton onClick={() => void logout()}>Abmelden</PixelButton>
-        </div>
-      }
-    />
+    <Layout bare>
+      <div className="center-msg">
+        <Frame className="msg-frame">{text}</Frame>
+        <PixelButton onClick={() => void logout()}>Abmelden</PixelButton>
+      </div>
+    </Layout>
   );
 }
 

@@ -29,48 +29,43 @@ export function LoginScreen() {
   };
 
   return (
-    <Layout
-      bare
-      top={
-        <div className="title-screen">
-          <AssetImage id="bg.great_hall" w={256} h={192} className="scene-bg" />
-          <div className="title-overlay">
-            <h1 className="title">Hogwarts</h1>
-            <div className="subtitle">und die Adventsuhr</div>
-          </div>
-        </div>
-      }
-      bottom={
-        <form className="login" onSubmit={submit}>
-          <Frame className="login-frame">
-            <label className="field">
-              <span>Eulenname</span>
-              <input
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                autoCapitalize="none"
-                autoCorrect="off"
-                autoComplete="username"
-                spellCheck={false}
-              />
-            </label>
-            <label className="field">
-              <span>Zauberwort</span>
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                autoCapitalize="none"
-                autoComplete="current-password"
-              />
-            </label>
-            {error && <div className="error">{error}</div>}
-          </Frame>
-          <PixelButton type="submit" variant="wax" disabled={busy || !username || !password}>
-            {busy ? '…' : 'Eintreten'}
-          </PixelButton>
-        </form>
-      }
-    />
+    <Layout bare className="login-screen">
+      <div className="scene-world">
+        <AssetImage id="bg.great_hall" w={256} h={512} />
+      </div>
+      <div className="title-overlay">
+        <h1 className="title">Hogwarts</h1>
+        <div className="subtitle">und die Adventsuhr</div>
+      </div>
+      <form className="login" onSubmit={submit}>
+        <Frame className="login-frame">
+          <label className="field">
+            <span>Eulenname</span>
+            <input
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              autoCapitalize="none"
+              autoCorrect="off"
+              autoComplete="username"
+              spellCheck={false}
+            />
+          </label>
+          <label className="field">
+            <span>Zauberwort</span>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              autoCapitalize="none"
+              autoComplete="current-password"
+            />
+          </label>
+          {error && <div className="error">{error}</div>}
+        </Frame>
+        <PixelButton type="submit" variant="wax" disabled={busy || !username || !password}>
+          {busy ? '…' : 'Eintreten'}
+        </PixelButton>
+      </form>
+    </Layout>
   );
 }

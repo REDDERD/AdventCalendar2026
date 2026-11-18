@@ -31,8 +31,9 @@ export function isCrop(def: AssetDef): def is CropAsset {
   return 'from' in def;
 }
 
+// Backgrounds: 256 × 512, anchored to the bottom of the scene (DECISIONS.md #32)
 const backgrounds = Object.fromEntries(
-  LOCATIONS.map((id) => [`bg.${id}`, { file: `assets/bg/${id}.png`, w: 256, h: 192 } satisfies FileAsset]),
+  LOCATIONS.map((id) => [`bg.${id}`, { file: `assets/bg/${id}.png`, w: 256, h: 512 } satisfies FileAsset]),
 );
 
 const LPC_LICENSE = 'CC-BY-SA 3.0 / GPL 3.0 / OGA-BY 3.0';
@@ -109,7 +110,8 @@ export const assets: Record<string, AssetDef> = {
   'ui.frame.parchment': { file: 'assets/ui/parchment.png', nineSlice: [8, 8, 8, 8] },
   'ui.frame.wood': { file: 'assets/ui/wood.png', nineSlice: [8, 8, 8, 8] },
   'ui.seal': { file: 'assets/ui/seal.png', w: 24, h: 24 },
-  'puzzle.p01': { file: 'assets/puzzles/p01.png', w: 256, h: 120 },
+  // Puzzle images: 256 × 64 (shown below the prompt)
+  'puzzle.p01': { file: 'assets/puzzles/p01.png', w: 256, h: 64 },
   // Phase 2 overrides go below, e.g.
   // 'portrait.quill': { file: 'assets/portraits/quill.png', moods: { happy: '...' } },
 };

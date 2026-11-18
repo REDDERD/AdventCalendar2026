@@ -88,23 +88,16 @@ export function SceneScreen() {
   const portraitEmote = step?.kind === 'line' && step.speaker ? emotes[step.speaker] : undefined;
 
   return (
-    <Layout
-      top={<SceneRenderer stage={stage} emotes={emotes} onSpark={collectSpark} />}
-      bottom={
-        step?.kind === 'line' ? (
-          <DialogueBox
-            speaker={step.speaker}
-            text={step.text}
-            textSpeed={textSpeed}
-            emote={portraitEmote}
-            onAdvance={advance}
-          />
-        ) : step?.kind === 'choices' ? (
-          <div className="choice-screen">
-            <ChoiceList options={step.options} onChoose={choose} />
-          </div>
-        ) : null
-      }
-    />
+    <Layout>
+      <SceneRenderer stage={stage} emotes={emotes} onSpark={collectSpark} />
+      {step?.kind === 'line' && (
+        <DialogueBox speaker={step.speaker} text={step.text} textSpeed={textSpeed} emote={portraitEmote} onAdvance={advance} />
+      )}
+      {step?.kind === 'choices' && (
+        <div className="choice-screen">
+          <ChoiceList options={step.options} onChoose={choose} />
+        </div>
+      )}
+    </Layout>
   );
 }

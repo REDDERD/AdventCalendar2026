@@ -34,10 +34,9 @@ export function LetterScreen() {
   };
 
   return (
-    <Layout
-      bare
-      top={
-        opened ? (
+    <Layout bare className="letter-screen">
+      {opened ? (
+        <>
           <div className="letter-top">
             <Frame className="letter-paper">
               <div className="letter-head">Hogwarts-Schule für Hexerei und Zauberei</div>
@@ -46,19 +45,6 @@ export function LetterScreen() {
               <p className="letter-sign">A. Thornbury, Schulleiterin</p>
             </Frame>
           </div>
-        ) : (
-          <div className="letter-top" onClick={() => setOpened(true)}>
-            <div className="envelope">
-              <div className="envelope-flap" />
-              <button type="button" className="wax-seal" aria-label="Siegel brechen" onClick={() => setOpened(true)}>
-                H
-              </button>
-            </div>
-          </div>
-        )
-      }
-      bottom={
-        opened ? (
           <div className="letter-form">
             <label className="field">
               <span>Unterschrift (dein Name)</span>
@@ -76,10 +62,18 @@ export function LetterScreen() {
               Unterschreiben
             </PixelButton>
           </div>
-        ) : (
-          <div className="center-msg tap-hint">Tippe auf das Siegel</div>
-        )
-      }
-    />
+        </>
+      ) : (
+        <div className="letter-top" onClick={() => setOpened(true)}>
+          <div className="envelope">
+            <div className="envelope-flap" />
+            <button type="button" className="wax-seal" aria-label="Siegel brechen" onClick={() => setOpened(true)}>
+              H
+            </button>
+          </div>
+          <div className="tap-hint">Tippe auf das Siegel</div>
+        </div>
+      )}
+    </Layout>
   );
 }

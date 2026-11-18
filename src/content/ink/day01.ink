@@ -4,7 +4,7 @@ INCLUDE globals.ink
 === day01 ===
 # bg: great_hall
 # music: castle
-# spark: d01.s1 36 30
+# spark: d01.s1 36 300
 Der erste Dezembermorgen in der Großen Halle. Es duftet nach Toast und Zimt.
 Und doch ist etwas falsch. Es ist still. Viel zu still.
 # show: quill right
@@ -65,7 +65,7 @@ quill: Das erinnert mich an ein Rätsel, das ich als Schülerin geliebt habe …
 { not last_puzzle_first_try: ellis: Uhren sind gemein. Ich hätte die Zeiger einfach gefragt. }
 quill: Jedes Rätsel hat eine Lösung, {pronoun_form("meine Liebe", "mein Lieber", "mein Gutes")}.
 quill: Und diese Uhr ist das größte Rätsel von allen.
-# spark: d01.s2 128 120
+# spark: d01.s2 212 250
 Da – ein leises Klicken im Uhrkasten. Dann wieder Stille.
 # emote: ellis !
 ellis: Habt ihr das gehört? Sie lebt noch!

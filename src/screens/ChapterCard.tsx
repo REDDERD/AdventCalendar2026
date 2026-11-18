@@ -17,20 +17,14 @@ export function ChapterCardScreen() {
   };
 
   return (
-    <Layout
-      top={
-        <div className="chapter-card" onClick={next}>
-          <Frame className="chapter-frame">
-            <div className="chapter-number">Kapitel {day}</div>
-            <div className="chapter-title">{title}</div>
-          </Frame>
-        </div>
-      }
-      bottom={
-        <div className="center-msg tap-hint" onClick={next}>
-          Tippen zum Beginnen
-        </div>
-      }
-    />
+    <Layout>
+      <div className="chapter-card" onClick={next}>
+        <Frame className="chapter-frame">
+          <div className="chapter-number">Kapitel {day}</div>
+          <div className="chapter-title">{title}</div>
+        </Frame>
+        <div className="tap-hint">Tippen zum Beginnen</div>
+      </div>
+    </Layout>
   );
 }

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { evaluateEnding } from '../../src/core/ending';
-import { computeScale } from '../../src/core/PixelStage';
+import { computeStage, MAX_H, MIN_H, STAGE_W } from '../../src/core/PixelStage';
 import { matchesAnswer, normalizeAnswer } from '../../src/puzzles/normalize';
 import { pointsFor, rivalScores } from '../../src/puzzles/scoring';
 import { emailToUsername, isValidUsername, normalizeUsername, usernameToEmail } from '../../src/services/username';
@@ -99,18 +99,30 @@ describe('ending evaluation [END-1]', () => {
   });
 });
 
-describe('stage scaling [UI-1]', () => {
-  it('uses an integer device-pixel factor when wide enough', () => {
-    // iPhone 13: 390 CSS px, DPR 3 → s = 4 → 341.3 CSS px (87.5 %)
-    expect(computeScale(390, 800, 3)).toBeCloseTo(4 / 3);
+describe('stage size [UI-1] (DECISIONS.md #32)', () => {
+  it('fills width and height on a modern phone', () => {
+    // iPhone 13: 390 × 763 CSS px after safe areas, DPR 3
+    const { scale, height } = computeStage(390, 763, 3);
+    expect(scale).toBeCloseTo(390 / 256);
+    expect(height).toBe(500);
   });
 
-  it('falls back to a fractional factor below 85 % of the width', () => {
-    // 375 CSS px, DPR 2 → s = 2 → 256 px = 68 % → fill width
-    expect(computeScale(375, 2000, 2)).toBeCloseTo(375 / 256);
+  it('keeps at least 448 logical pixels on short phones (side margins instead)', () => {
+    // iPhone SE: 375 × 647, DPR 2
+    const { scale, height } = computeStage(375, 647, 2);
+    expect(height).toBe(MIN_H);
+    expect(MIN_H * scale).toBeLessThanOrEqual(647);
+    expect(STAGE_W * scale).toBeLessThan(375);
   });
 
-  it('never exceeds the available height', () => {
-    expect(448 * computeScale(375, 600, 2)).toBeLessThanOrEqual(600);
+  it('caps the height on very long screens', () => {
+    // 20:9 Android: 412 × 870, DPR 2.6
+    expect(computeStage(412, 870, 2.625).height).toBeLessThanOrEqual(MAX_H);
+    expect(computeStage(360, 900, 3).height).toBe(MAX_H);
+  });
+
+  it('uses an integer factor on DPR 1 when wide enough', () => {
+    expect(computeStage(540, 1200, 1).scale).toBe(2);
+    expect(computeStage(400, 1200, 1).scale).toBeCloseTo(400 / 256); // 256 px would be < 85 %
   });
 });

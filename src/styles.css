@@ -69,7 +69,7 @@ img {
   image-rendering: pixelated;
 }
 
-/* ---------- Stage [UI-1] [UI-2] ---------- */
+/* ---------- Stage [UI-1] [UI-2]: one big screen, 256 × 448–560 (DECISIONS.md #32) ---------- */
 
 .stage-outer {
   position: fixed;
@@ -96,7 +96,7 @@ img {
   top: 0;
   left: 0;
   width: 256px;
-  height: 448px;
+  height: 448px; /* replaced inline by the measured stage height */
   transform-origin: 0 0;
   background: var(--night);
   font-size: 13px;
@@ -115,32 +115,28 @@ img {
   to { opacity: 1; }
 }
 
-.region {
-  position: absolute;
-  left: 0;
-  width: 256px;
+/* Status bar (24) on top, the screen body fills the rest */
+.layout { display: flex; flex-direction: column; height: 100%; }
+.screen-body {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
+  background: var(--night);
 }
-.region-status { top: 0; height: 24px; background: var(--wood-dark); }
-.region-top { top: 24px; height: 192px; background: var(--night-light); }
-.region-hinge {
-  top: 216px;
-  height: 8px;
-  background: repeating-linear-gradient(90deg, var(--wood) 0 6px, var(--wood-dark) 6px 8px);
-  border-top: 1px solid var(--wood-light);
-  border-bottom: 1px solid var(--wood-dark);
-}
-.region-bottom { top: 224px; height: 192px; background: var(--night); }
-.region-nav { top: 416px; height: 32px; background: var(--wood-dark); }
 
 /* ---------- Status bar ---------- */
 
 .statusbar {
+  flex: none;
   display: flex;
   align-items: center;
   gap: 8px;
   height: 24px;
   padding: 0 4px 0 6px;
+  background: var(--wood-dark);
   color: var(--candle-light);
 }
 .stat { display: flex; align-items: center; gap: 2px; min-width: 36px; }
@@ -201,17 +197,17 @@ img {
 }
 
 .center-msg {
+  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  height: 100%;
   padding: 8px;
   text-align: center;
   color: var(--snow);
 }
-.msg-frame { max-width: 232px; }
+.msg-frame { max-width: 236px; }
 .msg-frame h2,
 .dayend-frame h2 { margin: 0 0 4px; font-size: 18px; line-height: 19px; }
 .msg-frame p { margin: 0; }
@@ -242,24 +238,49 @@ img {
   animation: pixel-fade 200ms steps(3) both;
 }
 
-/* ---------- Title / login ---------- */
+/* ---------- Scene world: backgrounds are 256 × 512, anchored to the bottom ---------- */
 
-.title-screen,
-.scene { position: relative; width: 256px; height: 192px; }
-.scene-bg { position: absolute; inset: 0; }
-.title-overlay {
+.scene {
   position: absolute;
   inset: 0;
+  overflow: hidden;
+  background: var(--night-light);
+}
+.scene-world {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 256px;
+  height: 512px;
+}
+
+/* ---------- Title / login ---------- */
+
+.login-screen { background: var(--night-light); }
+.title-overlay {
+  position: absolute;
+  top: 56px;
+  left: 0;
+  right: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   text-shadow: 2px 2px 0 var(--ink);
 }
 .title { margin: 0; font-size: 40px; line-height: 40px; color: var(--gold-light); }
 .subtitle { font-size: 18px; color: var(--candle-light); }
 
-.login { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 12px; }
+.login {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 12px 24px;
+}
 .login-frame { width: 220px; }
 .field { display: flex; flex-direction: column; gap: 2px; margin-bottom: 6px; }
 .field span { font-size: 13px; }
@@ -280,20 +301,21 @@ img {
 
 /* ---------- Calendar ---------- */
 
-.calendar-top { display: flex; align-items: center; gap: 8px; height: 192px; padding: 8px; }
+.calendar-top { flex: none; display: flex; align-items: center; gap: 8px; padding: 12px 8px 8px; }
 .calendar-clock { flex: none; }
 .calendar-info { flex: 1; text-align: center; }
 .calendar-headline { font-size: 15px; line-height: 16px; }
 .calendar-countdown { margin-top: 6px; }
 
 .doors {
+  flex: 1;
   display: grid;
-  grid-template-columns: repeat(6, 36px);
-  grid-auto-rows: 40px;
+  grid-template-columns: repeat(6, 38px);
+  grid-auto-rows: 46px;
   gap: 4px;
   justify-content: center;
   align-content: center;
-  height: 192px;
+  padding-bottom: 8px;
 }
 .door {
   position: relative;
@@ -324,16 +346,24 @@ img {
 
 /* ---------- Chapter card ---------- */
 
-.chapter-card { display: flex; align-items: center; justify-content: center; height: 192px; background: var(--night-light); }
+.chapter-card {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  background: var(--night-light);
+}
 .chapter-frame { width: 200px; padding: 16px 8px; text-align: center; }
 .chapter-number { font-size: 15px; color: var(--wood); }
 .chapter-title { font-size: 22px; line-height: 24px; margin-top: 4px; }
 
-/* ---------- Scene ---------- */
+/* ---------- Scene actors (2×), emotes, sparks ---------- */
 
-.actor { position: absolute; width: 64px; height: 64px; }
-.emote { position: absolute; left: 24px; top: -14px; animation: emote-pop 1.6s steps(4) both; }
-.emote-portrait { left: 48px; top: -8px; }
+.actor { position: absolute; width: 128px; height: 128px; }
+.emote { position: absolute; left: 68px; top: 2px; animation: emote-pop 1.6s steps(4) both; }
+.emote-portrait { left: 46px; top: -6px; }
 @keyframes emote-pop {
   0% { transform: translateY(4px); opacity: 0; }
   15% { transform: translateY(0); opacity: 1; }
@@ -364,37 +394,42 @@ img {
   94% { opacity: 0.6; transform: scale(1); }
 }
 
-/* ---------- Dialogue ---------- */
+/* ---------- Dialogue and choices: overlays at the bottom ---------- */
 
-.dialogue { position: relative; height: 192px; padding: 8px; display: flex; flex-direction: column; justify-content: flex-end; gap: 4px; }
+.dialogue { position: absolute; left: 0; right: 0; bottom: 0; padding: 6px; z-index: 5; }
+.dialogue-box {
+  position: relative;
+  display: flex;
+  gap: 6px;
+  min-height: 84px;
+  padding: 6px 8px 12px 6px;
+  background: var(--parchment);
+  border: 2px solid var(--wood-dark);
+  box-shadow: inset 0 0 0 1px var(--parchment-light), 0 2px 0 rgba(0, 0, 0, 0.35);
+}
 .dialogue-portrait {
   position: relative;
+  flex: none;
   width: 64px;
   height: 64px;
   border: 2px solid var(--wood-dark);
   background: var(--night-light);
   box-sizing: content-box;
 }
-.dialogue-box {
-  position: relative;
-  min-height: 84px;
-  padding: 6px 8px 12px;
-  background: var(--parchment);
-  border: 2px solid var(--wood-dark);
-  box-shadow: inset 0 0 0 1px var(--parchment-light);
-}
-.dialogue-narration { background: var(--parchment-light); font-style: italic; }
+.dialogue-content { flex: 1; min-width: 0; }
+.dialogue-narration { background: var(--parchment-light); font-style: italic; padding-left: 8px; }
 .dialogue-name { font-weight: 400; color: var(--wood); margin-bottom: 2px; }
 .dialogue-text { margin: 0; white-space: pre-wrap; }
 .dialogue-more { position: absolute; right: 6px; bottom: 2px; font-size: 8px; animation: blink 0.8s steps(2) infinite; }
 
-.choice-screen { display: flex; align-items: center; justify-content: center; height: 192px; padding: 8px; }
+.choice-screen { position: absolute; left: 0; right: 0; bottom: 0; padding: 6px; z-index: 5; }
 .choices { display: flex; flex-direction: column; gap: 6px; width: 100%; }
 .choice {
   min-height: 28px;
   padding: 4px 8px;
   background: var(--parchment);
   border: 2px solid var(--wood-dark);
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.35);
   text-align: left;
 }
 .choice::before { content: '▸ '; color: var(--ember); }
@@ -403,11 +438,12 @@ img {
 /* ---------- Puzzles ---------- */
 
 .puzzle-intro {
+  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 192px;
+  padding-bottom: 104px; /* room for the dialogue overlay */
   background: var(--night);
   color: var(--candle-light);
 }
@@ -415,12 +451,30 @@ img {
 .puzzle-intro-title { font-size: 18px; margin-top: 4px; }
 .puzzle-intro-points { margin-top: 8px; color: var(--parchment-dark); }
 
-.puzzle-top { position: relative; height: 192px; padding: 4px; display: flex; flex-direction: column; gap: 4px; }
+/* Prompt panel (scrolls if needed) · play area ≥ 256 × 256 · action bar (DECISIONS.md #32) */
+.puzzle-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 4px;
+  flex: 0 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+}
+.puzzle-panel > * { flex-shrink: 0; } /* scroll the panel instead of squeezing the prompt */
 .puzzle-header { display: flex; justify-content: space-between; color: var(--gold-light); padding: 0 2px; }
-.puzzle-image { margin: 0 -4px; }
-.puzzle-prompt { flex: 1; overflow: auto; }
-.puzzle-bottom { height: 192px; }
-.puzzle-nav { display: flex; align-items: center; height: 32px; padding: 0 8px; color: var(--candle-light); }
+.puzzle-image { margin: 0 -4px; flex: none; }
+.puzzle-area { flex: 1 0 256px; display: flex; flex-direction: column; }
+.puzzle-actions {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 8px;
+  background: var(--wood-dark);
+  color: var(--candle-light);
+}
 
 .stamp {
   position: absolute;
@@ -438,17 +492,16 @@ img {
 }
 .stamp-correct { color: var(--red); }
 .stamp-wrong { color: var(--stone); }
-.stamp-static { position: static; transform: rotate(-6deg); align-self: center; }
+.stamp-static { position: static; transform: rotate(-6deg); align-self: center; animation: none; }
 @keyframes stamp {
   from { transform: translate(-50%, -50%) rotate(-8deg) scale(2); opacity: 0; }
   to { transform: translate(-50%, -50%) rotate(-8deg) scale(1); opacity: 1; }
 }
 
-.solution-top { display: flex; flex-direction: column; gap: 8px; height: 192px; padding: 8px; }
-.solution-text { flex: 1; overflow: auto; }
+.solution-text { max-width: 236px; max-height: 40%; overflow: auto; text-align: left; }
 .points-big { font-size: 18px; line-height: 19px; color: var(--wood); }
 
-.engine-input { display: flex; flex-direction: column; gap: 6px; height: 192px; padding: 8px; }
+.engine-input { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 8px; padding: 8px; }
 .input-display {
   height: 28px;
   padding: 0 8px;
@@ -464,14 +517,14 @@ img {
 .keyboard-row { display: flex; justify-content: center; gap: 2px; }
 .key {
   min-width: 20px;
-  height: 24px;
+  height: 26px;
   padding: 0 2px;
   background: var(--wood);
   border: 1px solid var(--wood-dark);
   color: var(--candle-light);
   box-shadow: inset 0 1px 0 var(--wood-light);
 }
-.keyboard-number .key { width: 40px; height: 30px; font-size: 18px; }
+.keyboard-number .key { width: 44px; height: 34px; font-size: 18px; }
 .key-wide { min-width: 56px; }
 .key-ok { background: var(--green); }
 .key:active { transform: translateY(1px); }
@@ -483,7 +536,17 @@ img {
 /* ---------- Prologue (Section 6.1) ---------- */
 
 /* Letter */
-.letter-top { position: relative; height: 192px; display: flex; align-items: center; justify-content: center; background: var(--night-light); overflow: hidden; }
+.letter-top {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  background: var(--night-light);
+  overflow: hidden;
+}
 .envelope {
   position: relative;
   width: 168px;
@@ -518,29 +581,30 @@ img {
   animation: blink 1.4s steps(2) infinite;
 }
 @keyframes envelope-fall {
-  from { transform: translateY(-180px) rotate(-8deg); }
+  from { transform: translateY(-240px) rotate(-8deg); }
   70% { transform: translateY(6px) rotate(2deg); }
   to { transform: translateY(0) rotate(0); }
 }
-.letter-paper { width: 236px; max-height: 180px; overflow: hidden; animation: pixel-fade 300ms steps(4) both; }
-.letter-paper p { margin: 4px 0 0; }
+.letter-paper { width: 236px; animation: pixel-fade 300ms steps(4) both; }
+.letter-paper p { margin: 6px 0 0; }
 .letter-head { color: var(--wood); text-align: center; }
 .letter-sign { text-align: right; color: var(--wood); }
-.letter-form { display: flex; flex-direction: column; gap: 6px; padding: 10px 12px; color: var(--snow); }
+.letter-form { flex: none; display: flex; flex-direction: column; gap: 6px; padding: 10px 12px 16px; color: var(--snow); }
 .letter-form .pbtn { align-self: center; }
 .field-label { font-size: 13px; }
 .segmented-dark button { color: var(--ink); }
 
 /* Mirror */
-.mirror-top { position: relative; width: 256px; height: 192px; touch-action: pan-y; }
+.mirror-top { position: relative; flex: 1; overflow: hidden; touch-action: pan-y; }
 .mirror-glass {
   position: absolute;
-  left: 60px;
-  top: 10px;
-  width: 136px;
-  height: 172px;
+  left: 50%;
+  bottom: 12px;
+  width: 148px;
+  height: min(200px, calc(100% - 24px));
+  transform: translateX(-50%);
   border: 4px solid var(--gold);
-  border-radius: 68px 68px 8px 8px;
+  border-radius: 74px 74px 8px 8px;
   background: radial-gradient(ellipse at 40% 30%, #3a5a7a, #1b2a4e 70%);
   box-shadow: inset 0 0 0 2px var(--wood-dark), 0 0 0 2px var(--wood-dark);
   display: flex;
@@ -550,7 +614,7 @@ img {
 }
 .turn-btn {
   position: absolute;
-  top: 80px;
+  bottom: 96px;
   width: 28px;
   height: 28px;
   border: 2px solid var(--wood-dark);
@@ -560,7 +624,7 @@ img {
 }
 .turn-left { left: 16px; }
 .turn-right { right: 16px; }
-.mirror-bottom { display: flex; flex-direction: column; gap: 6px; height: 192px; padding: 6px 8px; color: var(--snow); }
+.mirror-bottom { flex: none; display: flex; flex-direction: column; gap: 6px; padding: 6px 8px 10px; color: var(--snow); }
 .mirror-tabs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px; }
 .mirror-tabs button { height: 22px; padding: 0; font-size: 12px; border: 1px solid var(--wood-light); background: var(--wood); color: var(--candle-light); }
 .mirror-tabs button.active { background: var(--parchment); color: var(--ink); }
@@ -569,11 +633,23 @@ img {
 .mirror-value { flex: 1; height: 52px; padding: 2px; text-align: center; background: var(--parchment); color: var(--ink); border: 2px solid var(--wood-dark); font-size: 15px; line-height: 16px; }
 .mirror-label { font-size: 12px; color: var(--wood); }
 .mirror-count { font-size: 11px; color: var(--stone); }
-.row-buttons { display: flex; justify-content: space-between; gap: 8px; margin-top: auto; }
+.row-buttons { display: flex; justify-content: space-between; gap: 8px; }
 .row-buttons .pbtn { flex: 1; }
 
-/* Wand */
-.wand-bottom { display: flex; flex-direction: column; gap: 6px; height: 192px; padding: 6px 8px; }
+/* Wand: scene with the wandmaker, panel overlay at the bottom */
+.wand-bottom {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 196px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 6px 8px 10px;
+  background: var(--night);
+  border-top: 2px solid var(--wood-dark);
+}
 .npc-line { min-height: 50px; }
 .velvet {
   display: flex;
@@ -602,13 +678,13 @@ img {
 .wand-bottom .pbtn { align-self: center; }
 
 /* Pet */
-.pet-top { height: 192px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; background: linear-gradient(var(--night-light), #2b2033); }
+.pet-top { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; background: linear-gradient(var(--night-light), #2b2033); }
 .pet-sign { color: var(--gold-light); font-size: 18px; }
 .pet-shelf { display: flex; gap: 8px; padding: 6px 8px 0; border-bottom: 6px solid var(--wood); }
 .pet-slot { width: 72px; height: 72px; border: 2px solid transparent; background: transparent; padding: 2px; }
 .pet-slot.selected { border-color: var(--gold-light); animation: pet-hop 600ms steps(2) infinite; }
 @keyframes pet-hop { 50% { transform: translateY(-3px); } }
-.pet-bottom { display: flex; flex-direction: column; gap: 8px; height: 192px; padding: 8px; align-items: stretch; }
+.pet-bottom { flex: none; display: flex; flex-direction: column; gap: 8px; padding: 8px 8px 12px; align-items: stretch; }
 .pet-info { min-height: 56px; }
 .pet-name { color: var(--wood); font-size: 15px; }
 .pet-buttons { display: flex; gap: 4px; }
@@ -616,15 +692,15 @@ img {
 .pet-buttons .pbtn.active { background: var(--parchment); color: var(--ink); }
 .pet-bottom .pbtn-wax { align-self: center; }
 
-/* Sorting hat */
-.sorting-question { display: flex; flex-direction: column; gap: 4px; height: 192px; padding: 6px 8px; }
+/* Sorting hat: question panel overlay at the bottom */
+.sorting-question { position: absolute; left: 0; right: 0; bottom: 0; z-index: 5; display: flex; flex-direction: column; gap: 4px; padding: 6px; }
 .sorting-prompt { font-size: 13px; }
 .sorting-count { color: var(--wood); }
 .sorting-question .choice { min-height: 24px; padding: 2px 6px; font-size: 12px; line-height: 13px; }
 
 /* Reveal */
-.reveal-top { position: relative; width: 256px; height: 192px; }
-.reveal-figure { position: absolute; left: 64px; top: 40px; }
+.reveal-top { position: relative; flex: 1; overflow: hidden; background: var(--night-light); }
+.reveal-figure { position: absolute; left: 64px; bottom: 16px; }
 .reveal-top.revealed .reveal-figure { animation: reveal-flash 500ms steps(5) both; }
 @keyframes reveal-flash {
   0% { filter: brightness(3); }
@@ -642,12 +718,13 @@ img {
 }
 @keyframes confetti {
   from { background-position: 0 -60px, 17px -90px; opacity: 1; }
-  to { background-position: 0 192px, 17px 192px; opacity: 0; }
+  to { background-position: 0 560px, 17px 560px; opacity: 0; }
 }
+.reveal-screen .center-msg { flex: none; padding: 12px 8px 16px; }
 
 /* ---------- Onboarding ---------- */
 
-.onboarding { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 8px; height: 192px; }
+.onboarding-steps { max-width: 236px; text-align: left; }
 .onboarding-steps ol { margin: 0; padding-left: 14px; }
 .onboarding-steps li { margin-bottom: 4px; }
 

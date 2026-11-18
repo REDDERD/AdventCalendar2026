@@ -56,63 +56,60 @@ export function MirrorScreen() {
   };
 
   return (
-    <Layout
-      bare
-      top={
-        <div
-          className="mirror-top"
-          onPointerDown={(e) => (swipeStart.current = e.clientX)}
-          onPointerUp={(e) => {
-            if (swipeStart.current === null) return;
-            const dx = e.clientX - swipeStart.current;
-            swipeStart.current = null;
-            if (Math.abs(dx) > SWIPE_PX) rotate(dx < 0 ? 1 : -1);
-          }}
-        >
-          <AssetImage id="bg.robe_shop" w={256} h={192} className="scene-bg" />
-          <div className="mirror-glass">
-            <CharacterSprite look={look} house={null} direction={TURN[turn]} scale={2} />
-          </div>
-          <button type="button" className="turn-btn turn-left" aria-label="Drehen" onClick={() => rotate(-1)}>
-            ⟲
-          </button>
-          <button type="button" className="turn-btn turn-right" aria-label="Drehen" onClick={() => rotate(1)}>
-            ⟳
-          </button>
+    <Layout bare className="mirror-screen">
+      <div
+        className="mirror-top"
+        onPointerDown={(e) => (swipeStart.current = e.clientX)}
+        onPointerUp={(e) => {
+          if (swipeStart.current === null) return;
+          const dx = e.clientX - swipeStart.current;
+          swipeStart.current = null;
+          if (Math.abs(dx) > SWIPE_PX) rotate(dx < 0 ? 1 : -1);
+        }}
+      >
+        <div className="scene-world">
+          <AssetImage id="bg.robe_shop" w={256} h={512} />
         </div>
-      }
-      bottom={
-        <div className="mirror-bottom">
-          <div className="mirror-tabs">
-            {CATEGORIES.map(([id, name], i) => (
-              <button key={id} type="button" className={i === category ? 'active' : ''} onClick={() => setCategory(i)}>
-                {name}
-              </button>
-            ))}
-          </div>
-          <div className="mirror-option">
-            <button type="button" className="arrow" aria-label="Zurück" onClick={() => cycle(-1)}>
-              ◀
+        <div className="mirror-glass">
+          <CharacterSprite look={look} house={null} direction={TURN[turn]} scale={2} />
+        </div>
+        <button type="button" className="turn-btn turn-left" aria-label="Drehen" onClick={() => rotate(-1)}>
+          ⟲
+        </button>
+        <button type="button" className="turn-btn turn-right" aria-label="Drehen" onClick={() => rotate(1)}>
+          ⟳
+        </button>
+      </div>
+      <div className="mirror-bottom">
+        <div className="mirror-tabs">
+          {CATEGORIES.map(([id, name], i) => (
+            <button key={id} type="button" className={i === category ? 'active' : ''} onClick={() => setCategory(i)}>
+              {name}
             </button>
-            <div className="mirror-value">
-              <div className="mirror-label">{label}</div>
-              <div>{options[index][1]}</div>
-              <div className="mirror-count">
-                {index + 1} / {options.length}
-              </div>
+          ))}
+        </div>
+        <div className="mirror-option">
+          <button type="button" className="arrow" aria-label="Zurück" onClick={() => cycle(-1)}>
+            ◀
+          </button>
+          <div className="mirror-value">
+            <div className="mirror-label">{label}</div>
+            <div>{options[index][1]}</div>
+            <div className="mirror-count">
+              {index + 1} / {options.length}
             </div>
-            <button type="button" className="arrow" aria-label="Weiter" onClick={() => cycle(1)}>
-              ▶
-            </button>
           </div>
-          <div className="row-buttons">
-            <PixelButton onClick={() => update(randomLook(build))}>Zufall</PixelButton>
-            <PixelButton variant="wax" onClick={done}>
-              Fertig
-            </PixelButton>
-          </div>
+          <button type="button" className="arrow" aria-label="Weiter" onClick={() => cycle(1)}>
+            ▶
+          </button>
         </div>
-      }
-    />
+        <div className="row-buttons">
+          <PixelButton onClick={() => update(randomLook(build))}>Zufall</PixelButton>
+          <PixelButton variant="wax" onClick={done}>
+            Fertig
+          </PixelButton>
+        </div>
+      </div>
+    </Layout>
   );
 }

@@ -19,30 +19,22 @@ export function SolutionScreen() {
   };
 
   return (
-    <Layout
-      top={
-        <div className="solution-top">
-          <div className="stamp stamp-correct stamp-static">Richtig!</div>
-          <Frame className="solution-text">{puzzle.solutionText}</Frame>
-        </div>
-      }
-      bottom={
-        <div className="center-msg">
-          <Frame className="msg-frame">
-            <div className="points-big">+{result.points} Hauspunkte</div>
-            {result.solvedBy === 'help' ? (
-              <div>Gemeinsam mit Prof. Quill gelöst.</div>
-            ) : (
-              <div>
-                {result.attempts === 1 ? 'Im ersten Versuch!' : `Im ${result.attempts}. Versuch.`}
-              </div>
-            )}
-          </Frame>
-          <PixelButton variant="wax" onClick={next}>
-            Weiter
-          </PixelButton>
-        </div>
-      }
-    />
+    <Layout>
+      <div className="center-msg">
+        <div className="stamp stamp-correct stamp-static">Richtig!</div>
+        <Frame className="solution-text">{puzzle.solutionText}</Frame>
+        <Frame className="msg-frame">
+          <div className="points-big">+{result.points} Hauspunkte</div>
+          {result.solvedBy === 'help' ? (
+            <div>Gemeinsam mit Prof. Quill gelöst.</div>
+          ) : (
+            <div>{result.attempts === 1 ? 'Im ersten Versuch!' : `Im ${result.attempts}. Versuch.`}</div>
+          )}
+        </Frame>
+        <PixelButton variant="wax" onClick={next}>
+          Weiter
+        </PixelButton>
+      </div>
+    </Layout>
   );
 }

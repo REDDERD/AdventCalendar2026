@@ -19,32 +19,26 @@ export function DayEndScreen() {
   const t = now();
 
   return (
-    <Layout
-      top={
-        <div className="center-msg">
-          <Frame className="dayend-frame">
-            <h2>Kapitel {day} geschafft!</h2>
-            <div>+{points} Hauspunkte</div>
-            {!!summary?.sparks && <div>+{summary.sparks} Zauberfunken</div>}
-            {summary?.clues.map((id) => <div key={id}>Neuer Hinweis: {CLUES[id] ?? id}</div>)}
-            {summary?.items.map((id) => <div key={id}>Neuer Gegenstand: {ITEMS[id] ?? id}</div>)}
+    <Layout>
+      <div className="center-msg">
+        <Frame className="dayend-frame">
+          <h2>Kapitel {day} geschafft!</h2>
+          <div>+{points} Hauspunkte</div>
+          {!!summary?.sparks && <div>+{summary.sparks} Zauberfunken</div>}
+          {summary?.clues.map((id) => <div key={id}>Neuer Hinweis: {CLUES[id] ?? id}</div>)}
+          {summary?.items.map((id) => <div key={id}>Neuer Gegenstand: {ITEMS[id] ?? id}</div>)}
+        </Frame>
+        {nextDay <= LAST_DAY && (
+          <Frame className="msg-frame">
+            {t < unlockAtMs(nextDay)
+              ? `Kapitel ${nextDay} öffnet sich in ${formatCountdown(unlockAtMs(nextDay) - t)}`
+              : `Kapitel ${nextDay} wartet schon auf dich.`}
           </Frame>
-        </div>
-      }
-      bottom={
-        <div className="center-msg">
-          {nextDay <= LAST_DAY && (
-            <Frame className="msg-frame">
-              {t < unlockAtMs(nextDay)
-                ? `Kapitel ${nextDay} öffnet sich in ${formatCountdown(unlockAtMs(nextDay) - t)}`
-                : `Kapitel ${nextDay} wartet schon auf dich.`}
-            </Frame>
-          )}
-          <PixelButton variant="wax" onClick={() => go('calendar')}>
-            Zum Kalender
-          </PixelButton>
-        </div>
-      }
-    />
+        )}
+        <PixelButton variant="wax" onClick={() => go('calendar')}>
+          Zum Kalender
+        </PixelButton>
+      </div>
+    </Layout>
   );
 }

@@ -50,6 +50,8 @@ export function AssetImage({ id, w, h, frame = 0, className, style }: Props) {
     const cols = Math.max(1, Math.floor(img.naturalWidth / srcDef.frameW));
     x += (frame % cols) * srcDef.frameW;
     y += Math.floor(frame / cols) * srcDef.frameH;
+    // Sprite frames are scaled to the requested size (64 px frames shown at 128 px).
+    if (!isCrop(def)) scale = w / srcDef.frameW;
   } else if (!isCrop(def)) {
     // Single images are scaled to the requested size (e.g. 32 px pets shown at 64 px).
     scale = w / img.naturalWidth;

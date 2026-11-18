@@ -28,50 +28,45 @@ export function PetScreen() {
   };
 
   return (
-    <Layout
-      bare
-      top={
-        <div className="pet-top">
-          <div className="pet-sign">Magische Menagerie</div>
-          <div className="pet-shelf">
-            {PETS.map((p) => (
-              <button
-                key={p.id}
-                type="button"
-                className={`pet-slot ${selected === p.id ? 'selected' : ''}`}
-                aria-label={p.name}
-                onClick={() => setSelected(p.id)}
-              >
-                <AssetImage id={`pet.${p.id}`} w={64} h={64} />
-              </button>
-            ))}
-          </div>
+    <Layout bare className="pet-screen">
+      <div className="pet-top">
+        <div className="pet-sign">Magische Menagerie</div>
+        <div className="pet-shelf">
+          {PETS.map((p) => (
+            <button
+              key={p.id}
+              type="button"
+              className={`pet-slot ${selected === p.id ? 'selected' : ''}`}
+              aria-label={p.name}
+              onClick={() => setSelected(p.id)}
+            >
+              <AssetImage id={`pet.${p.id}`} w={64} h={64} />
+            </button>
+          ))}
         </div>
-      }
-      bottom={
-        <div className="pet-bottom">
-          <Frame className="pet-info">
-            {pet ? (
-              <>
-                <div className="pet-name">{pet.name}</div>
-                <div>{pet.text}</div>
-              </>
-            ) : (
-              <div>Ein Haustier begleitet dich durch Hogwarts. Wen nimmst du mit?</div>
-            )}
-          </Frame>
-          <div className="pet-buttons">
-            {PETS.map((p) => (
-              <PixelButton key={p.id} small className={selected === p.id ? 'active' : ''} onClick={() => setSelected(p.id)}>
-                {p.name}
-              </PixelButton>
-            ))}
-          </div>
-          <PixelButton variant="wax" disabled={!selected} onClick={confirm}>
-            Das ist meins!
-          </PixelButton>
+      </div>
+      <div className="pet-bottom">
+        <Frame className="pet-info">
+          {pet ? (
+            <>
+              <div className="pet-name">{pet.name}</div>
+              <div>{pet.text}</div>
+            </>
+          ) : (
+            <div>Ein Haustier begleitet dich durch Hogwarts. Wen nimmst du mit?</div>
+          )}
+        </Frame>
+        <div className="pet-buttons">
+          {PETS.map((p) => (
+            <PixelButton key={p.id} small className={selected === p.id ? 'active' : ''} onClick={() => setSelected(p.id)}>
+              {p.name}
+            </PixelButton>
+          ))}
         </div>
-      }
-    />
+        <PixelButton variant="wax" disabled={!selected} onClick={confirm}>
+          Das ist meins!
+        </PixelButton>
+      </div>
+    </Layout>
   );
 }

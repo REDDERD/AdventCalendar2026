@@ -86,28 +86,24 @@ export function PuzzleHost({ puzzle }: { puzzle: Puzzle }) {
   };
 
   return (
-    <Layout
-      top={
-        <div className="puzzle-top">
-          <div className="puzzle-header">
-            <span>Rätsel {String(puzzle.number).padStart(2, '0')}</span>
-            <span>{puzzle.points} P.</span>
-          </div>
-          {puzzle.image && <AssetImage id={puzzle.image} w={256} h={84} className="puzzle-image" />}
-          <Frame className="puzzle-prompt">{puzzle.prompt}</Frame>
-          {stamp && <div className={`stamp stamp-${stamp}`}>{stamp === 'correct' ? 'Richtig!' : 'Leider falsch'}</div>}
+    <Layout className="puzzle-view">
+      {/* Prompt panel · play area (at least 256 × 256, DECISIONS.md #32) · action bar */}
+      <div className="puzzle-panel">
+        <div className="puzzle-header">
+          <span>Rätsel {String(puzzle.number).padStart(2, '0')}</span>
+          <span>{puzzle.points} P.</span>
         </div>
-      }
-      bottom={
-        <div className="puzzle-bottom">
-          <engine.Component puzzle={puzzle} disabled={!!stamp} onSubmit={submit} />
-        </div>
-      }
-      nav={
-        <div className="puzzle-nav">
-          <span className="puzzle-attempts">Versuche: {result?.attempts ?? 0}</span>
-        </div>
-      }
-    />
+        {/* Text first: on a 448 px stage the panel has ~136 px before it scrolls */}
+        <Frame className="puzzle-prompt">{puzzle.prompt}</Frame>
+        {puzzle.image && <AssetImage id={puzzle.image} w={256} h={64} className="puzzle-image" />}
+      </div>
+      <div className="puzzle-area">
+        <engine.Component puzzle={puzzle} disabled={!!stamp} onSubmit={submit} />
+      </div>
+      <div className="puzzle-actions">
+        <span className="puzzle-attempts">Versuche: {result?.attempts ?? 0}</span>
+      </div>
+      {stamp && <div className={`stamp stamp-${stamp}`}>{stamp === 'correct' ? 'Richtig!' : 'Leider falsch'}</div>}
+    </Layout>
   );
 }

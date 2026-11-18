@@ -58,56 +58,52 @@ export function CalendarScreen() {
   else headline = 'Alle Türchen sind offen';
 
   return (
-    <Layout
-      top={
-        <div className="calendar-top">
-          <AssetImage id="ui.clock" w={96} h={120} className="calendar-clock" />
-          <Frame className="calendar-info">
-            <div className="calendar-headline">{headline}</div>
-            {next === null && nextLocked !== undefined && (
-              <div className="calendar-countdown">
-                Nächstes Kapitel in
-                <br />
-                {formatCountdown(unlockAtMs(nextLocked) - t)}
-              </div>
-            )}
-          </Frame>
+    <Layout className="calendar">
+      <div className="calendar-top">
+        <AssetImage id="ui.clock" w={96} h={120} className="calendar-clock" />
+        <Frame className="calendar-info">
+          <div className="calendar-headline">{headline}</div>
+          {next === null && nextLocked !== undefined && (
+            <div className="calendar-countdown">
+              Nächstes Kapitel in
+              <br />
+              {formatCountdown(unlockAtMs(nextLocked) - t)}
+            </div>
+          )}
+        </Frame>
+      </div>
+      {!prologueDone ? (
+        <div className="center-msg">
+          {isPlayable(0, t, completed) ? (
+            <PixelButton variant="wax" onClick={() => void startPrologue()}>
+              Brief öffnen
+            </PixelButton>
+          ) : (
+            <Frame className="msg-frame">
+              Der Prolog beginnt am 30. November um 18 Uhr.
+              <br />
+              Noch {formatCountdown(unlockAtMs(0) - t)}
+            </Frame>
+          )}
         </div>
-      }
-      bottom={
-        !prologueDone ? (
-          <div className="center-msg">
-            {isPlayable(0, t, completed) ? (
-              <PixelButton variant="wax" onClick={() => void startPrologue()}>
-                Brief öffnen
-              </PixelButton>
-            ) : (
-              <Frame className="msg-frame">
-                Der Prolog beginnt am 30. November um 18 Uhr.
-                <br />
-                Noch {formatCountdown(unlockAtMs(0) - t)}
-              </Frame>
-            )}
-          </div>
-        ) : (
-          <div className="doors">
-            {Array.from({ length: LAST_DAY }, (_, i) => i + 1).map((day) => {
-              const state = doorState(day, t, completed);
-              return (
-                <button
-                  key={day}
-                  type="button"
-                  className={`door door-${state}`}
-                  onClick={() => open(day)}
-                  style={state === 'done' && seal ? { ['--seal' as string]: seal } : undefined}
-                >
-                  <span>{day}</span>
-                </button>
-              );
-            })}
-          </div>
-        )
-      }
-    />
+      ) : (
+        <div className="doors">
+          {Array.from({ length: LAST_DAY }, (_, i) => i + 1).map((day) => {
+            const state = doorState(day, t, completed);
+            return (
+              <button
+                key={day}
+                type="button"
+                className={`door door-${state}`}
+                onClick={() => open(day)}
+                style={state === 'done' && seal ? { ['--seal' as string]: seal } : undefined}
+              >
+                <span>{day}</span>
+              </button>
+            );
+          })}
+        </div>
+      )}
+    </Layout>
   );
 }
