@@ -111,5 +111,5 @@ quill: Aber ich kenne jemanden, der alles über den Uhrmacher weiß: die Bibliot
 | Ellis hat Höhenangst („Ich mag Treppen nur nicht, wenn sie hoch sind“) | Tag 12 (Astronomieturm), Tag 21 (Uhrturm: Ellis klettert) |
 | Wandernde Kälte, verschwindet durch eine Wand (`k02`) | Tag 4 (Aldous wird eingeführt), Tag 15a, Tag 21 |
 | Grimsbys Zettel (hängt von `d02.grimsby` ab) | Tag 10 |
-| Verschlossene Uhrturm-Tür, Thornburys Zettel | Tag 21: Quill hat am Ende doch einen Schlüssel (von Theo?) |
+| Verschlossene Uhrturm-Tür, Thornburys Zettel | Tag 21: Quill öffnet das Schloss mit ihrem Teelöffel (Hutnadel). Ausrede inklusive |
 | Ellis' Cousine Hortensia | Wiederkehrender Gag; Tag 22 (Epilog-Gag: Hortensia schreibt) |
