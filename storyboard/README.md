@@ -39,3 +39,4 @@ Ich habe überall eine sinnvolle Annahme getroffen und weitergemacht. Bitte kurz
 
 1. **Tag 9, Hausgegenstände:** Gryffindor eine Löwenfeder, Hufflepuff ein Honigtöpfchen, Ravenclaw eine Adlerbrosche, Slytherin ein grüner Glücksstein. Passen die? (Tag 18 baut darauf eine Bonus-Szene.)
 2. **Tag 9, Hausgeister:** Jeder Spieler sieht nur den Geist seines Hauses (Nick, Mönch, Graue Dame, Baron). Ellis ist nur am Anfang dabei. In Ordnung?
+3. **Tag 10, Quill fehlt:** Ellis und die Spielfigur verhören Grimsby allein (Quill hat Unterricht). Der fehlende Uhrturm-Schlüssel ist eine neue Spur: Theo hat ihn „geliehen“ (Auflösung Tag 13a/20). Einverstanden, dass Theo der Schlüssel-Leiher ist?
