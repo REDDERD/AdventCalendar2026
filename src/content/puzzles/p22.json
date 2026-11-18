@@ -7,15 +7,10 @@
   "prompt": "Im Pendel steht eine falsche Rechnung aus Holzstäben: IX + II = VI. Leg genau einen Stab um, damit sie stimmt. Tippe einen Stab an, dann seinen neuen Platz.",
   "config": {
     "mode": "sticks",
-    "roman": {
-      "cells": "nnnonnnonnn",
-      "start": "IX+II=VI"
-    },
+    "roman": { "cells": "nnnonnnonnn", "start": "IX+II=VI" },
     "moves": 1
   },
-  "solution": [
-    "IX-III=VI"
-  ],
+  "solution": ["IX-III=VI"],
   "hints": [
     "Neun plus zwei ist elf, nicht sechs. Mit einem einzigen Stab ist der Abstand zu groß – es sei denn, du änderst die Rechenart.",
     "Ein Plus besteht aus zwei Stäben. Ein Minus nur aus einem.",

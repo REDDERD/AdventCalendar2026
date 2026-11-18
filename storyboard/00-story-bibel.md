@@ -98,7 +98,7 @@ Jedes Rätsel öffnet ein Türchen, aus dem ein kleines Weihnachtswunder fällt.
 
 | Tag | Zauber | Tag | Zauber |
 | --- | --- | --- | --- |
-| 1 | (nur ein Klicken im Uhrkasten) | 13 | Glühwürmchen-Lichterketten im Wald |
+| 1 | Das erste Türchen springt auf – leer | 13 | Glühwürmchen-Lichterketten im Wald |
 | 2 | Zimtsterne | 14 | Eiskristalle in Spinnweben |
 | 3 | Treppen schaukeln im Takt | 15 | Schokotaler regnen |
 | 4 | Bücher in Wollmützen | 16 | Der Tisch deckt sich selbst |
@@ -111,7 +111,7 @@ Jedes Rätsel öffnet ein Türchen, aus dem ein kleines Weihnachtswunder fällt.
 | 11 | Schneemänner winken | 23 | Ein Tannenbaum wächst in der Halle |
 | 12 | Sternschnuppen formen Zahlen | 24 | Schnee fällt in der Halle |
 
-**Offen:** CONCEPT Tag 2 heißt „Erstes Türchen“, der Kalender nummeriert Türchen aber nach Tagen (Türchen 2 am 2.12.). Vorschlag in README, Abschnitt „Offene Punkte“.
+**Entschieden (DECISIONS.md #42):** Tag 1 = 1. Dezember = erstes Türchen; der Prolog ist kein Tag. Am Ende von Tag 1 springt das erste (leere) Türchen auf, an Tag 2 das zweite. Der Tagesend-Bildschirm zeigt den Zauber als „Türchen N: …“.
 
 ## 6. Technische Ergänzungen zum Konzept (zur Übernahme)
 

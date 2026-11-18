@@ -19,7 +19,7 @@
 2. **Entscheidung 1:** Slughorn schmeicheln oder bescheiden bleiben.
 3. Duft-Probe mit dem Amortentia-Fläschchen. Du riechst deine persönlichen Düfte. Ellis auch. Theo riecht Öl und Messing und lügt.
 4. Theo sieht die Skizze (Tag 4). Mit `bookmark` wird er blass. **Entscheidung 2:** sein Messingöl annehmen oder ablehnen.
-5. Das Haustier kommentiert. Rätsel: Zutaten abmessen (8/5/3).
+5. Das Haustier kommentiert. Rätsel: Zutaten abmessen (14/9/5).
 6. Probe: Der Trank taut das Eis. Es kommt zurück. Ellis' Theorie drei: Die Uhr streikt, nach 300 Jahren ohne Urlaub.
 
 ## Skript
@@ -74,10 +74,10 @@ theo: Ihr braut gegen Eis. Mit der alten Rezeptur? Die versagt ohne Messingöl.
 * [Wir kommen allein klar.] # cid: d05.ingredient.decline
     theo: Wie ihr wollt. Ich bin nur ein Slytherin mit Messingöl. Nichts weiter.
 - # hide: theo
-quill: Dann los. Wir brauchen genau vier Maß und noch einmal vier.
-{ pet == "owl": Deine Eule sitzt auf dem Kesselrand und schüttelt den Kopf. Dreimal: acht ist zu viel. }
+quill: Dann los. Wir brauchen genau sieben Maß und noch einmal sieben.
+{ pet == "owl": Deine Eule sitzt auf dem Kesselrand und schüttelt den Kopf. Dreimal: vierzehn ist zu viel. }
 { pet == "cat": Deine Katze patscht gegen die mittlere Flasche. Sie meint die kleine. Oder die große. }
-{ pet == "toad": Deine Kröte quakt bei Zahlen. Bei fünf besonders laut. Sie kennt sich aus. }
+{ pet == "toad": Deine Kröte quakt bei Zahlen. Bei neun besonders laut. Sie kennt sich aus. }
 # emote: quill dots
 quill: Das erinnert mich an ein Rätsel aus meiner ersten Brauprüfung …
 # puzzle: p05
@@ -96,12 +96,15 @@ quill: Eine gewerkschaftlich organisierte Uhr. Gar nicht so unplausibel.
 
 ## Rätsel `p05` – Drei Flaschen
 
-- **Engine:** `custom:pour` (Umfüllen). Drei Flaschen mit Fassungsvermögen 8, 5 und 3 Maß. Die große ist randvoll, die anderen leer. Ziel: in der 8er-Flasche und in der 5er-Flasche je genau **4** Maß, die 3er-Flasche leer. Umfüllen läuft, bis der Empfänger voll oder der Spender leer ist.
-- **Per BFS geprüft:** kürzeste Lösung in **7** Zügen: 8/0/0 → 3/5/0 → 3/2/3 → 6/2/0 → 6/0/2 → 1/5/2 → 1/4/3 → 4/4/0.
-- **Intro (Quill):** „Der Enteisungstrank braucht zweimal vier Maß. Und wir haben nur Flaschen, die dafür völlig ungeeignet sind. Wie immer.“
-- **Hinweise:** 1) Fülle zuerst die mittlere Flasche (5) aus der großen. 2) Die 3er-Flasche sammelt alles, was übrig ist. 3) Du musst einmal die große Flasche wieder auffüllen, indem du zurückgießt.
-- **Super-Hinweis:** Nach drei Zügen stehen 6/2/0 da.
-- **Lösungstext:** „Mit 8, 5 und 3 geht fast alles, wenn man sich auf das Umfüllen versteht. Der Trick: Die kleine Flasche ist ein Zwischenlager. Zweimal 4 ist nämlich 8.“
+> Schwerer als die erste Skizze (DECISIONS.md #44). Umgesetzt in `src/content/puzzles/p05.json`.
+
+- **Engine:** `custom:pour` (Umfüllen). Drei Flaschen mit **14, 9 und 5 Maß**. Die große ist randvoll, die anderen leer. Ziel: in der großen und der mittleren je genau **7** Maß, die kleine leer. Umfüllen läuft, bis der Empfänger voll oder der Spender leer ist.
+- **Per BFS geprüft:** kürzeste Lösung in **13** Zügen: 14/0/0 → 5/9/0 → 5/4/5 → 10/4/0 → 10/0/4 → 1/9/4 → 1/8/5 → 6/8/0 → 6/3/5 → 11/3/0 → 11/0/3 → 2/9/3 → 2/7/5 → 7/7/0. Man gießt immer nur in eine Kreisrichtung (groß → mittel → klein → groß).
+- **Haustier `[PLAN-2]`:** Hinweis 1 ist gratis, das Hinweis-Panel öffnet sich mit einem Satz des Haustiers (`petHint` im Rätsel-JSON).
+- **Intro (Quill):** „Der Enteisungstrank braucht zweimal sieben Maß. Und wir haben nur Flaschen, die dafür völlig ungeeignet sind. Wie immer.“
+- **Hinweise:** 1) Fülle zuerst die mittlere Flasche (9) aus der großen. 2) Gieß nur in eine Kreisrichtung: groß → mittel, mittel → klein, klein → groß. 3) Nach sechs Zügen stehen 1/8/5 da.
+- **Super-Hinweis:** Nach neun Zügen stehen 11/3/0 da. Noch vier Züge.
+- **Lösungstext:** „13 Züge, immer im Kreis groß → mittel → klein → groß: 14/0/0, 5/9/0, 5/4/5, 10/4/0, 10/0/4, 1/9/4, 1/8/5, 6/8/0, 6/3/5, 11/3/0, 11/0/3, 2/9/3, 2/7/5, 7/7/0.“
 
 ## Setups und Payoffs
 

@@ -7,37 +7,14 @@
   "prompt": "Sechs Alraunen müssen ins Beet. In jeder Reihe und jeder Spalte steht genau eine, und keine zwei dürfen sich berühren – auch nicht über Eck. Auf die Steine kann man nichts stellen. Tippe ein Feld an, um einen Topf zu setzen.",
   "config": {
     "mode": "grid",
-    "board": [
-      "....#.",
-      "....##",
-      "......",
-      ".##...",
-      ".##...",
-      "..#..."
-    ],
-    "pieces": {
-      "M": 6
-    },
+    "board": ["....#.", "....##", "......", ".##...", ".##...", "..#..."],
+    "pieces": { "M": 6 },
     "kinds": {
-      "M": {
-        "label": "Alraune",
-        "sprite": "puzzle.mandrake"
-      }
+      "M": { "label": "Alraune", "sprite": "puzzle.mandrake" }
     },
-    "rules": [
-      "distinct_rows",
-      "distinct_cols",
-      "no_touch"
-    ]
+    "rules": ["distinct_rows", "distinct_cols", "no_touch"]
   },
-  "solution": [
-    "....#M",
-    "..M.##",
-    "....M.",
-    "M##...",
-    ".##M..",
-    ".M#..."
-  ],
+  "solution": ["....#M", "..M.##", "....M.", "M##...", ".##M..", ".M#..."],
   "hints": [
     "Markier dir mit der Notiz, wo in jeder Reihe noch Platz ist. Steine und Nachbarn fallen weg.",
     "In der obersten Reihe steht die Alraune ganz rechts.",

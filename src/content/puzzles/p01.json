@@ -8,14 +8,9 @@
   "config": {
     "inputMode": "number",
     "maxLength": 2,
-    "figure": {
-      "image": "puzzle.p01",
-      "height": 64
-    }
+    "figure": { "image": "puzzle.p01", "height": 64 }
   },
-  "solution": [
-    "22"
-  ],
+  "solution": ["22"],
   "hints": [
     "Es sind nicht 24. Zwei pro Stunde klingt richtig, ist es aber nicht.",
     "In zwölf Stunden überholt der Minutenzeiger den Stundenzeiger genau 11-mal.",

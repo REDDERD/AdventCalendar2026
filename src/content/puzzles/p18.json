@@ -7,30 +7,10 @@
   "prompt": "Die Tür ist in neun Platten zerfallen, eine fehlt. Schieb die übrigen acht zurück, bis das Bild stimmt. Die Lücke gehört nach unten rechts.",
   "config": {
     "size": 3,
-    "start": [
-      8,
-      3,
-      4,
-      2,
-      0,
-      6,
-      5,
-      7,
-      1
-    ],
+    "start": [8, 3, 4, 2, 0, 6, 5, 7, 1],
     "image": "puzzle.p18.door"
   },
-  "solution": [
-    1,
-    2,
-    3,
-    4,
-    5,
-    6,
-    7,
-    8,
-    0
-  ],
+  "solution": [1, 2, 3, 4, 5, 6, 7, 8, 0],
   "hints": [
     "Bring zuerst die obere Reihe in Ordnung: Bogen links, Fenster in der Mitte, Bogen rechts. Danach rührst du sie nicht mehr an.",
     "Die linke Spalte als Nächstes: Scharnier oben, Topf mit Mistelzweig unten. Dann bleiben nur noch vier Platten.",

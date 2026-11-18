@@ -6,9 +6,9 @@
 | --- | --- |
 | **Kurz** | Der erste Morgen ohne Ticken. Quill macht die Spielfigur zu ihrer Assistenz, Ellis will „einen Fall“, Thornbury verlangt Schweigen. Das Rätsel: die Zeiger. |
 | **Entscheidungen** | `d01.ellis` (`listen` +1 `bond_ellis` / `hush`) · `d01.secret` (`watch` / `promise`, Ton) |
-| **Rätsel** | `p01` Die Zeiger (`input`, 20 Punkte), Lösung `11` |
+| **Rätsel** | `p01` Die Zeiger (`input`, 20 Punkte): Wie oft stehen die Zeiger im rechten Winkel? Lösung `22` (Falle: 24) |
 | **Wortzahl** | 345–380 (gemessen) |
-| **Türchen-Zauber** | nur ein Klicken im Uhrkasten |
+| **Türchen-Zauber** | Das erste Türchen springt auf – leer. Am Ende: „Das erste Türchen. Leer, aber offen.“ |
 
 ## Was spätere Tage von Tag 1 übernehmen
 
@@ -19,7 +19,7 @@
 | „Kein Wort zu irgendjemandem“ (Thornbury) | Dauer-Gag: In Tag 9 wissen es alle |
 | `d01.ellis` (`listen`) | `bond_ellis`: Tag 2, 4, 12, 22 |
 | `d01.secret` | `watch` → `f_d01_watch` (nur nach Patch unten), Tag 9 |
-| Das Klicken im Uhrkasten am Ende | Die Uhr lebt noch (Tag 6: ein Tick, Tag 24: sie tickt wieder) |
+| Das erste, leere Türchen am Ende | Die Uhr lebt noch (Tag 2: das zweite Türchen, Tag 6: ein Tick, Tag 24: sie tickt wieder) |
 | Quills Teelöffel in der Hutnadel | Tag 21: öffnet das Schloss zum Uhrturm |
 
 ## Optionaler Patch für `day01.ink`

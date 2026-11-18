@@ -8,78 +8,23 @@
   "config": {
     "mode": "row",
     "items": [
-      {
-        "id": "zeit",
-        "label": "ZEIT"
-      },
-      {
-        "id": "rad",
-        "label": "RAD"
-      },
-      {
-        "id": "feder",
-        "label": "FEDER"
-      },
-      {
-        "id": "stunde",
-        "label": "STUNDE"
-      },
-      {
-        "id": "pendel",
-        "label": "PENDEL"
-      },
-      {
-        "id": "anker",
-        "label": "ANKER"
-      }
+      { "id": "zeit", "label": "ZEIT" },
+      { "id": "rad", "label": "RAD" },
+      { "id": "feder", "label": "FEDER" },
+      { "id": "stunde", "label": "STUNDE" },
+      { "id": "pendel", "label": "PENDEL" },
+      { "id": "anker", "label": "ANKER" }
     ],
-    "start": [
-      "pendel",
-      "anker",
-      "stunde",
-      "zeit",
-      "feder",
-      "rad"
-    ],
+    "start": ["pendel", "anker", "stunde", "zeit", "feder", "rad"],
     "rules": [
-      {
-        "type": "left_of",
-        "item": "rad",
-        "of": "stunde",
-        "gap": 2
-      },
-      {
-        "type": "not_next_to",
-        "item": "rad",
-        "of": "feder"
-      },
-      {
-        "type": "left_of",
-        "item": "stunde",
-        "of": "pendel",
-        "gap": 1
-      },
-      {
-        "type": "not_next_to",
-        "item": "anker",
-        "of": "pendel"
-      },
-      {
-        "type": "left_of",
-        "item": "feder",
-        "of": "anker",
-        "gap": 2
-      }
+      { "type": "left_of", "item": "rad", "of": "stunde", "gap": 2 },
+      { "type": "not_next_to", "item": "rad", "of": "feder" },
+      { "type": "left_of", "item": "stunde", "of": "pendel", "gap": 1 },
+      { "type": "not_next_to", "item": "anker", "of": "pendel" },
+      { "type": "left_of", "item": "feder", "of": "anker", "gap": 2 }
     ]
   },
-  "solution": [
-    "feder",
-    "zeit",
-    "rad",
-    "anker",
-    "stunde",
-    "pendel"
-  ],
+  "solution": ["feder", "zeit", "rad", "anker", "stunde", "pendel"],
   "hints": [
     "ZEIT kommt in keinem Hinweis vor. Sie füllt am Ende die Lücke, die übrig bleibt.",
     "RAD, STUNDE und PENDEL stehen in genau dieser Reihenfolge, mit Abstand zwischen RAD und STUNDE.",

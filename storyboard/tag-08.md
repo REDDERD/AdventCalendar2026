@@ -19,7 +19,7 @@
 3. **Entscheidung 1:** Neville beim Umtopfen helfen oder zusehen.
 4. Wenn du den anonymen Brief hast, wird Maren bleich: „Das war ich nicht!“
 5. **Entscheidung 2:** Maren auf das Rascheln ansprechen oder es lassen.
-6. Rätsel: Töpfe so stellen, dass Alraunen sich nicht anschreien (kein Topf neben dem anderen).
+6. Rätsel: sechs Töpfe so ins Beet stellen, dass Alraunen sich nicht anschreien (kein Topf neben dem anderen, Steine im Weg).
 7. Nach dem Rätsel rollt eine Galleone aus dem Schuppen. Maren überspielt es mit Keksen. Quill fasst Akt I zusammen.
 
 ## Skript
@@ -97,12 +97,15 @@ quill: Und eine Kälte, die durch Wände geht. Morgen beginnt der Teil, in dem d
 
 ## Rätsel `p08` – Alraunen
 
-- **Engine:** `arrange`, Modus `grid` (4 × 4). Vier Töpfe sollen so stehen, dass in **jeder Reihe und jeder Spalte genau einer** steht und **keine zwei Töpfe einander berühren** (auch nicht diagonal). Ein Topf steht schon: in Reihe 1, Spalte 2.
-- **Per Brute-Force geprüft:** Mit dem vorgegebenen Topf gibt es genau **eine** Lösung. Spalten je Reihe von oben nach unten: **2, 4, 1, 3**.
+> Schwerer als die erste Skizze (DECISIONS.md #44). Umgesetzt in `src/content/puzzles/p08.json` (dort steht bis zur Umsetzung von Tag 8 noch ein Intro von Maren; bei der Umsetzung kommt Nevilles Intro hinein).
+
+- **Engine:** `arrange`, Modus `grid`, **6 × 6-Beet mit 8 Steinen** (dort kann nichts stehen). Sechs Töpfe: in **jeder Reihe und jeder Spalte genau einer**, **keine zwei berühren sich** (auch nicht diagonal). Feld antippen setzt einen Topf, Topf antippen nimmt ihn zurück.
+- **Beet** (`#` = Stein): `....#.` · `....##` · `......` · `.##...` · `.##...` · `..#...`
+- **Per Backtracking geprüft:** genau **eine** Lösung. Spalten je Reihe von oben nach unten: **6, 3, 5, 1, 4, 2**.
 - **Intro (Neville):** „Alraunen sind sehr gesellig, aber nur auf Abstand. Wenn sie nebeneinander stehen, streiten sie.“
-- **Hinweise:** 1) Der Topf in Reihe 2 darf nicht unter oder schräg unter dem ersten stehen. 2) Dann bleibt in Reihe 2 nur die ganz rechte Spalte. 3) In Reihe 3 bleibt nur die ganz linke Spalte.
-- **Super-Hinweis:** Der zweite Topf steht ganz rechts.
-- **Lösungstext:** „Zwei, vier, eins, drei. Wie ein Treppchen, aber nie Hand in Hand. Dazwischen immer mindestens eine Lücke.“
+- **Hinweise:** 1) Mit der Notiz markieren, wo in jeder Reihe noch Platz ist. 2) In der obersten Reihe steht die Alraune ganz rechts. 3) In der vierten Reihe ganz links.
+- **Super-Hinweis:** Die Spalten von oben nach unten: 6, 3, 5, 1, 4, 2.
+- **Lösungstext:** „Von oben nach unten in den Spalten 6, 3, 5, 1, 4, 2. Jede andere Anordnung bringt zwei Alraunen zu nah zusammen oder stellt eine auf einen Stein.“
 
 ## Akt-I-Bilanz (für die Umsetzung)
 

@@ -113,16 +113,20 @@ quill: Aber wir sollten uns den Eisreif an der Uhr genauer ansehen. Morgen. Mit 
 
 ## Rätsel `p04` – Das Regal
 
-- **Engine:** `arrange`, Modus `row`, fünf Bücher (je ein Rücken mit Titel): `ZEIT`, `RAD`, `FEDER`, `STUNDE`, `PENDEL`. Per Ziehen in fünf Fächer sortieren.
-- **Hinweise auf der Regalkarte (alle drei nötig, Brute-Force-Check: genau eine Lösung):**
-  1. `PENDEL` steht ganz rechts.
-  2. `RAD` steht direkt rechts von `ZEIT`.
-  3. `FEDER` steht links von `STUNDE`, aber nicht direkt daneben.
-- **Lösung:** `FEDER`, `ZEIT`, `RAD`, `STUNDE`, `PENDEL`.
+> Schwerer als die erste Skizze (DECISIONS.md #44). Umgesetzt in `src/content/puzzles/p04.json`.
+
+- **Engine:** `arrange`, Modus `row`, **sechs Bücher**: `ZEIT`, `RAD`, `FEDER`, `STUNDE`, `PENDEL`, `ANKER`. Tauschen per Ziehen oder Antippen.
+- **Hinweise im Aufgabentext (nur indirekte, kein „steht ganz rechts“; Brute-Force: genau eine Lösung):**
+  1. RAD steht links von STUNDE, aber nicht direkt daneben.
+  2. RAD und FEDER stehen nicht nebeneinander.
+  3. STUNDE steht links von PENDEL.
+  4. ANKER und PENDEL stehen nicht nebeneinander.
+  5. FEDER steht links von ANKER, nicht direkt daneben.
+- **Lösung:** `FEDER`, `ZEIT`, `RAD`, `ANKER`, `STUNDE`, `PENDEL`. ZEIT kommt in keinem Hinweis vor und füllt die Lücke.
 - **Intro (Quill):** „Isolde ordnete ihre Bücher in der Reihenfolge, in der sie arbeitete. Von der Feder bis zum Pendel.“
-- **Hinweise:** 1) Fang mit dem Buch an, das ganz rechts steht. 2) `ZEIT` und `RAD` bilden ein Paar. 3) `FEDER` braucht mindestens ein Buch Abstand zu `STUNDE`.
-- **Super-Hinweis:** Das Paar `ZEIT`–`RAD` steht in der Mitte.
-- **Lösungstext:** „Feder, Zeit, Rad, Stunde, Pendel: von der ersten Skizze bis zur letzten Schraube. Das Pendel ist immer das Letzte, was sich bewegt.“
+- **Hinweise:** 1) ZEIT kommt in keinem Hinweis vor. 2) RAD, STUNDE und PENDEL stehen in dieser Reihenfolge, mit Abstand zwischen RAD und STUNDE. 3) Probier FEDER ganz links.
+- **Super-Hinweis:** FEDER steht ganz links, PENDEL ganz rechts.
+- **Lösungstext:** „Feder, Zeit, Rad, Anker, Stunde, Pendel: von der ersten Skizze bis zum Pendel. Der Anker sitzt in der Mitte, er ist das Herz jeder Hemmung.“
 
 ## Setups und Payoffs
 

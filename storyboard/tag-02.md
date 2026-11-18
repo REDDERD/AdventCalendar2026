@@ -1,10 +1,10 @@
-# Tag 2 – Das erste Türchen
+# Tag 2 – Schwebende Kerzen
 
 > Akt I · Die stehende Uhr · Ort `great_hall` · Musik `castle`
 
 | | |
 | --- | --- |
-| **Kurz** | Grimsby behauptet, Stille sei herrlich. Peeves bläst alle Kerzen aus. Das erste Türchen öffnet sich, und zwischen Zimtsternen fällt zum ersten Mal der Name eines Verdächtigen: Mäuse. |
+| **Kurz** | Grimsby behauptet, Stille sei herrlich. Peeves bläst alle Kerzen aus. Das zweite Türchen öffnet sich, und zwischen Zimtsternen fällt zum ersten Mal der Name eines Verdächtigen: Mäuse. |
 | **Entscheidungen** | `d02.grimsby` (`polite` +1 / `cheeky` −1 `trust_grimsby`) · `d02.peeves` (`scare` / `join` → `peeves_friend`) |
 | **Hinweis** | `k01` Kratzspuren am Uhrkasten (automatisch) |
 | **Cameo** | Peeves (Poltergeist, siehe Bibel) |
@@ -19,7 +19,7 @@
 2. Quill darf die Uhr untersuchen („Erlaubnis“-Gag). **Entscheidung 1:** Wie reagiert man auf Grimsbys Gejammer?
 3. `k01`: Kratzer am Uhrkasten. Grimsby sagt „Mäuse“. Ellis stellt Theorie zwei auf (Frosch im Hals).
 4. Peeves stürzt herein, bläst alle schwebenden Kerzen aus und reimt. **Entscheidung 2:** anschreien oder mitmachen.
-5. Rätsel: die Kerzen wieder anbekommen. Danach springt das erste Türchen auf.
+5. Rätsel: die Kerzen wieder anbekommen. Danach springt das zweite Türchen auf (Tag 1 hat das erste geöffnet).
 6. Cliffhanger: Etwas Silbriges verbeugt sich am Ende der Halle vor der Uhr und ist weg. Nur Ellis hat es gesehen.
 
 ## Skript
@@ -27,11 +27,11 @@
 ```ink
 INCLUDE globals.ink
 
-// Tag 2 – Das erste Türchen (Akt I). Ort: great_hall. Rätsel: p02.
+// Tag 2 – Schwebende Kerzen (Akt I). Ort: great_hall. Rätsel: p02.
 === day02 ===
 # bg: great_hall
 # music: castle
-# spark: d02.s1 214 36
+# spark: d02.s1 214 150
 Zweiter Dezember. Die Große Halle ist still, nur ein Eimer klappert.
 # show: grimsby right
 grimsby: Ruhe! Herrlich! Dreißig Jahre Tick, Tick, Tick. Und jetzt: nichts.
@@ -95,16 +95,16 @@ quill: Das erinnert mich an ein Rätsel aus meiner Referendarszeit …
 { last_puzzle_first_try: quill: Beim ersten Versuch. Ich merke mir Ihren Namen, {name}. }
 { not last_puzzle_first_try: ellis: Eine Kerze war gemein. Ich nenne sie Kevin. }
 # sfx: door
-Kaum brennt die letzte Kerze, klickt es im Uhrkasten. Ein winziges Türchen springt auf.
+Kaum brennt die letzte Kerze, klickt es im Uhrkasten. Das zweite Türchen springt auf.
 Heraus rieseln Zimtsterne. Hunderte. Sie prasseln auf die Köpfe und die Tische.
 # emote: ellis heart
 ellis: ZIMTSTERNE! Ich fange alle! Ich wusste, dass Schnee ein Anfang ist!
 grimsby: Zimtsterne im Haar. Das dauert Wochen, das rauszukämmen.
 # emote: grimsby note
 Er sammelt einen Stern auf, sieht sich um und steckt ihn in die Tasche.
-# spark: d02.s2 40 120
+# spark: d02.s2 40 230
 # hide: grimsby
-quill: Das erste Türchen. Das ist ein Anfang. Aber die Uhr bleibt stehen.
+quill: Gestern ein Klicken, heute Gebäck. Ein Fortschritt. Aber die Uhr bleibt stehen.
 ellis: Habt ihr das gesehen? Da hinten! Etwas Silbriges hat sich vor der Uhr verbeugt!
 # emote: quill ?
 quill: Die Halle ist siebenhundert Jahre alt, Ellis. Da spukt es mal.
@@ -115,12 +115,15 @@ quill: Dann hat es Manieren. Das schadet in diesem Schloss selten. Bis morgen.
 
 ## Rätsel `p02` – Schwebende Kerzen
 
-- **Engine:** `toggle`, 3 × 3 Kerzen, Antippen schaltet die Kerze und ihre vier Nachbarn (Kreuzform, nicht diagonal). Ziel: alle 9 brennen.
-- **Start:** alle Kerzen aus (Peeves hat sie alle ausgeblasen). Geprüft per Brute-Force: genau **eine** Lösung (die vier Ecken und die Mitte, 5 Berührungen, Reihenfolge egal).
+> Schwerer als die erste Skizze (DECISIONS.md #44). Umgesetzt in `src/content/puzzles/p02.json`.
+
+- **Engine:** `toggle`, **4 × 5 Kerzen**. Antippen schaltet die Kerze und ihre vier Nachbarn (Kreuzform, nicht diagonal). Ziel: alle 20 brennen.
+- **Start:** Peeves hat nicht alle erwischt: Kerzen 2 und 5 in Reihe 1, 4 in Reihe 2, 1 in Reihe 3 und 3 in Reihe 4 brennen noch.
+- **Geprüft (Gauß-Verfahren über GF(2)):** genau **eine** Lösung, **11 Berührungen**: Reihe 1: 1–4 · Reihe 2: 1, 2, 4, 5 · Reihe 3: 4, 5 · Reihe 4: 1.
 - **Intro (Quill):** „Eine Kerze, die man berührt, steckt ihre Nachbarn an. Eine alte Regel, nach der auch Gerüchte funktionieren.“
-- **Hinweise:** 1) Jede Kerze musst du höchstens einmal berühren. 2) Die Reihenfolge ist egal. 3) Eine Kante gehört zu drei Berührungen, wenn du richtig anfängst: zwei Ecken und die Mitte.
-- **Super-Hinweis:** Fünf Berührungen reichen.
-- **Lösungstext:** „Die vier Ecken und die Mitte. Jede Kante wird von zwei Ecken und der Mitte berührt, also dreimal, und dreimal berühren heißt: an. Die Ecken und die Mitte selbst nur einmal.“
+- **Hinweise:** 1) Jede Kerze höchstens einmal, die Reihenfolge ist egal. 2) Licht jagen: Reihe für Reihe nach unten, unter jeder dunklen Kerze die darunter antippen. 3) Was unten dunkel bleibt, hängt nur von der obersten Reihe ab.
+- **Super-Hinweis:** In der obersten Reihe die vier linken Kerzen, dann das Licht nach unten jagen.
+- **Lösungstext:** „Elf Berührungen. Reihe 1: Kerzen 1 bis 4. Reihe 2: Kerzen 1, 2, 4 und 5. Reihe 3: Kerzen 4 und 5. Reihe 4: Kerze 1. Wer oben richtig anfängt, jagt das Licht einfach nach unten.“
 
 ## Setups und Payoffs
 

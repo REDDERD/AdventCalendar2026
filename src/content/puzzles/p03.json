@@ -17,9 +17,19 @@
       { "id": "1", "x": 184, "y": 216 }
     ],
     "edges": [
-      ["1", "4", ">"], ["4", "A"], ["7", "A"], ["7", "6", ">"], ["6", "4", ">"],
-      ["2", "4"], ["2", "A"], ["A", "3", ">"], ["2", "3"], ["1", "2"],
-      ["1", "A", ">"], ["A", "5", ">"], ["5", "7"]
+      ["1", "4", ">"],
+      ["4", "A"],
+      ["7", "A"],
+      ["7", "6", ">"],
+      ["6", "4", ">"],
+      ["2", "4"],
+      ["2", "A"],
+      ["A", "3", ">"],
+      ["2", "3"],
+      ["1", "2"],
+      ["1", "A", ">"],
+      ["A", "5", ">"],
+      ["5", "7"]
     ],
     "rule": "every_edge_once",
     "start": "1",
@@ -29,7 +39,7 @@
   "hints": [
     "Wer sich festläuft, darf zurück: Tippe auf den vorigen Punkt, dann wird die letzte Treppe wieder frei.",
     "Der 7. Stock ist nicht nur das Ziel. Du kommst unterwegs schon einmal vorbei.",
-    "Vom 1. Stock führen drei Treppen weg, aber du kommst auch einmal zurück. Spar dir die Treppe 1–2 für später auf."
+    "Die Treppe zwischen 1 und 2 nimmst du nur abwärts, von 2 nach 1. Und der Absatz A wird dreimal besucht."
   ],
   "superHint": "Beginne mit 1 → 4 → A → 7 → 6.",
   "solutionText": "Zum Beispiel 1, 4, A, 7, 6, 4, 2, A, 3, 2, 1, A, 5, 7. Der Trick: Der 7. Stock ist auch ein Umsteigebahnhof, und der Absatz A wird dreimal besucht.",

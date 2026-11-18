@@ -17,8 +17,8 @@
 1. Ellis erklärt, dass Treppen beleidigt sein können (Cousine Hortensia). Grimsbys Zettel am Pfosten.
 2. Die Treppe schwingt ins Leere. Ellis' Höhenangst taucht zum ersten Mal auf (Setup für Tag 12 und Tag 21).
 3. Eine eiskalte Stelle wandert das Geländer entlang. **Entscheidung 1:** untersuchen (→ `k02`) oder hinterherrennen (→ Bindung).
-4. Ein Porträt kennt den Treppenplan. **Entscheidung 2:** fragen oder nach Gefühl gehen.
-5. Rätsel: alle Treppen genau einmal, dann in den 7. Stock.
+4. Ein Porträt kennt den Treppenplan. **Entscheidung 2:** fragen (die Dame verrät eine echte Regel fürs Rätsel) oder nach Gefühl gehen.
+5. Rätsel: alle Treppen genau einmal, manche nur in eine Richtung (Grimsby hat Pfeile gemalt), dann in den 7. Stock.
 6. Oben: Tür zum Uhrturm zu. Zettel von Thornbury: „Auch für Sie, Henrietta.“ Quill braucht einen Schlüssel oder eine Ausrede.
 
 ## Skript
@@ -69,13 +69,14 @@ ellis: Eine Kälte, die allein spazieren geht! Das ist Theorie … ach, das ist 
 Die Treppen drehen sich weiter. Vor euch hängt ein Gemälde: eine Dame mit einem Pudel.
 # choice_point: d03.portrait Eine Dame im Porträt kennt den Treppenplan.
 * [Das Bild nach dem Weg fragen.] # cid: d03.portrait.ask
-    Die Dame sagt, ohne aufzusehen: „Immer links, dreimal rauf, dann beten.“
-    Der Pudel auf ihrem Schoß gähnt. Er hat das schon oft gehört.
+    Die Dame sagt, ohne aufzusehen: „Vom Zweiten in den Ersten. Nie umgekehrt.“
+    „Und im Siebten klopft man zweimal.“ Der Pudel gähnt. Er hat das schon oft gehört.
 * [Nach Gefühl gehen.] # cid: d03.portrait.guess
     # emote: ellis note
     ellis: Mein Gefühl sagt links! Wobei mein Gefühl auch Pudding bestellt hat.
     Die Dame im Bild schnaubt. Der Pudel kläfft. Beide haben Meinungen.
 - quill: Dann wollen wir den Treppen mal zeigen, dass wir ihre Wege respektieren.
+quill: Mr. Grimsby hat Pfeile ans Geländer gemalt. Manche fahren heute nur in eine Richtung.
 # emote: quill dots
 quill: Das erinnert mich an ein Rätsel, das ich mit sieben auf einem Bierdeckel löste …
 # puzzle: p03
@@ -84,7 +85,9 @@ quill: Das erinnert mich an ein Rätsel, das ich mit sieben auf einem Bierdeckel
 # sfx: spark
 Alle Treppen stehen still, zum ersten Mal heute. Eine beginnt leise zu summen.
 # bg: staircases
-# spark: d03.s2 220 90
+# show: quill right
+# show: ellis left
+# spark: d03.s2 220 160
 Im siebten Stock endet der Weg vor einer schweren Tür. Ein Zettel klebt daran.
 quill: „Zutritt zum Uhrturm verboten. Auch für Sie, Henrietta. Thornbury.“
 # emote: quill !
@@ -96,13 +99,16 @@ quill: Aber ich kenne jemanden, der alles über den Uhrmacher weiß: die Bibliot
 
 ## Rätsel `p03` – Die Treppen
 
-- **Engine:** `path`. Sieben Stockwerke als Punkte, neun Treppen als Linien. Man zieht eine Linie von Stockwerk 1 zu Stockwerk 7 und benutzt dabei **jede Treppe genau einmal** (Euler-Pfad). Gerade Stockwerke werden mehrfach besucht.
-- **Karte (Vorschlag):** 1–2, 1–5, 1–7, 2–6, 3–5, 3–6, 4–5, 4–6, 5–6. Nur die Stockwerke 1 und 7 haben eine ungerade Anzahl Treppen, deshalb ist ein solcher Weg von 1 nach 7 möglich. Per Brute-Force: 12 gültige Wege, z. B. 1 → 5 → 3 → 6 → 5 → 4 → 6 → 2 → 1 → 7.
-- **Falle:** Der direkte Weg 1 → 7 ist kein Treffer, denn er lässt sieben Treppen aus. Das ist der Aha-Moment.
+> Schwerer als die erste Skizze (DECISIONS.md #44). Umgesetzt in `src/content/puzzles/p03.json`.
+
+- **Engine:** `path`. Sieben Stockwerke und ein Absatz **A** als Punkte, **13 Treppen**, davon **6 Einbahntreppen** (Pfeil). Man zieht eine Linie von Stockwerk 1 in den 7. Stock und benutzt **jede Treppe genau einmal**, Pfeiltreppen nur in Pfeilrichtung.
+- **Karte:** 1→4, 1→A, 1–2, 2–3, 2–4, 2–A, A→3, A→5, A–4, A–7, 6→4, 7→6, 5–7 (→ = Einbahn).
+- **Geprüft:** 28 gültige Wege, aber nur etwa 6 % aller zufällig gezogenen Wege kommen an. In **allen** gültigen Wegen gilt: Die Treppe 1–2 wird nur abwärts genommen (2 → 1), der 7. Stock wird zweimal besucht, der Absatz A dreimal.
+- **Rückbezug im Skript:** Wer das Porträt fragt, hört „Vom Zweiten in den Ersten. Nie umgekehrt. Und im Siebten klopft man zweimal.“ – zwei dieser Regeln.
 - **Intro (Quill):** „Eine Treppe, die man auslässt, trägt es einem nach. Nehmt sie alle, und zwar nur einmal.“
-- **Hinweise:** 1) Die Treppe 1–7 geht nicht zuerst. 2) Welche Stockwerke haben eine ungerade Zahl an Treppen? 3) Ein Weg, der in 1 oder 7 begonnen oder beendet wird, muss die Treppe 1–7 als letzte nehmen.
-- **Super-Hinweis:** Beginne mit 1 → 5.
-- **Lösungstext:** „Nur in den Stockwerken 1 und 7 hängen drei Treppen zusammen. Alle anderen haben gerade viele. Also müsst ihr dort beginnen und dort aufhören.“
+- **Hinweise:** 1) Wer sich festläuft, darf zurück: auf den vorigen Punkt tippen. 2) Der 7. Stock ist nicht nur das Ziel, man kommt unterwegs schon einmal vorbei. 3) Die Treppe 1–2 nur abwärts, und A wird dreimal besucht.
+- **Super-Hinweis:** Beginne mit 1 → 4 → A → 7 → 6.
+- **Lösungstext:** „Zum Beispiel 1, 4, A, 7, 6, 4, 2, A, 3, 2, 1, A, 5, 7. Der Trick: Der 7. Stock ist auch ein Umsteigebahnhof, und der Absatz A wird dreimal besucht.“
 
 ## Setups und Payoffs
 

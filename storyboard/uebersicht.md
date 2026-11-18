@@ -5,8 +5,8 @@ Wörter = längster und kürzester Pfad laut `content:simulate`-Logik (500 Zufal
 | Tag | Titel | Ort | Entscheidungen | Hinweis / Gegenstand | Cameo | Rätsel (Punkte) | Wörter |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | [1](tag-01.md) | Die stehende Uhr | `great_hall` | `d01.ellis`, `d01.secret` | – | – | `p01` Die Zeiger (20) | 345–380 |
-| [2](tag-02.md) | Das erste Türchen | `great_hall` | `d02.grimsby` (±`trust_grimsby`), `d02.peeves` (`peeves_friend`) | `k01` | Peeves | `p02` Schwebende Kerzen (20) | 413–445 |
-| [3](tag-03.md) | Die wandernden Treppen | `staircases` | `d03.cold` (`k02` / +`bond_ellis`), `d03.portrait` | `k02` (optional) | – | `p03` Die Treppen (30) | 323–333 |
+| [2](tag-02.md) | Schwebende Kerzen | `great_hall` | `d02.grimsby` (±`trust_grimsby`), `d02.peeves` (`peeves_friend`) | `k01` | Peeves | `p02` Schwebende Kerzen (20) | 413–445 |
+| [3](tag-03.md) | Die wandernden Treppen | `staircases` | `d03.cold` (`k02` / +`bond_ellis`), `d03.portrait` | `k02` (optional) | – | `p03` Die Treppen (30) | 337–351 |
 | [4](tag-04.md) | Die Bibliothek | `library` | `d04.pince`, `d04.help` (+`bond_ellis` / `bookmark`) | `bookmark` (optional) | Pince, Hermine | `p04` Das Regal (30) | 435–474 |
 | [5](tag-05.md) | Der Enteisungstrank | `potions` | `d05.slughorn`, `d05.ingredient` (+`trust_theo`) | – | Slughorn, Snape-Porträt | `p05` Drei Flaschen (40) | 310–347 |
 | [6](tag-06.md) | Die Nikolausnacht | `dorm_corridor` | `d06.boot`, `d06.theo` (±`trust_theo`) | `k03` | Harry und Ron (Tarnumhang) | `p06` Die Nikolausstiefel (30) | 371–398 |
@@ -15,14 +15,17 @@ Wörter = längster und kürzester Pfad laut `content:simulate`-Logik (500 Zufal
 
 **Mindestgrenzen eingehalten:** Jeder Tag hat zwei Entscheidungen. Kein Ermittlungshinweis hängt an etwas anderem als in CONCEPT Abschnitt 8.3. Jeder Tag hat mindestens einen Rückbezug (siehe Kopftabelle der Tage).
 
-## Rätsel, die per Brute-Force geprüft sind
+## Rätsel, die per Skript geprüft sind (`npm run puzzles:verify`)
 
-| Rätsel | Eindeutig? | Hinweis |
+| Rätsel | Stand | Geprüft |
 | --- | --- | --- |
-| `p02` Kerzen | ja | genau eine Lösung: vier Ecken und Mitte |
-| `p03` Treppen | 12 gültige Wege | Euler-Pfad 1 → 7, jede Treppe einmal |
-| `p04` Regal | ja | `FEDER ZEIT RAD STUNDE PENDEL` |
-| `p05` Flaschen | kürzeste Lösung 7 Züge | per BFS |
-| `p06` Stiefel | ja (logisch herleitbar) | Ellis `Zimtstern`, Maren `Nuss`, Theo `Lakritz`, Quill `Mandarine` |
-| `p07` Eulen | ja | `38` (zwei unabhängige Deutungen) |
-| `p08` Alraunen | ja | Spalten je Reihe `2 4 1 3` |
+| `p01` Zeiger | rechte Winkel statt Überdeckungen | Lösung `22` (Falle 24) |
+| `p02` Kerzen | 4 × 5 mit Startmuster | genau eine Lösung, 11 Berührungen (GF(2)) |
+| `p03` Treppen | 13 Treppen, 6 Einbahn, Absatz A | 28 Wege, ~6 % Trefferquote beim Raten |
+| `p04` Regal | 6 Bücher, 5 indirekte Hinweise | genau eine Reihenfolge |
+| `p05` Flaschen | 14/9/5 → 7/7 | kürzeste Lösung 13 Züge (BFS) |
+| `p06` Stiefel | noch Storyboard-Stand | wird mit Tag 6 geprüft |
+| `p07` Eulen | noch Storyboard-Stand | wird mit Tag 7 geprüft |
+| `p08` Alraunen | 6 × 6 mit Steinen | genau eine Lösung: 6 3 5 1 4 2 |
+
+Alle Rätsel sind knackiger als in der ersten Fassung (Vorgabe Auftraggeber, DECISIONS.md #44). Tag 1–3 sind umgesetzt.

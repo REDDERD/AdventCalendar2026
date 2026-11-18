@@ -6,24 +6,13 @@
   "type": "choice",
   "prompt": "Quill dreht die Kurbel an Rad A in Pfeilrichtung. In welche Richtung dreht sich der Zeiger an Rad F?",
   "config": {
-    "figure": {
-      "image": "puzzle.p21.gears",
-      "height": 132
-    },
+    "figure": { "image": "puzzle.p21.gears", "height": 132 },
     "columns": 2,
     "options": [
-      {
-        "label": "Im Uhrzeigersinn"
-      },
-      {
-        "label": "Gegen den Uhrzeigersinn"
-      },
-      {
-        "label": "Gar nicht, alles klemmt"
-      },
-      {
-        "label": "Mal so, mal so"
-      }
+      { "label": "Im Uhrzeigersinn" },
+      { "label": "Gegen den Uhrzeigersinn" },
+      { "label": "Gar nicht, alles klemmt" },
+      { "label": "Mal so, mal so" }
     ]
   },
   "solution": 1,
