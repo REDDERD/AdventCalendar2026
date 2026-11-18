@@ -6,7 +6,11 @@ import { SPEAKER_NAMES } from '../../dialogue/speakers';
 export function Diary() {
   const diary = useStore((s) => s.save?.diary ?? []);
   const end = useRef<HTMLDivElement>(null);
-  useEffect(() => end.current?.scrollIntoView(), []);
+  // Block body on purpose: newer browsers return a Promise from scrollIntoView(),
+  // which React would try to call as cleanup and crash.
+  useEffect(() => {
+    end.current?.scrollIntoView();
+  }, []);
 
   if (!diary.length) return <p className="muted">Noch keine Einträge.</p>;
   let lastDay = -1;

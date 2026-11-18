@@ -87,6 +87,19 @@ test('M1: admin plays day 1 with choice and puzzle, reload resumes exactly, even
   const choice = events.find((e) => e.type === 'choice')!;
   expect(JSON.stringify(choice.data)).toContain('d01.ellis');
   expect(events.filter((e) => e.type === 'puzzle_attempt')).toHaveLength(2);
+
+  // Regression: every trunk tab works after a completed day
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  await page.getByRole('button', { name: 'Truhe' }).click();
+  for (const tab of ['Tagebuch', 'Inventar', 'Hinweise', 'Steckbrief', 'Optionen']) {
+    await page.getByRole('button', { name: tab }).click();
+    await expect(page.locator('.trunk')).toBeVisible();
+  }
+  await expect(page.locator('.trunk-body')).toContainText('Text-Tempo');
+  await page.getByRole('button', { name: '✕' }).click();
+  await expect(page.locator('.door-done', { hasText: '1' })).toBeVisible();
+  expect(errors).toEqual([]);
 });
 
 test('a deactivated player sees the pause message [AUTH-9]', async ({ page }) => {

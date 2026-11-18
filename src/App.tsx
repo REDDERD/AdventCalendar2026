@@ -20,7 +20,9 @@ import { PuzzleIntroScreen } from './screens/PuzzleIntro';
 import { SceneScreen } from './screens/Scene';
 import { SolutionScreen } from './screens/Solution';
 import { Trunk } from './screens/trunk/Trunk';
+import { ErrorBoundary } from './ui/ErrorBoundary';
 import { Layout } from './ui/Layout';
+import { PixelButton } from './ui/PixelButton';
 
 const AdminApp = lazy(() => import('./admin/AdminApp'));
 
@@ -153,7 +155,20 @@ export function App() {
       <div key={screen} className="screen-fade">
         {SCREENS[screen]()}
       </div>
-      {trunkOpen && user && <Trunk />}
+      {trunkOpen && user && (
+        <ErrorBoundary
+          fallback={(reset) => (
+            <div className="trunk">
+              <div className="center-msg">
+                Die Truhe klemmt. Versuch es noch einmal.
+                <PixelButton onClick={() => { reset(); useStore.getState().setTrunkOpen(false); }}>Schließen</PixelButton>
+              </div>
+            </div>
+          )}
+        >
+          <Trunk />
+        </ErrorBoundary>
+      )}
     </PixelStage>
   );
 }
