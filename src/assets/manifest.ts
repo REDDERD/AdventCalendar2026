@@ -35,17 +35,46 @@ const backgrounds = Object.fromEntries(
   LOCATIONS.map((id) => [`bg.${id}`, { file: `assets/bg/${id}.png`, w: 256, h: 192 } satisfies FileAsset]),
 );
 
+const LPC_LICENSE = 'CC-BY-SA 3.0 / GPL 3.0 / OGA-BY 3.0';
+const LPC_CREDIT = 'Liberated Pixel Cup contributors, composed by npm run assets:npcs (see CREDITS.md)';
+const OWN = { license: 'own work', credit: 'Drawn by the agent (scripts/draw-sprites.ts)' };
+
+/** LPC walk sheets: rows up/left/down/right × 9 frames; frame 18 = facing the viewer. */
+export const IDLE_FRAME = 18;
+const LPC_NPCS = ['quill', 'ellis', 'theo', 'maren', 'grimsby', 'aldous', 'thornbury', 'wandmaker'] as const;
+
 const npcs = Object.fromEntries(
   CHARACTERS.filter((id) => id !== 'player').map((id) => [
     `npc.${id}`,
-    { file: `assets/sprites/${id}.png`, frameW: 64, frameH: 64, anims: { idle: [0], walk: [1, 2, 3, 4] } } satisfies FileAsset,
+    {
+      file: `assets/sprites/${id}.png`,
+      frameW: 64,
+      frameH: 64,
+      anims: { idle: [IDLE_FRAME], walk: [19, 20, 21, 22, 23, 24, 25, 26] },
+      ...((LPC_NPCS as readonly string[]).includes(id) ? { license: LPC_LICENSE, credit: LPC_CREDIT } : {}),
+    } satisfies FileAsset,
   ]),
 );
 
+/** Phase 1 portraits: the head of the facing-down idle frame, ×2. */
 const portraits = Object.fromEntries(
   CHARACTERS.filter((id) => id !== 'player').map((id) => [
     `portrait.${id}`,
-    { from: `npc.${id}`, crop: [16, 8, 32, 32], scale: 2 } satisfies CropAsset,
+    { from: `npc.${id}`, crop: [16, 140, 32, 32], scale: 2 } satisfies CropAsset,
+  ]),
+);
+
+const PETS = ['owl', 'cat', 'toad'] as const;
+const pets = Object.fromEntries(
+  PETS.map((id) => [`pet.${id}`, { file: `assets/sprites/pet_${id}.png`, w: 32, h: 32, ...OWN } satisfies FileAsset]),
+);
+const wands = Object.fromEntries(
+  ['phoenix', 'dragon', 'unicorn'].map((id) => [`ui.wand.${id}`, { file: `assets/ui/wand_${id}.png`, w: 48, h: 12, ...OWN } satisfies FileAsset]),
+);
+const crests = Object.fromEntries(
+  ['gryffindor', 'hufflepuff', 'ravenclaw', 'slytherin'].map((id) => [
+    `ui.crest.${id}`,
+    { file: `assets/ui/crest_${id}.png`, w: 24, h: 28, ...OWN } satisfies FileAsset,
   ]),
 );
 
@@ -54,7 +83,7 @@ const emoteFile: Record<(typeof EMOTES)[number], string> = {
   '!': 'exclaim', '?': 'question', heart: 'heart', sweat: 'sweat', note: 'note', dots: 'dots',
 };
 const emotes = Object.fromEntries(
-  EMOTES.map((id) => [`emote.${id}`, { file: `assets/emotes/${emoteFile[id]}.png`, w: 16, h: 16 } satisfies FileAsset]),
+  EMOTES.map((id) => [`emote.${id}`, { file: `assets/emotes/${emoteFile[id]}.png`, w: 16, h: 16, ...OWN } satisfies FileAsset]),
 );
 
 const SFX = ['blip', 'select', 'correct', 'wrong', 'spark', 'door', 'stamp'] as const;
@@ -67,6 +96,12 @@ export const assets: Record<string, AssetDef> = {
   ...backgrounds,
   ...npcs,
   ...portraits,
+  ...pets,
+  ...wands,
+  ...crests,
+  // The sorting hat is a single 64 × 64 image (no walk sheet) [GFX-4]
+  'npc.hat': { file: 'assets/sprites/hat.png', w: 64, h: 64, ...OWN },
+  'portrait.hat': { from: 'npc.hat', crop: [16, 20, 32, 32], scale: 2 },
   ...emotes,
   ...sfx,
   ...music,

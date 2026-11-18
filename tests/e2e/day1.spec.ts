@@ -1,25 +1,7 @@
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 import { ADMIN_UID } from '../../src/config';
 import { createAccount, listEvents, resetEmulators, setDocument, waitForEmulators } from './emulator';
-
-const PASSWORD = 'zimt-eule-lumos-47';
-
-async function login(page: Page, username: string): Promise<void> {
-  await page.getByLabel('Eulenname').fill(username);
-  await page.getByLabel('Zauberwort').fill(PASSWORD);
-  await page.getByRole('button', { name: 'Eintreten' }).click();
-}
-
-/** Tap the dialogue until `target` is visible. */
-async function tapUntil(page: Page, target: ReturnType<Page['locator']>, maxTaps = 40): Promise<void> {
-  for (let i = 0; i < maxTaps; i++) {
-    if (await target.isVisible()) return;
-    const dialogue = page.locator('.dialogue');
-    if (await dialogue.isVisible()) await dialogue.click();
-    await page.waitForTimeout(80);
-  }
-  await expect(target).toBeVisible();
-}
+import { login, PASSWORD, playPrologue, setDebugDate, tapUntil } from './helpers';
 
 test.beforeEach(async () => {
   await waitForEmulators();
@@ -32,17 +14,10 @@ test('M1: admin plays day 1 with choice and puzzle, reload resumes exactly, even
   await page.goto('./');
   await login(page, 'daniel');
 
-  // [AUTH-10] onboarding once, then the prologue placeholder
+  // [AUTH-10] onboarding once; [DAY-7] debug date; then the prologue (M2)
   await page.getByRole('button', { name: 'Verstanden' }).click();
-  await page.getByRole('button', { name: 'Hufflepuff' }).click();
-
-  // [DAY-7] debug date + instant text via the trunk
-  await page.getByRole('button', { name: 'Truhe' }).click();
-  await page.getByRole('button', { name: 'Optionen' }).click();
-  await page.getByRole('button', { name: 'Sofort' }).click();
-  await page.locator('input[type="datetime-local"]').fill('2026-12-01T10:00');
-  await page.getByRole('button', { name: 'Setzen', exact: true }).click();
-  await page.getByRole('button', { name: '✕' }).click();
+  await setDebugDate(page, '2026-12-01T10:00');
+  await playPrologue(page, { house: 'hufflepuff' });
 
   await expect(page.getByText('Ein Kapitel wartet auf dich')).toBeVisible();
   await page.locator('.door-available', { hasText: '1' }).click();

@@ -55,21 +55,28 @@ export class DaySession {
 
     const current = save.progress.current;
     let session: DaySession;
-    if (current && current.day === day) {
+    // The prologue's non-Ink steps keep `current` with an empty inkState.
+    if (current && current.day === day && current.inkState) {
       runner.resume(current.inkState, save.vars);
       session = new DaySession(day, runner, current.stage ?? defaultStage(day, save.vars.route));
     } else {
       runner.start(storyStem(day), save.vars);
       session = new DaySession(day, runner, defaultStage(day, save.vars.route));
+      const alreadyStarted = String(day) in save.progress.dayStartedAt;
       const startedAt = now();
       store.getState().updateSave(
         (s) => {
-          s.progress.dayStartedAt[String(day)] = startedAt;
-          s.progress.current = { day, screen: 'chapterCard', inkState: runner.checkpoint, stage: session.stage };
+          if (!alreadyStarted) s.progress.dayStartedAt[String(day)] = startedAt;
+          s.progress.current = {
+            day,
+            screen: day === 0 ? 'prologue.train' : 'chapterCard',
+            inkState: runner.checkpoint,
+            stage: session.stage,
+          };
         },
         { immediate: true },
       );
-      logEvent('day_start', day);
+      if (!alreadyStarted) logEvent('day_start', day);
     }
     DaySession.current = session;
     store.getState().setActiveDay(day);
@@ -154,6 +161,21 @@ export class DaySession {
     store.getState().updateSave((s) => this.persistInto(s, screen, puzzleId));
   }
 
+  /**
+   * End the Ink part without completing the day (prologue: the train scene is
+   * followed by the sorting and reveal screens).
+   */
+  leaveScene(next: Screen): void {
+    store.getState().updateSave(
+      (s) => {
+        s.vars = this.runner.getVars();
+        s.progress.current = { day: this.day, screen: next, inkState: '' };
+      },
+      { immediate: true },
+    );
+    DaySession.current = null;
+  }
+
   complete(): void {
     const { save } = store.getState();
     const startedAt = save?.progress.dayStartedAt[String(this.day)];
@@ -179,7 +201,7 @@ export class DaySession {
     s.vars = this.runner.getVars();
     s.progress.current = {
       day: this.day,
-      screen,
+      screen: this.day === 0 && screen === 'scene' ? 'prologue.train' : screen,
       inkState: this.runner.checkpoint,
       stage: this.stage,
       puzzleId: puzzleId ?? (inPuzzle ? s.progress.current?.puzzleId : undefined),

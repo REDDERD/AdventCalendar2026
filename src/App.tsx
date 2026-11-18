@@ -14,7 +14,12 @@ import { ChapterCardScreen } from './screens/ChapterCard';
 import { DayEndScreen } from './screens/DayEnd';
 import { LoginScreen } from './screens/Login';
 import { OnboardingScreen } from './screens/Onboarding';
-import { PrologueStub } from './screens/prologue/PrologueStub';
+import { LetterScreen } from './screens/prologue/Letter';
+import { MirrorScreen } from './screens/prologue/Mirror';
+import { PetScreen } from './screens/prologue/Pet';
+import { RevealScreen } from './screens/prologue/Reveal';
+import { SortingScreen } from './screens/prologue/Sorting';
+import { WandScreen } from './screens/prologue/Wand';
 import { PuzzleScreen } from './screens/Puzzle';
 import { PuzzleIntroScreen } from './screens/PuzzleIntro';
 import { SceneScreen } from './screens/Scene';
@@ -113,7 +118,13 @@ const SCREENS: Record<Screen, () => ReactNode> = {
   login: () => <LoginScreen />,
   blocked: () => <BlockedScreen />,
   onboarding: () => <OnboardingScreen />,
-  prologue: () => <PrologueStub />,
+  'prologue.letter': () => <LetterScreen />,
+  'prologue.mirror': () => <MirrorScreen />,
+  'prologue.wand': () => <WandScreen />,
+  'prologue.pet': () => <PetScreen />,
+  'prologue.train': () => <SceneScreen />,
+  'prologue.sorting': () => <SortingScreen />,
+  'prologue.reveal': () => <RevealScreen />,
   calendar: () => <CalendarScreen />,
   chapterCard: () => <ChapterCardScreen />,
   scene: () => <SceneScreen />,

@@ -1,3 +1,6 @@
+import { IDLE_FRAME } from '../assets/manifest';
+import { CharacterSprite } from '../character/CharacterSprite';
+import { useStore } from '../core/store';
 import type { StageState } from '../types';
 import { AssetImage } from '../ui/AssetImage';
 import { Hotspot } from './Hotspot';
@@ -13,6 +16,11 @@ interface Props {
 
 /** Background, actors, emote bubbles and spark hotspots of the top screen. */
 export function SceneRenderer({ stage, emotes, onSpark }: Props) {
+  const profile = useStore((s) => s.save?.profile);
+  const draft = useStore((s) => s.save?.prologueDraft);
+  const look = profile?.look ?? draft?.look;
+  const house = profile?.house ?? null;
+
   return (
     <div className="scene">
       {stage.bg && <AssetImage id={`bg.${stage.bg}`} w={256} h={192} className="scene-bg" />}
@@ -21,7 +29,11 @@ export function SceneRenderer({ stage, emotes, onSpark }: Props) {
         const y = FLOOR_Y - 64;
         return (
           <div key={actor.id} className="actor" style={{ left: x, top: y }}>
-            <AssetImage id={`npc.${actor.id}`} w={64} h={64} />
+            {actor.id === 'player' && look ? (
+              <CharacterSprite look={look} house={house} />
+            ) : (
+              <AssetImage id={`npc.${actor.id}`} w={64} h={64} frame={IDLE_FRAME} />
+            )}
             {emotes[actor.id] && <Emote emote={emotes[actor.id]} />}
           </div>
         );

@@ -19,6 +19,7 @@ export const profileSchema = z.object({
   name: z.string(),
   pronoun: z.enum(['f', 'm', 'n']),
   look: z.object({
+    build: z.string().default('slim'),
     skin: z.string(),
     hair: z.string(),
     hairColor: z.string(),
@@ -26,6 +27,7 @@ export const profileSchema = z.object({
     glasses: z.string(),
     accessory: z.string(),
     sweater: z.string(),
+    bottom: z.string().default('pants'),
   }),
   wand: z.enum(['phoenix', 'dragon', 'unicorn']),
   pet: z.enum(['owl', 'cat', 'toad']),
@@ -37,11 +39,14 @@ export const profileSchema = z.object({
 
 const inkVar = z.union([z.string(), z.number(), z.boolean(), z.array(z.string())]);
 
+const prologueDraftSchema = profileSchema.partial();
+
 export const saveDocSchema = z.object({
   uid: z.string(),
   runId: z.number(),
   schemaVersion: z.literal(1),
   profile: profileSchema.nullable(),
+  prologueDraft: prologueDraftSchema.optional(),
   vars: z.record(z.string(), inkVar),
   progress: z.object({
     completedDays: z.array(z.number()),

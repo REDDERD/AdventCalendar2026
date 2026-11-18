@@ -1,3 +1,4 @@
+import { resumePrologue } from '../screens/prologue/prologueFlow';
 import { detectPlatform } from '../services/EventLogger';
 import { DaySession } from './DaySession';
 import { go } from './ScreenMachine';
@@ -39,6 +40,10 @@ export async function enterGame(): Promise<void> {
   const { save } = store.getState();
   if (!save) return;
   const current = save.progress.current;
+  if (current?.day === 0) {
+    await resumePrologue(current.screen);
+    return;
+  }
   if (current) {
     try {
       await DaySession.begin(current.day);
@@ -49,7 +54,7 @@ export async function enterGame(): Promise<void> {
       console.error('Could not resume day', e);
     }
   }
-  go(save.profile ? 'calendar' : 'prologue');
+  go('calendar');
 }
 
 /** Start a day from the calendar (or the admin's debug jump [DAY-7]). */

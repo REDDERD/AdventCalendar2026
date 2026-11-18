@@ -49,6 +49,10 @@ export function SceneScreen() {
     applyEffects(effects);
     if (next.kind === 'puzzle') {
       go('puzzleIntro');
+    } else if (next.kind === 'end' && session.day === 0) {
+      // Prologue: the train ride is followed by the sorting hat (Section 6.1)
+      session.leaveScene('prologue.sorting');
+      go('prologue.sorting');
     } else if (next.kind === 'end') {
       session.complete();
       go('dayEnd');

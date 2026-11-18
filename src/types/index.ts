@@ -51,6 +51,8 @@ export interface UserDoc {
 }
 
 export interface Look {
+  /** 'slim' | 'broad' – LPC female/male body (DECISIONS.md) */
+  build: string;
   skin: string;
   hair: string;
   hairColor: string;
@@ -58,6 +60,8 @@ export interface Look {
   glasses: string;
   accessory: string;
   sweater: string;
+  /** 'pants' | 'skirt' */
+  bottom: string;
 }
 
 export interface Profile {
@@ -70,6 +74,19 @@ export interface Profile {
   house: HouseId;
   hatOverruled: boolean;
   sortingAnswers: HouseId[];
+}
+
+/** Prologue choices made so far; becomes `profile` when the prologue ends [DAY-4]. */
+export interface PrologueDraft {
+  name?: string;
+  pronoun?: Pronoun;
+  look?: Look;
+  wand?: WandId;
+  pet?: PetId;
+  sortingAnswers?: HouseId[];
+  hatSuggestion?: HouseId;
+  house?: HouseId;
+  hatOverruled?: boolean;
 }
 
 export type InkVarValue = string | number | boolean | string[];
@@ -113,6 +130,7 @@ export interface SaveDoc {
   runId: number;
   schemaVersion: 1;
   profile: Profile | null;
+  prologueDraft?: PrologueDraft;
   vars: Record<string, InkVarValue>;
   progress: {
     completedDays: number[];

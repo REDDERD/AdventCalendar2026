@@ -16,6 +16,11 @@ function walk(dir: string): string[] {
 }
 
 const referenced = new Set<string>();
+// LPC layers are referenced by the CharacterComposer via lpc.generated.json, not the manifest.
+const lpc = JSON.parse(fs.readFileSync('src/character/lpc.generated.json', 'utf8')) as {
+  layers: Record<string, { files: Record<string, string> }>;
+};
+for (const layer of Object.values(lpc.layers)) for (const file of Object.values(layer.files)) referenced.add(file);
 const missing: string[] = [];
 const unlicensed: string[] = [];
 

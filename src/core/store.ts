@@ -3,9 +3,21 @@ import { saveNow, scheduleSave } from '../services/SaveService';
 import type { SaveDoc, UserDoc } from '../types';
 
 export type Screen =
-  | 'boot' | 'login' | 'blocked' | 'onboarding' | 'prologue'
+  | 'boot' | 'login' | 'blocked' | 'onboarding'
+  | PrologueScreen
   | 'calendar' | 'chapterCard' | 'scene' | 'puzzleIntro' | 'puzzle' | 'solution' | 'dayEnd'
   | 'ending' | 'letter' | 'credits';
+
+/** Section 6.1 – prologue screen sequence. */
+export const PROLOGUE_SCREENS = [
+  'prologue.letter', 'prologue.mirror', 'prologue.wand', 'prologue.pet',
+  'prologue.train', 'prologue.sorting', 'prologue.reveal',
+] as const;
+export type PrologueScreen = (typeof PROLOGUE_SCREENS)[number];
+
+export function isPrologueScreen(screen: string): screen is PrologueScreen {
+  return (PROLOGUE_SCREENS as readonly string[]).includes(screen);
+}
 
 export type BlockedReason = 'inactive' | 'unknown_user';
 

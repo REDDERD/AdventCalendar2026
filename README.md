@@ -32,6 +32,9 @@ Die App läuft dann unter http://localhost:5173/AdventCalendar2026/. Am Rechner 
 | `content:compile` | Ink → JSON, Entscheidungs-Katalog `choices.generated.json` |
 | `content:lint` | Statische Prüfung von Ink und Rätsel-JSON |
 | `assets:check` | Fehlende/unbenutzte Assets, fehlende Lizenzen |
+| `assets:import-lpc -- <lpc-repo>` | LPC-Ebenen aus `scripts/lpc/catalog.ts` importieren (Laufanimation, Paletten, Credits); `--list` zeigt die benötigten Dateien für einen Sparse-Checkout des [Generator-Repos](https://github.com/LiberatedPixelCup/Universal-LPC-Spritesheet-Character-Generator) |
+| `assets:npcs` | NPC-Sprites aus den LPC-Ebenen bauen (`src/character/npcs.ts`) |
+| `assets:draw` | Eigene Sprites zeichnen (Hut, Haustiere, Zauberstäbe, Wappen, Emotes) |
 | `admin:set-uid -- <uid>` | Admin-UID in `src/config.ts` und `firestore.rules` eintragen |
 | `admin:set-password -- <eulenname> <zauberwort>` | Zauberwort zurücksetzen `[AUTH-11]` |
 

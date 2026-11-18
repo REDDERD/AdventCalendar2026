@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { HOUSE_COLORS } from '../assets/palette';
 import { LAST_DAY } from '../content/schedule';
-import { go } from '../core/ScreenMachine';
 import { startDay } from '../core/flow';
+import { startPrologue } from './prologue/prologueFlow';
 import { useStore } from '../core/store';
 import { doorState, formatCountdown, isPlayable, nextPlayableDay, unlockAtMs, waitingChapters } from '../core/time';
 import { hasStory } from '../services/ContentService';
@@ -78,7 +78,7 @@ export function CalendarScreen() {
         !prologueDone ? (
           <div className="center-msg">
             {isPlayable(0, t, completed) ? (
-              <PixelButton variant="wax" onClick={() => go('prologue')}>
+              <PixelButton variant="wax" onClick={() => void startPrologue()}>
                 Brief öffnen
               </PixelButton>
             ) : (

@@ -1,17 +1,23 @@
-import { store, type Screen } from './store';
+import { PROLOGUE_SCREENS, store, type Screen } from './store';
 
 /**
- * Section 13.2: boot → login → onboarding → prologue → calendar → chapterCard →
+ * Section 13.2: boot → login → onboarding → prologue.* → calendar → chapterCard →
  * scene → puzzleIntro → puzzle → solution → scene → dayEnd → calendar.
  * `trunk` is an overlay, not a screen.
  */
 const transitions: Record<Screen, Screen[]> = {
-  boot: ['login', 'blocked', 'onboarding', 'prologue', 'calendar', 'chapterCard', 'scene', 'puzzleIntro', 'puzzle', 'solution', 'dayEnd', 'ending', 'letter', 'credits'],
+  boot: ['login', 'blocked', 'onboarding', ...PROLOGUE_SCREENS, 'calendar', 'chapterCard', 'scene', 'puzzleIntro', 'puzzle', 'solution', 'dayEnd', 'ending', 'letter', 'credits'],
   login: ['boot', 'blocked'],
   blocked: ['login', 'boot'],
-  onboarding: ['prologue', 'calendar'],
-  prologue: ['calendar'],
-  calendar: ['chapterCard', 'prologue', 'ending', 'letter', 'credits'],
+  onboarding: [...PROLOGUE_SCREENS, 'calendar'],
+  'prologue.letter': ['prologue.mirror'],
+  'prologue.mirror': ['prologue.wand'],
+  'prologue.wand': ['prologue.pet'],
+  'prologue.pet': ['prologue.train'],
+  'prologue.train': ['prologue.sorting'],
+  'prologue.sorting': ['prologue.reveal'],
+  'prologue.reveal': ['calendar'],
+  calendar: ['chapterCard', ...PROLOGUE_SCREENS, 'ending', 'letter', 'credits'],
   chapterCard: ['scene'],
   scene: ['puzzleIntro', 'dayEnd', 'ending'],
   puzzleIntro: ['puzzle'],
