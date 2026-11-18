@@ -444,6 +444,75 @@ function gearTrain(): Canvas {
   return c;
 }
 
+/** The Advent clock (96 × 120): calendar picture and source of the app icons [UI-5]. */
+function adventClock(): Canvas {
+  const c = new Canvas(96, 120);
+  const wood = ['#3b2414', '#5a3a20', '#6b4226', '#8a5a34', '#9a6a3c'];
+  // case: arched crown, head, waist, base with feet – lit from the left
+  for (let y = 2; y < 16; y++) for (let x = 12; x < 84; x++) {
+    const u = (x - 48) / 36;
+    const v = (16 - y) / 14;
+    if (u * u + v * v <= 1) c.set(x, y, ramp(wood, 0.55 - u * 0.25));
+  }
+  const block = (x: number, y: number, w: number, h: number) => {
+    c.rect(x, y, w, h, wood[2]);
+    c.rect(x, y, 1, h, wood[4]);
+    c.rect(x + w - 2, y, 2, h, wood[1]);
+  };
+  block(10, 14, 76, 44);
+  block(24, 58, 48, 44);
+  block(16, 102, 64, 12);
+  c.rect(18, 114, 8, 4, wood[0]);
+  c.rect(70, 114, 8, 4, wood[0]);
+  // clock face, stopped at midnight
+  c.ellipse(48, 36, 21, 21, (u, v) => (u + v < -0.5 ? '#f2d675' : '#a8802a'));
+  c.ellipse(48, 36, 19, 19, wood[0]);
+  c.ellipse(48, 36, 17, 17, (u, v) => (u + v < -0.9 ? '#fff8ea' : '#f6ead0'));
+  for (let h = 0; h < 12; h++) {
+    const a = (h / 12) * Math.PI * 2;
+    c.rect(48 + Math.sin(a) * 14, 36 - Math.cos(a) * 14, h % 3 === 0 ? 2 : 1, h % 3 === 0 ? 2 : 1, '#3b2414');
+  }
+  c.rect(47, 23, 2, 13, '#1a1423');
+  c.rect(47, 27, 2, 9, '#1a1423');
+  c.ellipse(48, 36, 2, 2, '#d4a73a');
+  // pendulum window with the brass pendulum
+  c.rect(34, 64, 28, 34, '#1b2a4e');
+  c.rect(47, 64, 2, 22, '#d4a73a');
+  c.ellipse(48, 88, 5, 5, (u, v) => (u + v < -0.4 ? '#f2d675' : '#d4a73a'));
+  // 24 little doors as dots on the waist
+  for (let i = 0; i < 4; i++) {
+    c.rect(27, 62 + i * 9, 4, 5, '#c4512a');
+    c.rect(65, 62 + i * 9, 4, 5, '#c4512a');
+  }
+  // holly on the crown, a star on top
+  c.ellipse(36, 12, 4, 2.5, '#2e5a2a');
+  c.ellipse(60, 12, 4, 2.5, '#2e5a2a');
+  c.rect(46, 10, 2, 2, '#c23b3b');
+  c.rect(49, 11, 2, 2, '#c23b3b');
+  for (const [x, y] of [[48, 0], [47, 1], [49, 1], [46, 2], [50, 2], [48, 2], [48, 3]]) c.set(x, y, '#f2d675');
+  c.outline('#1a1423');
+  return c;
+}
+
+/** App icon: the clock centred on midnight blue (size × size). */
+function appIcon(size: number): Canvas {
+  const c = new Canvas(size, size);
+  c.rect(0, 0, size, size, '#0b1530');
+  const clock = adventClock();
+  // nearest-neighbour sampling, so the clock fills ~85 % of the height at any icon size
+  const scale = (size * 0.85) / 120;
+  const ox = Math.floor((size - 96 * scale) / 2);
+  const oy = Math.floor((size - 120 * scale) / 2);
+  for (let y = 0; y < 120 * scale; y++) for (let x = 0; x < 96 * scale; x++) {
+    const hex = clock.get(Math.floor(x / scale), Math.floor(y / scale));
+    if (hex) c.set(ox + x, oy + y, hex);
+  }
+  return c;
+}
+
+adventClock().save(path.join(OUT, 'ui/clock.png'));
+for (const size of [180, 192, 512]) appIcon(size).save(path.resolve(`public/icons/icon-${size}.png`));
+
 /** p01 (256 × 64): the clock face, hands at a right angle (three o'clock). */
 function clockFace(): Canvas {
   const c = new Canvas(256, 64);

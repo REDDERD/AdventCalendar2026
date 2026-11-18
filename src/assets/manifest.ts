@@ -106,7 +106,7 @@ export const assets: Record<string, AssetDef> = {
   ...emotes,
   ...sfx,
   ...music,
-  'ui.clock': { file: 'assets/ui/clock.png', w: 128, h: 160 },
+  'ui.clock': { file: 'assets/ui/clock.png', w: 96, h: 120, ...OWN },
   'ui.frame.parchment': { file: 'assets/ui/parchment.png', nineSlice: [8, 8, 8, 8] },
   'ui.frame.wood': { file: 'assets/ui/wood.png', nineSlice: [8, 8, 8, 8] },
   'ui.seal': { file: 'assets/ui/seal.png', w: 24, h: 24 },

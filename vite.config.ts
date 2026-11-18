@@ -1,6 +1,7 @@
 import react from '@vitejs/plugin-react';
 import fs from 'node:fs';
 import { defineConfig, type Plugin } from 'vite';
+import { VitePWA } from 'vite-plugin-pwa';
 import { compileAll, INK_DIR, writeOutputs } from './scripts/ink-compiler.ts';
 
 const pkg = JSON.parse(fs.readFileSync('./package.json', 'utf8')) as { version: string };
@@ -33,7 +34,34 @@ export const appDefines = {
 export default defineConfig({
   // GitHub Pages project site: https://redderd.github.io/AdventCalendar2026/
   base: '/AdventCalendar2026/',
-  plugins: [react(), inkWatch()],
+  plugins: [
+    react(),
+    inkWatch(),
+    // [UI-5] Home-screen app: standalone, portrait, midnight-blue splash, Advent clock icon.
+    // The service worker precaches the build; Firestore keeps its own offline cache (no runtime caching here).
+    VitePWA({
+      registerType: 'autoUpdate',
+      includeAssets: ['icons/icon-180.png'],
+      manifest: {
+        name: 'Hogwarts und die Adventsuhr',
+        short_name: 'Adventsuhr',
+        lang: 'de',
+        display: 'standalone',
+        orientation: 'portrait',
+        background_color: '#0b1530',
+        theme_color: '#0b1530',
+        icons: [
+          { src: 'icons/icon-192.png', sizes: '192x192', type: 'image/png' },
+          { src: 'icons/icon-512.png', sizes: '512x512', type: 'image/png' },
+          { src: 'icons/icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
+        ],
+      },
+      workbox: {
+        globPatterns: ['**/*.{js,css,html,png,woff2,json}'],
+        maximumFileSizeToCacheInBytes: 4 * 1024 * 1024,
+      },
+    }),
+  ],
   define: appDefines,
   server: { host: true },
 });
