@@ -3,7 +3,7 @@ import type { Recipe } from './layers';
 /**
  * NPC looks (Section 7.2), composed from LPC layers by `npm run assets:npcs`
  * into public/assets/sprites/<id>.png [GFX-1]. Sorting hat and Niffler are
- * drawn separately [GFX-4].
+ * drawn separately [GFX-4]. Every ghost gets `ghost` (translucent, bluish – DECISIONS.md #47).
  */
 export const NPCS: Record<string, Recipe> = {
   // Prof. Henrietta Quill – pointed hat, round glasses, purple robe
@@ -107,9 +107,10 @@ export const NPCS: Record<string, Recipe> = {
       { id: 'wizard_hat_belt_maroon' },
     ],
   },
-  // Peeves the poltergeist (cameo, day 2) – jester colours, Christmas hat
+  // Peeves the poltergeist (cameo, day 2) – jester colours, Christmas hat, tinted like every ghost
   peeves: {
     body: 'male',
+    ghost: 0.3,
     layers: [
       { id: 'body', colors: { body: 'light' } },
       { id: 'head_male', colors: { body: 'light', eye: 'orange' } },

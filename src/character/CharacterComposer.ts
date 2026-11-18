@@ -1,7 +1,7 @@
 import { assetUrl } from '../assets/AssetRegistry';
 import type { HouseId, Look } from '../types';
 import { FRAME, playerRecipe, resolveRecipe, SHEET_COLS, type Recipe } from './layers';
-import { ghostify, recolorPixels } from './recolor';
+import { ghostify, ghostKeep, recolorPixels } from './recolor';
 
 const SHEET_W = FRAME * SHEET_COLS;
 const SHEET_H = FRAME * 4;
@@ -53,9 +53,10 @@ export function composeSheet(recipe: Recipe): Promise<HTMLCanvasElement> {
         }
         ctx.drawImage(tmp, 0, 0);
       });
-      if (recipe.ghost) {
+      const keep = ghostKeep(recipe.ghost);
+      if (keep !== null) {
         const data = ctx.getImageData(0, 0, SHEET_W, SHEET_H);
-        ghostify(data.data);
+        ghostify(data.data, keep);
         ctx.putImageData(data, 0, 0);
       }
       return out;

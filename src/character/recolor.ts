@@ -62,14 +62,22 @@ export function blendOver(dst: Uint8Array | Uint8ClampedArray, src: Uint8Array |
   }
 }
 
-/** Translucent pale-blue look for the ghost Sir Aldous. */
-export function ghostify(data: Uint8Array | Uint8ClampedArray, alpha = 170): void {
+/**
+ * Translucent, bluish look for ghosts. `keep` = share of the original colours
+ * (0 = pale blue all over like Sir Aldous, 0.5 = a tinted Peeves who still looks like a jester).
+ */
+export function ghostify(data: Uint8Array | Uint8ClampedArray, keep = 0, alpha = 170): void {
   for (let i = 0; i < data.length; i += 4) {
     if (data[i + 3] === 0) continue;
     const lum = 0.3 * data[i] + 0.59 * data[i + 1] + 0.11 * data[i + 2];
-    data[i] = Math.min(255, 90 + lum * 0.6);
-    data[i + 1] = Math.min(255, 140 + lum * 0.5);
-    data[i + 2] = Math.min(255, 190 + lum * 0.3);
+    const blue = [Math.min(255, 90 + lum * 0.6), Math.min(255, 140 + lum * 0.5), Math.min(255, 190 + lum * 0.3)];
+    for (let c = 0; c < 3; c++) data[i + c] = data[i + c] * keep + blue[c] * (1 - keep); // typed array truncates
     data[i + 3] = Math.min(data[i + 3], alpha);
   }
+}
+
+/** `Recipe.ghost` → share of the original colours, or null for the living. */
+export function ghostKeep(ghost: boolean | number | undefined): number | null {
+  if (ghost === undefined || ghost === false) return null;
+  return ghost === true ? 0 : ghost;
 }

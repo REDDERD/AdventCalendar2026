@@ -70,7 +70,11 @@ export interface LayerUse {
 export interface Recipe {
   body: Body;
   layers: LayerUse[];
-  ghost?: boolean;
+  /**
+   * Every ghost is drawn translucent and bluish (DECISIONS.md #47): `true` = pale blue
+   * all over (Sir Aldous), a number 0–1 = how much of the own colours stays visible.
+   */
+  ghost?: boolean | number;
 }
 
 type LayerInfo = { z: number; recolor: Array<{ material: string; base: string }>; files: Partial<Record<Body | 'any', string>> };

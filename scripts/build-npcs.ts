@@ -6,7 +6,7 @@ import path from 'node:path';
 import { PNG } from 'pngjs';
 import { resolveRecipe, type Recipe } from '../src/character/layers';
 import { NPCS } from '../src/character/npcs';
-import { blendOver, ghostify, recolorPixels } from '../src/character/recolor';
+import { blendOver, ghostify, ghostKeep, recolorPixels } from '../src/character/recolor';
 
 const OUT = path.resolve('public/assets/sprites');
 const W = 576;
@@ -27,7 +27,8 @@ export function composeRecipe(recipe: Recipe): PNG {
     recolorPixels(src.data, layer.maps);
     blendOver(out.data, src.data);
   }
-  if (recipe.ghost) ghostify(out.data);
+  const keep = ghostKeep(recipe.ghost);
+  if (keep !== null) ghostify(out.data, keep);
   return out;
 }
 
