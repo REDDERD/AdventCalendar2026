@@ -17,6 +17,8 @@ const MAX_CHOICE_CHARS = 40; // [STY-3]
 // Sparks: on the shortest stage (448) the world is visible from y = 88; the dialogue box covers ~100 px.
 const SPARK_MIN_Y = 100;
 const SPARK_MAX_Y = 400;
+// Keys that PersonalService.personalValue() answers (Section 12); anything else would always be empty.
+const PERSONAL_KEYS = ['amortentiaScents', 'insideJoke1', 'insideJoke2', 'patronus', 'favoriteSweet', 'surprise', 'letterSignature'];
 
 const errors: string[] = [];
 const warnings: string[] = [];
@@ -128,6 +130,10 @@ for (const stem of listStoryFiles()) {
           break;
         }
       }
+    }
+
+    for (const m of line.matchAll(/personal\("([^"]*)"\)/g)) {
+      if (!PERSONAL_KEYS.includes(m[1])) errors.push(`${at}: unknown personal key "${m[1]}"`);
     }
 
     // ~ items += x / clues += x must reference existing ids

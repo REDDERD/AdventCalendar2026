@@ -3,7 +3,7 @@ INCLUDE globals.ink
 // Tag 7 – Die Eulerei (Akt I). Ort: owlery. Rätsel: p07.
 // Quelle: storyboard/tag-07.md. Anpassungen: Funke ins 256 × 512-Raster. Rätsel p07 schwerer, die Antwort bleibt 38.
 === day07 ===
-~ temp joke = personal("insideJokes")
+~ temp joke = personal("insideJoke1")
 # bg: owlery
 # music: outdoor
 # spark: d07.s1 212 140

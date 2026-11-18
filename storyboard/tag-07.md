@@ -8,7 +8,7 @@
 | **Entscheidungen** | `d07.letter` (`give` / `keep` → Gegenstand `anonymous_letter`) · `d07.home` (`write` → `wrote_home` / `later`, Ton) |
 | **Gegenstand** | `anonymous_letter` (nur bei `keep`) |
 | **Cameo** | **Hedwig** (weiße Eule) · **Errol** (graue Eule, Landetechnik: ungenau). Beide nur als Namensschilder und Erzählzeilen, keine Sprecher |
-| **Persönlich** | `personal("insideJokes")` (Zeile von Ellis, entfällt, wenn leer) |
+| **Persönlich** | `personal("insideJoke1")` = erster Eintrag von `insideJokes` (Zeile von Ellis, entfällt, wenn leer) |
 | **Rätsel** | `p07` Eulen-Nummern (`input`, 30 Punkte) |
 | **Rückbezug** | `d06.theo` über `trust_theo`: Ellis fragt, ob der Brief von Theo sein könnte · `k02` (Kälte) |
 | **Türchen-Zauber** | Alle Eulen tragen rote Schleifen und tauschen ihre Briefe versehentlich gegen Weihnachtskarten |
@@ -29,7 +29,7 @@ INCLUDE globals.ink
 
 // Tag 7 – Die Eulerei (Akt I). Ort: owlery. Rätsel: p07.
 === day07 ===
-~ temp joke = personal("insideJokes")
+~ temp joke = personal("insideJoke1")
 # bg: owlery
 # music: outdoor
 # spark: d07.s1 212 140
@@ -104,7 +104,7 @@ quill: Das ist nicht verdächtig, Ellis. Das ist Hufflepuff.
 
 ## Rückbezüge und Hinweise für die Umsetzung
 
-- **`personal("insideJokes")`:** Der Wert ist ein Satz oder leer. Wenn die App keinen Wert liefert, gibt sie `""` zurück, dann entfällt die Zeile (`{ joke != "": … }`). Der Admin pflegt das Feld bis 27.11. `[PRS-3]`.
+- **`personal("insideJoke1")`:** erster Eintrag der Liste `insideJokes` (der zweite, `insideJoke2`, gehört Quill an Tag 17). Der Wert ist ein Satz oder leer. Wenn die App keinen Wert liefert, gibt sie `""` zurück, dann entfällt die Zeile (`{ joke != "": … }`). Der Admin pflegt das Feld bis 27.11. `[PRS-3]`.
 - **Hedwig und Errol** brauchen keine Sprites und keine Sprecher-IDs. Sie erscheinen als Schilder und Erzählzeilen. Falls Grafik übrig ist: eine weiße und eine graue Eule als Hintergrundsprite der Eulerei.
 
 ## Setups und Payoffs
