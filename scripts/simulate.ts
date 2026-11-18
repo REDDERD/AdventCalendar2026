@@ -34,6 +34,7 @@ function randomState(): Record<string, InkVarValue> {
     items: ITEMS.filter(() => Math.random() < 0.3),
     route: pick(['forest', 'archive']),
     maren_covered: Math.random() < 0.5,
+    peeves_friend: Math.random() < 0.5,
   };
 }
 

@@ -6,6 +6,15 @@ import type { Engine, EngineProps } from './types';
 /** Finger within this distance of a point counts as touching it. */
 const HIT = 14;
 
+/** Triangle at the middle of a one-way connection, pointing from p to q. */
+function arrowHead(p: Point, q: Point): string {
+  const len = Math.hypot(q.x - p.x, q.y - p.y) || 1;
+  const [ux, uy] = [(q.x - p.x) / len, (q.y - p.y) / len];
+  const [mx, my] = [(p.x + q.x) / 2 + ux * 5, (p.y + q.y) / 2 + uy * 5];
+  const corner = (side: number) => `${mx - ux * 10 - uy * 6 * side},${my - uy * 10 + ux * 6 * side}`;
+  return `${mx},${my} ${corner(1)} ${corner(-1)}`;
+}
+
 function PathEngine({ puzzle, state, setState, disabled }: EngineProps<PathState>) {
   const config = puzzle.config as PathConfig;
   const { ref, toLocal } = useLocalPoint<SVGSVGElement>();
@@ -68,11 +77,16 @@ function PathEngine({ puzzle, state, setState, disabled }: EngineProps<PathState
         onPointerUp={() => (drawing.current = false)}
         onPointerCancel={() => (drawing.current = false)}
       >
-        {config.edges.map(([a, b]) => {
+        {config.edges.map(([a, b, oneWay]) => {
           const p = pos.get(a)!;
           const q = pos.get(b)!;
           const on = used.has(edgeKey(a, b));
-          return <line key={edgeKey(a, b)} x1={p.x} y1={p.y} x2={q.x} y2={q.y} className={on ? 'path-edge used' : 'path-edge'} />;
+          return (
+            <g key={edgeKey(a, b)}>
+              <line x1={p.x} y1={p.y} x2={q.x} y2={q.y} className={on ? 'path-edge used' : 'path-edge'} />
+              {oneWay && <polygon className="path-arrow" points={arrowHead(p, q)} />}
+            </g>
+          );
         })}
         {state.slice(1).map((node, i) => {
           const p = pos.get(state[i])!;

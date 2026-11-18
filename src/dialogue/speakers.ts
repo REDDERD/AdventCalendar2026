@@ -11,4 +11,5 @@ export const SPEAKER_NAMES: Record<string, string> = {
   knopf: 'Knopf',
   wandmaker: 'Zauberstabmacherin',
   player: 'Du',
+  peeves: 'Peeves',
 };

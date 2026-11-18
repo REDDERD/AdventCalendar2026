@@ -4,33 +4,35 @@
   "title": "Die Treppen",
   "points": 30,
   "type": "path",
-  "prompt": "Die Treppen sind launisch: Jede will genau einmal benutzt werden – keine zweimal, keine auslassen. Zieh einen Weg vom 1. in den 7. Stock.",
+  "prompt": "Jede Treppe will genau einmal benutzt werden – keine auslassen, keine zweimal. Treppen mit Pfeil fahren nur in Pfeilrichtung. A ist ein Absatz. Zieh einen Weg vom 1. in den 7. Stock.",
   "config": {
     "nodes": [
-      { "id": "1", "x": 40, "y": 220 },
-      { "id": "2", "x": 216, "y": 220 },
-      { "id": "3", "x": 128, "y": 80 },
-      { "id": "4", "x": 128, "y": 176 },
-      { "id": "5", "x": 80, "y": 128 },
-      { "id": "6", "x": 176, "y": 128 },
-      { "id": "7", "x": 40, "y": 36 }
+      { "id": "5", "x": 40, "y": 32 },
+      { "id": "7", "x": 128, "y": 32 },
+      { "id": "6", "x": 216, "y": 32 },
+      { "id": "3", "x": 40, "y": 120 },
+      { "id": "A", "x": 128, "y": 120 },
+      { "id": "4", "x": 216, "y": 120 },
+      { "id": "2", "x": 72, "y": 216 },
+      { "id": "1", "x": 184, "y": 216 }
     ],
     "edges": [
-      ["1", "2"], ["1", "5"], ["1", "7"], ["2", "6"], ["3", "5"],
-      ["3", "6"], ["4", "5"], ["4", "6"], ["5", "6"]
+      ["1", "4", ">"], ["4", "A"], ["7", "A"], ["7", "6", ">"], ["6", "4", ">"],
+      ["2", "4"], ["2", "A"], ["A", "3", ">"], ["2", "3"], ["1", "2"],
+      ["1", "A", ">"], ["A", "5", ">"], ["5", "7"]
     ],
     "rule": "every_edge_once",
     "start": "1",
     "end": "7"
   },
-  "solution": ["1", "5", "3", "6", "5", "4", "6", "2", "1", "7"],
+  "solution": ["1", "4", "A", "7", "6", "4", "2", "A", "3", "2", "1", "A", "5", "7"],
   "hints": [
-    "Die Treppe 1–7 geht nicht zuerst.",
-    "Zähl bei jedem Stockwerk die Treppen. Welche haben eine ungerade Zahl?",
-    "Ein Weg, der in 1 beginnt und in 7 endet, muss die Treppe 1–7 als letzte nehmen."
+    "Wer sich festläuft, darf zurück: Tippe auf den vorigen Punkt, dann wird die letzte Treppe wieder frei.",
+    "Der 7. Stock ist nicht nur das Ziel. Du kommst unterwegs schon einmal vorbei.",
+    "Vom 1. Stock führen drei Treppen weg, aber du kommst auch einmal zurück. Spar dir die Treppe 1–2 für später auf."
   ],
-  "superHint": "Beginne mit 1 → 5.",
-  "solutionText": "Nur in den Stockwerken 1 und 7 hängt eine ungerade Zahl von Treppen. Alle anderen haben gerade viele. Also müsst ihr dort beginnen und dort aufhören – zum Beispiel 1, 5, 3, 6, 5, 4, 6, 2, 1, 7.",
+  "superHint": "Beginne mit 1 → 4 → A → 7 → 6.",
+  "solutionText": "Zum Beispiel 1, 4, A, 7, 6, 4, 2, A, 3, 2, 1, A, 5, 7. Der Trick: Der 7. Stock ist auch ein Umsteigebahnhof, und der Absatz A wird dreimal besucht.",
   "intro": {
     "speaker": "quill",
     "text": "Eine Treppe, die man auslässt, trägt es einem nach. Nehmt sie alle, und zwar nur einmal."

@@ -4,31 +4,89 @@
   "title": "Das Regal",
   "points": 30,
   "type": "arrange",
-  "prompt": "Isoldes Bücher stehen durcheinander. PENDEL steht ganz rechts. RAD steht direkt rechts von ZEIT. FEDER steht links von STUNDE, aber nicht direkt daneben. Tausche die Bücher, bis alles stimmt.",
+  "prompt": "Sortiere Isoldes sechs Bücher. 1) RAD steht links von STUNDE, aber nicht direkt daneben. 2) RAD und FEDER stehen nicht nebeneinander. 3) STUNDE steht links von PENDEL. 4) ANKER und PENDEL stehen nicht nebeneinander. 5) FEDER steht links von ANKER, nicht direkt daneben.",
   "config": {
     "mode": "row",
     "items": [
-      { "id": "zeit", "label": "ZEIT" },
-      { "id": "rad", "label": "RAD" },
-      { "id": "feder", "label": "FEDER" },
-      { "id": "stunde", "label": "STUNDE" },
-      { "id": "pendel", "label": "PENDEL" }
+      {
+        "id": "zeit",
+        "label": "ZEIT"
+      },
+      {
+        "id": "rad",
+        "label": "RAD"
+      },
+      {
+        "id": "feder",
+        "label": "FEDER"
+      },
+      {
+        "id": "stunde",
+        "label": "STUNDE"
+      },
+      {
+        "id": "pendel",
+        "label": "PENDEL"
+      },
+      {
+        "id": "anker",
+        "label": "ANKER"
+      }
     ],
-    "start": ["pendel", "stunde", "rad", "feder", "zeit"],
+    "start": [
+      "pendel",
+      "anker",
+      "stunde",
+      "zeit",
+      "feder",
+      "rad"
+    ],
     "rules": [
-      { "type": "at", "item": "pendel", "pos": -1 },
-      { "type": "right_of", "item": "rad", "of": "zeit" },
-      { "type": "left_of", "item": "feder", "of": "stunde", "gap": 2 }
+      {
+        "type": "left_of",
+        "item": "rad",
+        "of": "stunde",
+        "gap": 2
+      },
+      {
+        "type": "not_next_to",
+        "item": "rad",
+        "of": "feder"
+      },
+      {
+        "type": "left_of",
+        "item": "stunde",
+        "of": "pendel",
+        "gap": 1
+      },
+      {
+        "type": "not_next_to",
+        "item": "anker",
+        "of": "pendel"
+      },
+      {
+        "type": "left_of",
+        "item": "feder",
+        "of": "anker",
+        "gap": 2
+      }
     ]
   },
-  "solution": ["feder", "zeit", "rad", "stunde", "pendel"],
-  "hints": [
-    "Fang mit dem Buch an, das ganz rechts steht.",
-    "ZEIT und RAD bilden ein Paar.",
-    "FEDER braucht mindestens ein Buch Abstand zu STUNDE."
+  "solution": [
+    "feder",
+    "zeit",
+    "rad",
+    "anker",
+    "stunde",
+    "pendel"
   ],
-  "superHint": "Das Paar ZEIT–RAD steht in der Mitte.",
-  "solutionText": "Feder, Zeit, Rad, Stunde, Pendel: von der ersten Skizze bis zur letzten Schraube. Das Pendel ist immer das Letzte, was sich bewegt.",
+  "hints": [
+    "ZEIT kommt in keinem Hinweis vor. Sie füllt am Ende die Lücke, die übrig bleibt.",
+    "RAD, STUNDE und PENDEL stehen in genau dieser Reihenfolge, mit Abstand zwischen RAD und STUNDE.",
+    "FEDER muss links von ANKER stehen, darf aber nicht neben RAD. Probier FEDER ganz links."
+  ],
+  "superHint": "FEDER steht ganz links, PENDEL ganz rechts.",
+  "solutionText": "Feder, Zeit, Rad, Anker, Stunde, Pendel: von der ersten Skizze bis zum Pendel. Der Anker sitzt in der Mitte, er ist das Herz jeder Hemmung.",
   "intro": {
     "speaker": "quill",
     "text": "Isolde ordnete ihre Bücher in der Reihenfolge, in der sie arbeitete. Von der Feder bis zum Pendel."

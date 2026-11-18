@@ -12,14 +12,16 @@ import {
   type RowState,
   type SticksConfig,
   type SticksState,
+  stickSlots,
 } from '../../src/puzzles/logic/arrange';
+import { equationHolds, readEquation, romanValue } from '../../src/puzzles/logic/roman';
 import { choiceLogic } from '../../src/puzzles/logic/choice';
 import { inputLogic } from '../../src/puzzles/logic/input';
 import { extendPath, pathLogic, type PathConfig, type PathState } from '../../src/puzzles/logic/path';
 import { pour, pourLogic, type PourConfig, type PourState } from '../../src/puzzles/logic/pour';
 import { slideLogic, slideTile } from '../../src/puzzles/logic/slide';
 import { tapLogic, toggleMark, type TapState } from '../../src/puzzles/logic/tap';
-import { toggleCell, toggleLogic, type ToggleConfig } from '../../src/puzzles/logic/toggle';
+import { solveToggle, toggleCell, toggleLogic, type ToggleConfig } from '../../src/puzzles/logic/toggle';
 import { parsePuzzle, type Puzzle } from '../../src/puzzles/schema';
 import { helpDueAt, HELP_AFTER_MS, HELP_REOFFER_MS, nextHint } from '../../src/puzzles/scoring';
 
@@ -30,16 +32,16 @@ const load = (id: string): Puzzle =>
 
 describe('input (p01)', () => {
   const p = load('p01');
-  it('is solvable', () => expect(inputLogic.check(p, '11')).toBe(true));
-  it('rejects a wrong answer', () => expect(inputLogic.check(p, '12')).toBe(false));
+  it('is solvable', () => expect(inputLogic.check(p, '22')).toBe(true));
+  it('rejects a wrong answer (the trap 24)', () => expect(inputLogic.check(p, '24')).toBe(false));
   it('rejects empty input', () => expect(inputLogic.check(p, '  ')).toBe(false));
   it('verifies', () => expect(inputLogic.verify(p).errors).toEqual([]));
 });
 
 describe('choice (p21)', () => {
   const p = load('p21');
-  it('is solvable', () => expect(choiceLogic.check(p, 3)).toBe(true));
-  it('rejects a wrong card', () => expect(choiceLogic.check(p, 0)).toBe(false));
+  it('is solvable', () => expect(choiceLogic.check(p, 1)).toBe(true));
+  it('rejects a wrong card', () => expect(choiceLogic.check(p, 2)).toBe(false));
   it('rejects no selection and unknown cards', () => {
     expect(choiceLogic.check(p, null)).toBe(false);
     expect(choiceLogic.check(p, 9)).toBe(false);
@@ -53,17 +55,24 @@ describe('toggle (p02)', () => {
   const p = load('p02');
   const config = p.config as ToggleConfig;
   const tap = (cells: number[]) => cells.reduce((s, c) => toggleCell(config, s, c), toggleLogic.initial(p));
-  it('is solvable: corners and centre', () => expect(toggleLogic.check(p, tap([0, 2, 4, 6, 8]))).toBe(true));
+  it('is solvable with 11 taps', () => {
+    expect(toggleLogic.check(p, tap([0, 1, 2, 3, 5, 6, 8, 9, 13, 14, 15]))).toBe(true);
+  });
   it('rejects a wrong pattern', () => {
-    expect(toggleLogic.check(p, tap([4]))).toBe(false);
-    expect(toggleLogic.check(p, tap([0, 2, 4, 6, 8, 8]))).toBe(false);
+    expect(toggleLogic.check(p, tap([0, 2, 4]))).toBe(false);
+    expect(toggleLogic.check(p, tap([0, 1, 2, 3, 5, 6, 8, 9, 13, 14, 15, 15]))).toBe(false);
   });
   it('ignores cells outside the grid (rule)', () => {
     const start = toggleLogic.initial(p);
-    expect(toggleCell(config, start, 9)).toBe(start);
+    expect(toggleCell(config, start, 20)).toBe(start);
     expect(toggleCell(config, start, -1)).toBe(start);
   });
-  it('has exactly one solution', () => expect(toggleLogic.verify(p).errors).toEqual([]));
+  it('has exactly one solution (GF(2))', () => {
+    expect(toggleLogic.verify(p).errors).toEqual([]);
+    expect(solveToggle(config).nullity).toBe(0);
+    // 4 × 4 has no unique solutions – verify must say so
+    expect(solveToggle({ rows: 4, cols: 4, lit: [] }).nullity).toBeGreaterThan(0);
+  });
 });
 
 describe('path (p03)', () => {
@@ -71,21 +80,22 @@ describe('path (p03)', () => {
   const config = p.config as PathConfig;
   const draw = (nodes: string[]) => nodes.reduce<PathState | null>((s, n) => (s ? extendPath(config, s, n) : null), []);
   it('is solvable: every stair once', () => {
-    expect(pathLogic.check(p, draw(['1', '5', '3', '6', '5', '4', '6', '2', '1', '7'])!)).toBe(true);
+    expect(pathLogic.check(p, draw(['1', '4', 'A', '7', '6', '4', '2', 'A', '3', '2', '1', 'A', '5', '7'])!)).toBe(true);
   });
-  it('rejects an incomplete line (the direct stair)', () => {
-    expect(pathLogic.check(p, draw(['1', '7'])!)).toBe(false);
+  it('rejects an incomplete line', () => {
+    expect(pathLogic.check(p, draw(['1', 'A', '5', '7'])!)).toBe(false);
   });
   it('refuses rule violations', () => {
     expect(extendPath(config, [], '5')).toBeNull(); // must start at 1
     expect(extendPath(config, ['1'], '3')).toBeNull(); // no stair 1–3
-    expect(extendPath(config, ['1', '5', '1'], '5')).toBeNull(); // stair 1–5 twice
-    expect(pathLogic.check(p, ['1', '5', '1'])).toBe(false);
+    expect(extendPath(config, ['1', '2', '1'], '2')).toBeNull(); // stair 1–2 twice
+    expect(extendPath(config, ['1', '2', 'A'], '1')).toBeNull(); // one-way: only 1 → A
+    expect(extendPath(config, ['1'], 'A')).toEqual(['1', 'A']);
   });
-  it('verifies (12 lines, as in the storyboard)', () => {
+  it('verifies', () => {
     const { errors, info } = pathLogic.verify(p);
     expect(errors).toEqual([]);
-    expect(info).toContain('12 valid lines');
+    expect(info).toContain('28 valid lines');
   });
 });
 
@@ -93,15 +103,13 @@ describe('arrange: row (p04)', () => {
   const p = load('p04');
   const start = arrangeLogic.initial(p) as RowState;
   it('is solvable by swapping', () => {
-    // pendel stunde rad feder zeit → feder zeit rad stunde pendel
-    let s = swapRow(start, 0, 4); // zeit … pendel
-    s = swapRow(s, 0, 3); // feder stunde rad zeit pendel
-    s = swapRow(s, 1, 3); // feder zeit rad stunde pendel
-    expect(arrangeLogic.check(p, s)).toBe(true);
+    // pendel anker stunde zeit feder rad → feder zeit rad anker stunde pendel
+    const end = [[0, 4], [1, 3], [2, 5], [4, 5]].reduce((s, [a, b]) => swapRow(s, a, b), start);
+    expect(arrangeLogic.check(p, end)).toBe(true);
   });
   it('rejects the start order', () => expect(arrangeLogic.check(p, start)).toBe(false));
   it('ignores invalid places (rule)', () => {
-    expect(swapRow(start, 0, 5)).toBe(start);
+    expect(swapRow(start, 0, 6)).toBe(start);
     expect(swapRow(start, 2, 2)).toBe(start);
   });
   it('the clues allow exactly one order', () => expect(arrangeLogic.verify(p).errors).toEqual([]));
@@ -112,10 +120,13 @@ describe('arrange: grid (p08)', () => {
   const config = p.config as GridConfig;
   const start = arrangeLogic.initial(p) as GridState;
   const put = (moves: Array<[string, number | null]>) => moves.reduce((s, [id, cell]) => placeGrid(config, s, id, cell), start);
-  it('is solvable', () => expect(arrangeLogic.check(p, put([['M1', 7], ['M2', 8], ['M3', 14]]))).toBe(true));
-  it('rejects a wrong placement', () => expect(arrangeLogic.check(p, put([['M1', 4], ['M2', 11], ['M3', 14]]))).toBe(false));
-  it('refuses fixed cells and unknown pieces (rule)', () => {
-    expect(placeGrid(config, start, 'M1', 1)).toBe(start); // the given pot
+  const solved: Array<[string, number]> = [['M1', 5], ['M2', 8], ['M3', 16], ['M4', 18], ['M5', 27], ['M6', 31]];
+  it('is solvable', () => expect(arrangeLogic.check(p, put(solved))).toBe(true));
+  it('rejects a wrong placement', () => {
+    expect(arrangeLogic.check(p, put([...solved.slice(0, 5), ['M6', 33]]))).toBe(false);
+  });
+  it('refuses stones and unknown pieces (rule)', () => {
+    expect(placeGrid(config, start, 'M1', 4)).toBe(start); // a stone
     expect(placeGrid(config, start, 'X9', 5)).toBe(start);
   });
   it('swaps pieces and returns them to the tray', () => {
@@ -127,35 +138,53 @@ describe('arrange: grid (p08)', () => {
   it('the rules allow exactly one placement', () => expect(arrangeLogic.verify(p).errors).toEqual([]));
 });
 
-describe('arrange: sticks (p22)', () => {
+describe('arrange: sticks, Roman (p22)', () => {
   const p = load('p22');
   const config = p.config as SticksConfig;
   const start = arrangeLogic.initial(p) as SticksState;
   const tap = (slots: string[]) => slots.reduce<ArrangeState>((s, id) => tapStick(config, s as SticksState, id), start);
-  it('is solvable both ways', () => {
-    expect(arrangeLogic.check(p, tap(['r1', 'r2']))).toBe(true); // V + I = VI
-    expect(arrangeLogic.check(p, tap(['r1', 'a1']))).toBe(true); // IV + I = V
+  it('reads the start as an equation', () => {
+    expect(readEquation(stickSlots(config), start.on)).toBe('IX+II=VI');
+  });
+  it('is solvable: the plus gives its upright stick to the II', () => {
+    expect(arrangeLogic.check(p, tap(['c3.P', 'c4.I']))).toBe(true);
+    expect(arrangeLogic.describe(p, tap(['c3.P', 'c4.I']))).toBe('IX-III=VI');
   });
   it('rejects a wrong move and a stick still in hand', () => {
-    expect(arrangeLogic.check(p, tap(['i1', 'a1']))).toBe(false);
-    expect(arrangeLogic.check(p, tap(['r1']))).toBe(false);
+    expect(arrangeLogic.check(p, tap(['c3.P', 'c0.I']))).toBe(false);
+    expect(arrangeLogic.check(p, tap(['c3.P']))).toBe(false);
   });
   it('refuses a second stick and occupied places (rule)', () => {
-    const moved = tap(['r1', 'r2']) as SticksState;
-    expect(tapStick(config, moved, 'v1')).toBe(moved); // only one stick may move
-    const holding = tap(['r1']) as SticksState;
-    expect(tapStick(config, holding, 'v1')).toBe(holding); // occupied
-    // the moved stick itself may move again
-    expect(tapStick(config, moved, 'r2').held).toBe('r2');
+    const moved = tap(['c3.P', 'c4.I']) as SticksState;
+    expect(tapStick(config, moved, 'c1.I')).toBe(moved); // only one stick may move
+    const holding = tap(['c3.P']) as SticksState;
+    expect(tapStick(config, holding, 'c1.I')).toBe(holding); // occupied
+    expect(tapStick(config, moved, 'c4.I').held).toBe('c4.I'); // the moved stick may move again
+  });
+  it('has exactly one true equation within one move', () => expect(arrangeLogic.verify(p).errors).toEqual([]));
+});
+
+describe('Roman equations', () => {
+  it('reads canonical numerals only', () => {
+    expect(romanValue('IX')).toBe(9);
+    expect(romanValue('XIV')).toBe(14);
+    expect(romanValue('IIII')).toBeNull();
+    expect(romanValue('VX')).toBeNull();
+  });
+  it('checks equations', () => {
+    expect(equationHolds('IX-III=VI')).toBe(true);
+    expect(equationHolds('IX+II=VI')).toBe(false);
+    expect(equationHolds('V=V=V')).toBe(false);
+    expect(equationHolds('V+=V')).toBe(false);
   });
 });
 
 describe('slide (p18)', () => {
   const p = load('p18');
-  it('is solvable (BFS, 18 moves)', () => {
+  it('is solvable (BFS, 26 moves)', () => {
     const { errors, info } = slideLogic.verify(p);
     expect(errors).toEqual([]);
-    expect(info).toContain('18 moves minimum');
+    expect(info).toContain('26 moves minimum');
     expect(slideLogic.check(p, [1, 2, 3, 4, 5, 6, 7, 8, 0])).toBe(true);
   });
   it('rejects the start', () => expect(slideLogic.check(p, slideLogic.initial(p))).toBe(false));
@@ -168,34 +197,37 @@ describe('slide (p18)', () => {
 
 describe('tap (p11)', () => {
   const p = load('p11');
-  it('is solvable: mark the greenhouse', () => expect(tapLogic.check(p, [{ x: 222, y: 205 }])).toBe(true));
+  it('is solvable: mark the greenhouse', () => expect(tapLogic.check(p, [{ x: 180, y: 205 }])).toBe(true));
   it('rejects a wrong place and an empty picture', () => {
-    expect(tapLogic.check(p, [{ x: 160, y: 208 }])).toBe(false);
+    expect(tapLogic.check(p, [{ x: 128, y: 208 }])).toBe(false);
     expect(tapLogic.check(p, [{ x: 128, y: 100 }])).toBe(false);
     expect(tapLogic.check(p, [])).toBe(false);
   });
   it('refuses more marks than allowed (rule) and removes a mark when tapped again', () => {
-    const one = toggleMark(p, [], 222, 205);
+    const one = toggleMark(p, [], 180, 205);
     expect(toggleMark(p, one, 30, 200)).toBe(one);
-    expect(toggleMark(p, one, 224, 207)).toEqual([] as TapState);
+    expect(toggleMark(p, one, 182, 207)).toEqual([] as TapState);
   });
 });
 
 describe('custom: pour (p05)', () => {
   const p = load('p05');
   const config = p.config as PourConfig;
-  it('is solvable in 7 moves', () => {
-    const moves: Array<[number, number]> = [[0, 1], [1, 2], [2, 0], [1, 2], [0, 1], [1, 2], [2, 0]];
+  it('is solvable in 13 moves', () => {
+    const moves: Array<[number, number]> = [
+      [0, 1], [1, 2], [2, 0], [1, 2], [0, 1], [1, 2], [2, 0], [1, 2], [2, 0], [1, 2], [0, 1], [1, 2], [2, 0],
+    ];
     const end = moves.reduce<PourState | null>((s, [a, b]) => (s ? pour(config, s, a, b) : null), pourLogic.initial(p));
-    expect(end?.levels).toEqual([4, 4, 0]);
+    expect(end?.levels).toEqual([7, 7, 0]);
     expect(pourLogic.check(p, end!)).toBe(true);
+    expect(pourLogic.verify(p).info).toContain('13 moves minimum');
   });
-  it('rejects other levels', () => expect(pourLogic.check(p, { levels: [3, 5, 0], moves: 1 })).toBe(false));
+  it('rejects other levels', () => expect(pourLogic.check(p, { levels: [5, 9, 0], moves: 1 })).toBe(false));
   it('refuses pouring from empty, into full or into itself (rule)', () => {
     const start = pourLogic.initial(p);
     expect(pour(config, start, 1, 0)).toBeNull();
     expect(pour(config, start, 0, 0)).toBeNull();
-    expect(pour(config, { levels: [3, 5, 0], moves: 1 }, 0, 1)).toBeNull();
+    expect(pour(config, { levels: [5, 9, 0], moves: 1 }, 0, 1)).toBeNull();
   });
 });
 

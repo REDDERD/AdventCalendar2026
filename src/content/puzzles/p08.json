@@ -4,22 +4,47 @@
   "title": "Alraunen",
   "points": 40,
   "type": "arrange",
-  "prompt": "Alraunen schreien, wenn sie sich zu nah sind. Setz drei weitere Töpfe ins Beet: keine zwei in derselben Reihe oder Spalte, und keine zwei dürfen sich berühren – auch nicht über Eck. Ein Topf steht schon.",
+  "prompt": "Sechs Alraunen müssen ins Beet. In jeder Reihe und jeder Spalte steht genau eine, und keine zwei dürfen sich berühren – auch nicht über Eck. Auf die Steine kann man nichts stellen. Tippe ein Feld an, um einen Topf zu setzen.",
   "config": {
     "mode": "grid",
-    "board": [".M..", "....", "....", "...."],
-    "pieces": { "M": 3 },
-    "kinds": { "M": { "label": "Alraune", "sprite": "puzzle.mandrake" } },
-    "rules": ["distinct_rows", "distinct_cols", "no_touch"]
+    "board": [
+      "....#.",
+      "....##",
+      "......",
+      ".##...",
+      ".##...",
+      "..#..."
+    ],
+    "pieces": {
+      "M": 6
+    },
+    "kinds": {
+      "M": {
+        "label": "Alraune",
+        "sprite": "puzzle.mandrake"
+      }
+    },
+    "rules": [
+      "distinct_rows",
+      "distinct_cols",
+      "no_touch"
+    ]
   },
-  "solution": [".M..", "...M", "M...", "..M."],
-  "hints": [
-    "In jede Reihe gehört genau ein Topf.",
-    "In der zweiten Reihe darf der Topf nicht neben oder schräg unter dem ersten stehen.",
-    "Die zweite Reihe hat nur noch einen freien Platz."
+  "solution": [
+    "....#M",
+    "..M.##",
+    "....M.",
+    "M##...",
+    ".##M..",
+    ".M#..."
   ],
-  "superHint": "Der Topf der zweiten Reihe steht ganz rechts.",
-  "solutionText": "Spalte 2, 4, 1, 3. Nach dem ersten Topf bleibt in der zweiten Reihe nur die rechte Ecke, danach ergibt sich alles von selbst.",
+  "hints": [
+    "Markier dir mit der Notiz, wo in jeder Reihe noch Platz ist. Steine und Nachbarn fallen weg.",
+    "In der obersten Reihe steht die Alraune ganz rechts.",
+    "In der vierten Reihe steht sie ganz links."
+  ],
+  "superHint": "Die Spalten von oben nach unten: 6, 3, 5, 1, 4, 2.",
+  "solutionText": "Von oben nach unten in den Spalten 6, 3, 5, 1, 4, 2. Jede andere Anordnung bringt zwei Alraunen zu nah zusammen oder stellt eine auf einen Stein.",
   "intro": {
     "speaker": "maren",
     "text": "Bitte vorsichtig. Wenn eine schreit, schreien alle. Und dann hört man drei Tage nichts mehr."

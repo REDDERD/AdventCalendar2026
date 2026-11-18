@@ -9,11 +9,14 @@ export type Role = 'admin' | 'player';
 
 export type CharacterId =
   | 'quill' | 'ellis' | 'theo' | 'maren' | 'grimsby' | 'aldous'
-  | 'thornbury' | 'hat' | 'knopf' | 'wandmaker' | 'player';
+  | 'thornbury' | 'hat' | 'knopf' | 'wandmaker' | 'player'
+  // Cameos ("Zeitgäste", DECISIONS.md #41)
+  | 'peeves';
 
 export const CHARACTERS: CharacterId[] = [
   'quill', 'ellis', 'theo', 'maren', 'grimsby', 'aldous',
   'thornbury', 'hat', 'knopf', 'wandmaker', 'player',
+  'peeves',
 ];
 
 export type LocationId =

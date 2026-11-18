@@ -4,22 +4,25 @@
   "title": "Die Zeiger",
   "points": 20,
   "type": "input",
-  "prompt": "Von 12 Uhr mittags bis kurz vor Mitternacht: Wie oft liegen Stunden- und Minutenzeiger genau übereinander?",
-  "image": "puzzle.p01",
+  "prompt": "Übereinander ist leicht. Aber: Wie oft stehen Stunden- und Minutenzeiger von 12 Uhr mittags bis kurz vor Mitternacht genau im rechten Winkel zueinander?",
   "config": {
     "inputMode": "number",
-    "maxLength": 2
+    "maxLength": 2,
+    "figure": {
+      "image": "puzzle.p01",
+      "height": 64
+    }
   },
   "solution": [
-    "11"
+    "22"
   ],
   "hints": [
-    "Um 12:00 liegen sie schon übereinander – das zählt mit.",
-    "Der Minutenzeiger überholt den Stundenzeiger etwa einmal pro Stunde …",
-    "… aber nicht genau einmal. Zwischen 11 und 12 Uhr klappt es nicht."
+    "Es sind nicht 24. Zwei pro Stunde klingt richtig, ist es aber nicht.",
+    "In zwölf Stunden überholt der Minutenzeiger den Stundenzeiger genau 11-mal.",
+    "Zwischen zwei Überholungen stehen die Zeiger zweimal im rechten Winkel: einmal davor, einmal danach."
   ],
-  "superHint": "Es ist eine Zahl kleiner als 12.",
-  "solutionText": "11 Mal: um 12:00 und danach etwa alle 65 Minuten. Das nächste Treffen nach 10:54 Uhr wäre erst um Mitternacht – und die zählt nicht mehr mit.",
+  "superHint": "11 Runden mit je zwei rechten Winkeln.",
+  "solutionText": "22 Mal. Der Minutenzeiger überholt den Stundenzeiger in zwölf Stunden 11-mal, und jede Runde bringt zwei rechte Winkel. Zwischen 2 und 4 Uhr und zwischen 8 und 10 Uhr gibt es deshalb nur je drei statt vier.",
   "intro": {
     "speaker": "quill",
     "text": "Eine Uhr, die steht, ist immer noch zweimal am Tag richtig. Aber dies hier …"

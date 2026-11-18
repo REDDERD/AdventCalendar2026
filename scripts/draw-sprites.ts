@@ -343,29 +343,201 @@ function snowTrails(): Canvas {
     }
   };
   const start = [128, 22];
-  trail([start, [-20, 90], [300, 120], [160, 196]], [[0.55, 0.63]]); // → pond, broken
-  trail([start, [300, 70], [-40, 130], [32, 196]], [[0.3, 0.38]]); // → forest, broken
-  trail([start, [200, 100], [20, 110], [96, 196]], [[0.8, 0.88]]); // → hut, broken
-  trail([start, [40, 60], [300, 100], [224, 196]], []); // → greenhouse, unbroken
+  // Five trails; four miss a single step somewhere, only the one to the greenhouse never breaks.
+  trail([start, [260, 60], [-60, 150], [24, 192]], [[0.52, 0.545]]); // → forest
+  trail([start, [-40, 80], [300, 120], [76, 192]], [[0.7, 0.725]]); // → hut
+  trail([start, [220, 40], [20, 170], [128, 194]], [[0.34, 0.365]]); // → pond
+  trail([start, [0, 110], [260, 90], [180, 192]], []); // → greenhouse, unbroken
+  trail([start, [60, 40], [180, 180], [232, 192]], [[0.84, 0.865]]); // → owlery
 
   // destinations along the bottom
   for (let k = 0; k < 3; k++) {
-    const x = 18 + k * 10;
+    const x = 10 + k * 9;
     for (let j = 0; j < 14; j++) c.rect(x + 6 - j / 2.4, 196 + j, 1 + j / 1.2, 1, j % 4 === 3 ? '#2e5a2a' : '#3d7a35');
     c.rect(x + 5, 210, 2, 4, '#5a3a20');
   }
-  c.rect(84, 204, 24, 14, '#8a5a34'); // hut
-  for (let j = 0; j < 8; j++) c.rect(82 + j, 204 - j, 28 - 2 * j, 1, '#5a3a20');
-  c.rect(94, 210, 5, 8, '#3b2414');
-  c.ellipse(160, 210, 16, 7, (u, v) => (u + v < -0.5 ? '#ffffff' : '#a9cbe8')); // frozen pond
-  c.rect(210, 200, 28, 18, '#bfe0d8'); // greenhouse
-  for (let x = 210; x <= 238; x += 7) c.rect(x, 200, 1, 18, '#4f6b3a');
-  c.rect(210, 200, 28, 1, '#4f6b3a');
-  c.rect(210, 208, 28, 1, '#4f6b3a');
-  for (let j = 0; j < 6; j++) c.rect(212 + j * 2, 199 - j, 24 - j * 4, 1, '#4f6b3a');
+  c.rect(64, 204, 24, 14, '#8a5a34'); // hut
+  for (let j = 0; j < 8; j++) c.rect(62 + j, 204 - j, 28 - 2 * j, 1, '#5a3a20');
+  c.rect(74, 210, 5, 8, '#3b2414');
+  c.ellipse(128, 210, 16, 7, (u, v) => (u + v < -0.5 ? '#ffffff' : '#a9cbe8')); // frozen pond
+  c.rect(166, 200, 28, 18, '#bfe0d8'); // greenhouse
+  for (let x = 166; x <= 194; x += 7) c.rect(x, 200, 1, 18, '#4f6b3a');
+  c.rect(166, 200, 28, 1, '#4f6b3a');
+  c.rect(166, 208, 28, 1, '#4f6b3a');
+  for (let j = 0; j < 6; j++) c.rect(168 + j * 2, 199 - j, 24 - j * 4, 1, '#4f6b3a');
+  c.rect(224, 196, 16, 22, '#7a7788'); // owlery tower
+  for (let j = 0; j < 9; j++) c.rect(222 + j, 196 - j, 20 - 2 * j, 1, '#5a3a20');
+  c.rect(230, 202, 4, 5, '#1a1423');
   return c;
 }
 
+/** p18 "Die Tür, die erscheint" (105 × 105 = 3 × 3 tiles of 35 px, shown at 2×). */
+function door(): Canvas {
+  const c = new Canvas(105, 105);
+  // stone wall
+  for (let y = 0; y < 105; y++) {
+    for (let x = 0; x < 105; x++) {
+      const row = Math.floor(y / 9);
+      const brickEdge = y % 9 === 0 || (x + (row % 2) * 9) % 18 === 0;
+      c.set(x, y, brickEdge ? '#3a3846' : (x * 7 + y * 13) % 11 === 0 ? '#5d5a6a' : '#514e5e');
+    }
+  }
+  // arch frame and door leaf
+  const inArch = (x: number, y: number, r: number) => (y >= 40 ? Math.abs(x - 52) <= r : Math.hypot(x - 52, y - 40) <= r);
+  for (let y = 6; y < 105; y++) {
+    for (let x = 14; x < 92; x++) {
+      if (inArch(x, y, 37) && !inArch(x, y, 31)) c.set(x, y, (x + y) % 7 === 0 ? '#9a96a8' : '#857f94');
+      else if (inArch(x, y, 31)) {
+        const plank = Math.floor((x - 21) / 10);
+        const seam = (x - 21) % 10 === 0;
+        c.set(x, y, seam ? '#2b1a10' : ['#6b4226', '#7a4c2c', '#5f3a20', '#734828', '#68401f', '#7d4f2e'][plank % 6]);
+        if (!seam && (x * 3 + y * 5) % 23 === 0) c.set(x, y, '#4e2f18'); // wood grain
+      }
+    }
+  }
+  // round window with candle glow
+  c.ellipse(52, 30, 9, 9, '#2b1a10');
+  c.ellipse(52, 30, 7, 7, (u, v) => (Math.hypot(u, v) < 0.45 ? '#fff1c2' : '#ffd27a'));
+  c.rect(45, 30, 15, 1, '#2b1a10');
+  c.rect(52, 23, 1, 15, '#2b1a10');
+  // iron hinges with bolts
+  for (const y of [48, 86]) {
+    c.rect(21, y, 30, 4, '#2b2a33');
+    for (const x of [24, 32, 40, 48]) c.set(x, y + 1, '#7a7788');
+  }
+  // brass knocker ring and keyhole
+  c.ellipse(70, 68, 6, 6, '#d4a73a');
+  c.ellipse(70, 68, 3.5, 3.5, '#734828');
+  c.rect(69, 60, 3, 3, '#f2d675');
+  c.rect(60, 80, 3, 5, '#1a1423');
+  c.rect(59, 79, 5, 2, '#1a1423');
+  // star runes in the arch stones
+  for (const [x, y] of [[22, 22], [82, 22], [52, 7]]) {
+    c.set(x, y, '#a9cbe8');
+    c.set(x - 1, y, '#5d8fc7');
+    c.set(x + 1, y, '#5d8fc7');
+    c.set(x, y - 1, '#5d8fc7');
+    c.set(x, y + 1, '#5d8fc7');
+  }
+  // a pot of mistletoe on the left, a mouse hole on the right – detail for the bottom tiles
+  c.rect(4, 92, 8, 9, '#a8502c');
+  c.ellipse(8, 89, 5, 3, '#4f8a3c');
+  c.set(6, 88, '#f6ead0');
+  c.set(10, 88, '#f6ead0');
+  c.ellipse(98, 100, 4, 5, '#1a1423');
+  return c;
+}
+
+/** Tiny 3 × 5 capitals for labels in puzzle pictures. */
+const LETTERS: Record<string, string[]> = {
+  A: ['.#.', '#.#', '###', '#.#', '#.#'],
+  B: ['##.', '#.#', '##.', '#.#', '##.'],
+  C: ['.##', '#..', '#..', '#..', '.##'],
+  D: ['##.', '#.#', '#.#', '#.#', '##.'],
+  E: ['###', '#..', '##.', '#..', '###'],
+  F: ['###', '#..', '##.', '#..', '#..'],
+};
+function label(c: Canvas, text: string, x: number, y: number, color: string): void {
+  [...text].forEach((ch, k) =>
+    LETTERS[ch].forEach((row, j) => [...row].forEach((p, i) => p === '#' && c.set(x + k * 4 + i, y + j, color))),
+  );
+}
+
+/**
+ * p21 "Zahnräder" (256 × 132): crank on A, chain A–B–C, a crossed belt C–D,
+ * D–E–F with a pointer on F. A ring of three gears (which would jam) sits
+ * close to B but does not touch it.
+ */
+function gearTrain(): Canvas {
+  const c = new Canvas(256, 132);
+  for (let y = 0; y < 132; y++) for (let x = 0; x < 256; x++) c.set(x, y, (x + y) % 4 === 0 ? '#e2cc98' : '#e8d5a6');
+  const brass = ['#7a5a1c', '#a8802a', '#d4a73a', '#f2d675'];
+  const gear = (cx: number, cy: number, r: number, colors: string[], phase = 0) => {
+    const teeth = Math.max(6, Math.round(r * 0.7));
+    for (let y = Math.floor(cy - r - 4); y <= cy + r + 4; y++) {
+      for (let x = Math.floor(cx - r - 4); x <= cx + r + 4; x++) {
+        const d = Math.hypot(x + 0.5 - cx, y + 0.5 - cy);
+        const a = Math.atan2(y + 0.5 - cy, x + 0.5 - cx);
+        const tooth = Math.cos(teeth * a + phase) > 0;
+        if (d <= r || (d <= r + 3 && tooth)) {
+          const light = (x - cx + (y - cy)) / (r * 2);
+          c.set(x, y, d > r * 0.45 && d < r * 0.6 ? colors[0] : colors[Math.max(0, Math.min(3, Math.round(2 - light * 2)))]);
+        }
+      }
+    }
+    c.ellipse(cx, cy, 2.5, 2.5, '#2b1a10');
+  };
+  // ring of three (decoy): same brass, only a narrow gap to B
+  gear(64.5, 118, 9, brass);
+  gear(87.5, 118, 9, brass, 0.4);
+  gear(76, 98, 9, brass, 0.8);
+  // main train
+  gear(36, 50, 18, brass);
+  gear(64, 72, 12, brass, 0.5);
+  gear(94, 64, 16, brass, 0.2);
+  gear(170, 40, 14, brass, 0.3);
+  gear(188, 62, 10, brass, 0.1);
+  gear(208, 87, 16, brass, 0.6);
+  // crossed belt C–D on small pulleys
+  c.ellipse(94, 64, 9, 9, '#3b2414');
+  c.ellipse(170, 40, 9, 9, '#3b2414');
+  for (const d of [0, 1]) {
+    c.line(94, 55 + d, 170, 48 + d, '#3b2414');
+    c.line(94, 72 - d, 170, 31 - d, '#3b2414');
+  }
+  c.ellipse(94, 64, 2.5, 2.5, '#d4a73a');
+  c.ellipse(170, 40, 2.5, 2.5, '#d4a73a');
+  // crank on A with a clockwise arrow
+  c.line(36, 50, 22, 36, '#3b2414');
+  c.line(37, 50, 23, 36, '#3b2414');
+  c.ellipse(21, 35, 3, 3, '#8e1b1b');
+  for (let k = 0; k <= 40; k++) {
+    const a = (-150 + k * 3) * (Math.PI / 180);
+    c.rect(36 + Math.cos(a) * 26, 50 + Math.sin(a) * 26, 2, 2, '#c23b3b');
+  }
+  const tip = (-30 * Math.PI) / 180;
+  const [tx, ty] = [36 + Math.cos(tip) * 26, 50 + Math.sin(tip) * 26];
+  // arrowhead pointing along the clockwise direction (down-right at -30°)
+  for (let i = 0; i < 6; i++) c.rect(tx - 4 + i * 0.5 + 1, ty - 3 + i, 8 - i * 1.2, 1, '#c23b3b');
+  // pointer on F
+  c.line(208, 87, 226, 72, '#1a1423');
+  c.line(209, 87, 227, 72, '#1a1423');
+  c.rect(226, 70, 3, 3, '#c23b3b');
+  // labels
+  label(c, 'A', 8, 54, '#1a1423');
+  label(c, 'B', 52, 84, '#1a1423');
+  label(c, 'C', 112, 48, '#1a1423');
+  label(c, 'D', 168, 15, '#1a1423');
+  label(c, 'E', 202, 50, '#1a1423');
+  label(c, 'F', 228, 102, '#1a1423');
+  return c;
+}
+
+/** p01 (256 × 64): the clock face, hands at a right angle (three o'clock). */
+function clockFace(): Canvas {
+  const c = new Canvas(256, 64);
+  for (let y = 0; y < 64; y++) for (let x = 0; x < 256; x++) c.set(x, y, (x + y) % 4 === 0 ? '#1b2a4e' : '#0b1530');
+  c.ellipse(128, 32, 30, 30, '#6b4226');
+  c.ellipse(128, 32, 27, 27, (u, v) => (u + v < -0.9 ? '#fff8ea' : '#f6ead0'));
+  for (let h = 0; h < 12; h++) {
+    const a = (h / 12) * Math.PI * 2;
+    const len = h % 3 === 0 ? 5 : 2;
+    for (let r = 24 - len; r <= 24; r++) c.rect(128 + Math.sin(a) * r, 32 - Math.cos(a) * r, h % 3 === 0 ? 2 : 1, h % 3 === 0 ? 2 : 1, '#3b2414');
+  }
+  for (let r = 0; r <= 19; r++) c.rect(127, 32 - r, 2, 1, '#1a1423'); // minute hand to 12
+  for (let r = 0; r <= 13; r++) c.rect(128 + r, 31, 1, 3, '#1a1423'); // hour hand to 3
+  c.ellipse(128, 32, 2.5, 2.5, '#d4a73a');
+  // candles left and right
+  for (const x of [60, 196]) {
+    c.rect(x, 30, 6, 22, '#e8d5a6');
+    c.ellipse(x + 3, 25, 2, 4, '#ffd27a');
+  }
+  return c;
+}
+
+clockFace().save(path.join(OUT, 'puzzles/p01.png'));
+door().save(path.join(OUT, 'puzzles/p18_door.png'));
+gearTrain().save(path.join(OUT, 'puzzles/p21_gears.png'));
 candle(true).save(path.join(OUT, 'puzzles/candle_on.png'));
 candle(false).save(path.join(OUT, 'puzzles/candle_off.png'));
 mandrake().save(path.join(OUT, 'puzzles/mandrake.png'));

@@ -1,11 +1,11 @@
 import { z } from 'zod';
 import type { Puzzle } from '../schema';
-import { combinations, result, sameSet, type EngineLogic } from './types';
+import { result, sameSet, type EngineLogic } from './types';
 
 /** `toggle`: tapping a cell switches it and its four neighbours; goal: all on. */
 export const toggleConfig = z.object({
-  rows: z.number().int().min(2).max(4),
-  cols: z.number().int().min(2).max(4),
+  rows: z.number().int().min(2).max(5),
+  cols: z.number().int().min(2).max(5),
   /** Cells that are on at the start (row-major indices). */
   lit: z.array(z.number().int().min(0)).default([]),
   /** Optional sprites for both states, e.g. a candle. */
@@ -37,6 +37,35 @@ export function toggleCell(config: ToggleConfig, state: ToggleState, cell: numbe
   return next;
 }
 
+/**
+ * Solve over GF(2): tapping twice cancels out, so a solution is a set of cells.
+ * Returns the dimension of the solution space (0 = unique) and one solution.
+ */
+export function solveToggle(config: ToggleConfig): { nullity: number; taps: number[] | null } {
+  const n = config.rows * config.cols;
+  // Row i of the system: which taps affect cell i, plus the wanted change (bit n).
+  const rows = Array.from({ length: n }, (_, cell) => {
+    let row = config.lit.includes(cell) ? 0 : 2 ** n;
+    for (let tap = 0; tap < n; tap++) if (toggleNeighbours(config, tap).includes(cell)) row += 2 ** tap;
+    return BigInt(row);
+  });
+  const pivots: number[] = [];
+  let rank = 0;
+  for (let col = 0; col < n; col++) {
+    const bit = 1n << BigInt(col);
+    const p = rows.findIndex((r, i) => i >= rank && (r & bit) !== 0n);
+    if (p < 0) continue;
+    [rows[rank], rows[p]] = [rows[p], rows[rank]];
+    for (let i = 0; i < n; i++) if (i !== rank && (rows[i] & bit) !== 0n) rows[i] ^= rows[rank];
+    pivots.push(col);
+    rank++;
+  }
+  const rhs = 1n << BigInt(n);
+  if (rows.slice(rank).some((r) => (r & rhs) !== 0n)) return { nullity: n - rank, taps: null };
+  const taps = pivots.filter((_, i) => (rows[i] & rhs) !== 0n);
+  return { nullity: n - rank, taps };
+}
+
 function initial(config: ToggleConfig): ToggleState {
   return Array.from({ length: config.rows * config.cols }, (_, i) => config.lit.includes(i));
 }
@@ -58,15 +87,13 @@ export const toggleLogic: EngineLogic<ToggleState> = {
   },
   verify: (puzzle: Puzzle) => {
     const config = puzzle.config as ToggleConfig;
-    const cells = Array.from({ length: config.rows * config.cols }, (_, i) => i);
-    const solved = (taps: number[]) => taps.reduce((s, c) => toggleCell(config, s, c), initial(config)).every(Boolean);
-    // Tapping a cell twice cancels out, so every solution is a set of cells.
-    const solutions: number[][] = [];
-    for (let k = 0; k <= cells.length; k++) for (const taps of combinations(cells, k)) if (solved(taps)) solutions.push(taps);
+    const { nullity, taps } = solveToggle(config);
     const errors: string[] = [];
-    if (solutions.length !== 1) errors.push(`${solutions.length} solutions, expected exactly 1`);
-    const given = (puzzle.solution as number[]).map(String);
-    if (!solutions.some((s) => sameSet(s.map(String), given))) errors.push('the given solution does not light every cell');
-    return result(errors, [`${solutions[0]?.length ?? '?'} taps`]);
+    if (nullity !== 0) errors.push(`${2 ** nullity} solutions, expected exactly 1`);
+    if (!taps) errors.push('no solution');
+    else if (!sameSet(taps.map(String), (puzzle.solution as number[]).map(String))) {
+      errors.push(`the given solution differs from the computed one: ${taps.join(',')}`);
+    }
+    return result(errors, [`${taps?.length ?? '?'} taps`]);
   },
 };

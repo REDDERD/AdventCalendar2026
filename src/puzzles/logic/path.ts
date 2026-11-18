@@ -18,7 +18,8 @@ export const pathConfig = z.object({
       }),
     )
     .min(2),
-  edges: z.array(z.tuple([z.string(), z.string()])).min(1),
+  /** [a, b] both ways; [a, b, ">"] only from a to b (a moving staircase). */
+  edges: z.array(z.union([z.tuple([z.string(), z.string()]), z.tuple([z.string(), z.string(), z.literal(">")])])).min(1),
   rule: z.enum(['every_edge_once', 'simple']),
   start: z.string().optional(),
   end: z.string().optional(),
@@ -47,7 +48,9 @@ export function extendPath(config: PathConfig, path: PathState, node: string): P
   const last = path[path.length - 1];
   if (node === last) return null;
   const key = edgeKey(last, node);
-  if (!config.edges.some(([a, b]) => edgeKey(a, b) === key)) return null;
+  const edge = config.edges.find(([a, b]) => edgeKey(a, b) === key);
+  if (!edge) return null;
+  if (edge[2] === '>' && edge[0] !== last) return null; // one-way
   if (config.rule === 'every_edge_once' && usedEdges(path).has(key)) return null;
   if (config.rule === 'simple' && path.includes(node)) return null;
   return [...path, node];

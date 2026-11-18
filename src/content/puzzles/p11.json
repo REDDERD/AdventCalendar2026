@@ -4,26 +4,59 @@
   "title": "Spuren im Schnee",
   "points": 40,
   "type": "tap",
-  "prompt": "Vier Fährten führen vom Uhrturm weg. Drei davon reißen irgendwo ab, nur eine geht ohne Lücke durch. Tippe an, wo sie endet.",
+  "prompt": "Fünf Fährten führen vom Uhrturm weg. Vier setzen irgendwo einen einzigen Schritt aus – dort ist jemand gesprungen oder geflogen. Nur eine geht ohne Lücke durch. Tippe an, wo sie endet.",
   "config": {
     "image": "puzzle.p11.snow",
     "height": 232,
     "targets": [
-      { "id": "forest", "x": 12, "y": 188, "w": 40, "h": 32 },
-      { "id": "hut", "x": 78, "y": 192, "w": 36, "h": 30 },
-      { "id": "pond", "x": 140, "y": 196, "w": 40, "h": 26 },
-      { "id": "greenhouse", "x": 204, "y": 190, "w": 38, "h": 32 }
+      {
+        "id": "forest",
+        "x": 6,
+        "y": 188,
+        "w": 38,
+        "h": 32
+      },
+      {
+        "id": "hut",
+        "x": 60,
+        "y": 192,
+        "w": 32,
+        "h": 30
+      },
+      {
+        "id": "pond",
+        "x": 110,
+        "y": 198,
+        "w": 36,
+        "h": 24
+      },
+      {
+        "id": "greenhouse",
+        "x": 162,
+        "y": 190,
+        "w": 36,
+        "h": 32
+      },
+      {
+        "id": "owlery",
+        "x": 218,
+        "y": 184,
+        "w": 28,
+        "h": 38
+      }
     ],
     "maxMarks": 1
   },
-  "solution": ["greenhouse"],
-  "hints": [
-    "Folge einer Fährte mit dem Finger, Schritt für Schritt.",
-    "Wo sich Fährten kreuzen, geht jede geradeaus weiter.",
-    "Die Spur zum Wald und die zum See haben eine Lücke."
+  "solution": [
+    "greenhouse"
   ],
-  "superHint": "Die Spur zur Hütte reißt kurz vor dem Ziel ab.",
-  "solutionText": "Zum Gewächshaus. Die anderen drei Fährten haben Lücken – dort ist jemand über den Schnee geflogen oder gesprungen.",
+  "hints": [
+    "Folge jeder Fährte langsam mit dem Finger. Eine Lücke ist nur einen einzigen Schritt lang.",
+    "Wo sich Fährten kreuzen, geht jede gerade weiter. Keine biegt ab.",
+    "Die Fährten zum Wald und zum See setzen schon in der oberen Hälfte aus."
+  ],
+  "superHint": "Die Fährten zur Hütte und zur Eulerei reißen erst kurz vor dem Ziel ab.",
+  "solutionText": "Zum Gewächshaus. Die anderen vier Fährten setzen je einen Schritt aus – dort ist jemand über den Schnee gesprungen oder ein Stück geflogen.",
   "intro": {
     "speaker": "ellis",
     "text": "Spuren! Ich liebe Spuren. Ich bin praktisch ein Spurenleser. Ich habe nur noch nie eine gelesen."

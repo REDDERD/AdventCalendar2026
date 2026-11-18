@@ -4,23 +4,36 @@
   "title": "Zahnräder",
   "points": 60,
   "type": "choice",
-  "prompt": "Sieben Zahnräder bilden einen geschlossenen Ring, jedes greift in seine beiden Nachbarn. Quill will Rad 1 im Uhrzeigersinn drehen. Was macht Rad 4?",
+  "prompt": "Quill dreht die Kurbel an Rad A in Pfeilrichtung. In welche Richtung dreht sich der Zeiger an Rad F?",
   "config": {
+    "figure": {
+      "image": "puzzle.p21.gears",
+      "height": 132
+    },
+    "columns": 2,
     "options": [
-      { "label": "Es dreht sich im Uhrzeigersinn." },
-      { "label": "Es dreht sich gegen den Uhrzeigersinn." },
-      { "label": "Es dreht sich abwechselnd hin und her." },
-      { "label": "Nichts – der Ring klemmt." }
+      {
+        "label": "Im Uhrzeigersinn"
+      },
+      {
+        "label": "Gegen den Uhrzeigersinn"
+      },
+      {
+        "label": "Gar nicht, alles klemmt"
+      },
+      {
+        "label": "Mal so, mal so"
+      }
     ]
   },
-  "solution": 3,
+  "solution": 1,
   "hints": [
     "Zwei Räder, die ineinandergreifen, drehen sich immer gegensinnig.",
-    "Geh einmal im Kreis: Rad 2 gegen, Rad 3 mit, Rad 4 gegen … und Rad 7?",
-    "Rad 7 greift auch in Rad 1. Passt das zusammen?"
+    "Berühren die drei Räder unten links das Rad B wirklich? Schau ganz genau hin.",
+    "Ein Riemen, der über Kreuz läuft, dreht die Richtung um. Ein gerader Riemen nicht."
   ],
-  "superHint": "Ein Ring aus einer ungeraden Zahl von Rädern kann sich nicht drehen.",
-  "solutionText": "Der Ring klemmt. Nachbarn drehen gegensinnig, die Richtungen wechseln sich also ab. Bei sieben Rädern müssten Rad 7 und Rad 1 beide im Uhrzeigersinn laufen – und sie greifen ineinander. Nichts bewegt sich.",
+  "superHint": "Die drei Räder unten links drehen sich nicht mit. Und der Riemen zwischen C und D ist gekreuzt.",
+  "solutionText": "Gegen den Uhrzeigersinn. A dreht rechts herum, B links, C rechts. Der gekreuzte Riemen kehrt die Richtung um: D links, E rechts, F links. Die drei Räder unten würden klemmen – aber sie berühren B nicht.",
   "intro": {
     "speaker": "quill",
     "text": "Zahnräder lügen nicht. Sie drehen sich, oder sie tun es nicht. Menschen sind da komplizierter."

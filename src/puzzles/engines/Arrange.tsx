@@ -16,8 +16,9 @@ import {
   type RowState,
   type SticksConfig,
   type SticksState,
+  stickSlots,
 } from '../logic/arrange';
-import { useDragPick } from './pointer';
+import { useDragPick, useLocalPoint } from './pointer';
 import type { Engine, EngineProps } from './types';
 
 function ArrangeEngine(props: EngineProps<ArrangeState>) {
@@ -95,7 +96,11 @@ function RowArrange({ config, state, setState, disabled }: ModeProps<RowConfig, 
 function GridArrange({ config, state, setState, disabled }: ModeProps<GridConfig, GridState>) {
   const [selected, setSelected] = useState<string | null>(null);
   const { rows, cols } = gridSize(config);
-  const cell = Math.min(48, Math.floor(216 / Math.max(rows, cols)));
+  // One kind only (e.g. pots): tap an empty cell to place, tap a piece to take it back – no tray needed.
+  const single = Object.keys(config.pieces).length === 1;
+  const cell = Math.min(48, Math.floor((single ? 220 : 184) / Math.max(rows, cols)));
+  // Sprites at whole multiples of 16 px stay crisp.
+  const tokenSize = Math.max(16, 16 * Math.floor((cell - 4) / 16));
   const pieces = gridPieces(config);
   const kindOf = new Map(pieces.map((p) => [p.id, p.kind]));
   const tray = pieces.filter((p) => !state.cells.includes(p.id));
@@ -106,6 +111,7 @@ function GridArrange({ config, state, setState, disabled }: ModeProps<GridConfig
   };
   const { containerProps, itemProps, ghost } = useDragPick<HTMLDivElement>({
     onTap: (id) => {
+      if (single) return place(id, null);
       const onBoard = state.cells.indexOf(id);
       // A selected piece tapped onto another piece on the board swaps with it.
       if (selected && selected !== id && onBoard >= 0) place(selected, onBoard);
@@ -131,7 +137,7 @@ function GridArrange({ config, state, setState, disabled }: ModeProps<GridConfig
       disabled={disabled}
       {...itemProps(id, disabled)}
     >
-      {token(kindOf.get(id)!, cell - 6)}
+      {token(kindOf.get(id)!, tokenSize)}
     </button>
   );
 
@@ -141,26 +147,36 @@ function GridArrange({ config, state, setState, disabled }: ModeProps<GridConfig
         {state.cells.map((pieceId, i) => {
           const fixed = boardChar(config, i);
           if (fixed === '#') return <div key={i} className="grid-cell blocked" />;
-          if (fixed !== '.') return <div key={i} className="grid-cell fixed">{token(fixed, cell - 6)}</div>;
+          if (fixed !== '.') return <div key={i} className="grid-cell fixed">{token(fixed, tokenSize)}</div>;
           return (
             <div
               key={i}
               className="grid-cell"
               data-drop={`cell-${i}`}
               aria-label={`Feld ${Math.floor(i / cols) + 1}-${(i % cols) + 1}`}
-              onClick={() => selected && !pieceId && place(selected, i)}
+              onClick={() => {
+                if (pieceId || disabled) return;
+                if (single && tray.length) place(tray[0].id, i);
+                else if (selected) place(selected, i);
+              }}
             >
               {pieceId && piece(pieceId)}
             </div>
           );
         })}
       </div>
-      <div className="grid-tray" data-drop="tray" style={{ minHeight: cell }} onClick={() => selected && place(selected, null)}>
-        {tray.length ? tray.map((p) => piece(p.id)) : <span className="muted">alles verteilt</span>}
-      </div>
+      {single ? (
+        <div className="engine-status">
+          {config.kinds[Object.keys(config.pieces)[0]]?.label ?? 'Steine'}: noch {tray.length} übrig
+        </div>
+      ) : (
+        <div className="grid-tray" data-drop="tray" style={{ minHeight: cell }} onClick={() => selected && place(selected, null)}>
+          {tray.length ? tray.map((p) => piece(p.id)) : <span className="muted">alles verteilt</span>}
+        </div>
+      )}
       {ghost && (
         <div className="drag-ghost" style={{ left: ghost.x - cell / 2, top: ghost.y - cell / 2 }}>
-          {token(kindOf.get(ghost.id)!, cell - 6)}
+          {token(kindOf.get(ghost.id)!, tokenSize)}
         </div>
       )}
     </div>
@@ -169,32 +185,56 @@ function GridArrange({ config, state, setState, disabled }: ModeProps<GridConfig
 
 // ---------- Sticks: tap a stick to pick it up, tap an empty place to put it down ----------
 
+/** Distance from a point to a line segment. */
+function segmentDistance(p: { x: number; y: number }, s: { x1: number; y1: number; x2: number; y2: number }): number {
+  const [dx, dy] = [s.x2 - s.x1, s.y2 - s.y1];
+  const t = Math.max(0, Math.min(1, ((p.x - s.x1) * dx + (p.y - s.y1) * dy) / (dx * dx + dy * dy || 1)));
+  return Math.hypot(p.x - (s.x1 + t * dx), p.y - (s.y1 + t * dy));
+}
+
+/** Slots use y 40–220; the status line fits below on a 256 px area. */
+const STICKS_VIEW_Y = 40;
+const STICK_HIT = 12;
+
 function SticksArrange({ config, state, setState, disabled }: ModeProps<SticksConfig, SticksState>) {
+  const { ref, toLocal } = useLocalPoint<SVGSVGElement>();
+  const slots = stickSlots(config);
+
+  // Slots overlap (I, V and X share a cell), so a tap goes to the nearest slot that can take it:
+  // a lying stick when the hand is empty, a free place when holding one.
+  const onClick = (e: React.MouseEvent) => {
+    if (disabled) return;
+    const local = toLocal(e);
+    const p = { x: local.x, y: local.y + STICKS_VIEW_Y };
+    const eligible = slots.filter((s) => (state.held ? !state.on.includes(s.id) : state.on.includes(s.id)));
+    const nearest = eligible
+      .map((s) => ({ s, d: segmentDistance(p, s) }))
+      .sort((x, y) => x.d - y.d)[0];
+    if (nearest && nearest.d <= STICK_HIT) setState(tapStick(config, state, nearest.s.id));
+  };
+
   return (
     <div className="engine-center">
-      {/* Slots use y 40–220; the status line fits below on a 256 px area. */}
-      <svg className="sticks-board" width={256} height={180} viewBox="0 40 256 180">
-        {config.slots.map((s) => {
+      <svg ref={ref} className="sticks-board" width={256} height={180} viewBox={`0 ${STICKS_VIEW_Y} 256 180`} onClick={onClick}>
+        {slots.map((s) => {
           const on = state.on.includes(s.id);
           const held = state.held === s.id;
+          // Free places only show while a stick is in hand – otherwise they would give the answer away.
+          if (!on && !held && !state.held) return null;
           return (
-            <g key={s.id}>
-              <line x1={s.x1} y1={s.y1} x2={s.x2} y2={s.y2} className={on ? 'stick' : held ? 'stick-held' : 'stick-slot'} />
-              <line
-                x1={s.x1}
-                y1={s.y1}
-                x2={s.x2}
-                y2={s.y2}
-                className="stick-hit"
-                role="button"
-                aria-label={`Stab ${s.id}`}
-                onClick={() => !disabled && setState(tapStick(config, state, s.id))}
-              />
-            </g>
+            <line
+              key={s.id}
+              data-slot={s.id}
+              x1={s.x1}
+              y1={s.y1}
+              x2={s.x2}
+              y2={s.y2}
+              className={on ? 'stick' : held ? 'stick-held' : 'stick-slot'}
+            />
           );
         })}
       </svg>
-      <div className="engine-status">{state.held ? 'Wohin damit?' : `Umlegen: ${config.moves} ${config.moves === 1 ? 'Stab' : 'Stäbe'}`}</div>
+      <div className="engine-status">{state.held ? 'Wohin damit? (Tippe auf einen Platz)' : `Umlegen: ${config.moves} ${config.moves === 1 ? 'Stab' : 'Stäbe'}`}</div>
     </div>
   );
 }

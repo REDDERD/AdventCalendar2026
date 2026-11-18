@@ -1,3 +1,4 @@
+import { AssetImage } from '../../ui/AssetImage';
 import { PixelKeyboard } from '../../ui/PixelKeyboard';
 import { inputLogic, type InputConfig } from '../logic/input';
 import type { Engine, EngineProps } from './types';
@@ -13,6 +14,7 @@ function InputEngine({ puzzle, state, setState, disabled, onSubmit }: EngineProp
 
   return (
     <div className="engine-input">
+      {config.figure && <AssetImage id={config.figure.image} w={256} h={config.figure.height} className="input-figure" />}
       <div className="input-display">{state || <span className="input-cursor">_</span>}</div>
       <PixelKeyboard
         mode={config.inputMode}

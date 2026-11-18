@@ -4,28 +4,44 @@
   "title": "Drei Flaschen",
   "points": 40,
   "type": "custom",
-  "prompt": "Die große Flasche ist randvoll mit 8 Maß Enteisungssud. Gieß um, bis in der großen und der mittleren Flasche je genau 4 Maß sind. Beim Gießen läuft es, bis die eine leer oder die andere voll ist.",
+  "prompt": "Die große Flasche ist randvoll mit 14 Maß Enteisungssud. Gieß um, bis in der großen und der mittleren Flasche je genau 7 Maß sind. Beim Gießen läuft es, bis die eine leer oder die andere voll ist.",
   "config": {
     "component": "pour",
-    "capacities": [8, 5, 3],
-    "start": [8, 0, 0],
-    "labels": ["Große Flasche", "Mittlere Flasche", "Kleine Flasche"]
+    "capacities": [
+      14,
+      9,
+      5
+    ],
+    "start": [
+      14,
+      0,
+      0
+    ],
+    "labels": [
+      "Große Flasche",
+      "Mittlere Flasche",
+      "Kleine Flasche"
+    ]
   },
-  "solution": [4, 4, 0],
-  "hints": [
-    "Fülle zuerst die mittlere Flasche (5) aus der großen.",
-    "Die 3er-Flasche sammelt alles, was übrig ist.",
-    "Du musst einmal die große Flasche wieder auffüllen, indem du zurückgießt."
+  "solution": [
+    7,
+    7,
+    0
   ],
-  "superHint": "Nach drei Zügen stehen 6/2/0 da.",
-  "solutionText": "Mit 8, 5 und 3 geht fast alles, wenn man sich aufs Umfüllen versteht: 8/0/0, 3/5/0, 3/2/3, 6/2/0, 6/0/2, 1/5/2, 1/4/3, 4/4/0. Der Trick: Die kleine Flasche ist ein Zwischenlager.",
+  "hints": [
+    "Fülle zuerst die mittlere Flasche (9) aus der großen.",
+    "Gieß nur in eine Kreisrichtung: groß → mittel, mittel → klein, klein → groß. Nie andersherum.",
+    "Nach sechs Zügen stehen 1/8/5 da. Ab dort geht es mit demselben Kreis weiter."
+  ],
+  "superHint": "Nach neun Zügen stehen 11/3/0 da. Noch vier Züge.",
+  "solutionText": "13 Züge, immer im Kreis groß → mittel → klein → groß: 14/0/0, 5/9/0, 5/4/5, 10/4/0, 10/0/4, 1/9/4, 1/8/5, 6/8/0, 6/3/5, 11/3/0, 11/0/3, 2/9/3, 2/7/5, 7/7/0.",
   "intro": {
     "speaker": "quill",
-    "text": "Der Enteisungstrank braucht zweimal vier Maß. Und wir haben nur Flaschen, die dafür völlig ungeeignet sind. Wie immer."
+    "text": "Der Enteisungstrank braucht zweimal sieben Maß. Und wir haben nur Flaschen, die dafür völlig ungeeignet sind. Wie immer."
   },
   "petHint": {
     "owl": "Deine Eule hat die Flaschen lange angestarrt und dir Hinweis 1 aufgedeckt.",
     "cat": "Deine Katze stupst die mittlere Flasche an. Hinweis 1 ist frei.",
-    "toad": "Deine Kröte quakt bei der Fünf besonders laut. Hinweis 1 ist frei."
+    "toad": "Deine Kröte quakt bei der Neun besonders laut. Hinweis 1 ist frei."
   }
 }

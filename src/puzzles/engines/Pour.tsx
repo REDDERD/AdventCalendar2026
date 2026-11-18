@@ -2,13 +2,14 @@ import { useState } from 'react';
 import { pour, pourLogic, type PourConfig, type PourState } from '../logic/pour';
 import type { Engine, EngineProps } from './types';
 
-/** Logical pixels per unit of liquid. */
-const UNIT = 14;
+/** Logical pixels per unit of liquid (at most); the tallest bottle gets ~168 px. */
+const MAX_UNIT = 14;
 
 /** `custom:pour`: tap the bottle to pour from, then the bottle to pour into. */
 function PourEngine({ puzzle, state, setState, disabled }: EngineProps<PourState>) {
   const config = puzzle.config as PourConfig;
   const [from, setFrom] = useState<number | null>(null);
+  const UNIT = Math.min(MAX_UNIT, Math.floor(168 / Math.max(...config.capacities)));
   const [refused, setRefused] = useState<number | null>(null);
 
   const tap = (i: number) => {

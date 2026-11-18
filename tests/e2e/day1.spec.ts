@@ -38,19 +38,19 @@ test('M1: admin plays day 1 with choice and puzzle, reload resumes exactly, even
   await page.getByRole('button', { name: 'Ich passe auf Ellis auf.' }).click();
   await tapUntil(page, page.getByText('Rätsel 01'));
   await page.locator('.puzzle-intro').click();
-  await page.getByRole('button', { name: '1', exact: true }).click();
   await page.getByRole('button', { name: '2', exact: true }).click();
+  await page.getByRole('button', { name: '4', exact: true }).click(); // the trap: 24
   await page.getByRole('button', { name: 'OK' }).click();
   await expect(page.getByText('Leider falsch')).toBeVisible();
   await page.waitForTimeout(1000);
   // [PZL-4] hint 1 costs one spark (3 → 2) and does not lower the points
   await page.getByRole('button', { name: 'Hinweis', exact: true }).click();
   await page.getByRole('button', { name: 'Hinweis 1 öffnen · 1 Funke' }).click();
-  await expect(page.locator('.hint-open')).toContainText('Um 12:00');
+  await expect(page.locator('.hint-open')).toContainText('Es sind nicht 24');
   await expect(page.getByLabel('Zauberfunken')).toHaveText('2');
   await page.getByRole('button', { name: 'Hinweise schließen' }).click();
-  await page.getByRole('button', { name: '1', exact: true }).click();
-  await page.getByRole('button', { name: '1', exact: true }).click();
+  await page.getByRole('button', { name: '2', exact: true }).click();
+  await page.getByRole('button', { name: '2', exact: true }).click();
   await page.getByRole('button', { name: 'OK' }).click();
   await expect(page.getByText('+16 Hauspunkte')).toBeVisible(); // 80 % of 20 in the 2nd attempt
   await page.getByRole('button', { name: 'Weiter' }).click();

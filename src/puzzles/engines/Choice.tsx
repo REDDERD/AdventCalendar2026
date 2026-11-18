@@ -3,23 +3,26 @@ import { choiceLogic, type ChoiceConfig, type ChoiceState } from '../logic/choic
 import type { Engine, EngineProps } from './types';
 
 function ChoiceEngine({ puzzle, state, setState, disabled }: EngineProps<ChoiceState>) {
-  const { options, columns } = puzzle.config as ChoiceConfig;
+  const { options, columns, figure } = puzzle.config as ChoiceConfig;
   return (
-    <div className={`engine-choice cols-${columns}`}>
-      {options.map((option, i) => (
-        <button
-          key={i}
-          type="button"
-          className={`answer-card ${state === i ? 'selected' : ''}`}
-          aria-pressed={state === i}
-          disabled={disabled}
-          onClick={() => setState(state === i ? null : i)}
-        >
-          <span className="answer-letter">{String.fromCharCode(65 + i)}</span>
-          {option.image && <AssetImage id={option.image} w={48} h={48} />}
-          <span>{option.label}</span>
-        </button>
-      ))}
+    <div className="engine-choice-wrap">
+      {figure && <AssetImage id={figure.image} w={256} h={figure.height} className="choice-figure" />}
+      <div className={`engine-choice cols-${columns}`}>
+        {options.map((option, i) => (
+          <button
+            key={i}
+            type="button"
+            className={`answer-card ${state === i ? 'selected' : ''}`}
+            aria-pressed={state === i}
+            disabled={disabled}
+            onClick={() => setState(state === i ? null : i)}
+          >
+            <span className="answer-letter">{String.fromCharCode(65 + i)}</span>
+            {option.image && <AssetImage id={option.image} w={48} h={48} />}
+            <span>{option.label}</span>
+          </button>
+        ))}
+      </div>
     </div>
   );
 }

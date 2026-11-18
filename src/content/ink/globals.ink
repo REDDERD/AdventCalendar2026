@@ -24,6 +24,9 @@ VAR accused = ""
 VAR ending = ""
 VAR maren_covered = false
 
+// Tone flags for later callbacks (storyboard/globals-zusatz.ink); no effect on clues or endings
+VAR peeves_friend = false   // d02.peeves.join – day 19
+
 // Set by the app after each puzzle [ARC-3]
 VAR last_puzzle_first_try = false
 

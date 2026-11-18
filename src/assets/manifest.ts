@@ -42,7 +42,7 @@ const OWN = { license: 'own work', credit: 'Drawn by the agent (scripts/draw-spr
 
 /** LPC walk sheets: rows up/left/down/right × 9 frames; frame 18 = facing the viewer. */
 export const IDLE_FRAME = 18;
-const LPC_NPCS = ['quill', 'ellis', 'theo', 'maren', 'grimsby', 'aldous', 'thornbury', 'wandmaker'] as const;
+const LPC_NPCS = ['quill', 'ellis', 'theo', 'maren', 'grimsby', 'aldous', 'thornbury', 'wandmaker', 'peeves'] as const;
 
 const npcs = Object.fromEntries(
   CHARACTERS.filter((id) => id !== 'player').map((id) => [
@@ -111,11 +111,13 @@ export const assets: Record<string, AssetDef> = {
   'ui.frame.wood': { file: 'assets/ui/wood.png', nineSlice: [8, 8, 8, 8] },
   'ui.seal': { file: 'assets/ui/seal.png', w: 24, h: 24 },
   // Puzzle images: 256 × 64 (shown below the prompt)
-  'puzzle.p01': { file: 'assets/puzzles/p01.png', w: 256, h: 64 },
+  'puzzle.p01': { file: 'assets/puzzles/p01.png', w: 256, h: 64, ...OWN },
   // Engine pictures and pieces (own sprites, scripts/draw-sprites.ts)
   'puzzle.candle_on': { file: 'assets/puzzles/candle_on.png', w: 32, h: 32, ...OWN },
   'puzzle.candle_off': { file: 'assets/puzzles/candle_off.png', w: 32, h: 32, ...OWN },
   'puzzle.mandrake': { file: 'assets/puzzles/mandrake.png', w: 16, h: 16, ...OWN },
+  'puzzle.p18.door': { file: 'assets/puzzles/p18_door.png', w: 105, h: 105, frameW: 35, frameH: 35, ...OWN },
+  'puzzle.p21.gears': { file: 'assets/puzzles/p21_gears.png', w: 256, h: 132, ...OWN },
   'puzzle.p11.snow': { file: 'assets/puzzles/p11.png', w: 256, h: 232, ...OWN },
   // Phase 2 overrides go below, e.g.
   // 'portrait.quill': { file: 'assets/portraits/quill.png', moods: { happy: '...' } },

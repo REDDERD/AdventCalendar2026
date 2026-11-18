@@ -66,8 +66,8 @@ quill: Das erinnert mich an ein Rätsel, das ich als Schülerin geliebt habe …
 quill: Jedes Rätsel hat eine Lösung, {pronoun_form("meine Liebe", "mein Lieber", "mein Gutes")}.
 quill: Und diese Uhr ist das größte Rätsel von allen.
 # spark: d01.s2 212 250
-Da – ein leises Klicken im Uhrkasten. Dann wieder Stille.
+Da – ein leises Klicken. Im Uhrkasten springt ein winziges Türchen auf. Leer.
 # emote: ellis !
 ellis: Habt ihr das gehört? Sie lebt noch!
-quill: Morgen öffnen wir das erste Türchen. Mit oder ohne ihre Erlaubnis.
+quill: Das erste Türchen. Leer, aber offen. Morgen nehmen wir uns das nächste vor.
 -> END

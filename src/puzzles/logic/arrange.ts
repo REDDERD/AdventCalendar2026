@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import type { Puzzle } from '../schema';
-import { combinations, permutations, result, sameArray, sameSet, type EngineLogic, type VerifyResult } from './types';
+import { equationHolds, readEquation, romanSlots, sticksFor, type RomanSlot } from './roman';
+import { permutations, result, sameArray, sameSet, type EngineLogic, type VerifyResult } from './types';
 
 // ---------- Modes ----------
 
@@ -38,15 +39,24 @@ const gridConfig = z.object({
   rules: z.array(z.enum(['distinct_rows', 'distinct_cols', 'no_touch'])).optional(),
 });
 
-/** Sticks lie on slots (line segments in play-area pixels); move up to `moves` of them. */
-const sticksConfig = z.object({
-  mode: z.literal('sticks'),
-  slots: z
-    .array(z.object({ id: z.string().min(1), x1: z.number(), y1: z.number(), x2: z.number(), y2: z.number() }))
-    .min(2),
-  start: z.array(z.string()).min(1),
-  moves: z.number().int().min(1).max(3),
-});
+/**
+ * Sticks lie on slots (line segments in play-area pixels); move up to `moves` of them.
+ * Either free slots (`slots` + `start`) or a Roman equation: `roman.cells` lists the
+ * cells ('n' numeral, 'o' operator), `roman.start` the equation as text. Roman
+ * solutions are equations as text, e.g. "IX-III=VI".
+ */
+const sticksConfig = z
+  .object({
+    mode: z.literal('sticks'),
+    slots: z
+      .array(z.object({ id: z.string().min(1), x1: z.number(), y1: z.number(), x2: z.number(), y2: z.number() }))
+      .min(2)
+      .optional(),
+    start: z.array(z.string()).min(1).optional(),
+    roman: z.object({ cells: z.string().regex(/^[no]+$/), start: z.string().min(3) }).optional(),
+    moves: z.number().int().min(1).max(3),
+  })
+  .refine((c) => !!c.roman !== !!(c.slots && c.start), 'sticks need either roman or slots + start');
 
 export const arrangeConfig = z.discriminatedUnion('mode', [rowConfig, gridConfig, sticksConfig]);
 export type ArrangeConfig = z.infer<typeof arrangeConfig>;
@@ -187,27 +197,32 @@ function verifyGrid(config: GridConfig, solution: string[]): VerifyResult {
   if (!config.rules) return result(errors, ['no rules: uniqueness not checked']);
   if (!gridRulesHold(config.rules, solution)) errors.push('the solution breaks the rules');
 
-  // Brute force: every way to put the pieces (kinds in a fixed order) on the free cells.
-  const kinds = Object.entries(config.pieces);
+  // Backtracking over the free cells: piece or nothing, pruned by the rules after every placement.
+  const remaining = { ...config.pieces };
+  const board = config.board.map((r) => [...r]);
   let matches = 0;
   let match: string[] | null = null;
-  const place = (k: number, freeCells: number[], board: string[][]) => {
-    if (k === kinds.length) {
-      const rowsNow = board.map((r) => r.join(''));
-      if (gridRulesHold(config.rules, rowsNow)) {
-        matches++;
-        match = rowsNow;
-      }
+  const place = (i: number) => {
+    if (matches > 1) return;
+    if (Object.values(remaining).every((n) => n === 0)) {
+      matches++;
+      match = board.map((r) => r.join(''));
       return;
     }
-    const [kind, count] = kinds[k];
-    for (const chosen of combinations(freeCells, count)) {
-      const next = board.map((r) => [...r]);
-      for (const cell of chosen) next[Math.floor(cell / cols)][cell % cols] = kind;
-      place(k + 1, freeCells.filter((c) => !chosen.includes(c)), next);
+    if (i === free.length) return;
+    const cell = free[i];
+    const [r, c] = [Math.floor(cell / cols), cell % cols];
+    for (const kind of Object.keys(remaining)) {
+      if (!remaining[kind]) continue;
+      board[r][c] = kind;
+      remaining[kind]--;
+      if (gridRulesHold(config.rules, board.map((row) => row.join('')))) place(i + 1);
+      remaining[kind]++;
+      board[r][c] = '.';
     }
+    place(i + 1);
   };
-  place(0, free, config.board.map((r) => [...r]));
+  place(0);
   if (matches !== 1) errors.push(`${matches} placements satisfy the rules, expected exactly 1`);
   else if (!sameArray(match!, solution)) errors.push('the rules lead to a different placement than the solution');
   return result(errors, [`${matches} placement(s) fit the rules`]);
@@ -215,9 +230,24 @@ function verifyGrid(config: GridConfig, solution: string[]): VerifyResult {
 
 // ---------- Sticks ----------
 
+/** Roman equations: cells 22 px wide, centred, glyphs from y 98 to 154. */
+const ROMAN_CELL = 22;
+
+const cellKinds = (config: SticksConfig) => [...config.roman!.cells] as Array<'n' | 'o'>;
+
+export function stickSlots(config: SticksConfig): RomanSlot[] {
+  if (!config.roman) return config.slots!;
+  const kinds = cellKinds(config);
+  return romanSlots(kinds, (256 - kinds.length * ROMAN_CELL) / 2, ROMAN_CELL, 98, 154);
+}
+
+export function stickStart(config: SticksConfig): string[] {
+  return config.roman ? sticksFor(cellKinds(config), config.roman.start) : config.start!;
+}
+
 /** Start sticks no longer on their slot (the stick in hand counts as moved). */
 export function sticksMoved(config: SticksConfig, on: readonly string[]): number {
-  return config.start.filter((s) => !on.includes(s)).length;
+  return stickStart(config).filter((s) => !on.includes(s)).length;
 }
 
 /**
@@ -226,7 +256,7 @@ export function sticksMoved(config: SticksConfig, on: readonly string[]): number
  * putting a stick on an occupied slot, unknown slots.
  */
 export function tapStick(config: SticksConfig, state: SticksState, slot: string): SticksState {
-  if (!config.slots.some((s) => s.id === slot)) return state;
+  if (!stickSlots(config).some((s) => s.id === slot)) return state;
   const occupied = state.on.includes(slot);
   if (state.held) {
     if (occupied) return state;
@@ -238,14 +268,51 @@ export function tapStick(config: SticksConfig, state: SticksState, slot: string)
   return { mode: 'sticks', on, held: slot };
 }
 
+/** Every arrangement reachable by moving at most `moves` sticks (as sorted slot lists). */
+function reachableSticks(config: SticksConfig): string[][] {
+  const ids = stickSlots(config).map((s) => s.id);
+  const seen = new Set<string>();
+  let frontier = [stickStart(config)];
+  for (let m = 0; m < config.moves; m++) {
+    const next: string[][] = [];
+    for (const on of frontier) {
+      for (const from of on) {
+        for (const to of ids) {
+          if (on.includes(to)) continue;
+          const moved = [...on.filter((x) => x !== from), to].sort();
+          const key = moved.join();
+          if (seen.has(key) || sticksMoved(config, moved) > config.moves) continue;
+          seen.add(key);
+          next.push(moved);
+        }
+      }
+    }
+    frontier = next;
+  }
+  return [...seen].map((k) => k.split(','));
+}
+
+function verifyRoman(config: SticksConfig, solutions: string[]): VerifyResult {
+  const errors: string[] = [];
+  const slots = stickSlots(config);
+  if (equationHolds(readEquation(slots, stickStart(config)))) errors.push('the start equation is already true');
+  const reachable = new Set(
+    reachableSticks(config).map((on) => readEquation(slots, on)).filter((text): text is string => equationHolds(text)),
+  );
+  if (!sameSet([...reachable], solutions)) errors.push(`reachable true equations: ${[...reachable].join(' | ') || 'none'}`);
+  return result(errors, [`${reachable.size} true equation(s) within ${config.moves} move(s)`]);
+}
+
 function verifySticks(config: SticksConfig, solutions: string[][]): VerifyResult {
   const errors: string[] = [];
-  const ids = new Set(config.slots.map((s) => s.id));
-  if (ids.size !== config.slots.length) errors.push('slot ids must be unique');
-  for (const id of config.start) if (!ids.has(id)) errors.push(`unknown start slot ${id}`);
+  const slots = stickSlots(config);
+  const start = stickStart(config);
+  const ids = new Set(slots.map((s) => s.id));
+  if (ids.size !== slots.length) errors.push('slot ids must be unique');
+  for (const id of start) if (!ids.has(id)) errors.push(`unknown start slot ${id}`);
   for (const sol of solutions) {
     if (sol.some((id) => !ids.has(id))) errors.push(`unknown slot in solution ${sol.join(',')}`);
-    if (new Set(sol).size !== config.start.length) errors.push(`solution ${sol.join(',')} has a different number of sticks`);
+    if (new Set(sol).size !== start.length) errors.push(`solution ${sol.join(',')} has a different number of sticks`);
     if (sticksMoved(config, sol) > config.moves) errors.push(`solution ${sol.join(',')} needs more than ${config.moves} moves`);
     if (sticksMoved(config, sol) === 0) errors.push('a solution equals the start');
   }
@@ -256,7 +323,7 @@ function verifySticks(config: SticksConfig, solutions: string[][]): VerifyResult
 
 export const arrangeLogic: EngineLogic<ArrangeState> = {
   config: arrangeConfig,
-  /** row: ids in order · grid: board rows · sticks: list of accepted slot sets */
+  /** row: ids in order · grid: board rows · sticks: accepted slot sets, or equations for roman */
   solution: z.union([z.array(z.string()), z.array(z.array(z.string()))]),
   initial: (puzzle) => {
     const config = puzzle.config as ArrangeConfig;
@@ -265,14 +332,19 @@ export const arrangeLogic: EngineLogic<ArrangeState> = {
       const { rows, cols } = gridSize(config);
       return { mode: 'grid', cells: Array.from({ length: rows * cols }, () => null) };
     }
-    return { mode: 'sticks', on: [...config.start], held: null };
+    return { mode: 'sticks', on: stickStart(config), held: null };
   },
   check: (puzzle, state) => {
     const config = puzzle.config as ArrangeConfig;
     if (config.mode === 'row' && state.mode === 'row') return sameArray(state.order, puzzle.solution as string[]);
     if (config.mode === 'grid' && state.mode === 'grid') return sameArray(gridRows(config, state), puzzle.solution as string[]);
     if (config.mode === 'sticks' && state.mode === 'sticks') {
-      return !state.held && (puzzle.solution as string[][]).some((sol) => sameSet(sol, state.on));
+      if (state.held) return false;
+      if (config.roman) {
+        const text = readEquation(stickSlots(config), state.on);
+        return equationHolds(text) && (puzzle.solution as string[]).includes(text!);
+      }
+      return (puzzle.solution as string[][]).some((sol) => sameSet(sol, state.on));
     }
     return false;
   },
@@ -280,6 +352,7 @@ export const arrangeLogic: EngineLogic<ArrangeState> = {
     const config = puzzle.config as ArrangeConfig;
     if (config.mode === 'grid' && state.mode === 'grid') return gridRows(config, state).join('/');
     if (state.mode === 'row') return state.order.join(',');
+    if (config.mode === 'sticks' && state.mode === 'sticks' && config.roman) return readEquation(stickSlots(config), state.on) ?? '?';
     if (state.mode === 'sticks') return [...state.on].sort().join(',');
     return '–';
   },
@@ -287,6 +360,7 @@ export const arrangeLogic: EngineLogic<ArrangeState> = {
     const config = puzzle.config as ArrangeConfig;
     if (config.mode === 'row') return verifyRow(config, puzzle.solution as string[]);
     if (config.mode === 'grid') return verifyGrid(config, puzzle.solution as string[]);
+    if (config.roman) return verifyRoman(config, puzzle.solution as string[]);
     return verifySticks(config, puzzle.solution as string[][]);
   },
 };

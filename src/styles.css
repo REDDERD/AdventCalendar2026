@@ -503,6 +503,7 @@ img {
 .points-big { font-size: 18px; line-height: 19px; color: var(--wood); }
 
 .engine-input { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 8px; padding: 8px; }
+.input-figure { flex: none; margin: -8px -8px 0; }
 .input-display {
   height: 28px;
   padding: 0 8px;
@@ -538,7 +539,10 @@ img {
 .drag-ghost { position: absolute; z-index: 3; pointer-events: none; opacity: 0.9; }
 
 /* choice */
+.engine-choice-wrap { flex: 1; display: flex; flex-direction: column; }
+.choice-figure { flex: none; }
 .engine-choice { flex: 1; display: grid; align-content: center; gap: 6px; padding: 8px; }
+.engine-choice.cols-2 .answer-card { min-height: 40px; padding-right: 4px; font-size: 14px; line-height: 14px; }
 .engine-choice.cols-2 { grid-template-columns: 1fr 1fr; }
 .answer-card {
   display: flex;
@@ -567,6 +571,7 @@ img {
 .path-board { touch-action: none; }
 .path-edge { stroke: var(--stone-light); stroke-width: 3; stroke-dasharray: 4 3; }
 .path-edge.used { stroke: transparent; }
+.path-arrow { fill: var(--stone-light); }
 .path-trail { stroke: var(--gold-light); stroke-width: 4; stroke-linecap: square; }
 .path-node rect { fill: var(--parchment); stroke: var(--wood-dark); stroke-width: 2; }
 .path-node.visited rect { fill: var(--candle); }
@@ -675,6 +680,7 @@ img {
 /* ---------- Day end ---------- */
 
 .dayend-frame { width: 220px; text-align: center; display: flex; flex-direction: column; gap: 2px; }
+.door-magic { margin: 0 0 4px; font-style: italic; color: var(--wood); }
 
 /* ---------- Prologue (Section 6.1) ---------- */
 

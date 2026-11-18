@@ -7,6 +7,8 @@ import { result, type EngineLogic } from './types';
 export const inputConfig = z.object({
   inputMode: z.enum(['number', 'text']),
   maxLength: z.number().int().min(1).max(24),
+  /** Picture above the keyboard (play-area width 256). */
+  figure: z.object({ image: z.string(), height: z.number().int().min(32).max(96) }).optional(),
 });
 export type InputConfig = z.infer<typeof inputConfig>;
 

@@ -1,5 +1,5 @@
 import { CLUES, ITEMS } from '../content/catalog';
-import { getEntry, LAST_DAY } from '../content/schedule';
+import { DOOR_MAGIC, getEntry, LAST_DAY } from '../content/schedule';
 import { DaySession } from '../core/DaySession';
 import { go } from '../core/ScreenMachine';
 import { useStore } from '../core/store';
@@ -23,6 +23,7 @@ export function DayEndScreen() {
       <div className="center-msg">
         <Frame className="dayend-frame">
           <h2>Kapitel {day} geschafft!</h2>
+          {DOOR_MAGIC[day] && <p className="door-magic">Türchen {day}: {DOOR_MAGIC[day]}</p>}
           <div>+{points} Hauspunkte</div>
           {!!summary?.sparks && <div>+{summary.sparks} Zauberfunken</div>}
           {summary?.clues.map((id) => <div key={id}>Neuer Hinweis: {CLUES[id] ?? id}</div>)}

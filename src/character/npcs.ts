@@ -107,6 +107,20 @@ export const NPCS: Record<string, Recipe> = {
       { id: 'wizard_hat_belt_maroon' },
     ],
   },
+  // Peeves the poltergeist (cameo, day 2) – jester colours, Christmas hat
+  peeves: {
+    body: 'male',
+    layers: [
+      { id: 'body', colors: { body: 'light' } },
+      { id: 'head_male', colors: { body: 'light', eye: 'orange' } },
+      { id: 'shoes', colors: { cloth: 'orange' } },
+      { id: 'pants', colors: { cloth: 'purple' } },
+      { id: 'sweater', colors: { cloth: 'orange' } },
+      { id: 'bowtie', colors: { cloth: 'purple' } },
+      { id: 'hair_messy1', colors: { hair: 'red' } },
+      { id: 'christmas_hat' },
+    ],
+  },
   // The wandmaker
   wandmaker: {
     body: 'female',

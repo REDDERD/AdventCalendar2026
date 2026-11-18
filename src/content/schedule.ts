@@ -29,7 +29,7 @@ type Row = [day: number, title: string, location: LocationId, puzzleIds: string[
 
 const rows: Row[] = [
   [1, 'Die stehende Uhr', 'great_hall', ['p01']],
-  [2, 'Das erste Türchen', 'great_hall', ['p02']],
+  [2, 'Schwebende Kerzen', 'great_hall', ['p02']],
   [3, 'Die wandernden Treppen', 'staircases', ['p03']],
   [4, 'Die Bibliothek', 'library', ['p04']],
   [5, 'Der Enteisungstrank', 'potions', ['p05']],
@@ -90,6 +90,34 @@ export const schedule: ScheduleEntry[] = [
 ];
 
 export const LAST_DAY = 24;
+
+/** What falls out of the clock's door each day (storyboard bible, section 5); shown on dayEnd. */
+export const DOOR_MAGIC: Record<number, string> = {
+  1: 'Ein leises Klicken im Uhrkasten. Mehr nicht. Noch nicht.',
+  2: 'Zimtsterne rieseln von der Decke. Ellis fängt neun.',
+  3: 'Die Treppen schaukeln im Takt eines Weihnachtslieds.',
+  4: 'Alle Bücher tragen Wollmützen und flüstern Gutenachtgeschichten.',
+  5: 'Die Kessel duften nach Lebkuchen.',
+  6: 'Die Stiefel vor den Türen füllen sich.',
+  7: 'Eulen mit roten Schleifen kreisen um den Turm.',
+  8: 'Die Mistelzweige singen.',
+  9: 'Die Kamine brennen in den Hausfarben.',
+  10: 'Der Schlüsselbund wird zum Glöckchen.',
+  11: 'Die Schneemänner winken.',
+  12: 'Sternschnuppen formen Zahlen.',
+  13: 'Glühwürmchen hängen wie Lichterketten in den Bäumen.',
+  14: 'Eiskristalle glitzern in den Spinnweben.',
+  15: 'Schokotaler regnen.',
+  16: 'Der Tisch deckt sich selbst.',
+  17: 'Schnee in Bonbonfarben.',
+  18: 'Der Raum wünscht jedem etwas Warmes.',
+  19: 'Die Geister singen im Chor.',
+  20: 'Die Zauberstäbe funkeln wie Wunderkerzen.',
+  21: 'Ein Glockenspiel klingt im Uhrturm.',
+  22: 'Das Pendel schwingt einmal. Schneeflocken.',
+  23: 'In der Halle wächst ein Tannenbaum.',
+  24: 'Schnee fällt in der Großen Halle.',
+};
 
 export function getEntry(day: number): ScheduleEntry {
   const entry = schedule.find((e) => e.day === day);

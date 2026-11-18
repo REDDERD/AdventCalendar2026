@@ -4,21 +4,21 @@
   "title": "Schwebende Kerzen",
   "points": 20,
   "type": "toggle",
-  "prompt": "Peeves hat alle Kerzen ausgeblasen. Tippst du eine Kerze an, wechselt sie zwischen an und aus – und ihre Nachbarn oben, unten, links und rechts ebenso. Bring alle neun zum Brennen.",
+  "prompt": "Peeves hat die meisten Kerzen ausgeblasen. Tippst du eine an, wechselt sie zwischen an und aus – und mit ihr die Nachbarn oben, unten, links und rechts. Bring alle zwanzig zum Brennen.",
   "config": {
-    "rows": 3,
-    "cols": 3,
-    "lit": [],
+    "rows": 4,
+    "cols": 5,
+    "lit": [1, 4, 8, 10, 17],
     "sprites": { "on": "puzzle.candle_on", "off": "puzzle.candle_off" }
   },
-  "solution": [0, 2, 4, 6, 8],
+  "solution": [0, 1, 2, 3, 5, 6, 8, 9, 13, 14, 15],
   "hints": [
-    "Jede Kerze musst du höchstens einmal berühren. Zweimal ist wie keinmal.",
-    "Die Reihenfolge ist egal.",
-    "Eine Kante gehört zu drei Berührungen, wenn du richtig anfängst: zwei Ecken und die Mitte."
+    "Jede Kerze höchstens einmal – zweimal ist wie keinmal. Die Reihenfolge ist egal.",
+    "Licht jagen: Geh Reihe für Reihe nach unten. Ist eine Kerze aus, tippe die Kerze direkt darunter an. Dann brennt alles bis auf die unterste Reihe.",
+    "Was unten dunkel bleibt, hängt nur davon ab, was du in der obersten Reihe antippst. Probier oben etwas anderes und jage dann wieder nach unten."
   ],
-  "superHint": "Fünf Berührungen reichen.",
-  "solutionText": "Die vier Ecken und die Mitte. Jede Kante wird von zwei Ecken und der Mitte berührt, also dreimal, und dreimal heißt: an. Die Ecken und die Mitte selbst nur einmal.",
+  "superHint": "In der obersten Reihe tippst du die vier linken Kerzen an. Dann jage das Licht nach unten.",
+  "solutionText": "Elf Berührungen. Reihe 1: Kerzen 1 bis 4. Reihe 2: Kerzen 1, 2, 4 und 5. Reihe 3: Kerzen 4 und 5. Reihe 4: Kerze 1. Wer oben richtig anfängt, jagt das Licht einfach nach unten.",
   "intro": {
     "speaker": "quill",
     "text": "Eine Kerze, die man berührt, steckt ihre Nachbarn an. Eine alte Regel, nach der auch Gerüchte funktionieren."

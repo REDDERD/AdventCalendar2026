@@ -75,6 +75,7 @@ Repository → Settings → Pages → Source: **GitHub Actions**. Danach baut un
 
 - Story: `src/content/ink/dayNN.ink`, bindet `globals.ink` ein. Konventionen: CONCEPT.md Abschnitt 15.1. Abweichung: `# choice_point: <id> <Frage>` ohne `|`.
 - Rätsel: `src/content/puzzles/<id>.json`. Grundschema in `src/puzzles/schema.ts`, `config`/`solution` je Engine in `src/puzzles/logic/<engine>.ts`. Danach `npm run puzzles:verify`. Als Admin: Truhe → Rätsel zeigt alle Rätsel zum Ausprobieren.
-- Freischaltzeiten und Titel: `src/content/schedule.ts`.
+- Freischaltzeiten und Titel: `src/content/schedule.ts`. Dort steht auch `DOOR_MAGIC`: was am Tagesende aus dem Türchen fällt.
+- Storyboards: `storyboard/tag-NN.md` (vom Auftraggeber). Das Ink-Skript daraus wird nach `src/content/ink/dayNN.ink` übernommen; neue Sprecher in `src/types/index.ts` (`CHARACTERS`), `src/dialogue/speakers.ts` und `src/character/npcs.ts` (danach `npm run assets:npcs`).
 - Grafiken/Sounds: nur über IDs aus `src/assets/manifest.ts`; fehlende Dateien erscheinen als Platzhalter.
 - Bildschirm: 256 logische Pixel breit, 448–560 hoch (DECISIONS.md #32). Hintergründe sind 256 × 512 und unten verankert; Funken (`# spark: id x y`) liegen in diesen Koordinaten zwischen y 100 und 400. Rätsel-Engines bekommen mindestens 256 × 256.

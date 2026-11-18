@@ -4,19 +4,40 @@
   "title": "Die Tür, die erscheint",
   "points": 50,
   "type": "slide",
-  "prompt": "Die Tür besteht aus acht verschobenen Platten. Schieb sie zurück in die Reihenfolge 1 bis 8, die Lücke unten rechts.",
+  "prompt": "Die Tür ist in neun Platten zerfallen, eine fehlt. Schieb die übrigen acht zurück, bis das Bild stimmt. Die Lücke gehört nach unten rechts.",
   "config": {
     "size": 3,
-    "start": [6, 1, 2, 4, 0, 3, 5, 7, 8]
+    "start": [
+      8,
+      3,
+      4,
+      2,
+      0,
+      6,
+      5,
+      7,
+      1
+    ],
+    "image": "puzzle.p18.door"
   },
-  "solution": [1, 2, 3, 4, 5, 6, 7, 8, 0],
-  "hints": [
-    "Bring zuerst die obere Reihe in Ordnung und rühr sie danach nicht mehr an.",
-    "Die 1 muss zuerst nach oben links. Die 6 steht ihr im Weg.",
-    "Für die untere Reihe musst du die 7 und die 8 im Kreis um die Lücke wandern lassen."
+  "solution": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    0
   ],
-  "superHint": "Mit 18 Zügen geht es am kürzesten.",
-  "solutionText": "Reihe für Reihe: erst 1-2-3 oben, dann den Rest im Kreis schieben, bis die Lücke unten rechts landet.",
+  "hints": [
+    "Bring zuerst die obere Reihe in Ordnung: Bogen links, Fenster in der Mitte, Bogen rechts. Danach rührst du sie nicht mehr an.",
+    "Die linke Spalte als Nächstes: Scharnier oben, Topf mit Mistelzweig unten. Dann bleiben nur noch vier Platten.",
+    "Die letzten drei Platten kreisen um die Lücke, bis Türklopfer und Schlüsselloch zusammenpassen."
+  ],
+  "superHint": "Das Fenster liegt anfangs links in der Mitte, die Ecke oben links ganz unten rechts. Bring diese beiden zuerst nach oben.",
+  "solutionText": "Reihe für Reihe: Erst oben den Bogen mit dem Fenster, dann links Scharniere und Mistelzweig. Die letzten Platten kreisen um die Lücke, bis der Türklopfer an seinem Platz hängt. Kürzester Weg: 26 Züge.",
   "intro": {
     "speaker": "quill",
     "text": "Ein Raum, der erscheint, wenn man ihn braucht. Und eine Tür, die erst gebraucht werden will."

@@ -46,27 +46,29 @@ test('M4: the workshop lists every puzzle and each engine can be played', async 
 
   if (SHOTS) {
     const rows = page.locator('.puzzle-row');
-    for (let i = 0; i < (await rows.count()); i++) {
+    const count = await rows.count();
+    for (let i = 0; i < count; i++) {
+      await expect(rows.nth(i)).toBeVisible();
       const label = (await rows.nth(i).locator('.puzzle-row-number').textContent())!.trim();
       await rows.nth(i).click();
-      await page.waitForTimeout(300);
+      await page.waitForTimeout(800);
       await page.screenshot({ path: `${SHOTS}/puzzle-${label}.png` });
       await page.getByRole('button', { name: 'Übung beenden' }).click();
     }
   }
 
-  // toggle: corners and centre
+  // toggle: 4 × 5 candles, 11 taps
   await play(page, 'Schwebende Kerzen');
-  for (const n of [1, 3, 5, 7, 9]) await page.getByRole('button', { name: `Feld ${n}`, exact: true }).click();
+  for (const n of [1, 2, 3, 4, 6, 7, 9, 10, 14, 15, 16]) await page.getByRole('button', { name: `Feld ${n}`, exact: true }).click();
   await expectSolved(page);
 
-  // path: one continuous drag along the stairs
+  // path: one continuous drag along the stairs, respecting the one-way stairs
   await play(page, 'Die Treppen');
   const nodes: Record<string, [number, number]> = {
-    1: [40, 220], 2: [216, 220], 3: [128, 80], 4: [128, 176], 5: [80, 128], 6: [176, 128], 7: [40, 36],
+    5: [40, 32], 7: [128, 32], 6: [216, 32], 3: [40, 120], A: [128, 120], 4: [216, 120], 2: [72, 216], 1: [184, 216],
   };
   const board = page.locator('.path-board');
-  const route = ['1', '5', '3', '6', '5', '4', '6', '2', '1', '7'];
+  const route = ['1', '4', 'A', '7', '6', '4', '2', 'A', '3', '2', '1', 'A', '5', '7'];
   const first = await at(board, ...nodes[route[0]]);
   await page.mouse.move(first.x, first.y);
   await page.mouse.down();
@@ -77,7 +79,7 @@ test('M4: the workshop lists every puzzle and each engine can be played', async 
   await page.mouse.up();
   await expectSolved(page);
 
-  // arrange row: drag books onto each other (swap)
+  // arrange row: drag books onto each other (swap), then tap to swap
   await play(page, 'Das Regal');
   const drag = async (from: string, to: string) => {
     const a = (await page.getByRole('button', { name: from, exact: true }).boundingBox())!;
@@ -87,53 +89,59 @@ test('M4: the workshop lists every puzzle and each engine can be played', async 
     await page.mouse.move(b.x + b.width / 2, b.y + b.height / 2, { steps: 8 });
     await page.mouse.up();
   };
-  await drag('PENDEL', 'ZEIT'); // zeit stunde rad feder pendel
-  await drag('ZEIT', 'FEDER'); // feder stunde rad zeit pendel
-  // tap-to-swap works as well
-  await page.getByRole('button', { name: 'STUNDE', exact: true }).click();
-  await page.getByRole('button', { name: 'ZEIT', exact: true }).click(); // feder zeit rad stunde pendel
+  await drag('PENDEL', 'FEDER'); // feder anker stunde zeit pendel rad
+  await drag('ANKER', 'ZEIT'); // feder zeit stunde anker pendel rad
+  const swapByTap = async (a: string, b: string) => {
+    await page.getByRole('button', { name: a, exact: true }).click();
+    await page.getByRole('button', { name: b, exact: true }).click();
+  };
+  await swapByTap('STUNDE', 'RAD'); // feder zeit rad anker pendel stunde
+  await swapByTap('PENDEL', 'STUNDE'); // feder zeit rad anker stunde pendel
   await expectSolved(page);
 
-  // custom pour: 7 moves
+  // custom pour: 13 moves, always round the circle big → middle → small → big
   await play(page, 'Drei Flaschen');
   const bottle = (i: number) => page.locator('.bottle-btn').nth(i);
-  for (const [a, b] of [[0, 1], [1, 2], [2, 0], [1, 2], [0, 1], [1, 2], [2, 0]]) {
+  for (const [a, b] of [[0, 1], [1, 2], [2, 0], [1, 2], [0, 1], [1, 2], [2, 0], [1, 2], [2, 0], [1, 2], [0, 1], [1, 2], [2, 0]]) {
     await bottle(a).click();
     await bottle(b).click();
   }
-  await expect(page.locator('.engine-status')).toContainText('Züge: 7');
+  await expect(page.locator('.engine-status')).toContainText('Züge: 13');
   await expectSolved(page);
 
-  // arrange grid: tap a pot, then a cell
+  // arrange grid with one kind: tap a cell to place a pot
   await play(page, 'Alraunen');
-  for (const cell of ['2-4', '3-1', '4-3']) {
-    await page.locator('.grid-tray .grid-piece').first().click();
-    await page.getByLabel(`Feld ${cell}`).click();
-  }
+  for (const cell of ['1-6', '2-3', '3-5', '4-1', '5-4', '6-2']) await page.getByLabel(`Feld ${cell}`).click();
+  await expect(page.locator('.engine-status')).toContainText('noch 0');
   await expectSolved(page);
 
   // tap: mark the greenhouse
   await play(page, 'Spuren im Schnee');
   const picture = page.locator('.tap-picture');
-  const greenhouse = await at(picture, 222, 205, 232);
+  const greenhouse = await at(picture, 180, 205, 232);
   await page.mouse.click(greenhouse.x, greenhouse.y);
   await expect(page.locator('.tap-mark')).toHaveCount(1);
   await expectSolved(page);
 
-  // choice
+  // choice with the gear picture
   await play(page, 'Zahnräder');
-  await page.getByRole('button', { name: /der Ring klemmt/ }).click();
+  await expect(page.locator('.choice-figure')).toBeVisible();
+  await page.getByRole('button', { name: /Gegen den Uhrzeigersinn/ }).click();
   await expectSolved(page);
 
-  // sticks: move the right I behind the V
+  // Roman sticks: take the upright stick of the plus and add it to the II
   await play(page, 'Römische Stäbe');
-  await page.getByRole('button', { name: 'Stab r1' }).click({ force: true });
-  await page.getByRole('button', { name: 'Stab r2' }).click({ force: true });
+  const sticks = page.locator('.sticks-board');
+  const plus = await at(sticks, 84, 120, 180, 40);
+  await page.mouse.click(plus.x, plus.y);
+  await expect(page.locator('.engine-status')).toContainText('Wohin damit?');
+  const place = await at(sticks, 106, 104, 180, 40);
+  await page.mouse.click(place.x, place.y);
   await expectSolved(page);
 
   // slide: a tile next to the gap moves, a wrong check stamps "Leider falsch"
   await play(page, 'Die Tür, die erscheint');
-  const tile = page.getByRole('button', { name: 'Teil 1', exact: true });
+  const tile = page.getByRole('button', { name: 'Teil 3', exact: true });
   const before = await tile.boundingBox();
   await tile.click();
   await expect.poll(async () => (await tile.boundingBox())!.y).not.toBe(before!.y);
