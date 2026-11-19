@@ -38,6 +38,7 @@ function randomState(): Record<string, InkVarValue> {
     f_d01_watch: Math.random() < 0.5,
     wrote_home: Math.random() < 0.5,
     ate_rockcake: Math.random() < 0.5,
+    kept_chair: Math.random() < 0.5,
   };
 }
 

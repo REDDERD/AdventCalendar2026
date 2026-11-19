@@ -1,0 +1,48 @@
+{
+  "id": "p16",
+  "number": 16,
+  "title": "Die Tischordnung",
+  "points": 50,
+  "type": "arrange",
+  "prompt": "Sechs Gäste aus anderen Zeiten, sechs Plätze an der langen Tafel: links das Fenster, rechts der Kamin. Setz alle so, dass jeder Wunsch auf Quills Karte erfüllt ist.",
+  "config": {
+    "mode": "row",
+    "items": [
+      { "id": "neville", "label": "NEVILLE" },
+      { "id": "hermine", "label": "HERMINE" },
+      { "id": "slughorn", "label": "SLUGHORN" },
+      { "id": "luna", "label": "LUNA" },
+      { "id": "newt", "label": "NEWT" },
+      { "id": "hagrid", "label": "HAGRID" }
+    ],
+    "start": ["hagrid", "luna", "newt", "hermine", "neville", "slughorn"],
+    "rules": [
+      { "type": "not_next_to", "item": "neville", "of": "slughorn" },
+      { "type": "left_of", "item": "neville", "of": "newt", "gap": 2 },
+      { "type": "left_of", "item": "slughorn", "of": "hagrid", "gap": 3 },
+      { "type": "at", "item": "hagrid", "pos": -1 },
+      { "type": "left_of", "item": "hermine", "of": "hagrid", "gap": 4 },
+      { "type": "right_of", "item": "luna", "of": "slughorn" }
+    ]
+  },
+  "solution": ["neville", "hermine", "slughorn", "luna", "newt", "hagrid"],
+  "clues": [
+    "Neville sitzt nicht neben Slughorn.",
+    "Neville sitzt mindestens zwei Plätze weiter links als Newt.",
+    "Slughorn sitzt mindestens drei Plätze weiter links als Hagrid.",
+    "Hagrid sitzt am rechten Ende, beim Kamin – wegen der Ellbogen.",
+    "Hermine sitzt mindestens vier Plätze weiter links als Hagrid.",
+    "Luna sitzt direkt rechts neben Slughorn."
+  ],
+  "hints": [
+    "Hagrid steht fest: ganz rechts beim Kamin.",
+    "Hermine braucht bis Hagrid mindestens vier Plätze Abstand. Sie sitzt also ganz links oder auf dem zweiten Platz.",
+    "Slughorn und Luna sitzen direkt nebeneinander und mit Abstand zu Neville."
+  ],
+  "superHint": "Neville ganz links, Hermine auf Platz 2, Slughorn auf Platz 3.",
+  "solutionText": "Neville, Hermine, Slughorn, Luna, Newt, Hagrid. Hagrid hat sein Ende, Slughorn seine Begabte, Neville seine Ruhe vor ihm, und Luna sitzt neben dem, der alles sammelt.",
+  "intro": {
+    "speaker": "quill",
+    "text": "Ein Ball besteht aus Musik, Essen und der richtigen Reihenfolge der Egos."
+  }
+}

@@ -282,3 +282,19 @@ test('day 15 (archive): Dumbledore, Aldous and five differences in the portrait'
   await expect(page.locator('.dayend-frame')).toContainText('Porträt von 1726');
   await choicesLogged('d15a.dumbledore.take', 'd15a.aldous.ask');
 });
+
+test('day 16: Maren confesses, the seating plan and the empty chair', async ({ page }) => {
+  await startDayAsAdmin(page, 16, undefined, 'archive');
+  await choose(page, ['Maren decken und schweigen.']);
+  await openPuzzle(page, 16);
+  await tapSwap(page, 'HAGRID', 'NEVILLE');
+  await tapSwap(page, 'LUNA', 'HERMINE');
+  await tapSwap(page, 'NEWT', 'SLUGHORN');
+  await tapSwap(page, 'HAGRID', 'NEWT');
+  await page.getByRole('button', { name: 'Prüfen' }).click();
+  await expect(page.getByText('+50 Hauspunkte')).toBeVisible();
+  await page.getByRole('button', { name: 'Weiter' }).click();
+  await choose(page, ['Den Stuhl für Aldous freihalten.']);
+  await tapUntil(page, page.getByText('Kapitel 16 geschafft!'));
+  await choicesLogged('d16.maren.cover', 'd16.seating.keep');
+});

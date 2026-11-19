@@ -29,6 +29,7 @@ VAR f_d01_watch = false     // d01.secret.watch – day 9
 VAR peeves_friend = false   // d02.peeves.join – day 19
 VAR wrote_home = false      // d07.home.write – day 24
 VAR ate_rockcake = false    // d11.hagrid.eat – day 16
+VAR kept_chair = false      // d16.seating.keep – day 24 (Aldous sits on the free chair)
 
 // Set by the app after each puzzle [ARC-3]
 VAR last_puzzle_first_try = false

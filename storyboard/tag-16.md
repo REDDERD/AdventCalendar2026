@@ -40,8 +40,8 @@ Tannen, Kerzen, Aufregung.
 { route == "forest":
     quill: Im Archiv: Isoldes Familie. Theo ist ihr Nachfahre.
     quill: Und ein Brief an „meinen Ritter“.
-    ellis: Im Wald: ein Niffler. Er heißt Knopf. Er ist so klein, dass ich ihm ein Wort
-    ellis: widmen möchte.
+    ellis: Im Wald: ein Niffler. Er heißt Knopf.
+    ellis: Er ist so klein, dass ich ihm ein ganzes Wort widmen möchte.
 }
 { route == "archive":
     ellis: Im Wald: ein Niffler und ein goldenes Zahnrad.
@@ -80,10 +80,10 @@ maren: Ich wusste nicht, wie ich es zurückgeben soll.
     # toast: Maren wird sich das merken.
     maren: Ich verstehe. Ich wäre es auch. Aber bitte: Er ist kein Dieb. Er sammelt.
 - # hide: maren
-quill: Zwei unabhängige Defekte also: eine Uhr, die nicht will, und ein Zahnrad, das
-quill: gehen wollte.
-Das Portal öffnet sich. Sechs Gäste treten ein, sehen sich um und tun so, als wären sie
-immer da gewesen.
+quill: Zwei unabhängige Defekte also.
+quill: Eine Uhr, die nicht will, und ein Zahnrad, das gehen wollte.
+Das Portal öffnet sich. Sechs Gäste treten ein.
+Sie sehen sich um und tun so, als wären sie immer da gewesen.
 # show: slughorn center
 slughorn: Ah! Die Assistenz! Ich sitze neben den Begabten, versteht sich. Ich sammle.
 # show: hagrid left
@@ -95,8 +95,8 @@ quill: Das erinnert mich an ein Rätsel über Eitelkeit.
 { last_puzzle_first_try: quill: Alle sechs zufrieden. Selbst Slughorn. Das ist ein Meisterstück. }
 { not last_puzzle_first_try: quill: Zwei haben sich beschwert. Das ist bei Ballordnungen ein guter Schnitt. }
 # sfx: spark
-Der Tisch deckt sich von selbst. Teller landen, Gläser klingeln, ein Pudding verbeugt
-sich.
+Der Tisch deckt sich von selbst. Teller landen, Gläser klingeln.
+Ein Pudding verbeugt sich.
 Am Kopf der Tafel bleibt ein siebter Stuhl leer.
 # choice_point: d16.seating Ein Stuhl ist übrig. Für wen?
 * [Den Stuhl für Aldous freihalten.] # cid: d16.seating.keep
