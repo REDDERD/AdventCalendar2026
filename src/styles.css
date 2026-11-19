@@ -363,7 +363,7 @@ img {
 
 .actor { position: absolute; width: 128px; height: 128px; }
 .emote { position: absolute; left: 68px; top: 2px; animation: emote-pop 1.6s steps(4) both; }
-.emote-portrait { left: 46px; top: -6px; }
+.emote-portrait { left: 46px; top: 2px; }
 @keyframes emote-pop {
   0% { transform: translateY(4px); opacity: 0; }
   15% { transform: translateY(0); opacity: 1; }
@@ -415,6 +415,7 @@ img {
   border: 2px solid var(--wood-dark);
   background: var(--night-light);
   box-sizing: content-box;
+  overflow: hidden;
 }
 .dialogue-content { flex: 1; min-width: 0; }
 .dialogue-narration { background: var(--parchment-light); font-style: italic; padding-left: 8px; }
@@ -878,7 +879,7 @@ img {
 
 .actor { position: absolute; width: 128px; height: 128px; }
 .emote { position: absolute; left: 68px; top: 2px; animation: emote-pop 1.6s steps(4) both; }
-.emote-portrait { left: 46px; top: -6px; }
+.emote-portrait { left: 46px; top: 2px; }
 @keyframes emote-pop {
   0% { transform: translateY(4px); opacity: 0; }
   15% { transform: translateY(0); opacity: 1; }
@@ -930,6 +931,7 @@ img {
   border: 2px solid var(--wood-dark);
   background: var(--night-light);
   box-sizing: content-box;
+  overflow: hidden;
 }
 .dialogue-content { flex: 1; min-width: 0; }
 .dialogue-narration { background: var(--parchment-light); font-style: italic; padding-left: 8px; }
