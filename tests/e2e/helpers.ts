@@ -88,8 +88,13 @@ export async function playPrologue(page: Page, { house, reloadAfterMirror }: Pro
 }
 
 /** Admin with a finished prologue jumps straight into `day` [DAY-7]. */
-/** `beforeStart` runs right after the login, e.g. to edit personal content in the console. */
-export async function startDayAsAdmin(page: Page, day: number, beforeStart?: () => Promise<void>): Promise<void> {
+/** `beforeStart` runs right after the login, e.g. to edit personal content in the console; `route` sets the day-12 route. */
+export async function startDayAsAdmin(
+  page: Page,
+  day: number,
+  beforeStart?: () => Promise<void>,
+  route?: 'forest' | 'archive',
+): Promise<void> {
   await page.goto('./');
   await login(page, 'daniel');
   await page.getByRole('button', { name: 'Verstanden' }).click();
@@ -101,7 +106,8 @@ export async function startDayAsAdmin(page: Page, day: number, beforeStart?: () 
   await playPrologue(page, { house: 'hufflepuff' });
   await page.getByRole('button', { name: 'Truhe' }).click();
   await page.getByRole('button', { name: 'Optionen' }).click();
-  await page.locator('select').selectOption(String(day));
+  await page.getByLabel('Tag', { exact: true }).selectOption(String(day));
+  if (route) await page.getByLabel('Route').selectOption(route);
   await page.getByRole('button', { name: 'Start', exact: true }).click();
   await page.getByText('Tippen zum Beginnen').click();
 }

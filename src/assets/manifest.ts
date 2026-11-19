@@ -126,6 +126,7 @@ export const assets: Record<string, AssetDef> = {
   'puzzle.treat.licorice': { file: 'assets/puzzles/treat_licorice.png', w: 16, h: 16, ...OWN },
   'puzzle.treat.gingerbread': { file: 'assets/puzzles/treat_gingerbread.png', w: 16, h: 16, ...OWN },
   'puzzle.p07': { file: 'assets/puzzles/p07.png', w: 256, h: 72, ...OWN },
+  'puzzle.p13w': { file: 'assets/puzzles/p13w.png', w: 256, h: 96, ...OWN },
   'puzzle.p10': { file: 'assets/puzzles/p10.png', w: 256, h: 120, ...OWN },
   'puzzle.p10.key_a': { file: 'assets/puzzles/p10_key_a.png', w: 24, h: 24, ...OWN },
   'puzzle.p10.key_b': { file: 'assets/puzzles/p10_key_b.png', w: 24, h: 24, ...OWN },

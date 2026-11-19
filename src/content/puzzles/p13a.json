@@ -1,0 +1,57 @@
+{
+  "id": "p13a",
+  "number": 13,
+  "title": "Der Stammbaum",
+  "points": 40,
+  "type": "arrange",
+  "prompt": "Sieben Karteikarten, eine pro Generation: von Isolde (ganz links) bis Theo (ganz rechts). Bring die Familie Tickwell in die richtige Reihenfolge. Die Hinweise stehen auf der Karte.",
+  "config": {
+    "mode": "row",
+    "items": [
+      { "id": "isolde", "label": "ISOLDE" },
+      { "id": "mabel", "label": "MABEL" },
+      { "id": "hugo", "label": "HUGO" },
+      { "id": "ottilie", "label": "OTTILIE" },
+      { "id": "barnaby", "label": "BARNABY" },
+      { "id": "cora", "label": "CORA" },
+      { "id": "theo", "label": "THEO" }
+    ],
+    "start": ["cora", "hugo", "theo", "mabel", "barnaby", "isolde", "ottilie"],
+    "rules": [
+      { "type": "at", "item": "isolde", "pos": 0 },
+      { "type": "at", "item": "theo", "pos": -1 },
+      { "type": "right_of", "item": "hugo", "of": "mabel" },
+      { "type": "not_next_to", "item": "cora", "of": "mabel" },
+      { "type": "not_next_to", "item": "cora", "of": "hugo" },
+      { "type": "left_of", "item": "mabel", "of": "ottilie", "gap": 1 },
+      { "type": "not_next_to", "item": "ottilie", "of": "cora" },
+      { "type": "left_of", "item": "mabel", "of": "barnaby", "gap": 2 }
+    ]
+  },
+  "solution": ["isolde", "mabel", "hugo", "ottilie", "barnaby", "cora", "theo"],
+  "clues": [
+    "Isolde ist die Älteste, Theo der Jüngste.",
+    "Hugo ist Mabels Sohn.",
+    "Cora ist weder Mabels Mutter noch ihre Tochter.",
+    "Cora ist weder Hugos Mutter noch seine Tochter.",
+    "Mabel ist älter als Ottilie.",
+    "Ottilie ist weder Coras Mutter noch ihre Tochter.",
+    "Barnaby lebte mindestens zwei Generationen nach Mabel."
+  ],
+  "hints": [
+    "Isolde und Theo stehen fest. Hugo steht direkt rechts neben seiner Mutter Mabel.",
+    "Cora darf nur neben Barnaby oder Theo stehen – nicht neben Mabel, Hugo oder Ottilie.",
+    "Cora steht direkt vor Theo, und vor Cora steht Barnaby."
+  ],
+  "superHint": "Isolde, Mabel, Hugo, Ottilie, Barnaby, Cora, Theo.",
+  "solutionText": "Isolde, Mabel, Hugo, Ottilie, Barnaby, Cora, Theo: sieben Generationen in dreihundert Jahren. Theo ist die siebte, und er hat es immer gewusst.",
+  "intro": {
+    "speaker": "quill",
+    "text": "Eine Karte pro Generation. Der Karteikasten hat sie gemischt wie ein Kartenspieler seine Gefühle."
+  },
+  "petHint": {
+    "owl": "Deine Eule blättert mit dem Schnabel von hinten nach vorn. Hinweis 1 ist frei.",
+    "cat": "Deine Katze schläft auf Mabels Karte ein. Hinweis 1 ist frei.",
+    "toad": "Deine Kröte hüpft auf Theos Karte und bleibt dort. Hinweis 1 ist frei."
+  }
+}

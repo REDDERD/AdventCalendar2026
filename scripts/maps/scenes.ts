@@ -511,6 +511,71 @@ export const SCENES: Record<string, (p: Picture) => void> = {
     p.snow(0, 0, 256, 512, 220, 13);
   },
 
+  forest_edge: (p) => {
+    // dusk at the edge of the Forbidden Forest: dark pines behind, a snowy path to a wooden gate
+    p.gradient(0, 300, '#1b2a4e', '#5d6f96');
+    p.stars(0, 0, 256, 140, 40, 31);
+    const rnd = random(32);
+    for (let i = 0; i < 14; i++) {
+      const x = rnd() * 256;
+      const h = 90 + rnd() * 70;
+      for (let k = 0; k < h; k++) p.rect(x - k / 4, 300 - h + k, k / 2 + 1, 1, '#16233a'); // pine silhouettes
+    }
+    p.fill('grass', 1, 3, 0, 292, 256, 512, 1, 1, { recolor: toSnow });
+    p.rect(0, 292, 256, 220, '#9aa6c8', 0.25); // blue evening light on the snow
+    // the path and the centaurs' gate
+    for (let y = 300; y < 512; y++) {
+      const w = 20 + (y - 300) * 0.45;
+      p.rect(128 - w / 2 + Math.sin(y / 30) * 10, y, w, 1, '#c9d6e8');
+    }
+    p.rect(104, 250, 6, 60, '#5a3a20');
+    p.rect(146, 250, 6, 60, '#5a3a20');
+    for (const y of [262, 280]) p.rect(104, y, 48, 5, '#6b4226');
+    p.line(108, 284, 148, 262, '#6b4226');
+    snowCap(p, 104, 262, 48, 33);
+    // big snowy trees left and right, paw prints and cinnamon crumbs on the path
+    for (const [x, y] of [[-40, 200], [180, 190], [-10, 300], [210, 310]]) p.tile('treetop', 0, 3, x, y, 3, 4, { recolor: toSnow });
+    for (let i = 0; i < 6; i++) {
+      const y = 340 + i * 12;
+      const x = 120 + Math.sin(y / 30) * 10 + (i % 2 ? 6 : -4);
+      p.ellipse(x, y, 2, 1.5, '#7a8aa8');
+      if (i % 2) p.dot(x + 9, y + 3, hex('#9a6a3c'));
+    }
+    p.snow(0, 0, 256, 512, 120, 34);
+  },
+
+  archive: (p) => {
+    // the archive in the east wing: drawer cabinets to the ceiling, a lectern with the card box
+    p.gradient(0, 120, '#2b2a33', '#3b2414');
+    p.fill('inside', 0, 4, 0, 100, 256, 304);
+    p.rect(0, 100, 256, 204, '#1a1423', 0.45);
+    for (let x = 0; x < 256; x += 32) {
+      p.blit('cabinets', 0, 96, 32, 96, x, 112);
+      p.blit('cabinets', 0, 96, 32, 96, x, 208);
+    }
+    p.rect(0, 100, 256, 12, '#3b2414');
+    p.rect(0, 0, 256, 304, '#1a1423', 0.2);
+    // labels on the drawers
+    const rnd = random(41);
+    for (let i = 0; i < 40; i++) p.rect(Math.floor(rnd() * 8) * 32 + 12, 120 + Math.floor(rnd() * 12) * 15, 8, 3, '#e8d5a6');
+    woodFloor(p, 304);
+    p.rect(0, 304, 256, 4, '#3b2414');
+    // ladder, the lectern with the card box and tea
+    p.line(200, 112, 214, 320, '#9a6a3c');
+    p.line(212, 112, 226, 320, '#9a6a3c');
+    for (let y = 120; y < 320; y += 14) p.line(200 + (y - 112) / 15, y, 212 + (y - 112) / 15, y, '#c99a5c');
+    planks(p, 70, 340, 116, 34);
+    p.rect(104, 326, 40, 18, '#6b4226'); // the card box
+    p.rect(104, 326, 40, 3, '#9a6a3c');
+    for (let i = 0; i < 6; i++) p.rect(108 + i * 6, 320 - (i % 3), 4, 8, '#f6ead0');
+    p.rect(156, 334, 8, 7, '#e8e4dc'); // tea cup
+    p.rect(164, 336, 2, 3, '#e8e4dc');
+    p.candle(80, 334);
+    // light moths
+    const moths = random(42);
+    for (let i = 0; i < 18; i++) p.ellipse(moths() * 256, 110 + moths() * 200, 1.5, 1.5, '#fff1c2', 0.8);
+  },
+
   astronomy_tower: (p) => {
     p.gradient(0, 360, '#03060f', '#1b2a4e');
     p.stars(0, 0, 256, 330, 220, 21);

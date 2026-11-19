@@ -1,0 +1,30 @@
+{
+  "id": "p13w",
+  "number": 13,
+  "title": "Zentaurenpfeile",
+  "points": 40,
+  "type": "input",
+  "prompt": "Die Herde zieht vom Waldrand (goldener Ring) zum Gatter. An jeder Kreuzung geht sie nur nach rechts oder nach unten, und wo ein Baum steht, kommt niemand durch. Wie viele verschiedene Wege gibt es?",
+  "config": {
+    "inputMode": "number",
+    "maxLength": 3,
+    "figure": { "image": "puzzle.p13w", "height": 96 }
+  },
+  "solution": ["46"],
+  "hints": [
+    "Schreib an jede Kreuzung, auf wie vielen Wegen die Herde sie erreichen kann. Am Start steht eine 1.",
+    "Die Zahl an einer Kreuzung ist die Summe aus der Zahl darüber und der Zahl links davon.",
+    "Wo ein Baum steht, schreibst du eine 0 – von dort aus geht kein Weg weiter."
+  ],
+  "superHint": "In der obersten Reihe und der linken Spalte steht überall eine 1. Rechne dann Zeile für Zeile: In der zweiten Reihe steht 1, 0, 1, 2, 0, 1.",
+  "solutionText": "46 Wege. An jeder Kreuzung addierst du die Wege von oben und von links, bei den Bäumen steht eine Null. Ohne Bäume wären es 252.",
+  "intro": {
+    "speaker": "ellis",
+    "text": "Der Zentaur zählt keine Sterne, er zählt Wege. Ich habe gehört, das ist dasselbe."
+  },
+  "petHint": {
+    "owl": "Deine Eule zählt mit den Krallen von oben links los. Hinweis 1 ist frei.",
+    "cat": "Deine Katze setzt sich auf die erste Kreuzung und rührt sich nicht. Hinweis 1 ist frei.",
+    "toad": "Deine Kröte quakt bei jedem Baum. Hinweis 1 ist frei."
+  }
+}

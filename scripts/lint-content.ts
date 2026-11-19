@@ -63,11 +63,14 @@ for (const stem of listStoryFiles()) {
   const file = `${stem}.ink`;
   const day = dayFromFile(stem);
   const source = fs.readFileSync(path.join(INK_DIR, file), 'utf8');
-  let words = 0;
+  // Route days (13–15) hold both routes in one file: count shared knots once plus the longer route
+  const wordsIn: Record<string, number> = {};
+  let knot = '';
 
   source.split('\n').forEach((raw, i) => {
     const at = `${file}:${i + 1}`;
     const line = raw.replace(/\/\/.*$/, '');
+    knot = line.match(/^\s*===\s*(\w+)\s*===/)?.[1] ?? knot;
 
     // Choices: cid required [DEC-1], text ≤ 40 chars [STY-3]
     const choice = line.match(/^\s*([*+]\s*)+(.*)$/);
@@ -153,7 +156,7 @@ for (const stem of listStoryFiles()) {
     if (speaker && !characters.has(speaker[1])) errors.push(`${at}: unknown speaker "${speaker[1]}"`);
     const text = speaker ? content.slice(speaker[0].length) : content;
     if (text.length > MAX_LINE_CHARS) warnings.push(`${at}: line has ${text.length} chars (max ~${MAX_LINE_CHARS})`);
-    words += text.split(/\s+/).filter(Boolean).length;
+    wordsIn[knot] = (wordsIn[knot] ?? 0) + text.split(/\s+/).filter(Boolean).length;
   });
 
   const choicePoints = source.match(/^\s*#\s*choice_point:/gm)?.length ?? 0;
@@ -161,7 +164,10 @@ for (const stem of listStoryFiles()) {
     errors.push(`${file}: ${choicePoints} choice points, at least ${MIN_CHOICE_POINTS} required`);
   }
 
-  // Upper bound: all lines of the file. Exact per-path counts: content:simulate.
+  // Upper bound: all lines of the file (the longer route on route days). Exact per-path counts: content:simulate.
+  const isRoute = (k: string) => /_(forest|archive)$/.test(k);
+  const shared = Object.entries(wordsIn).filter(([k]) => !isRoute(k)).reduce((n, [, w]) => n + w, 0);
+  const words = shared + Math.max(0, ...Object.entries(wordsIn).filter(([k]) => isRoute(k)).map(([, w]) => w));
   if (words > MAX_WORDS) warnings.push(`${file}: ${words} words in total – check the longest path with content:simulate`);
 }
 

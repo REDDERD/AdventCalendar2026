@@ -710,7 +710,40 @@ function ferret(): Canvas {
   c.outline('#3b2414');
   return c;
 }
+/** p13w (256 × 96): a snowy clearing as a 6 × 6 grid of crossings, five trees, start top left, gate bottom right. */
+const P13W_TREES = ['1,1', '1,4', '2,4', '3,1', '4,1'];
+function centaurClearing(): Canvas {
+  const c = new Canvas(256, 96);
+  for (let y = 0; y < 96; y++) for (let x = 0; x < 256; x++) c.set(x, y, (x * 5 + y * 3) % 17 === 0 ? '#c9d6e8' : '#e4ecf6');
+  const X = (i: number) => 38 + i * 36;
+  const Y = (j: number) => 8 + j * 16;
+  // paths: right and down only
+  for (let j = 0; j < 6; j++) for (let i = 0; i < 6; i++) {
+    if (i < 5) c.rect(X(i), Y(j) - 1, 36, 3, '#c9a66b');
+    if (j < 5) c.rect(X(i) - 1, Y(j), 3, 16, '#c9a66b');
+  }
+  for (let j = 0; j < 6; j++) for (let i = 0; i < 6; i++) {
+    if (P13W_TREES.includes(`${j},${i}`)) {
+      c.ellipse(X(i), Y(j) + 5, 4, 2, '#9aa6b8'); // shadow
+      for (let k = 0; k < 12; k++) c.rect(X(i) - Math.floor(k / 2), Y(j) - 9 + k, 1 + 2 * Math.floor(k / 2), 1, k < 3 ? '#f4f8ff' : k % 4 === 0 ? '#2e5a3a' : '#3f7a4a');
+      c.rect(X(i) - 1, Y(j) + 3, 3, 3, '#5a3a20');
+    } else {
+      c.ellipse(X(i), Y(j), 2.5, 2.5, '#8a5a34');
+    }
+  }
+  // start: hoof prints coming out of the forest edge; goal: a wooden gate
+  c.ellipse(X(0), Y(0), 6, 6, '#d4a73a');
+  c.ellipse(X(0), Y(0), 3.5, 3.5, '#e4ecf6');
+  for (let k = 0; k < 3; k++) c.ellipse(6 + k * 9, Y(0) + (k % 2 ? 3 : -2), 2, 1.5, '#6b4226');
+  c.rect(X(5) + 6, Y(5) - 9, 3, 14, '#6b4226');
+  c.rect(X(5) + 18, Y(5) - 9, 3, 14, '#6b4226');
+  for (const dy of [-6, -1, 3]) c.rect(X(5) + 6, Y(5) + dy, 15, 2, '#9a6a3c');
+  c.line(X(5) + 7, Y(5) + 4, X(5) + 20, Y(5) - 7, '#9a6a3c');
+  return c;
+}
+
 hippogriff().save(path.join(OUT, 'puzzles/hippogriff.png'));
+centaurClearing().save(path.join(OUT, 'puzzles/p13w.png'));
 ferret().save(path.join(OUT, 'puzzles/ferret.png'));
 keyBoard(P10).save(path.join(OUT, 'puzzles/p10.png'));
 for (const [name, bow, teeth, metal] of [

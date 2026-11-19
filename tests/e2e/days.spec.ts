@@ -190,3 +190,32 @@ test('day 12: Luna, the knight in one stroke and the route choice', async ({ pag
   await tapUntil(page, page.getByText('Kapitel 12 geschafft!'));
   await choicesLogged('d12.courage.encourage', 'd12.route.forest');
 });
+
+test('day 13 (forest): lantern, the centaur and 46 paths', async ({ page }) => {
+  await startDayAsAdmin(page, 13, undefined, 'forest');
+  await choose(page, ['Die Laterne anzünden und mitnehmen.', 'Ihn nach den Pfotenspuren fragen.']);
+  await openPuzzle(page, 13);
+  await expect(page.locator('.hint-open')).toContainText('Am Start steht eine 1'); // [PLAN-2] pet hint
+  await page.getByRole('button', { name: 'Hinweise schließen' }).click();
+  for (const key of ['4', '6']) await page.getByRole('button', { name: key, exact: true }).click();
+  await page.getByRole('button', { name: 'OK' }).click();
+  await expect(page.getByText('+40 Hauspunkte')).toBeVisible();
+  await page.getByRole('button', { name: 'Weiter' }).click();
+  await tapUntil(page, page.getByText('Kapitel 13 geschafft!'));
+  await expect(page.getByText('Neuer Gegenstand: Laterne')).toBeVisible();
+  await choicesLogged('d13w.lantern.on', 'd13w.centaur.ask');
+});
+
+test('day 13 (archive): Theo, the family tree and the letter to "my knight"', async ({ page }) => {
+  await startDayAsAdmin(page, 13, undefined, 'archive');
+  await choose(page, ['Höflich um die Tickwell-Akte bitten.', 'Theo offen fragen.']);
+  await openPuzzle(page, 13);
+  await page.getByRole('button', { name: 'Hinweise schließen' }).click();
+  await tapSwap(page, 'CORA', 'ISOLDE');
+  await tapSwap(page, 'HUGO', 'MABEL');
+  await tapSwap(page, 'THEO', 'HUGO');
+  await tapSwap(page, 'THEO', 'OTTILIE');
+  await finishDay(page, 13, 40);
+  await expect(page.getByText('Brief der Uhrmacherin an „meinen Ritter“')).toBeVisible();
+  await choicesLogged('d13a.archivist.polite', 'd13a.theo.ask');
+});

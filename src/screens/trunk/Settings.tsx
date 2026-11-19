@@ -66,13 +66,18 @@ function toLocalInput(ms: number): string {
   return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
 }
 
+const ROUTE_FROM_DAY = 13;
+
 /** [DAY-7] Debug date and day jump – admin only, own save only. */
 function AdminDebug() {
   const user = useStore((s) => s.user)!;
   const bumpClock = useStore((s) => s.bumpClock);
   const setTrunkOpen = useStore((s) => s.setTrunkOpen);
   const [value, setValue] = useState(() => toLocalInput(now()));
+  const updateSave = useStore((s) => s.updateSave);
+  const savedRoute = useStore((s) => s.save?.vars.route);
   const [day, setDay] = useState(1);
+  const [route, setRoute] = useState(savedRoute === 'archive' ? 'archive' : 'forest');
   const [, force] = useState(0);
 
   const apply = (ms: number | null) => {
@@ -95,12 +100,28 @@ function AdminDebug() {
       </div>
       <h3>Tag direkt starten</h3>
       <div className="row">
-        <select value={day} onChange={(e) => setDay(Number(e.target.value))}>
+        <select aria-label="Tag" value={day} onChange={(e) => setDay(Number(e.target.value))}>
           {Array.from({ length: 24 }, (_, i) => i + 1).map((d) => (
             <option key={d} value={d}>Tag {d}</option>
           ))}
         </select>
-        <PixelButton small onClick={() => { setTrunkOpen(false); void startDay(day); }}>Start</PixelButton>
+        {day >= ROUTE_FROM_DAY && (
+          <select aria-label="Route" value={route} onChange={(e) => setRoute(e.target.value)}>
+            <option value="forest">Wald</option>
+            <option value="archive">Archiv</option>
+          </select>
+        )}
+        <PixelButton
+          small
+          onClick={() => {
+            setTrunkOpen(false);
+            // From day 13 on the story depends on the route chosen on day 12 [STR-1]
+            if (day >= ROUTE_FROM_DAY) updateSave((s) => void (s.vars.route = route), { immediate: true });
+            void startDay(day);
+          }}
+        >
+          Start
+        </PixelButton>
       </div>
       <h3>Eigener Spielstand</h3>
       <PixelButton
