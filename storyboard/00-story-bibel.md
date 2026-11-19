@@ -61,6 +61,7 @@ Die Sprecher-ID ist eine **neue** ID, die in `src/types/index.ts` (`CHARACTERS`)
 | Rosmerta, Fred und George | `rosmerta`, `fred`, `george` | 17 | Butterbier, Scherzartikel, Trio im Hintergrund. Fred und George spielen im Scherzladen Nim um Knallbonbons (Rätsel „Knallbonbons“, Abschnitt 8) und spielen perfekt | ja, aber das Rätsel braucht dann einen anderen Spielpartner |
 | Dobby | – | 18 | Sockengeschenk im Raum der Wünsche (nur Erzählzeile) | ja |
 | Fast Kopfloser Nick, Graue Dame, Blutiger Baron, Fetter Mönch | `nick`, `grey_lady`, `baron`, `friar` | 19 | Geisterparade. Die Graue Dame sagt Aldous den klügsten Satz | Nick und Graue Dame wichtig, andere streichbar |
+| Die Maulende Myrte | `myrte` | 14a ✅, 19 ✅ | Ghost im Kerkergang, liest Spiegelschrift; in der Geisterparade ganz rechts (jüngster Geist) | ja |
 | Flitwick, Lockhart | `flitwick` | 20 | Duell-Champion als Trainer. Lockhart signiert Luft (nur Erzählzeile) | ja |
 | Fawkes | – | 21 | Nur bei Zauberstab `phoenix`: Feder als Funke | ja |
 | Zeitumkehrer (Hermine) | – | 22 | Auflösung des Zeitfransen-Gags | hängt an Tag 4 |
@@ -147,6 +148,7 @@ dumbledore: 'Dumbledore (Porträt)',
 rosmerta: 'Madam Rosmerta',
 fred: 'Fred',
 george: 'George',
+myrte: 'Myrte',
 flitwick: 'Prof. Flitwick',
 nick: 'Fast Kopfloser Nick',
 grey_lady: 'Die Graue Dame',
@@ -156,7 +158,7 @@ friar: 'Der Fette Mönch',
 
 Portraits und Sprites erscheinen als Platzhalter, bis Grafik da ist `[GFX-6]`.
 
-## 7. Fahrplan Tag 9–24 (noch nicht geschrieben)
+## 7. Fahrplan Tag 9–24 (inzwischen geschrieben, siehe tag-NN.md)
 
 Kurz-Skizze, damit die nächsten Tage dieselbe Linie halten. Jeder Tag bekommt eine Zweitentscheidung (Mindestgrenze: 2 Entscheidungen).
 
@@ -166,18 +168,18 @@ Kurz-Skizze, damit die nächsten Tage dieselbe Linie halten. Jeder Tag bekommt e
 | 10 | Grimsbys Büro. Er gibt zu, das Ticken zu vermissen. `k08` | Filch und Mrs. Norris | `d10.cat` |
 | 11 ✅ [tag-11.md](tag-11.md) | Das Boot. Zwei Fährten (Pfoten mit Glitzer Richtung Wald, Schuhe Richtung Archiv) als Erzählung, am See Hagrids Herde im Zweier-Boot: Rätsel „Wolves and Chicks“ | Hagrid, Fang, Seidenschnabel | `d11.snow` + `d11.hagrid` (`ate_rockcake`) |
 | 12 | Astronomieturm. Sternbild „Der Ritter“. Ellis' Höhenangst. Routenwahl. Quills Leitspruch Akt II | Luna | `d12.courage` + `d12.route` |
-| 13w/13a | Wald mit Ellis bzw. Archiv mit Quill. Theo ist Isoldes Nachfahre (13a); Rätsel dort: der Stammbaum von Isolde bis Theo (Abschnitt 8) | Zentaur (Erzählzeile) / – | `d13w.centaur` / `d13a.archivist` |
-| 14w/14a | Das goldene Zahnrad im Nest / Isoldes Spiegelschrift ("Pendel") | Aragogs Urenkelin (Erzählzeile) / Myrte als Option | `d14w.spider` / `d14a.myrtle` |
-| 15w/15a | Knopf gefunden / Porträt von 1726 (`k07`) | Newt / Dumbledore (Porträt) | `d15w.newt` / `d15a.dumbledore` |
-| 16 | Ball-Vorbereitung. Maren gesteht. Routen treffen sich. Tischordnung mit den Cameos | alle Zeitgäste | `d16.seating` |
-| 17 | Hogsmeade. Geschenke für Ellis oder Aldous. Im Scherzladen Nim um Knallbonbons gegen Fred und George (Abschnitt 8) | Rosmerta, Fred und George, Trio im Hintergrund | `d17.treat` |
-| 18 | Raum der Wünsche. Isoldes Erinnerung, persönliches Foto | Dobby (Erzählzeile) | `d18.wish` |
-| 19 | Geisterparade. Aldous ist traurig, die Graue Dame spricht mit ihm | Nick, Graue Dame, Baron, Mönch, Peeves | `d19.parade` |
-| 20 | Duell-Training. Theo verbündet sich oder nicht | Flitwick, Lockhart | `d20.lockhart` |
-| 21 | Uhrturm. `k09`. Ellis klettert (Höhenangst) | Fawkes (bei `phoenix`) | `d21.climb` |
-| 22 | Pendelkammer. `k10` „CCC“. Ellis' siebte Theorie | Hermine mit Zeitumkehrer | `d22.hermione` |
-| 23 | Anklage mit Hinweiskarten. Alle Verdächtigen | Snape (Porträt) nickt | `d23.speech` |
-| 24 | Geständnis, Finale je Ende, Abschied der Zeitgäste, Abspann | alle | `d24.last` |
+| 13w/13a ✅ [tag-13.md](tag-13.md) | Wald mit Ellis bzw. Archiv mit Quill. Theo ist Isoldes Nachfahre (13a); Rätsel dort: der Stammbaum von Isolde bis Theo (Abschnitt 8) | Zentaur (Erzählzeile) / – | `d13w.centaur` / `d13a.archivist` |
+| 14w/14a ✅ [tag-14.md](tag-14.md) | Das goldene Zahnrad im Nest / Isoldes Spiegelschrift ("Pendel") | Aragogs Urenkelin (Erzählzeile) / Myrte als Option | `d14w.spider` / `d14a.myrtle` |
+| 15w/15a ✅ [tag-15.md](tag-15.md) | Knopf gefunden / Porträt von 1726 (`k07`) | Newt / Dumbledore (Porträt) | `d15w.newt` / `d15a.dumbledore` |
+| 16 ✅ [tag-16.md](tag-16.md) | Ball-Vorbereitung. Maren gesteht. Routen treffen sich. Tischordnung mit den Cameos | alle Zeitgäste | `d16.seating` |
+| 17 ✅ [tag-17.md](tag-17.md) | Hogsmeade. Geschenke für Ellis oder Aldous. Im Scherzladen Nim um Knallbonbons gegen Fred und George (Abschnitt 8) | Rosmerta, Fred und George, Trio im Hintergrund | `d17.treat` |
+| 18 ✅ [tag-18.md](tag-18.md) | Raum der Wünsche. Isoldes Erinnerung, persönliches Foto | Dobby (Erzählzeile) | `d18.wish` |
+| 19 ✅ [tag-19.md](tag-19.md) | Geisterparade. Aldous ist traurig, die Graue Dame spricht mit ihm | Nick, Graue Dame, Baron, Mönch, Peeves | `d19.parade` |
+| 20 ✅ [tag-20.md](tag-20.md) | Duell-Training. Theo verbündet sich oder nicht | Flitwick, Lockhart | `d20.lockhart` |
+| 21 ✅ [tag-21.md](tag-21.md) | Uhrturm. `k09`. Ellis klettert (Höhenangst) | Fawkes (bei `phoenix`) | `d21.climb` |
+| 22 ✅ [tag-22.md](tag-22.md) | Pendelkammer. `k10` „CCC“. Ellis' siebte Theorie | Hermine mit Zeitumkehrer | `d22.hermione` |
+| 23 ✅ [tag-23.md](tag-23.md) | Anklage mit Hinweiskarten. Alle Verdächtigen | Snape (Porträt) nickt | `d23.speech` |
+| 24 ✅ [tag-24.md](tag-24.md) | Geständnis, Finale je Ende, Abschied der Zeitgäste, Abspann | alle | `d24.last` |
 
 ## 8. Rätselplan (Stand 18.11.2026)
 

@@ -1,15 +1,15 @@
 # Storyboard: Hogwarts und die Adventsuhr
 
-Skripte für die 24 Kapitel. **Stand: Tag 1–8 (Akt I) fertig**, Tag 9–24 folgen (Fahrplan in der Bibel). Der Prolog entsteht separat.
+Skripte für die 24 Kapitel. **Stand: Tag 1–24 geschrieben** (Tag 1–12 sind bereits in `src/` umgesetzt, Tag 13–24 liegen als Storyboard vor). Der Prolog entsteht separat.
 
 | Datei | Inhalt |
 | --- | --- |
 | [00-story-bibel.md](00-story-bibel.md) | Wahrheit, Zeitfransen-Regel für Cameos, Cameo-Katalog, Stimmen, Ellis' sieben Theorien, Türchen-Zauber, Fahrplan Tag 9–24. **Enthält Spoiler** |
-| [uebersicht.md](uebersicht.md) | Tabelle Tag 1–8 mit Entscheidungen, Hinweisen, Wortzahlen |
+| [uebersicht.md](uebersicht.md) | Tabelle Tag 1–24 mit Entscheidungen, Hinweisen, Wortzahlen und der Rätsel-Prüfung |
 | [tag-01.md](tag-01.md) | Referenz zum bestehenden Tag 1 inkl. optionalem Patch |
-| [tag-02.md](tag-02.md) … [tag-08.md](tag-08.md) | Je Tag: Kopftabelle, Beats, **Ink-Skript**, Rätsel-Skizze, Setups und Payoffs |
-| [tag-11.md](tag-11.md) | **Einzeln vorgezogen:** Tag 11 „Das Boot“ mit dem Rätsel „Wolves and Chicks“ (Hippogreife und Frettchen), Ink-Skript, Rätsel-Entwurf und Spezifikation der Engine `custom:cross` |
-| [globals-zusatz.ink](globals-zusatz.ink) | Vier neue Ton-Variablen zum Anhängen an `globals.ink` |
+| [tag-02.md](tag-02.md) … [tag-12.md](tag-12.md) | Je Tag: Kopftabelle, Beats, **Ink-Skript**, Rätsel-Skizze, Setups und Payoffs. Tag 11 „Das Boot“ (Wolves and Chicks) enthält die Spezifikation der Engine `custom:cross` |
+| [tag-13.md](tag-13.md) … [tag-24.md](tag-24.md) | Dasselbe für Akt II (Ende) und Akt III. Tag 13–15 sind **Routentage** (zwei Knoten in einer Datei, `[STR-1]`) |
+| [globals-zusatz.ink](globals-zusatz.ink) | Ton-Variablen für `globals.ink` (zuletzt neu: `kept_chair`) |
 
 ## So sind die Skripte gebaut
 
@@ -19,7 +19,7 @@ Skripte für die 24 Kapitel. **Stand: Tag 1–8 (Akt I) fertig**, Tag 9–24 fol
 
 ## Wie geprüft wurde
 
-Ich habe die Skripte in eine **Kopie** des Repos (außerhalb des Projekts) kopiert und dort die echten Skripte laufen lassen: `content:compile`, `content:lint` und `content:simulate` (mit zusätzlich randomisierten Flags). Ergebnis für Tag 1–8: kompiliert, 0 Fehler, 0 Warnungen, 310–474 Wörter pro Pfad. Rätsel mit konkreten Zahlen sind per Brute-Force oder BFS nachgerechnet (Details je Tag). Im Repo selbst wurde nichts außerhalb von `storyboard/` angefasst.
+Ich habe die Skripte in eine **Kopie** des Repos (außerhalb des Projekts) kopiert und dort die echten Skripte laufen lassen: `content:compile`, `content:lint` und `content:simulate` (mit zusätzlich randomisierten Flags). Ergebnis für Tag 1–8: kompiliert, 0 Fehler, 0 Warnungen, 310–474 Wörter pro Pfad. Ergebnis für Tag 13–24 zusammen: 25 Geschichten kompiliert, 0 Fehler, 2 Warnungen („… words in total“ bei den Routentagen 13 und 15, weil zwei Routen in einer Datei liegen; die längsten Pfade liegen weit unter 500), 194–367 Wörter auf dem längsten Pfad. Rätsel mit konkreten Zahlen sind per Brute-Force oder BFS nachgerechnet (Details je Tag). Im Repo selbst wurde nichts außerhalb von `storyboard/` angefasst.
 
 ## Offene Punkte (brauchen deine Entscheidung)
 
@@ -31,6 +31,13 @@ Ich habe die Skripte in eine **Kopie** des Repos (außerhalb des Projekts) kopie
 6. ~~`personal("insideJokes")`~~ **Geprüft:** `PersonalService` liefert `""`, wenn nichts gepflegt ist; die Zeile entfällt dann.
 8. **Tag 11 „Das Boot“ ist umgesetzt** (DECISIONS #50): Engine `custom:cross`, Sprecher `hagrid`, Sprites Hippogreif und Frettchen; `puzzle.p11.snow` ist entfernt. Per `puzzles:verify`: 11 Überfahrten, 16 Zustände. Einzige Änderung am Skript: der erste Funke liegt jetzt bei y 140 (Raster 256 × 512).
 9. **Rätselplan geändert** (DECISIONS #51, Bibel Abschnitt 8): `p17` Wechselgeld wird **Nim** gegen Fred und George (`custom:nim`, Haufen 3/4/5, genau ein Gewinnzug), `p13a` Katalogcode wird der **Stammbaum** (`arrange` Reihe, 7 Karten, genau eine Reihenfolge, beides per Skript geprüft). Das Zauberduell von Tag 20 bleibt. `input` nutzen nur noch Tag 1, 7, 9, 13w, 14a. Neue Sprecher `fred`, `george`. Noch nicht in `src/`: Engines `cross` und `nim`, Rätsel-JSON von `p11`, `p13a`, `p17`.
+10. **Tag 13–24: Was in `src/` noch fehlt.** Alle Tage laufen in der Prüfkopie durch `content:compile`, `content:lint` und `content:simulate`. Damit sie im Repo laufen, braucht es:
+    - **Variable** `kept_chair` in `globals.ink` (steht in `globals-zusatz.ink`; `scripts/simulate.ts` sollte sie mitwürfeln).
+    - **Sprecher** `fred`, `george`, `rosmerta`, `newt`, `dumbledore`, `flitwick`, `myrte` in `CHARACTERS` und `speakers.ts` (mit durchscheinendem Geist-Flag für `myrte`, DECISIONS #47).
+    - **Engines** `custom:nim` (Tag 17), `custom:accuse` (Tag 23), `custom:finale` (Tag 24). Spezifikationen in Bibel Abschnitt 8 und `tag-23.md`, `tag-24.md`.
+    - **Rätsel-JSON** `p13w`, `p13a`, `p14w`, `p14a`, `p15w`, `p15a`, `p16`, `p17`, `p19`, `p20`, `p23`, `p24` (Entwürfe in den Tagesdateien). `p18`, `p21`, `p22` gibt es schon. `p21` braucht noch `petHint` (Haustier-Hinweis 3).
+    - **Tag** `# photo: mirror` (Tag 18, Spiegel zeigt `mirrorPhoto`): `content:lint` meldet es nicht, die App ignoriert es bis dahin.
+    - **Plan:** `src/content/schedule.ts` hat die Routentitel für 13–15 bereits.
 7. **Rätsel schwerer gemacht** (DECISIONS.md #44): Die Rätsel-Abschnitte von Tag 2, 3, 4, 5 und 8 beschreiben jetzt die schwereren Fassungen aus `src/content/puzzles/`; in Tag 5 sind die Mengen im Dialog angepasst (14/9/5, zweimal sieben Maß). Tag 1–8 sind umgesetzt; die Skripte hier entsprechen `src/content/ink/`. Auch `p06` (Logikraster mit Karte) und `p07` (Summe der drei davor) sind jetzt schwerer.
 
 ## Fragen an dich (gesammelt beim Schreiben ab Tag 9)
