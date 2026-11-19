@@ -298,3 +298,28 @@ test('day 16: Maren confesses, the seating plan and the empty chair', async ({ p
   await tapUntil(page, page.getByText('Kapitel 16 geschafft!'));
   await choicesLogged('d16.maren.cover', 'd16.seating.keep');
 });
+
+test('day 17: Hogsmeade, Nim against Fred and George, a scarf for Ellis', async ({ page }) => {
+  await startDayAsAdmin(page, 17, undefined, 'forest');
+  await choose(page, ['Etwas Süßes bestellen.']);
+  await expect(page.getByText('Schokofrosch', { exact: false })).toBeVisible(); // personal("favoriteSweet") default
+  await openPuzzle(page, 17);
+  const takeFrom = async (heap: number, from: number) => {
+    await page.getByRole('button', { name: `Haufen ${heap}, ab Bonbon ${from} nehmen` }).click();
+    await page.getByRole('button', { name: 'Nehmen', exact: true }).click();
+  };
+  await takeFrom(1, 2); // 3 → 1: the only winning move
+  for (let i = 0; i < 5; i++) {
+    // mirror the twins: always take the last cracker of the third heap
+    const last = page.locator('.nim-heap').nth(2).locator('.nim-cracker').last();
+    await expect(last).toBeEnabled();
+    await last.click();
+    await page.getByRole('button', { name: 'Nehmen', exact: true }).click();
+  }
+  await expect(page.getByText('+40 Hauspunkte')).toBeVisible();
+  await page.getByRole('button', { name: 'Weiter' }).click();
+  await choose(page, ['Einen Schal für Ellis kaufen.']);
+  await tapUntil(page, page.getByText('Kapitel 17 geschafft!'));
+  await expect(page.locator('.dayend-frame')).toContainText('Schal für Ellis');
+  await choicesLogged('d17.treat.sweet', 'd17.gift.ellis');
+});

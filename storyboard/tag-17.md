@@ -52,8 +52,8 @@ Ein Mädchen mit Bücherstapel blickt auf ihre Uhr. Die läuft rückwärts.
 * [Etwas Süßes bestellen.] # cid: d17.treat.sweet
     rosmerta: Hier. {personal("favoriteSweet")}. Ich habe es dir angesehen, Schätzchen.
 * [Ein Butterbier bestellen.] # cid: d17.treat.butterbeer
-    Das Butterbier schäumt bis an die Nase. Ellis kriegt einen Schnurrbart und hält ihn für
-    eine Entdeckung.
+    Das Butterbier schäumt bis an die Nase.
+    Ellis kriegt einen Schnurrbart und hält ihn für eine Entdeckung.
 - # hide: rosmerta
 Im Scherzladen nebenan liegen Chaos und Zauberkram in den Regalen.
 Hinter dem Tresen grinsen zwei Rothaarige.
@@ -66,8 +66,7 @@ fred: Reihum nimmt man so viele, wie man will, aus einem Haufen.
 fred: Wer das letzte nimmt, gewinnt.
 george: Du fängst an. Wir sind ja keine Unmenschen.
 fred: Und wer verliert, trägt das Bonbon, das singt.
-quill: Das erinnert mich an ein Rätsel, bei dem immer die gewinnt, die weiß, wann sie
-quill: aufhören muss.
+quill: Das erinnert mich an ein Rätsel, bei dem gewinnt, wer weiß, wann er aufhören muss.
 # puzzle: p17
 { last_puzzle_first_try: george: Wie?! Fred, hast du gesagt, es ist Glück? Er hat gewonnen. Sofort. }
 { not last_puzzle_first_try: fred: Na also. Beim Mal danach hat es geklappt. Das zählt trotzdem. }

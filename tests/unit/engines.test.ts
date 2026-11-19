@@ -20,6 +20,7 @@ import { choiceLogic } from '../../src/puzzles/logic/choice';
 import { inputLogic } from '../../src/puzzles/logic/input';
 import { allPaths, extendPath, pathLogic, type PathConfig, type PathState } from '../../src/puzzles/logic/path';
 import { bankSafe, crossAttempt, crossLogic, crossOver, type CrossConfig, type CrossState } from '../../src/puzzles/logic/cross';
+import { nimLogic, nimSum, opponentMove, playRound, take, winningFirstMoves, type NimConfig } from '../../src/puzzles/logic/nim';
 import { pour, pourLogic, type PourConfig, type PourState } from '../../src/puzzles/logic/pour';
 import { slideLogic, slideTile } from '../../src/puzzles/logic/slide';
 import { tapLogic, toggleMark, type TapState } from '../../src/puzzles/logic/tap';
@@ -411,5 +412,41 @@ describe('personal values used in the Ink files', () => {
     expect(personalValue('patronus')).toBe('ein Fuchs');
     expect(personalValue('favoriteSweet')).toBe('Schokofrosch');
     expect(personalValue('insideJoke1')).toBe('');
+  });
+});
+
+describe('custom: nim (p17)', () => {
+  const p = load('p17');
+  const config = p.config as NimConfig;
+  const start = nimLogic.initial(p);
+
+  it('has exactly one winning first move: 3 → 1 in the first heap', () => {
+    expect(nimSum(config.heaps)).toBe(2);
+    expect(winningFirstMoves(config)).toEqual([[1, 4, 5]]);
+    expect(nimLogic.verify(p).errors).toEqual([]);
+  });
+
+  it('refuses empty, oversized and out-of-turn moves', () => {
+    expect(take(start, 'player', 0, 0)).toBeNull();
+    expect(take(start, 'player', 0, 4)).toBeNull();
+    expect(take(start, 'player', 3, 1)).toBeNull();
+    expect(take(start, 'opponent', 0, 1)).toBeNull();
+  });
+
+  it('the twins answer perfectly: back to nim sum 0, or the smallest move when they are lost', () => {
+    expect(opponentMove([3, 4, 4])).toEqual({ heap: 0, count: 3 });
+    expect(opponentMove([1, 4, 5])).toEqual({ heap: 0, count: 1 });
+  });
+
+  it('a perfect game wins, a careless one loses', () => {
+    let s = playRound(start, 0, 2)!;
+    for (let i = 0; i < 5 && !s.winner; i++) s = playRound(s, 2, 1)!; // keep the heaps balanced
+    expect(s.winner).toBe('player');
+    expect(nimLogic.check(p, s)).toBe(true);
+
+    let lost = playRound(start, 2, 5)!; // empty the big heap: the twins take over
+    while (!lost.winner) lost = playRound(lost, lost.heaps.findIndex((h) => h > 0), 1)!;
+    expect(lost.winner).toBe('opponent');
+    expect(nimLogic.check(p, lost)).toBe(false);
   });
 });

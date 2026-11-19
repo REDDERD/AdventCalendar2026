@@ -666,6 +666,50 @@ export const SCENES: Record<string, (p: Picture) => void> = {
     torch(p, 128, 250);
   },
 
+  hogsmeade: (p) => {
+    // the snowy village street: crooked houses with lit windows, the Three Broomsticks and the joke shop
+    p.gradient(0, 260, '#2a3a66', '#7a8aa8');
+    p.stars(0, 0, 256, 120, 30, 91);
+    const houses: Array<[number, number, number, string, string]> = [
+      // x, width, wall top, wall colour, roof colour
+      [-6, 70, 170, '#c9a66b', '#6b2a2a'],
+      [62, 66, 150, '#e8d5a6', '#3a3440'],
+      [126, 60, 176, '#9a6a3c', '#6b2a2a'],
+      [184, 78, 156, '#d8c8a0', '#2e4a3a'],
+    ];
+    for (const [x, w, top, wall, roof] of houses) {
+      p.rect(x, top, w, 330 - top, wall);
+      for (let y = top; y < 330; y += 22) p.rect(x, y, w, 2, '#5a3a20'); // timber frame
+      for (let k = 0; k < w / 2 + 6; k++) p.rect(x - 4 + k, top - k * 0.9, w + 8 - 2 * k, 1, roof); // pointed roof
+      snowCap(p, x - 4, top, w + 8, x + 3);
+      p.rect(x + w / 2 - 7, 300, 14, 30, '#3b2414'); // door
+      p.rect(x + w / 2 - 5, 302, 10, 28, '#5a3a20');
+      p.dot(x + w / 2 + 3, 316, hex('#d4a73a'));
+      // lit windows
+      for (let wx = x + 8; wx < x + w - 14; wx += 22) {
+        for (const wy of [top + 18, top + 62]) {
+          if (wy > 300) continue;
+          p.rect(wx, wy, 12, 14, '#ffd27a');
+          p.rect(wx + 5, wy, 2, 14, '#5a3a20');
+          p.rect(wx, wy + 6, 12, 2, '#5a3a20');
+          p.ellipse(wx + 6, wy + 7, 12, 10, '#ffd27a', 0.12);
+        }
+      }
+    }
+    // the Three Broomsticks sign and the joke shop's crackers in the window
+    p.rect(96, 196, 3, 26, '#3b2414');
+    p.rect(82, 222, 34, 14, '#6b4226');
+    for (let k = 0; k < 3; k++) p.line(86 + k * 10, 225, 92 + k * 10, 233, '#d4a73a');
+    for (const [x, c] of [[196, '#c23b3b'], [212, '#4f8a3c'], [228, '#5d8fc7']] as const) p.rect(x, 252, 12, 5, c);
+    // street, snow and candy-coloured flakes
+    p.fill('castlefloors_outside', 1, 1, 0, 330, 256, 512, 1, 1);
+    p.rect(0, 330, 256, 182, '#c9d6e8', 0.45);
+    for (let y = 330; y < 512; y += 3) p.rect(0, y, 256, 1, '#f4f8ff', 0.25);
+    const flakes = random(92);
+    const candy = ['#f4a6c0', '#a6f4d0', '#f4ec8a', '#f4f8ff'];
+    for (let i = 0; i < 160; i++) p.dot(flakes() * 256, flakes() * 512, hex(candy[Math.floor(flakes() * candy.length)]));
+  },
+
   archive: (p) => {
     // the archive in the east wing: drawer cabinets to the ceiling, a lectern with the card box
     p.gradient(0, 120, '#2b2a33', '#3b2414');

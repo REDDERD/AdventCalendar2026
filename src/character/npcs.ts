@@ -322,6 +322,43 @@ export const NPCS: Record<string, Recipe> = {
       { id: 'wizard_hat_purple' },
     ],
   },
+  // Fred Weasley (cameo, days 17, 24): ginger, home-knitted maroon jumper
+  fred: {
+    body: 'male',
+    layers: [
+      { id: 'body', colors: { body: 'light' } },
+      { id: 'head_male', colors: { body: 'light', eye: 'brown' } },
+      { id: 'shoes', colors: { cloth: 'brown' } },
+      { id: 'pants', colors: { cloth: 'charcoal' } },
+      { id: 'sweater', colors: { cloth: 'maroon' } },
+      { id: 'hair_plain', colors: { hair: 'carrot' } },
+    ],
+  },
+  // George Weasley (cameo, days 17, 24): the same, in a forest-green jumper
+  george: {
+    body: 'male',
+    layers: [
+      { id: 'body', colors: { body: 'light' } },
+      { id: 'head_male', colors: { body: 'light', eye: 'brown' } },
+      { id: 'shoes', colors: { cloth: 'brown' } },
+      { id: 'pants', colors: { cloth: 'charcoal' } },
+      { id: 'sweater', colors: { cloth: 'forest' } },
+      { id: 'hair_plain', colors: { hair: 'carrot' } },
+    ],
+  },
+  // Madam Rosmerta (cameo, day 17): landlady of the Three Broomsticks, blonde bun, red dress
+  rosmerta: {
+    body: 'female',
+    layers: [
+      { id: 'body', colors: { body: 'light' } },
+      { id: 'head_female', colors: { body: 'light', eye: 'blue' } },
+      { id: 'shoes', colors: { cloth: 'black' } },
+      { id: 'skirt', colors: { cloth: 'maroon' } },
+      { id: 'sweater', colors: { cloth: 'white' } },
+      { id: 'hair_bangs_bun', colors: { hair: 'sandy' } },
+      { id: 'earrings' },
+    ],
+  },
   // The wandmaker
   wandmaker: {
     body: 'female',

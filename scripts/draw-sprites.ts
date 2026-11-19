@@ -955,6 +955,23 @@ function portraits(): Canvas {
   return c;
 }
 
+/** A Christmas cracker (32 × 16) for p17: wrapped middle, twisted ends, a gold band. */
+function cracker(main: string, dark: string, light: string): Canvas {
+  const c = new Canvas(32, 16);
+  for (let x = 8; x < 24; x++) for (let y = 4; y < 12; y++) c.set(x, y, y < 6 ? light : y > 9 ? dark : main);
+  for (const side of [0, 1]) {
+    for (let k = 0; k < 7; k++) {
+      const x = side ? 24 + k : 7 - k;
+      const half = k < 2 ? 2 - k : k - 2; // pinched near the body, flared at the end
+      for (let y = 8 - half - 1; y <= 8 + half; y++) c.set(x, y, k < 2 ? dark : y < 7 ? light : main);
+    }
+  }
+  c.rect(14, 4, 4, 8, '#d4a73a');
+  c.rect(14, 4, 4, 2, '#f2d675');
+  c.outline('#1a1423');
+  return c;
+}
+
 /** 5 × 7 capitals for Isolde's handwriting (p14a). */
 const HAND: Record<string, string[]> = {
   Q: ['.###.', '#...#', '#...#', '#...#', '#.#.#', '#..#.', '.##.#'],
@@ -997,6 +1014,9 @@ mirrorWriting('QFOEFM').save(path.join(OUT, 'puzzles/p14a.png'));
 niffler().save(path.join(OUT, 'sprites/knopf.png'));
 hoard().save(path.join(OUT, 'puzzles/p15w.png'));
 portraits().save(path.join(OUT, 'puzzles/p15a.png'));
+cracker('#c23b3b', '#8e1b1b', '#e86a6a').save(path.join(OUT, 'puzzles/cracker_red.png'));
+cracker('#4f8a3c', '#2e5a26', '#7ab84a').save(path.join(OUT, 'puzzles/cracker_green.png'));
+cracker('#5d8fc7', '#2e5a8f', '#a9cbe8').save(path.join(OUT, 'puzzles/cracker_blue.png'));
 centaurClearing().save(path.join(OUT, 'puzzles/p13w.png'));
 ferret().save(path.join(OUT, 'puzzles/ferret.png'));
 keyBoard(P10).save(path.join(OUT, 'puzzles/p10.png'));

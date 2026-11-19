@@ -1,0 +1,25 @@
+{
+  "id": "p17",
+  "number": 17,
+  "title": "Knallbonbons",
+  "points": 40,
+  "type": "custom",
+  "prompt": "Drei Haufen Knallbonbons: 3, 4 und 5. Abwechselnd nimmt man beliebig viele aus einem einzigen Haufen. Wer das letzte nimmt, gewinnt. Du fängst an – und Fred und George machen keine Fehler.",
+  "config": {
+    "component": "nim",
+    "heaps": [3, 4, 5],
+    "opponents": ["Fred", "George"]
+  },
+  "solution": [1, 4, 5],
+  "hints": [
+    "Der erste Zug entscheidet alles. Danach musst du nur noch ruhig bleiben.",
+    "Schreib die Haufen als Zweierpotenzen: 3 = 2 + 1, 4 = 4, 5 = 4 + 1. Nach deinem Zug soll jede Zweierpotenz gerade oft vorkommen.",
+    "Nimm zwei Bonbons aus dem ersten Haufen. Dann liegen 1, 4 und 5 – jede Zweierpotenz kommt zweimal vor."
+  ],
+  "superHint": "Nach 1, 4, 5 antwortest du auf jeden Zug der Zwillinge so, dass wieder jede Zweierpotenz gerade oft vorkommt. Nehmen sie aus dem vierer Haufen, nimmst du dasselbe aus dem fünfer Haufen, und umgekehrt.",
+  "solutionText": "Erst zwei aus dem ersten Haufen, dann immer so, dass die Nim-Summe null bleibt: 1, 4, 5 sind 1 ⊕ 4 ⊕ 5 = 0. Wer auf null spielt, kann nicht verlieren – und die Zwillinge wissen das.",
+  "intro": {
+    "speaker": "george",
+    "text": "Wir verlieren nie. Wir lassen manchmal gewinnen. Heute eher nicht."
+  }
+}

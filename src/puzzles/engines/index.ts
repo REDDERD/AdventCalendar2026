@@ -3,6 +3,7 @@ import { arrangeEngine } from './Arrange';
 import { choiceEngine } from './Choice';
 import { crossEngine } from './Cross';
 import { inputEngine } from './Input';
+import { nimEngine } from './Nim';
 import { pathEngine } from './Path';
 import { pourEngine } from './Pour';
 import { slideEngine } from './Slide';
@@ -23,10 +24,11 @@ const ENGINES: Record<Exclude<PuzzleType, 'custom'>, AnyEngine> = {
   path: pathEngine,
 };
 
-/** `custom` components by `config.component`; accuse and finale follow with days 23/24. */
+/** `custom` components by `config.component`. */
 const CUSTOM: Record<string, AnyEngine> = {
   pour: pourEngine,
   cross: crossEngine,
+  nim: nimEngine,
 };
 
 /** Section 10: 8 engine types, configured only by JSON. */

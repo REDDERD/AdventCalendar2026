@@ -11,7 +11,7 @@ export type CharacterId =
   | 'quill' | 'ellis' | 'theo' | 'maren' | 'grimsby' | 'aldous'
   | 'thornbury' | 'hat' | 'knopf' | 'wandmaker' | 'player'
   // Cameos ("Zeitgäste", DECISIONS.md #41)
-  | 'peeves' | 'pince' | 'hermione' | 'slughorn' | 'neville' | 'nick' | 'friar' | 'grey_lady' | 'baron' | 'filch' | 'hagrid' | 'luna' | 'myrte' | 'newt' | 'dumbledore';
+  | 'peeves' | 'pince' | 'hermione' | 'slughorn' | 'neville' | 'nick' | 'friar' | 'grey_lady' | 'baron' | 'filch' | 'hagrid' | 'luna' | 'myrte' | 'newt' | 'dumbledore' | 'fred' | 'george' | 'rosmerta';
 
 export const CHARACTERS: CharacterId[] = [
   'quill', 'ellis', 'theo', 'maren', 'grimsby', 'aldous',
@@ -23,6 +23,7 @@ export const CHARACTERS: CharacterId[] = [
   'luna',
   'myrte',
   'newt', 'dumbledore',
+  'fred', 'george', 'rosmerta',
 ];
 
 export type LocationId =

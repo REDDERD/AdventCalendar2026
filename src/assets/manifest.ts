@@ -47,7 +47,7 @@ const OWN = { license: 'own work', credit: 'Drawn by the agent (scripts/draw-spr
 
 /** LPC walk sheets: rows up/left/down/right × 9 frames; frame 18 = facing the viewer. */
 export const IDLE_FRAME = 18;
-const LPC_NPCS = ['quill', 'ellis', 'theo', 'maren', 'grimsby', 'aldous', 'thornbury', 'wandmaker', 'peeves', 'pince', 'hermione', 'slughorn', 'neville', 'nick', 'friar', 'grey_lady', 'baron', 'filch', 'hagrid', 'luna', 'myrte', 'newt', 'dumbledore'] as const;
+const LPC_NPCS = ['quill', 'ellis', 'theo', 'maren', 'grimsby', 'aldous', 'thornbury', 'wandmaker', 'peeves', 'pince', 'hermione', 'slughorn', 'neville', 'nick', 'friar', 'grey_lady', 'baron', 'filch', 'hagrid', 'luna', 'myrte', 'newt', 'dumbledore', 'fred', 'george', 'rosmerta'] as const;
 
 const npcs = Object.fromEntries(
   CHARACTERS.filter((id) => id !== 'player').map((id) => [
@@ -133,6 +133,9 @@ export const assets: Record<string, AssetDef> = {
   'puzzle.p14a': { file: 'assets/puzzles/p14a.png', w: 256, h: 80, ...OWN },
   'puzzle.p15w': { file: 'assets/puzzles/p15w.png', w: 256, h: 192, ...OWN },
   'puzzle.p15a': { file: 'assets/puzzles/p15a.png', w: 256, h: 232, ...OWN },
+  'puzzle.cracker.red': { file: 'assets/puzzles/cracker_red.png', w: 32, h: 16, ...OWN },
+  'puzzle.cracker.green': { file: 'assets/puzzles/cracker_green.png', w: 32, h: 16, ...OWN },
+  'puzzle.cracker.blue': { file: 'assets/puzzles/cracker_blue.png', w: 32, h: 16, ...OWN },
   'puzzle.p10': { file: 'assets/puzzles/p10.png', w: 256, h: 120, ...OWN },
   'puzzle.p10.key_a': { file: 'assets/puzzles/p10_key_a.png', w: 24, h: 24, ...OWN },
   'puzzle.p10.key_b': { file: 'assets/puzzles/p10_key_b.png', w: 24, h: 24, ...OWN },
