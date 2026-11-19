@@ -1,0 +1,32 @@
+{
+  "id": "p15a",
+  "number": 15,
+  "title": "Das Porträt",
+  "points": 50,
+  "type": "tap",
+  "prompt": "Oben hängt das Original von 1726, unten eine spätere Kopie. Ein Restaurator hat an der Kopie fünf Dinge verändert. Tippe die fünf Stellen in der unteren Kopie an.",
+  "config": {
+    "image": "puzzle.p15a",
+    "height": 232,
+    "targets": [
+      { "id": "smile", "x": 114, "y": 144, "w": 28, "h": 20 },
+      { "id": "ribbon", "x": 82, "y": 180, "w": 26, "h": 22 },
+      { "id": "key", "x": 158, "y": 202, "w": 20, "h": 24 },
+      { "id": "gear", "x": 70, "y": 208, "w": 20, "h": 20 },
+      { "id": "plate", "x": 102, "y": 212, "w": 52, "h": 20 }
+    ],
+    "maxMarks": 7
+  },
+  "solution": ["smile", "ribbon", "key", "gear", "plate"],
+  "hints": [
+    "Fang beim Gesicht an und geh dann langsam nach unten.",
+    "Zwei Unterschiede liegen am Schwertarm und an der rechten Hüfte.",
+    "Schau auch auf das Schild am Rahmen und ganz genau auf den Schwertknauf."
+  ],
+  "superHint": "Mund, Band am Arm, Schlüssel an der Hüfte, Jahreszahl und das Zahnrad im Schwertknauf.",
+  "solutionText": "Lächeln, Band, Schlüssel, Jahr und Zahnrad: Der Restaurator hat alles Persönliche wegretuschiert. Das Original ist 1726 gemalt, der Ritter trägt Isoldes Blau, den Uhrenschlüssel und ein Zahnrad im Schwertknauf.",
+  "intro": {
+    "speaker": "quill",
+    "text": "Ein Restaurator hat die Kopie geglättet. Wer glättet, nimmt etwas weg. Finde, was."
+  }
+}

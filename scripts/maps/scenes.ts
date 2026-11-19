@@ -613,6 +613,59 @@ export const SCENES: Record<string, (p: Picture) => void> = {
     for (let i = 0; i < 30; i++) p.dot(ice() < 0.5 ? ice() * 30 : 226 + ice() * 30, 96 + ice() * 60, hex('#a9cbe8'));
   },
 
+  niffler_burrow: (p) => {
+    // under a thick root: an earthy hollow, glittering heaps of buttons, coins and spoons
+    p.gradient(0, 160, '#0b1530', '#1b2a4e');
+    p.fill('dirt', 1, 3, 0, 150, 256, 512);
+    p.rect(0, 150, 256, 362, '#1a1423', 0.35);
+    // the big root arching over the hollow
+    for (let x = -10; x < 270; x++) {
+      const y = 150 + Math.sin((x / 256) * Math.PI) * -40 + 60;
+      p.rect(x, y, 2, 16 + Math.sin(x / 9) * 3, '#3b2414');
+      p.dot(x, y + 2, hex('#5a3a20'));
+    }
+    for (const [x0, y0] of [[30, 230], [210, 240], [140, 200]]) {
+      for (let k = 0; k < 40; k++) p.dot(x0 + Math.sin(k) * 6, y0 + k, hex('#4e2f18')); // root tendrils
+    }
+    p.ellipse(128, 300, 110, 60, '#1a1423', 0.5); // the hollow
+    // the hoard
+    const rnd = random(71);
+    const shiny = ['#d4a73a', '#f2d675', '#c0c8d0', '#a8802a', '#f4f8ff'];
+    for (let i = 0; i < 260; i++) {
+      const a = rnd() * Math.PI;
+      const d = Math.sqrt(rnd());
+      const x = 128 + Math.cos(a) * d * 90;
+      const y = 350 - Math.sin(a) * d * 45;
+      p.ellipse(x, y, 2.5, 1.8, shiny[Math.floor(rnd() * shiny.length)]);
+    }
+    for (const [x, y] of [[90, 330], [170, 340]]) p.line(x, y, x + 14, y - 10, '#c0c8d0'); // spoons
+    p.fill('dirt', 1, 3, 0, 370, 256, 512);
+    p.rect(0, 370, 256, 142, '#1a1423', 0.3);
+    // yellow-black wool thread on a twig
+    p.line(200, 180, 214, 220, '#e0b320');
+    p.line(201, 180, 215, 220, '#2b2620');
+  },
+
+  portrait_gallery: (p) => {
+    // a long, cold gallery full of listening portraits; frost on the frames
+    p.gradient(0, WALL_TOP, '#1b2a4e', '#2b2a33');
+    stoneWall(p, 60);
+    p.rect(0, 60, 256, FLOOR - 60, '#1b2a4e', 0.25);
+    const coats = ['#8e1b1b', '#1e6b3a', '#5a3a6e', '#1d3f8a', '#6b4226', '#3a3440'];
+    let i = 0;
+    for (const [x, y, w, h] of [[10, 100, 34, 44], [58, 92, 40, 52], [112, 104, 30, 38], [156, 90, 42, 54], [212, 100, 34, 44],
+      [24, 190, 30, 40], [82, 180, 38, 50], [148, 186, 30, 40], [200, 176, 40, 52]]) {
+      portrait(p, x, y, w, h, coats[i % coats.length], 80 + i);
+      i++;
+    }
+    snowCap(p, 56, 89, 46, 81); // frost on the frames
+    snowCap(p, 154, 87, 46, 82);
+    stoneFloor(p);
+    carpet(p, 0, 256, 380, 412);
+    p.rect(0, 380, 256, 32, '#1d3f8a', 0.5); // a cold blue runner
+    torch(p, 128, 250);
+  },
+
   archive: (p) => {
     // the archive in the east wing: drawer cabinets to the ceiling, a lectern with the card box
     p.gradient(0, 120, '#2b2a33', '#3b2414');

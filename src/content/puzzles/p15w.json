@@ -1,0 +1,31 @@
+{
+  "id": "p15w",
+  "number": 15,
+  "title": "Was glänzt?",
+  "points": 50,
+  "type": "tap",
+  "prompt": "Newt sagt: Eine echte Galleone hat alles drei – goldenen Glanz, einen geriffelten Rand und einen Drachen auf der Vorderseite. Tippe alle echten Galleonen in Knopfs Haufen an.",
+  "config": {
+    "image": "puzzle.p15w",
+    "height": 192,
+    "targets": [
+      { "id": "c2", "x": 68, "y": 6, "w": 56, "h": 56 },
+      { "id": "c5", "x": 6, "y": 68, "w": 56, "h": 56 },
+      { "id": "c8", "x": 192, "y": 68, "w": 56, "h": 56 },
+      { "id": "c11", "x": 130, "y": 130, "w": 56, "h": 56 }
+    ],
+    "maxMarks": 6
+  },
+  "solution": ["c2", "c5", "c8", "c11"],
+  "hints": [
+    "Echt ist nur, was alle drei Merkmale hat. Prüf bei jedem Stück jedes Merkmal einzeln.",
+    "Gold allein reicht nicht: Ein Schokotaler glänzt auch, und ein Knopf ist kein Geld. Schau auf den Rand.",
+    "Achte auch auf das Wappen: Nicht jedes Tier mit Flügeln ist ein Drache. Und Messing glänzt nicht wie Gold."
+  ],
+  "superHint": "Es sind vier: oben an zweiter Stelle, in der Mitte ganz links und ganz rechts, unten an dritter Stelle.",
+  "solutionText": "Vier echte Galleonen: Gold, geriffelter Rand und Drache. Der Schokotaler und die erste Münze haben einen glatten Rand, der Sickel ist silbern, das Messingstück stumpf, der Greif ist kein Drache und der Knopf hat gar kein Wappen.",
+  "intro": {
+    "speaker": "newt",
+    "text": "Er sammelt alles, was glänzt. Das ist keine Eigenschaft. Das ist ein Beruf."
+  }
+}

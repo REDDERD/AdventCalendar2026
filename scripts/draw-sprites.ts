@@ -742,6 +742,219 @@ function centaurClearing(): Canvas {
   return c;
 }
 
+/** Knopf the niffler (64 × 64, standing at the bottom like the LPC figures): black fur, duck bill, a gold coin. */
+function niffler(): Canvas {
+  // small: about half the height of a person on the stage
+  const c = new Canvas(64, 64);
+  const fur = (u: number, v: number) => (u + v < -0.7 ? '#4a4856' : u + v > 0.5 ? '#1a1423' : '#2b2a33');
+  c.ellipse(32, 55, 8, 6.5, fur); // round body
+  c.ellipse(32, 46, 6, 5.5, fur); // head
+  c.ellipse(27, 41, 2, 2, fur); // ears
+  c.ellipse(37, 41, 2, 2, fur);
+  c.ellipse(32, 50, 4, 2, (u) => (u < -0.2 ? '#c99a7a' : '#e2b48e')); // flat duck bill
+  c.rect(30, 49, 4, 1, '#9a6a4a');
+  for (const x of [29, 35]) c.rect(x, 44, 2, 2, '#f4f8ff'); // shiny eyes
+  for (const x of [30, 35]) c.set(x, 45, '#1a1423');
+  c.ellipse(32, 58, 5, 3, (u, v) => (u + v < -0.4 ? '#f2d675' : '#d4a73a')); // the coin it hugs
+  for (const x of [26, 38]) c.ellipse(x, 57, 2, 1.5, '#3a3440'); // paws on the coin
+  for (const x of [28, 36]) c.rect(x - 1, 61, 3, 2, '#3a3440'); // feet
+  c.outline('#0b0a10');
+  return c;
+}
+
+// ---------- p15w "Was glänzt?" (256 × 192): twelve finds from Knopf's hoard in 4 × 3 cells ----------
+type Metal = 'gold' | 'silver' | 'brass';
+const COIN: Record<Metal, string[]> = {
+  gold: ['#7a5a1c', '#a8802a', '#d4a73a', '#f2d675'],
+  silver: ['#5a5866', '#8a889a', '#c0c8d0', '#f4f8ff'],
+  brass: ['#4a4024', '#6a5a30', '#8a7a48', '#9a8a58'], // dull: no bright highlight
+};
+interface Find {
+  kind: 'coin' | 'spoon' | 'chocolate' | 'button';
+  metal?: Metal;
+  reeded?: boolean;
+  emblem?: 'dragon' | 'griffin' | null;
+}
+const HOARD: Find[] = [
+  { kind: 'coin', metal: 'gold', reeded: false, emblem: 'dragon' },
+  { kind: 'coin', metal: 'gold', reeded: true, emblem: 'dragon' }, // real
+  { kind: 'spoon' },
+  { kind: 'chocolate', metal: 'gold', reeded: false, emblem: 'dragon' },
+  { kind: 'coin', metal: 'gold', reeded: true, emblem: 'dragon' }, // real
+  { kind: 'coin', metal: 'silver', reeded: true, emblem: 'dragon' },
+  { kind: 'button', metal: 'gold', reeded: true, emblem: null },
+  { kind: 'coin', metal: 'gold', reeded: true, emblem: 'dragon' }, // real
+  { kind: 'coin', metal: 'gold', reeded: true, emblem: 'griffin' },
+  { kind: 'spoon' },
+  { kind: 'coin', metal: 'gold', reeded: true, emblem: 'dragon' }, // real
+  { kind: 'coin', metal: 'brass', reeded: true, emblem: 'dragon' },
+];
+
+/** Side view of a dragon: bat wing with points, horned head, long tail with an arrow tip. */
+function dragonEmblem(c: Canvas, cx: number, cy: number, col: string): void {
+  const thick = (x0: number, y0: number, x1: number, y1: number) => {
+    c.line(x0, y0, x1, y1, col);
+    c.line(x0, y0 + 1, x1, y1 + 1, col);
+  };
+  c.ellipse(cx, cy + 4, 7, 3.5, col); // body
+  thick(cx + 5, cy + 2, cx + 8, cy - 5); // neck
+  c.rect(cx + 6, cy - 8, 5, 3, col); // head
+  c.rect(cx + 11, cy - 7, 3, 2, col); // snout
+  c.set(cx + 7, cy - 9, col); // horns
+  c.set(cx + 6, cy - 10, col);
+  // bat wing: a fan from the shoulder to three points with scallops between
+  const tips: Array<[number, number]> = [[-11, -11], [-7, -7], [-5, -13], [-2, -7], [1, -11]];
+  for (let k = 0; k < tips.length - 1; k++) {
+    for (let t = 0; t <= 1; t += 0.1) {
+      const x = tips[k][0] + (tips[k + 1][0] - tips[k][0]) * t;
+      const y = tips[k][1] + (tips[k + 1][1] - tips[k][1]) * t;
+      c.line(cx - 1, cy + 1, cx + x, cy + y, col);
+    }
+  }
+  thick(cx - 6, cy + 5, cx - 12, cy + 8); // tail
+  thick(cx - 12, cy + 8, cx - 15, cy + 4);
+  c.rect(cx - 17, cy + 1, 4, 2, col); // arrow tip
+  c.set(cx - 16, cy, col);
+  for (const x of [cx - 4, cx + 3]) c.rect(x, cy + 7, 2, 3, col); // legs
+}
+
+/** Front view of a griffin: eagle head between two spread wings. */
+function griffinEmblem(c: Canvas, cx: number, cy: number, col: string): void {
+  for (const s of [-1, 1]) {
+    for (let k = 0; k < 9; k++) c.line(cx + s * 2, cy + 2, cx + s * (12 - (k % 3)), cy - 6 + k, col);
+  }
+  c.ellipse(cx, cy - 4, 3, 3.5, col); // head
+  c.rect(cx - 1, cy - 1, 2, 3, col); // beak
+  c.ellipse(cx, cy + 5, 3, 4, col); // body
+  for (const x of [cx - 3, cx + 2]) c.rect(x, cy + 8, 1, 3, col);
+}
+
+function coin(c: Canvas, cx: number, cy: number, f: Find): void {
+  const [dark, mid, base, light] = COIN[f.metal ?? 'gold'];
+  const r = 21;
+  c.ellipse(cx, cy, r, r, (u, v) => (u + v < -0.9 && f.metal !== 'brass' ? light : u + v > 0.8 ? mid : base));
+  // rim: reeded = notches sticking out all around (like a gear), smooth = one even ring
+  for (let a = 0; a < 160; a++) {
+    const ang = (a / 160) * Math.PI * 2;
+    const notch = f.reeded && Math.floor(a / 4) % 2 === 0;
+    for (let d = r - 3; d <= r + (notch ? 2 : 0); d++) {
+      c.set(cx + Math.cos(ang) * d, cy + Math.sin(ang) * d, d >= r ? dark : d === r - 3 ? dark : mid);
+    }
+  }
+  if (f.kind === 'button') {
+    for (const [dx, dy] of [[-4, -4], [4, -4], [-4, 4], [4, 4]]) c.ellipse(cx + dx, cy + dy, 2, 2, '#2b1a10');
+    return;
+  }
+  if (f.emblem === 'dragon') dragonEmblem(c, cx, cy, dark);
+  if (f.emblem === 'griffin') griffinEmblem(c, cx, cy, dark);
+  if (f.kind === 'chocolate') {
+    // crinkled foil and a torn corner with chocolate underneath
+    const rnd = (x: number, y: number) => ((x * 73 + y * 151) % 17) / 17;
+    for (let y = cy - r + 4; y < cy + r - 4; y++) for (let x = cx - r + 4; x < cx + r - 4; x++) {
+      if (Math.hypot(x - cx, y - cy) < r - 4 && rnd(x, y) > 0.86) c.set(x, y, light);
+    }
+    for (let y = cy + 6; y < cy + r; y++) for (let x = cx + 6; x < cx + r; x++) {
+      if (Math.hypot(x - cx, y - cy) < r - 1 && x + y > cx + cy + 22) c.set(x, y, (x + y) % 3 ? '#5a3a20' : '#6b4226');
+    }
+  }
+}
+
+function spoon(c: Canvas, cx: number, cy: number): void {
+  const [dark, , base, light] = COIN.silver;
+  for (let k = 0; k < 30; k++) c.rect(cx - 15 + k, cy + 12 - Math.round(k * 0.8), 3, 2, k % 7 === 0 ? light : base); // handle
+  c.ellipse(cx + 12, cy - 12, 8, 6, (u, v) => (u + v < -0.5 ? light : base)); // bowl
+  c.ellipse(cx + 13, cy - 11, 4, 3, dark);
+}
+
+function hoard(): Canvas {
+  const c = new Canvas(256, 192);
+  for (let y = 0; y < 192; y++) for (let x = 0; x < 256; x++) c.set(x, y, (x * 7 + y * 11) % 31 === 0 ? '#5a3a20' : (x + y) % 2 ? '#2b1a10' : '#33200f');
+  HOARD.forEach((f, i) => {
+    const x = 6 + (i % 4) * 62;
+    const y = 6 + Math.floor(i / 4) * 62;
+    c.rect(x, y, 56, 56, '#3b2414');
+    c.rect(x, y, 56, 1, '#5a3a20');
+    if (f.kind === 'spoon') spoon(c, x + 28, y + 28);
+    else coin(c, x + 28, y + 28, f);
+  });
+  return c;
+}
+
+// ---------- p15a "Das Porträt" (256 × 232): the knight of 1726 above, a retouched copy below ----------
+function knightPortrait(c: Canvas, oy: number, original: boolean): void {
+  // gold frame and a dark painted background
+  c.rect(40, oy, 176, 112, '#a8802a');
+  c.rect(42, oy + 2, 172, 108, '#f2d675');
+  c.rect(45, oy + 5, 166, 102, '#7a5a1c');
+  for (let y = oy + 7; y < oy + 105; y++) for (let x = 47; x < 209; x++) c.set(x, y, (x + y) % 5 === 0 ? '#2a2a3a' : '#1f2030');
+  const steel = (u: number, v: number) => (u + v < -0.6 ? '#d8dee8' : u + v > 0.6 ? '#5a5866' : '#9aa2b0');
+  // body: pauldrons and breastplate
+  c.ellipse(104, oy + 52, 12, 8, steel);
+  c.ellipse(152, oy + 52, 12, 8, steel);
+  for (let y = oy + 46; y < oy + 104; y++) {
+    const half = 26 - Math.max(0, (y - oy - 80) / 4);
+    for (let x = 128 - half; x < 128 + half; x++) c.set(x, y, steel((x - 128) / half, (y - oy - 75) / 30));
+  }
+  c.rect(127, oy + 50, 2, 30, '#8a889a');
+  // sword arm (viewer's left): arm down to the hand, sword held upright beside it
+  c.rect(92, oy + 56, 10, 30, '#b8c0cc');
+  c.rect(92, oy + 56, 2, 30, '#f4f8ff');
+  c.rect(78, oy + 14, 4, 70, '#d8dee8'); // blade
+  c.rect(78, oy + 14, 1, 70, '#ffffff');
+  c.rect(70, oy + 84, 20, 4, '#a8802a'); // cross guard
+  c.rect(77, oy + 88, 6, 8, '#5a3a20'); // grip
+  c.ellipse(80, oy + 98, 4, 4, '#a8802a'); // pommel
+  if (original) {
+    // a tiny gear in the pommel
+    c.ellipse(80, oy + 98, 3, 3, '#f2d675');
+    for (const [dx, dy] of [[0, -4], [4, 0], [0, 4], [-4, 0]]) c.set(80 + dx, oy + 98 + dy, '#f2d675');
+    c.set(80, oy + 98, '#7a5a1c');
+  }
+  c.ellipse(97, oy + 92, 5, 4, '#e8c39e'); // hand
+  // ribbon tied round the sword arm: Isolde's blue in the original, red in the copy
+  const ribbon = original ? ['#1d3f8a', '#3a6ac0'] : ['#8e1b1b', '#c23b3b'];
+  c.rect(90, oy + 64, 14, 5, ribbon[0]);
+  c.rect(90, oy + 64, 14, 2, ribbon[1]);
+  c.rect(86, oy + 68, 3, 9, ribbon[0]);
+  c.rect(91, oy + 69, 3, 8, ribbon[1]);
+  // belt and, in the original, the clock key on the right hip
+  c.rect(104, oy + 82, 48, 4, '#5a3a20');
+  c.rect(124, oy + 81, 8, 6, '#d4a73a');
+  if (original) {
+    c.line(152, oy + 84, 166, oy + 88, '#a8802a');
+    c.ellipse(168, oy + 90, 4, 4, '#d4a73a');
+    c.ellipse(168, oy + 90, 1.5, 1.5, '#1f2030');
+    c.rect(167, oy + 94, 2, 9, '#d4a73a');
+    c.rect(169, oy + 99, 3, 2, '#d4a73a');
+  }
+  // head: brown hair, eyes, and the mouth – a smile only in the original
+  c.ellipse(128, oy + 30, 11, 13, (u, v) => (u + v > 0.7 ? '#c9956a' : '#e8c39e'));
+  c.ellipse(128, oy + 20, 12, 7, '#5a3a20');
+  c.rect(116, oy + 20, 4, 14, '#5a3a20');
+  c.rect(136, oy + 20, 4, 14, '#5a3a20');
+  for (const x of [123, 132]) c.rect(x, oy + 28, 2, 2, '#1a1423');
+  c.rect(127, oy + 31, 2, 3, '#c9956a'); // nose
+  if (original) {
+    c.rect(124, oy + 36, 8, 1, '#8e3b3b');
+    c.set(123, oy + 35, '#8e3b3b');
+    c.set(132, oy + 35, '#8e3b3b');
+  } else {
+    c.rect(125, oy + 36, 6, 1, '#6a3030');
+  }
+  // brass plate on the frame with the year
+  c.rect(104, oy + 96, 48, 12, '#a8802a');
+  c.rect(105, oy + 97, 46, 10, '#d4a73a');
+  digits(c, original ? '1726' : '1826', 128, oy + 99, '#3b2414', 1);
+}
+
+function portraits(): Canvas {
+  const c = new Canvas(256, 232);
+  c.rect(0, 0, 256, 232, '#3a3440');
+  knightPortrait(c, 0, true);
+  knightPortrait(c, 120, false);
+  return c;
+}
+
 /** 5 × 7 capitals for Isolde's handwriting (p14a). */
 const HAND: Record<string, string[]> = {
   Q: ['.###.', '#...#', '#...#', '#...#', '#.#.#', '#..#.', '.##.#'],
@@ -781,6 +994,9 @@ function mirrorWriting(word: string): Canvas {
 
 hippogriff().save(path.join(OUT, 'puzzles/hippogriff.png'));
 mirrorWriting('QFOEFM').save(path.join(OUT, 'puzzles/p14a.png'));
+niffler().save(path.join(OUT, 'sprites/knopf.png'));
+hoard().save(path.join(OUT, 'puzzles/p15w.png'));
+portraits().save(path.join(OUT, 'puzzles/p15a.png'));
 centaurClearing().save(path.join(OUT, 'puzzles/p13w.png'));
 ferret().save(path.join(OUT, 'puzzles/ferret.png'));
 keyBoard(P10).save(path.join(OUT, 'puzzles/p10.png'));

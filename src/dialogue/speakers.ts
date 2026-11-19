@@ -24,4 +24,6 @@ export const SPEAKER_NAMES: Record<string, string> = {
   hagrid: "Hagrid",
   luna: "Luna",
   myrte: "Die Maulende Myrte",
+  newt: "Newt Scamander",
+  dumbledore: "Dumbledores Porträt",
 };

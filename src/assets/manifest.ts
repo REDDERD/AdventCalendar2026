@@ -47,7 +47,7 @@ const OWN = { license: 'own work', credit: 'Drawn by the agent (scripts/draw-spr
 
 /** LPC walk sheets: rows up/left/down/right × 9 frames; frame 18 = facing the viewer. */
 export const IDLE_FRAME = 18;
-const LPC_NPCS = ['quill', 'ellis', 'theo', 'maren', 'grimsby', 'aldous', 'thornbury', 'wandmaker', 'peeves', 'pince', 'hermione', 'slughorn', 'neville', 'nick', 'friar', 'grey_lady', 'baron', 'filch', 'hagrid', 'luna', 'myrte'] as const;
+const LPC_NPCS = ['quill', 'ellis', 'theo', 'maren', 'grimsby', 'aldous', 'thornbury', 'wandmaker', 'peeves', 'pince', 'hermione', 'slughorn', 'neville', 'nick', 'friar', 'grey_lady', 'baron', 'filch', 'hagrid', 'luna', 'myrte', 'newt', 'dumbledore'] as const;
 
 const npcs = Object.fromEntries(
   CHARACTERS.filter((id) => id !== 'player').map((id) => [
@@ -107,6 +107,9 @@ export const assets: Record<string, AssetDef> = {
   // The sorting hat is a single 64 × 64 image (no walk sheet) [GFX-4]
   'npc.hat': { file: 'assets/sprites/hat.png', w: 64, h: 64, ...OWN },
   'portrait.hat': { from: 'npc.hat', crop: [16, 20, 32, 32], scale: 2 },
+  // Knopf the niffler, a single 64 × 64 image as well
+  'npc.knopf': { file: 'assets/sprites/knopf.png', w: 64, h: 64, ...OWN },
+  'portrait.knopf': { from: 'npc.knopf', crop: [16, 32, 32, 32], scale: 2 },
   ...emotes,
   'ui.clock': { file: 'assets/ui/clock.png', w: 96, h: 120, ...OWN },
   'ui.frame.parchment': { file: 'assets/ui/parchment.png', nineSlice: [8, 8, 8, 8] },
@@ -128,6 +131,8 @@ export const assets: Record<string, AssetDef> = {
   'puzzle.p07': { file: 'assets/puzzles/p07.png', w: 256, h: 72, ...OWN },
   'puzzle.p13w': { file: 'assets/puzzles/p13w.png', w: 256, h: 96, ...OWN },
   'puzzle.p14a': { file: 'assets/puzzles/p14a.png', w: 256, h: 80, ...OWN },
+  'puzzle.p15w': { file: 'assets/puzzles/p15w.png', w: 256, h: 192, ...OWN },
+  'puzzle.p15a': { file: 'assets/puzzles/p15a.png', w: 256, h: 232, ...OWN },
   'puzzle.p10': { file: 'assets/puzzles/p10.png', w: 256, h: 120, ...OWN },
   'puzzle.p10.key_a': { file: 'assets/puzzles/p10_key_a.png', w: 24, h: 24, ...OWN },
   'puzzle.p10.key_b': { file: 'assets/puzzles/p10_key_b.png', w: 24, h: 24, ...OWN },

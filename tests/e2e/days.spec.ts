@@ -256,3 +256,29 @@ test('day 14 (archive): Moaning Myrtle and the mirrored PENDEL', async ({ page }
   await tapUntil(page, page.getByText('Kapitel 14 geschafft!'));
   await choicesLogged('d14a.myrtle.ask', 'd14a.tone.lonely');
 });
+
+/** Tap points given in picture coordinates (256 wide). */
+async function tapPicture(page: Page, points: Array<[number, number]>): Promise<void> {
+  const box = (await page.locator('.tap-picture').boundingBox())!;
+  for (const [x, y] of points) await page.mouse.click(box.x + (x * box.width) / 256, box.y + (y * box.width) / 256);
+}
+
+test('day 15 (forest): Knopf, Newt and the four real galleons', async ({ page }) => {
+  await startDayAsAdmin(page, 15, undefined, 'forest');
+  await choose(page, ['Sanft die Hand ausstrecken.', 'Er soll bei seiner Freundin bleiben.']);
+  await openPuzzle(page, 15);
+  await tapPicture(page, [[96, 34], [34, 96], [220, 96], [158, 158]]);
+  await finishDay(page, 15, 50);
+  await expect(page.locator('.dayend-frame')).toContainText('Knopf, der Niffler');
+  await choicesLogged('d15w.knopf.gentle', 'd15w.newt.stay');
+});
+
+test('day 15 (archive): Dumbledore, Aldous and five differences in the portrait', async ({ page }) => {
+  await startDayAsAdmin(page, 15, undefined, 'archive');
+  await choose(page, ['Ein Zitronenbonbon nehmen.', 'Ihn nach dem Ritter fragen.']);
+  await openPuzzle(page, 15);
+  await tapPicture(page, [[128, 154], [95, 191], [168, 214], [80, 218], [128, 222]]);
+  await finishDay(page, 15, 50);
+  await expect(page.locator('.dayend-frame')).toContainText('Porträt von 1726');
+  await choicesLogged('d15a.dumbledore.take', 'd15a.aldous.ask');
+});

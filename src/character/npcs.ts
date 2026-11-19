@@ -288,6 +288,40 @@ export const NPCS: Record<string, Recipe> = {
       { id: 'glasses_round' },
     ],
   },
+  // Newt Scamander (cameo, day 15w): blue coat, bow tie, mustard scarf, sandy messy hair
+  newt: {
+    body: 'male',
+    layers: [
+      { id: 'cape_bg', colors: { cloth: 'navy' } },
+      { id: 'body', colors: { body: 'light' } },
+      { id: 'head_male', colors: { body: 'light', eye: 'green' } },
+      { id: 'shoes', colors: { cloth: 'brown' } },
+      { id: 'pants', colors: { cloth: 'walnut' } },
+      { id: 'sweater', colors: { cloth: 'sky' } },
+      { id: 'cape', colors: { cloth: 'navy' } },
+      { id: 'bowtie', colors: { cloth: 'brown' } },
+      { id: 'scarf', colors: { cloth: 'yellow' } },
+      { id: 'hair_parted', colors: { hair: 'sandy' } },
+    ],
+  },
+  // Dumbledore's portrait (cameo, days 15a, 21): purple robe, pointed hat, long white beard and hair
+  dumbledore: {
+    body: 'male',
+    layers: [
+      { id: 'cape_bg', colors: { cloth: 'purple' } },
+      { id: 'body', colors: { body: 'light' } },
+      { id: 'head_male_elderly', colors: { body: 'light', eye: 'blue' } },
+      { id: 'shoes', colors: { cloth: 'purple' } },
+      { id: 'pants', colors: { cloth: 'purple' } },
+      { id: 'sweater', colors: { cloth: 'purple' } },
+      { id: 'cape', colors: { cloth: 'purple' } },
+      { id: 'cape_trim', colors: { cloth: 'yellow' } },
+      { id: 'hair_long', colors: { hair: 'white' } },
+      { id: 'beard_winter', colors: { hair: 'white' } },
+      { id: 'glasses' },
+      { id: 'wizard_hat_purple' },
+    ],
+  },
   // The wandmaker
   wandmaker: {
     body: 'female',
