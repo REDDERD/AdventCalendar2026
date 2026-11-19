@@ -113,6 +113,9 @@ for (const stem of listStoryFiles()) {
         case 'item':
           if (!(value in ITEMS)) errors.push(`${at}: unknown item "${value}"`);
           break;
+        case 'photo':
+          if (!['mirror', 'off'].includes(value)) errors.push(`${at}: photo must be mirror|off`);
+          break;
         case 'music':
           if (!(MUSIC_IDS as readonly string[]).includes(value)) errors.push(`${at}: unknown music "${value}"`);
           break;

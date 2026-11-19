@@ -107,6 +107,8 @@ export interface StageState {
   music: string | null;
   actors: Array<{ id: string; pos: 'left' | 'center' | 'right' }>;
   sparks: Array<{ id: string; x: number; y: number }>;
+  /** `# photo: mirror` (day 18): the mirror with the personal photo; `off` or a new `# bg` hides it. */
+  photo?: string | null;
 }
 
 export interface CurrentDay {

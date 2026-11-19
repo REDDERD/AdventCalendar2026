@@ -10,7 +10,7 @@ import { SCENES } from './maps/scenes';
 const args = process.argv.slice(2);
 const previewAt = args.indexOf('--preview');
 const preview = previewAt >= 0 ? args[previewAt + 1] : null;
-const only = args.filter((a, i) => !a.startsWith('--') && i !== previewAt + 1);
+const only = args.filter((a, i) => !a.startsWith('--') && (previewAt < 0 || i !== previewAt + 1));
 const ids = only.length ? only : Object.keys(SCENES);
 
 const rendered: Array<[string, PNG]> = [];

@@ -33,8 +33,8 @@ INCLUDE globals.ink
 # bg: room_of_requirement
 # music: castle
 # spark: d18.s1 40 160
-Achtzehnter Dezember. Im siebten Stock gibt es eine Wand, die nur erscheint, wenn man
-nichts sucht.
+Achtzehnter Dezember. Im siebten Stock gibt es eine Wand.
+Sie erscheint nur, wenn man nichts sucht.
 # show: quill right
 # show: ellis left
 quill: Der Raum der Wünsche. Er gibt, was man braucht. Selten das, was man will.
@@ -43,8 +43,8 @@ ellis: Der Raum hat Humor oder Hunger.
 In einer Ecke liegt ein einzelner Socken mit Bommel. Auf dem Zettel:
 „Für den, der Socken braucht. D.“
 { bond_ellis >= 3: ellis: Bleib bei mir, ja? Räume, die sich ändern, mag ich nur mit Begleitung. }
-Mitten im Raum erscheint eine Tür. Sofort zerfällt sie in neun Platten und lässt eine
-Lücke.
+Mitten im Raum erscheint eine Tür.
+Sofort zerfällt sie in neun Platten und lässt eine Lücke.
 quill: Das erinnert mich an ein Rätsel aus einer Werkstatt für Türen.
 # puzzle: p18
 { last_puzzle_first_try: ellis: Beim ersten Mal! Der Raum ist beeindruckt. Er sagt nur nichts. }
@@ -78,8 +78,8 @@ quill: Dreihundert Jahre. Die Uhr ist seine Wache und sein Käfig zugleich.
     quill: Der Raum hat zugehört. Manche Räume tun das.
 * [Weitergehen.] # cid: d18.token.skip
     Du ziehst die Tasche zu. Der Raum nickt, als hätte er verstanden.
-- Am Ende des Raums steht ein hoher Spiegel. Er zeigt nicht dich, sondern was du dir
-wünschst.
+- Am Ende des Raums steht ein hoher Spiegel.
+Er zeigt nicht dich, sondern was du dir wünschst.
 # photo: mirror
 Im Glas siehst du ein Bild aus deinem Leben. Es gehört nur dir.
 # choice_point: d18.wish Der Spiegel wartet auf einen Wunsch.
@@ -90,7 +90,8 @@ Im Glas siehst du ein Bild aus deinem Leben. Es gehört nur dir.
     Im Glas hörst du für einen Atemzug ein Ticken. Dann ist es wieder still. Es war aber da.
 * [Dass niemand gehen muss.] # cid: d18.wish.stay
     Der Spiegel wird kurz beschlagen. Dann sagt er nichts mehr. Auch eine Antwort.
-- Der Raum stellt jedem einen Becher heiße Schokolade hin. Auf Ellis' steht:
+- # photo: off
+Der Raum stellt jedem einen Becher heiße Schokolade hin. Auf Ellis' steht:
 „Für den Laminierer.“
 ellis: Der Raum kennt mich. Das ist schlimmer, als ich dachte.
 # spark: d18.s2 214 140
@@ -108,7 +109,7 @@ ellis: Der Raum kennt mich. Das ist schlimmer, als ich dachte.
 
 ## Zusätze für die Umsetzung
 
-- **Neues Tag `# photo: mirror`:** Es zeigt das Spiegelbild aus `personal/{uid}.mirrorPhoto` (96 × 72, Pergamentrahmen). Fehlt es, erscheint ein Standardbild (Spielfigur mit Ellis und Quill). `content:lint` kennt das Tag nicht, meldet aber keinen Fehler (in der Prüfkopie geprüft). Bis es gebaut ist, ignoriert die Szene es, und der Spiegel bleibt eine Erzählzeile.
+- **Tag `# photo: mirror`** (umgesetzt): Über der Szene erscheint ein goldener Spiegel mit dem Bild aus `personal/{uid}.mirrorPhoto` (96 × 72, doppelt groß). Fehlt es, zeigt der Spiegel die Köpfe von Ellis, der Spielfigur und Quill. `# photo: off` (nach dem Wunsch) oder ein neues `# bg` blendet ihn aus.
 - **Conditional choice:** `* { items ? house_token } [...]` blendet die Option für Spieler ohne Gegenstand aus. Sie sehen dort nur „Weitergehen“.
 - **Bonus-Szene `d18.token`:** Vier einzeilige Sätze, je Haus einer. Sie schicken **Hinweise auf Ende A** mit (offene Tür, dritte Lösung), ohne die Lösung zu verraten.
 

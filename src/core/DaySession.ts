@@ -215,7 +215,7 @@ export class DaySession {
     for (const { key, value } of tags) {
       switch (key) {
         case 'bg':
-          stage = { ...stage, bg: value, actors: [], sparks: [] };
+          stage = { ...stage, bg: value, actors: [], sparks: [], photo: null };
           break;
         case 'music':
           stage = { ...stage, music: value };
@@ -238,6 +238,9 @@ export class DaySession {
         }
         case 'emote':
           effects.emotes.push(parseEmote(value));
+          break;
+        case 'photo':
+          stage = { ...stage, photo: value === 'off' ? null : value };
           break;
         case 'toast':
           effects.toasts.push(value);

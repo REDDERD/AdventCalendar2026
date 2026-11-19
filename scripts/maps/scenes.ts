@@ -710,6 +710,44 @@ export const SCENES: Record<string, (p: Picture) => void> = {
     for (let i = 0; i < 160; i++) p.dot(flakes() * 256, flakes() * 512, hex(candy[Math.floor(flakes() * candy.length)]));
   },
 
+  room_of_requirement: (p) => {
+    // the room that gives what you need: towering piles of forgotten things, a fireplace, warm light
+    p.gradient(0, WALL_TOP, '#3b2414', '#5a3a20');
+    stoneWall(p, 60);
+    p.rect(0, 60, 256, FLOOR - 60, '#3b2414', 0.35);
+    // piles of things up to the ceiling, left and right
+    const rnd = random(101);
+    const stuff = ['#6b4226', '#8a5a34', '#5a3a6e', '#1d3f8a', '#8e1b1b', '#a8a6b8', '#d4a73a', '#4f8a3c'];
+    for (const [x0, x1] of [[0, 78], [178, 256]]) {
+      for (let y = FLOOR; y > 90; ) {
+        const h = 8 + Math.floor(rnd() * 14);
+        let x = x0 + Math.floor(rnd() * 8);
+        while (x < x1 - 6) {
+          const w = 10 + Math.floor(rnd() * 22);
+          const c = stuff[Math.floor(rnd() * stuff.length)];
+          p.rect(x, y - h, Math.min(w, x1 - x), h, c);
+          p.rect(x, y - h, Math.min(w, x1 - x), 1, hexShade(c, 0.35));
+          x += w + 1;
+        }
+        y -= h;
+      }
+    }
+    p.rect(0, 60, 78, FLOOR - 60, '#1a1423', 0.3);
+    p.rect(178, 60, 78, FLOOR - 60, '#1a1423', 0.3);
+    // the fireplace Ellis got instead of a sandwich, and two armchairs
+    fireplace(p, 88, 256);
+    stoneFloor(p);
+    p.rect(0, FLOOR, 256, 512 - FLOOR, '#5a3a20', 0.35);
+    armchair(p, 30, 356, '#8e1b1b');
+    armchair(p, 196, 356, '#1d3f8a');
+    // Dobby's sock with a note
+    p.rect(150, 372, 6, 10, '#c23b3b');
+    p.rect(150, 380, 10, 4, '#c23b3b');
+    p.rect(150, 372, 6, 2, '#f4f8ff');
+    p.rect(160, 376, 8, 6, '#f6ead0');
+    for (const x of [44, 212]) p.candle(x, 240);
+  },
+
   archive: (p) => {
     // the archive in the east wing: drawer cabinets to the ceiling, a lectern with the card box
     p.gradient(0, 120, '#2b2a33', '#3b2414');

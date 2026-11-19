@@ -323,3 +323,30 @@ test('day 17: Hogsmeade, Nim against Fred and George, a scarf for Ellis', async 
   await expect(page.locator('.dayend-frame')).toContainText('Schal für Ellis');
   await choicesLogged('d17.treat.sweet', 'd17.gift.ellis');
 });
+
+test('day 18: the door that appears, Isolde\'s memory and the mirror', async ({ page }) => {
+  await startDayAsAdmin(page, 18, undefined, 'forest');
+  await openPuzzle(page, 18);
+  for (const tile of [7, 1, 6, 4, 3, 8, 2, 5, 1, 7, 8, 2, 5, 1, 7, 8, 4, 3, 2, 5, 1, 4, 5, 2, 3, 6]) {
+    await page.getByRole('button', { name: `Teil ${tile}`, exact: true }).click();
+  }
+  await finishDay18(page);
+});
+
+async function finishDay18(page: Page): Promise<void> {
+  await page.getByRole('button', { name: 'Prüfen' }).click();
+  await expect(page.getByText('+50 Hauspunkte')).toBeVisible();
+  await page.getByRole('button', { name: 'Weiter' }).click();
+  await choose(page, ['Weitergehen.']); // no house token when jumping straight to day 18
+  // # photo: mirror – without a personal photo the mirror shows the player with Ellis and Quill
+  await tapUntil(page, page.locator('.mirror-photo-default'));
+  await choose(page, ['Dass niemand gehen muss.']);
+  for (let i = 0; i < 20 && (await page.locator('.mirror-photo').count()); i++) {
+    await page.locator('.dialogue').click();
+    await page.waitForTimeout(80);
+  }
+  await expect(page.locator('.mirror-photo')).toHaveCount(0); // # photo: off
+  await tapUntil(page, page.getByText('Kapitel 18 geschafft!'));
+  await expect(page.locator('.dayend-frame')).toContainText('Porträt von 1726'); // [DEC-4] catch-up clue
+  await choicesLogged('d18.token.skip', 'd18.wish.stay');
+}

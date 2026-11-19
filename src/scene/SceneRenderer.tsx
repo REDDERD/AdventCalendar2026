@@ -4,6 +4,7 @@ import { useStore } from '../core/store';
 import type { StageState } from '../types';
 import { AssetImage } from '../ui/AssetImage';
 import { Hotspot } from './Hotspot';
+import { MirrorPhoto } from './MirrorPhoto';
 
 /** Backgrounds are 256 × 512, anchored to the bottom of the scene (DECISIONS.md #32). */
 export const WORLD_W = 256;
@@ -38,6 +39,7 @@ export function SceneRenderer({ stage, emotes, onSpark, floor = DEFAULT_FLOOR }:
         {stage.sparks.map((spark) => (
           <Hotspot key={spark.id} x={spark.x} y={spark.y} onTap={() => onSpark?.(spark.id)} className="spark" />
         ))}
+        {stage.photo === 'mirror' && <MirrorPhoto />}
       </div>
       {stage.actors.map((actor) => (
         <div key={actor.id} className="actor" style={{ left: ACTOR_X[actor.pos] - ACTOR_SIZE / 2, bottom: floor }}>
