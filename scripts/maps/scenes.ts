@@ -99,9 +99,25 @@ function portrait(p: Picture, x: number, y: number, w: number, h: number, coat: 
   p.rect(x - 1, y - 1, w + 2, h + 2, '#7a5a1c');
   p.gradient(y, y + h, '#3a3440', '#1b2a4e', x, x + w);
   const rnd = random(seed);
-  p.ellipse(x + w / 2, y + h - 2, w / 2.6, h / 3.2, coat);
-  p.ellipse(x + w / 2, y + h * 0.42, w / 5, w / 5, rnd() < 0.5 ? '#e8c39e' : '#c9956a');
-  p.rect(x + w / 2 - w / 5, y + h * 0.42 - w / 5 - 1, (w / 5) * 2, 3, rnd() < 0.5 ? '#3b2414' : '#9aa0b0');
+  const skin = rnd() < 0.5 ? '#e8c39e' : '#c9956a';
+  const hair = rnd() < 0.5 ? '#3b2414' : '#9aa0b0';
+  const cx = x + w / 2;
+  // Shoulders: the upper half of a wide ellipse, clipped to the canvas so nothing sticks out of the frame.
+  const rx = w * 0.42;
+  const ry = h * 0.36;
+  const coatRgb = hex(coat);
+  for (let py = y + h - Math.ceil(ry); py < y + h; py++) {
+    for (let px = Math.floor(cx - rx); px <= cx + rx; px++) {
+      if (px < x || px >= x + w) continue;
+      const u = (px + 0.5 - cx) / rx;
+      const v = (py + 0.5 - (y + h)) / ry;
+      if (u * u + v * v <= 1) p.dot(px, py, coatRgb);
+    }
+  }
+  const headY = y + h * 0.44;
+  p.rect(Math.round(cx - w / 12), Math.round(headY), Math.round(w / 6), Math.round(y + h - ry - headY) + 2, skin); // neck
+  p.ellipse(cx, headY, w / 5, w / 5, skin);
+  p.rect(cx - w / 5, headY - w / 5 - 1, (w / 5) * 2, 3, hair);
 }
 
 /** Torch with flame and warm glow. */
