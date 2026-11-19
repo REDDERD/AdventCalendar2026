@@ -1,5 +1,6 @@
 import {
   collection,
+  deleteField,
   doc,
   getDoc,
   getDocs,
@@ -9,6 +10,7 @@ import {
   query,
   setDoc,
   updateDoc,
+  where,
   type Unsubscribe,
 } from 'firebase/firestore';
 import { parseUserDoc } from '../services/AuthService';
@@ -68,6 +70,25 @@ export function subscribeFeed(onEvents: (events: FeedEvent[]) => void, onError: 
   return onSnapshot(q, (snap) => onEvents(snap.docs.map((d) => parseEvent(d.id, d.data()))), onError);
 }
 
+/** [ADM-11] Events of one player or of one type (single-field filters need no index). */
+export async function loadEvents(filter: { uid?: string; type?: EventType } = {}): Promise<FeedEvent[]> {
+  const base = collection(db, 'events');
+  const q = filter.uid ? query(base, where('uid', '==', filter.uid)) : filter.type ? query(base, where('type', '==', filter.type)) : base;
+  const snap = await getDocs(q);
+  return snap.docs.map((d) => parseEvent(d.id, d.data()));
+}
+
+/** admin.tools: everything as one JSON object (users, saves, events, personal). */
+export async function exportAll(): Promise<Record<string, unknown>> {
+  const names = ['users', 'saves', 'events', 'personal'] as const;
+  const snaps = await Promise.all(names.map((n) => getDocs(collection(db, n))));
+  const out: Record<string, unknown> = { exportedAt: new Date().toISOString() };
+  names.forEach((n, i) => {
+    out[n] = Object.fromEntries(snaps[i].docs.map((d) => [d.id, d.data()]));
+  });
+  return out;
+}
+
 /** [ADM-7] [ADM-10] */
 export function updateUser(uid: string, patch: Partial<Pick<UserDoc, 'active' | 'displayName' | 'note'>>): Promise<void> {
   return updateDoc(doc(db, 'users', uid), patch);
@@ -82,4 +103,9 @@ export async function loadPersonalDoc(uid: string): Promise<PersonalDoc> {
 /** Merge keeps the mirror photo, which this editor does not touch. */
 export function savePersonalDoc(uid: string, form: PersonalForm): Promise<void> {
   return setDoc(doc(db, 'personal', uid), toPatch(form), { merge: true });
+}
+
+/** [PRS-1] The mirror photo as PNG data URL, or null to remove it. */
+export function saveMirrorPhoto(uid: string, dataUrl: string | null): Promise<void> {
+  return setDoc(doc(db, 'personal', uid), { mirrorPhoto: dataUrl ?? deleteField() }, { merge: true });
 }

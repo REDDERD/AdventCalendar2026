@@ -1,16 +1,10 @@
 import { useEffect, useState } from 'react';
 import { LAST_DAY } from '../../content/schedule';
-import { Avatar, Chip, houseColor, houseName } from '../components';
+import { adminHref } from '../routes';
+import { Avatar, Chip, ENDING_NAME, houseColor, houseName } from '../components';
 import type { AdminPlayer } from '../data';
 import { formatDuration } from '../eventText';
 import { highestDay, lastActive, overviewMetrics, playerStatus, relativeTime, statusLabel, type PlayerStatus } from '../stats';
-
-const ENDING: Record<string, string> = {
-  A: 'Die dritte Lösung',
-  B: 'Abschied im Schnee',
-  C_A: 'Der Geist gesteht + Ellis’ Idee',
-  C_B: 'Der Geist gesteht',
-};
 
 const TONE: Record<PlayerStatus, 'good' | 'warn' | 'plain' | 'gold'> = {
   playing: 'good',
@@ -66,7 +60,7 @@ export function OverviewView({ players }: { players: AdminPlayer[] | null }) {
         const day = highestDay(p.save);
         const ending = p.save?.ending;
         return (
-          <article key={p.user.uid} className="player-card" style={{ borderLeftColor: houseColor(p) }}>
+          <a key={p.user.uid} href={adminHref('player', p.user.uid)} className="player-card" style={{ borderLeftColor: houseColor(p) }}>
             <Avatar player={p} size={48} />
             <div className="player-body">
               <div className="player-head">
@@ -86,10 +80,10 @@ export function OverviewView({ players }: { players: AdminPlayer[] | null }) {
               </div>
               <div className="player-foot">
                 <span>★ {p.save?.housePoints ?? 0} Hauspunkte</span>
-                {ending && <span>Ende: {ENDING[ending]}</span>}
+                {ending && <span>Ende: {ENDING_NAME[ending]}</span>}
               </div>
             </div>
-          </article>
+          </a>
         );
       })}
     </>

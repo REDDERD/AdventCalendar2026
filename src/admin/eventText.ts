@@ -13,9 +13,9 @@ const HOUSE: Record<HouseId, string> = {
   ravenclaw: 'Ravenclaw',
   slytherin: 'Slytherin',
 };
-const WAND: Record<string, string> = { phoenix: 'Phönixfeder', dragon: 'Drachenherz', unicorn: 'Einhornhaar' };
-const PET: Record<string, string> = { owl: 'eine Eule', cat: 'eine Katze', toad: 'eine Kröte' };
-const PRONOUN: Record<string, string> = { f: 'Hexe', m: 'Zauberer', n: 'neutral' };
+export const WAND: Record<string, string> = { phoenix: 'Phönixfeder', dragon: 'Drachenherz', unicorn: 'Einhornhaar' };
+export const PET: Record<string, string> = { owl: 'eine Eule', cat: 'eine Katze', toad: 'eine Kröte' };
+export const PRONOUN: Record<string, string> = { f: 'Hexe', m: 'Zauberer', n: 'neutral' };
 const PLATFORM: Record<string, string> = { ios: 'iPhone', android: 'Android', other: 'Browser' };
 
 export function formatDuration(sec: unknown): string {

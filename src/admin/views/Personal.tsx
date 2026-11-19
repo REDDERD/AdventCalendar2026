@@ -1,10 +1,11 @@
-import { useEffect, useState, type FormEvent, type ReactNode } from 'react';
+import { useEffect, useMemo, useState, type FormEvent, type ReactNode } from 'react';
 import { joinGerman, PERSONAL_DEFAULTS } from '../../services/PersonalService';
 import { Avatar } from '../components';
-import { loadPersonalDoc, savePersonalDoc, type AdminPlayer } from '../data';
+import { loadPersonalDoc, saveMirrorPhoto, savePersonalDoc, type AdminPlayer } from '../data';
 import { LETTER_MAX, toForm, type PersonalForm } from '../personal';
+import { PHOTO_MAX_CHARS, PHOTO_W, renderPhoto } from '../photo';
 
-/** Section 12 / admin.personal: per player the text fields; photo and scene preview follow in M6. */
+/** Section 12 / admin.personal: per player the text fields, the mirror photo [PRS-1] and previews in the game look [PRS-4]. */
 export function PersonalView({ players }: { players: AdminPlayer[] | null }) {
   const [uid, setUid] = useState<string | null>(null);
   if (!players) return <p className="admin-muted">Lade …</p>;
@@ -29,6 +30,7 @@ export function PersonalView({ players }: { players: AdminPlayer[] | null }) {
 
 function PersonalEditor({ player, onClose }: { player: AdminPlayer; onClose: () => void }) {
   const [form, setForm] = useState<PersonalForm | null>(null);
+  const [photo, setPhoto] = useState<string | null>(null);
   const [status, setStatus] = useState<{ ok: boolean; text: string } | null>(null);
   const [busy, setBusy] = useState(false);
   const uid = player.user.uid;
@@ -36,7 +38,11 @@ function PersonalEditor({ player, onClose }: { player: AdminPlayer; onClose: () 
   useEffect(() => {
     let alive = true;
     loadPersonalDoc(uid)
-      .then((doc) => alive && setForm(toForm(doc)))
+      .then((doc) => {
+        if (!alive) return;
+        setForm(toForm(doc));
+        setPhoto(doc.mirrorPhoto ?? null);
+      })
       .catch((e) => {
         console.error(e);
         if (alive) setStatus({ ok: false, text: 'Konnte nicht geladen werden.' });
@@ -81,7 +87,7 @@ function PersonalEditor({ player, onClose }: { player: AdminPlayer; onClose: () 
       </button>
       <h2 className="personal-title">{player.user.displayName}</h2>
 
-      <Section title="Tag 5 · Amortentia" preview={`Es duftet nach ${scents.length ? joinGerman(scents) : PERSONAL_DEFAULTS.amortentiaScents}.`}>
+      <Section title="Tag 5 · Amortentia" preview={{ text: `Es duftet nach ${scents.length ? joinGerman(scents) : PERSONAL_DEFAULTS.amortentiaScents}.` }}>
         {form.scents.map((s, i) => (
           <label key={i}>
             Duft {i + 1}
@@ -90,7 +96,7 @@ function PersonalEditor({ player, onClose }: { player: AdminPlayer; onClose: () 
         ))}
       </Section>
 
-      <Section title="Tag 7 und 17 · Insider-Witze" preview={form.jokes[0].trim() ? `Ellis: ${form.jokes[0].trim()}` : 'Ohne Witz entfällt die Zeile.'}>
+      <Section title="Tag 7 und 17 · Insider-Witze" preview={form.jokes[0].trim() ? { speaker: 'Ellis', text: form.jokes[0].trim() } : { text: 'Ohne Witz entfällt die Zeile.' }}>
         <label>
           Witz 1 (Tag 7, sagt Ellis)
           <input value={form.jokes[0]} onChange={(e) => setAt('jokes', 0, e.target.value)} maxLength={140} />
@@ -101,7 +107,7 @@ function PersonalEditor({ player, onClose }: { player: AdminPlayer; onClose: () 
         </label>
       </Section>
 
-      <Section title="Tag 12 · Patronus" preview={`Luna: Und dein Patronus wäre ${form.patronus.trim() || PERSONAL_DEFAULTS.patronus}.`}>
+      <Section title="Tag 12 · Patronus" preview={{ speaker: 'Luna', text: `Und dein Patronus wäre ${form.patronus.trim() || PERSONAL_DEFAULTS.patronus}.` }}>
         <label>
           Tier mit Artikel
           <input value={form.patronus} onChange={(e) => set('patronus', e.target.value)} placeholder={PERSONAL_DEFAULTS.patronus} />
@@ -114,6 +120,8 @@ function PersonalEditor({ player, onClose }: { player: AdminPlayer; onClose: () 
           <input value={form.favoriteSweet} onChange={(e) => set('favoriteSweet', e.target.value)} placeholder={PERSONAL_DEFAULTS.favoriteSweet} />
         </label>
       </Section>
+
+      <MirrorPhoto uid={uid} photo={photo} onSaved={setPhoto} />
 
       <Section title="Tag 24 · Brief">
         <label>
@@ -138,6 +146,7 @@ function PersonalEditor({ player, onClose }: { player: AdminPlayer; onClose: () 
           Überraschung (Zeile nach dem Brief, optional)
           <input value={form.surprise} onChange={(e) => set('surprise', e.target.value)} />
         </label>
+        {form.letter.trim() && <LetterPreview text={form.letter} signature={form.letterSignature.trim() || player.user.displayName} />}
       </Section>
 
       {status && <div className={status.ok ? 'admin-ok' : 'admin-error'}>{status.text}</div>}
@@ -148,12 +157,135 @@ function PersonalEditor({ player, onClose }: { player: AdminPlayer; onClose: () 
   );
 }
 
-function Section({ title, preview, children }: { title: string; preview?: string; children: ReactNode }) {
+interface Preview {
+  speaker?: string;
+  text: string;
+}
+
+function Section({ title, preview, children }: { title: string; preview?: Preview; children: ReactNode }) {
   return (
     <section className="admin-card admin-form">
       <h2>{title}</h2>
       {children}
-      {preview && <p className="personal-preview">{preview}</p>}
+      {preview && (
+        <div className="game-preview" aria-label="Vorschau im Spiel">
+          {preview.speaker && <span className="game-preview-name">{preview.speaker}</span>}
+          <p>{preview.text}</p>
+        </div>
+      )}
+    </section>
+  );
+}
+
+/** "*kursiv*" → <em>, blank lines → paragraphs (Section 12). */
+function LetterPreview({ text, signature }: { text: string; signature: string }) {
+  return (
+    <div className="letter-preview" aria-label="Vorschau des Briefs">
+      {text
+        .trim()
+        .split(/\n\s*\n/)
+        .map((para, i) => (
+          <p key={i}>
+            {para.split(/(\*[^*]+\*)/).map((part, j) =>
+              part.length > 2 && part.startsWith('*') && part.endsWith('*') ? <em key={j}>{part.slice(1, -1)}</em> : part,
+            )}
+          </p>
+        ))}
+      <p className="letter-signature">{signature}</p>
+    </div>
+  );
+}
+
+/** [PRS-1] Pick a picture → crop to 96 × 72 → game palette (Floyd–Steinberg) → preview → save. */
+function MirrorPhoto({ uid, photo, onSaved }: { uid: string; photo: string | null; onSaved: (p: string | null) => void }) {
+  const [image, setImage] = useState<HTMLImageElement | null>(null);
+  const [zoom, setZoom] = useState(1);
+  const [panX, setPanX] = useState(0);
+  const [panY, setPanY] = useState(0);
+  const [busy, setBusy] = useState(false);
+  const [status, setStatus] = useState<{ ok: boolean; text: string } | null>(null);
+
+  const draft = useMemo(() => (image ? renderPhoto(image, zoom, panX, panY) : null), [image, zoom, panX, panY]);
+  const shown = draft ?? photo;
+  const tooBig = !!draft && draft.length > PHOTO_MAX_CHARS;
+
+  const pick = (file: File | undefined) => {
+    if (!file) return;
+    const url = URL.createObjectURL(file);
+    const img = new Image();
+    img.onload = () => {
+      setImage(img);
+      setZoom(1);
+      setPanX(0);
+      setPanY(0);
+      setStatus(null);
+      URL.revokeObjectURL(url);
+    };
+    img.onerror = () => setStatus({ ok: false, text: 'Das Bild konnte nicht gelesen werden.' });
+    img.src = url;
+  };
+
+  const save = async (value: string | null) => {
+    setBusy(true);
+    try {
+      await saveMirrorPhoto(uid, value);
+      onSaved(value);
+      setImage(null);
+      setStatus({ ok: true, text: value ? 'Foto gespeichert.' : 'Foto entfernt – der Spiegel zeigt die Spielfigur mit Ellis und Quill.' });
+    } catch (e) {
+      console.error(e);
+      setStatus({ ok: false, text: 'Speichern fehlgeschlagen.' });
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  return (
+    <section className="admin-card admin-form">
+      <h2>Tag 18 · Spiegel Nerhegeb</h2>
+      <div className="mirror-frame">
+        {shown ? (
+          <img src={shown} alt="Spiegelfoto" width={PHOTO_W * 3} className="pixelated" />
+        ) : (
+          <span className="admin-muted">Ohne Foto: Spielfigur mit Ellis und Quill</span>
+        )}
+      </div>
+      <label>
+        Foto wählen
+        <input type="file" accept="image/*" onChange={(e) => pick(e.target.files?.[0])} />
+      </label>
+      {image && (
+        <>
+          <label>
+            Zoom
+            <input type="range" min={1} max={3} step={0.05} value={zoom} onChange={(e) => setZoom(Number(e.target.value))} />
+          </label>
+          <label>
+            Links ↔ rechts
+            <input type="range" min={-1} max={1} step={0.02} value={panX} onChange={(e) => setPanX(Number(e.target.value))} />
+          </label>
+          <label>
+            Oben ↕ unten
+            <input type="range" min={-1} max={1} step={0.02} value={panY} onChange={(e) => setPanY(Number(e.target.value))} />
+          </label>
+          <span className="admin-muted">
+            96 × 72 Pixel in den Spielfarben · {Math.ceil((draft?.length ?? 0) / 1024)} KB{tooBig ? ' – zu groß, bitte näher heranzoomen' : ''}
+          </span>
+        </>
+      )}
+      {status && <div className={status.ok ? 'admin-ok' : 'admin-error'}>{status.text}</div>}
+      <div className="admin-row">
+        {image && (
+          <button type="button" className="admin-btn admin-btn-primary" disabled={busy || tooBig} onClick={() => save(draft)}>
+            Foto speichern
+          </button>
+        )}
+        {photo && !image && (
+          <button type="button" className="admin-btn" disabled={busy} onClick={() => save(null)}>
+            Foto entfernen
+          </button>
+        )}
+      </div>
     </section>
   );
 }

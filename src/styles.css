@@ -1641,7 +1641,6 @@ main > .admin-btn-primary { width: 100%; margin-bottom: 12px; }
 .personal-pick strong { flex: 1; font-family: var(--pixel-font); font-size: 20px; font-weight: 400; }
 .personal-title { font-family: var(--pixel-font); font-size: 26px; font-weight: 400; color: var(--gold-light); }
 .personal-letter { resize: vertical; min-height: 180px; }
-.personal-preview { font-style: italic; font-size: 13px; color: #6b5a44; border-left: 3px solid var(--gold); padding-left: 8px; }
 .admin-form label,
 .danger-zone label { display: flex; flex-direction: column; gap: 2px; font-size: 13px; color: var(--wood); }
 .admin input:not([type="checkbox"]),
@@ -1730,3 +1729,122 @@ main > .admin-btn-primary { width: 100%; margin-bottom: 12px; }
 .more-item { text-decoration: none; display: flex; flex-direction: column; }
 .more-item strong { font-family: var(--pixel-font); font-weight: 400; font-size: 20px; color: var(--wood); }
 .more-item.disabled { opacity: 0.6; }
+
+/* M6: previews in the game look [PRS-4] */
+.game-preview {
+  position: relative;
+  margin-top: 6px;
+  padding: 14px 10px 8px;
+  background: var(--parchment-light);
+  border: 3px solid var(--wood);
+  box-shadow: inset 0 0 0 2px var(--parchment-dark);
+  font-family: var(--pixel-font);
+  font-size: 18px;
+  line-height: 1.05;
+  color: var(--ink);
+}
+.game-preview-name {
+  position: absolute;
+  top: -10px;
+  left: 8px;
+  padding: 0 6px;
+  background: var(--wood);
+  color: var(--candle-light);
+  font-size: 15px;
+  border: 1px solid var(--wood-dark);
+}
+.letter-preview {
+  max-height: 260px;
+  overflow-y: auto;
+  padding: 12px 14px;
+  background: linear-gradient(#f6ead0, #e8d5a6);
+  border: 2px solid var(--parchment-dark);
+  font-family: var(--pixel-font);
+  font-size: 18px;
+  line-height: 1.1;
+  color: var(--ink);
+}
+.letter-preview p { margin: 0 0 8px; }
+.letter-signature { text-align: right; font-style: italic; }
+.mirror-frame {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 120px;
+  padding: 10px;
+  background: var(--night);
+  border: 6px solid var(--gold);
+  border-radius: 48px 48px 6px 6px;
+  box-shadow: inset 0 0 0 2px var(--wood-dark);
+}
+.mirror-frame img { max-width: 100%; height: auto; }
+.mirror-frame .admin-muted { color: var(--parchment-dark); text-align: center; }
+
+/* Tables (decisions summary, puzzle statistics) */
+.admin-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.admin-table th { text-align: left; font-weight: 600; color: var(--wood); border-bottom: 1px solid var(--parchment-dark); padding: 4px 3px; }
+.admin-table td { padding: 5px 3px; border-bottom: 1px solid rgba(107, 66, 38, 0.15); vertical-align: middle; }
+.summary-name { display: flex; align-items: center; gap: 4px; color: var(--ink) !important; text-decoration: none; }
+.puzzle-table td:not(:first-child),
+.puzzle-table th:not(:first-child) { text-align: right; white-space: nowrap; }
+.puzzle-title { display: block; font-size: 11px; color: #6b5a44; }
+.puzzle-table tr.flagged td:first-child { box-shadow: inset 3px 0 0 var(--red); padding-left: 6px; }
+.admin-table td.bad { color: var(--red); font-weight: 700; }
+
+/* Decisions */
+.decision-day { padding: 0; }
+.decision-day-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 10px 14px;
+  background: none;
+  border: 0;
+  font: inherit;
+  color: var(--ink);
+  text-align: left;
+}
+.decision-day-head strong { font-family: var(--pixel-font); font-size: 20px; font-weight: 400; }
+.decision-day-head .admin-muted { flex: 1; }
+.decision { padding: 4px 14px 10px; border-top: 1px solid rgba(107, 66, 38, 0.2); }
+.decision-question { font-weight: 600; margin: 6px 0; }
+.decision-option { margin-bottom: 8px; }
+.decision-text { display: flex; justify-content: space-between; gap: 8px; font-size: 14px; }
+.decision-bar { height: 8px; margin: 3px 0; background: #d9c38e; border-radius: 4px; overflow: hidden; }
+.decision-bar div { height: 100%; background: linear-gradient(90deg, var(--gold), var(--gold-light)); }
+.decision-who { display: flex; flex-wrap: wrap; gap: 3px; }
+.decision-who a { text-decoration: none; }
+
+/* Player detail */
+.back-link { display: inline-flex; align-items: center; margin-bottom: 10px; text-decoration: none; }
+.player-profile { display: flex; gap: 10px; align-items: flex-start; }
+.profile-figure { flex: none; width: 96px; height: 128px; overflow: hidden; display: flex; justify-content: center; }
+.profile-figure canvas { margin-top: -10px; }
+.profile-facts { flex: 1; min-width: 0; }
+.facts { display: grid; grid-template-columns: auto 1fr; gap: 3px 8px; margin: 8px 0 0; font-size: 14px; }
+.facts dt { color: #6b5a44; }
+.facts dd { margin: 0; }
+.hat-answers { display: flex; gap: 3px; }
+.hat-answer { width: 18px; height: 18px; border-radius: 50%; font-size: 11px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; }
+.relation { display: grid; grid-template-columns: 64px 1fr 24px; align-items: center; gap: 8px; margin-bottom: 6px; font-size: 14px; }
+.relation-bar { position: relative; height: 12px; background: #d9c38e; border-radius: 6px; overflow: hidden; }
+.relation-bar > div { position: absolute; top: 0; bottom: 0; background: var(--green); }
+.relation-bar > div.neg { background: var(--red); }
+.relation-zero { position: absolute; top: 0; bottom: 0; width: 2px; margin-left: -1px; background: var(--wood-dark); }
+.relation-value { text-align: right; font-variant-numeric: tabular-nums; }
+.clue-badges { display: grid; grid-template-columns: repeat(10, 1fr); gap: 3px; margin-bottom: 8px; }
+.clue-badge { display: flex; align-items: center; justify-content: center; height: 26px; border-radius: 4px; background: #d9d4c8; color: #9a948a; font-size: 13px; }
+.clue-badge.found { background: var(--gold); color: var(--ink); font-weight: 700; }
+.find-list { list-style: none; margin: 0; padding: 0; font-size: 14px; }
+.find-list li { padding: 2px 0; }
+.timeline-day { border-top: 1px solid rgba(107, 66, 38, 0.2); }
+.timeline-day .decision-day-head { padding: 8px 0; }
+.timeline-body { padding: 0 0 8px; font-size: 14px; }
+.timeline-body p { margin: 4px 0; }
+.timeline-choice { padding-left: 8px; border-left: 3px solid var(--gold); }
+.timeline-puzzle { margin: 6px 0; padding: 6px 8px; background: rgba(255, 255, 255, 0.35); border-radius: 4px; }
+.attempts { margin: 4px 0 0; padding-left: 18px; font-family: ui-monospace, monospace; font-size: 12px; }
+.attempts .ok { color: #24461a; }
+.attempts .wrong { color: #6e1a1a; }
+.player-card { text-decoration: none; }

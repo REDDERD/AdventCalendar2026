@@ -8,11 +8,11 @@ export function MoreView() {
       </a>
       <a className="admin-card more-item" href="#/admin/personal">
         <strong>Persönliches</strong>
-        <span className="admin-muted">Düfte, Witze, Patronus, Brief (Foto folgt in Meilenstein 6)</span>
+        <span className="admin-muted">Düfte, Witze, Patronus, Spiegelfoto, Brief</span>
       </a>
       <a className="admin-card more-item" href="#/admin/tools">
         <strong>Werkzeuge</strong>
-        <span className="admin-muted">Version, Debug-Datum, Export</span>
+        <span className="admin-muted">Debug-Datum, ins Spiel springen, Export, Version</span>
       </a>
       <a className="admin-card more-item" href="#/">
         <strong>Zurück ins Spiel</strong>

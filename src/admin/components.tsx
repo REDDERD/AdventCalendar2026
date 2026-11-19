@@ -3,7 +3,7 @@ import { HOUSE_COLORS } from '../assets/palette';
 import { CharacterSprite } from '../character/CharacterSprite';
 import type { AdminPlayer } from './data';
 
-const HOUSE_NAME: Record<string, string> = {
+export const HOUSE_NAME: Record<string, string> = {
   gryffindor: 'Gryffindor',
   hufflepuff: 'Hufflepuff',
   ravenclaw: 'Ravenclaw',
@@ -26,6 +26,15 @@ export function Avatar({ player, size = 40 }: { player: AdminPlayer; size?: numb
     </span>
   );
 }
+
+export const ENDING_NAME: Record<string, string> = {
+  A: 'Die dritte Lösung',
+  B: 'Abschied im Schnee',
+  C_A: 'Der Geist gesteht + Ellis’ Idee',
+  C_B: 'Der Geist gesteht',
+};
+
+export const ROUTE_NAME: Record<string, string> = { forest: 'Wald', archive: 'Archiv' };
 
 export function houseName(player: AdminPlayer): string {
   const house = player.save?.profile?.house;

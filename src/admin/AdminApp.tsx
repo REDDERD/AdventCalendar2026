@@ -1,14 +1,15 @@
 import { useCallback, useEffect, useState, type ReactNode } from 'react';
 import { loadPlayers, type AdminPlayer } from './data';
+import { DecisionsView } from './views/Decisions';
 import { FeedView } from './views/Feed';
 import { MoreView } from './views/More';
 import { OverviewView } from './views/Overview';
 import { PersonalView } from './views/Personal';
-import { PlaceholderView } from './views/Placeholder';
+import { PlayerView } from './views/Player';
+import { PuzzlesView } from './views/Puzzles';
 import { ToolsView } from './views/Tools';
 import { UsersView } from './views/Users';
-
-type Route = 'overview' | 'feed' | 'decisions' | 'puzzles' | 'more' | 'users' | 'personal' | 'tools';
+import { adminHref, routeFromHash, TITLES, type Route } from './routes';
 
 const TABS: Array<[Route, string]> = [
   ['overview', 'Übersicht'],
@@ -18,35 +19,15 @@ const TABS: Array<[Route, string]> = [
   ['more', 'Mehr'],
 ];
 
-const TITLES: Record<Route, string> = {
-  overview: 'Übersicht',
-  feed: 'Eulenpost',
-  decisions: 'Entscheidungen',
-  puzzles: 'Rätsel',
-  more: 'Mehr',
-  users: 'Spieler verwalten',
-  personal: 'Persönliches',
-  tools: 'Werkzeuge',
-};
-
-/** Pages under "Mehr" keep the "Mehr" tab highlighted. */
-const PARENT: Partial<Record<Route, Route>> = { users: 'more', personal: 'more', tools: 'more' };
-
-function routeFromHash(): Route {
-  const part = location.hash.replace(/^#\/admin\/?/, '').split('/')[0];
-  return (part in TITLES ? part : 'overview') as Route;
-}
-
-export function adminHref(route: Route): string {
-  return route === 'overview' ? '#/admin' : `#/admin/${route}`;
-}
+/** Pages under "Mehr" keep the "Mehr" tab highlighted, the player page the overview. */
+const PARENT: Partial<Record<Route, Route>> = { users: 'more', personal: 'more', tools: 'more', player: 'overview' };
 
 /**
  * Section 11: admin console in its own chunk under #/admin [ADM-1].
  * Players are loaded on open and on pull-to-refresh [ADM-12].
  */
 export default function AdminApp() {
-  const [route, setRoute] = useState<Route>(routeFromHash);
+  const [{ route, param }, setRoute] = useState(() => routeFromHash());
   const [players, setPlayers] = useState<AdminPlayer[] | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -82,8 +63,9 @@ export default function AdminApp() {
         {error && <div className="admin-error">{error}</div>}
         {route === 'overview' && <OverviewView players={players} />}
         {route === 'feed' && <FeedView players={players} />}
-        {route === 'decisions' && <PlaceholderView text="Die Auswertung aller Entscheidungen folgt in Meilenstein 6." />}
-        {route === 'puzzles' && <PlaceholderView text="Die Rätsel-Statistik folgt in Meilenstein 6." />}
+        {route === 'decisions' && <DecisionsView players={players} />}
+        {route === 'puzzles' && <PuzzlesView players={players} />}
+        {route === 'player' && <PlayerView players={players} uid={param} />}
         {route === 'more' && <MoreView />}
         {route === 'users' && <UsersView players={players} onChanged={refresh} />}
         {route === 'personal' && <PersonalView players={players} />}
