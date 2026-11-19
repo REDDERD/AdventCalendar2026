@@ -742,7 +742,45 @@ function centaurClearing(): Canvas {
   return c;
 }
 
+/** 5 × 7 capitals for Isolde's handwriting (p14a). */
+const HAND: Record<string, string[]> = {
+  Q: ['.###.', '#...#', '#...#', '#...#', '#.#.#', '#..#.', '.##.#'],
+  F: ['#####', '#....', '#....', '####.', '#....', '#....', '#....'],
+  O: ['.###.', '#...#', '#...#', '#...#', '#...#', '#...#', '.###.'],
+  E: ['#####', '#....', '#....', '####.', '#....', '#....', '#####'],
+  M: ['#...#', '##.##', '#.#.#', '#.#.#', '#...#', '#...#', '#...#'],
+};
+
+/** p14a (256 × 80): a dungeon wall with Isolde's line written mirror-inverted, and a brass hand mirror. */
+function mirrorWriting(word: string): Canvas {
+  const c = new Canvas(256, 80);
+  for (let y = 0; y < 80; y++) for (let x = 0; x < 256; x++) {
+    const brick = (y % 16 === 0) || ((x + (Math.floor(y / 16) % 2) * 16) % 32 === 0);
+    c.set(x, y, brick ? '#3a3440' : (x * 7 + y * 13) % 29 === 0 ? '#5a5866' : '#4a4856');
+  }
+  // the word, mirrored as a whole: letters flipped and in reverse order, slightly slanted
+  const s = 4;
+  const total = word.length * 6 * s - s;
+  const x0 = 24;
+  [...word].forEach((ch, k) =>
+    HAND[ch].forEach((row, j) =>
+      [...row].forEach((p, i) => {
+        if (p !== '#') return;
+        const x = x0 + total - (k * 6 + i + 1) * s - Math.floor(j / 3);
+        c.rect(x, 22 + j * s, s, s, '#e8d5a6');
+      }),
+    ),
+  );
+  // brass hand mirror on the right
+  c.ellipse(232, 34, 13, 17, '#a8802a');
+  c.ellipse(232, 34, 10, 14, (u, v) => (u + v < -0.6 ? '#f4f8ff' : '#a9cbe8'));
+  c.rect(229, 50, 6, 20, '#a8802a');
+  c.rect(230, 50, 2, 20, '#f2d675');
+  return c;
+}
+
 hippogriff().save(path.join(OUT, 'puzzles/hippogriff.png'));
+mirrorWriting('QFOEFM').save(path.join(OUT, 'puzzles/p14a.png'));
 centaurClearing().save(path.join(OUT, 'puzzles/p13w.png'));
 ferret().save(path.join(OUT, 'puzzles/ferret.png'));
 keyBoard(P10).save(path.join(OUT, 'puzzles/p10.png'));

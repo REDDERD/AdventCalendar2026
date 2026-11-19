@@ -1,0 +1,25 @@
+{
+  "id": "p14a",
+  "number": 14,
+  "title": "Spiegelschrift",
+  "points": 50,
+  "type": "input",
+  "prompt": "Isolde hat eine Zeile an die Wand geschrieben – für einen Spiegel und für jemanden, der sie ernst nimmt. Welches Wort hat sie gemeint?",
+  "config": {
+    "inputMode": "text",
+    "maxLength": 8,
+    "figure": { "image": "puzzle.p14a", "height": 80 }
+  },
+  "solution": ["Pendel"],
+  "hints": [
+    "Lies die Zeile so, wie ein Spiegel sie zeigt: von rechts nach links, jeder Buchstabe umgedreht.",
+    "Gespiegelt steht dort QFOEFM. Das ist kein Wort – Isolde hat jeden Buchstaben einen Schritt weiter im Alphabet geschrieben.",
+    "Q ist P, F ist E. Geh jeden Buchstaben einen Schritt zurück."
+  ],
+  "superHint": "Das Wort hat sechs Buchstaben, beginnt mit P und gehört zu jeder Standuhr.",
+  "solutionText": "Gespiegelt steht dort QFOEFM, jeder Buchstabe einen Schritt zurück im Alphabet: PENDEL. Das Pendel ist das Herz jeder Uhr – und der Ort, an dem Isolde ihr Geheimnis versteckt hat.",
+  "intro": {
+    "speaker": "quill",
+    "text": "Isolde schrieb für zwei Leser: einen Spiegel und einen, der sie ernst nimmt."
+  }
+}

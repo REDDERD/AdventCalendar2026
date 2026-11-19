@@ -117,7 +117,7 @@ export function playMusic(id: string | null): void {
 /** Pitch of the text blip per speaker; narration is a soft middle tone. */
 const VOICE_PITCH: Record<string, number> = {
   quill: 620, ellis: 880, theo: 520, maren: 760, grimsby: 300, aldous: 240, thornbury: 400, hat: 200,
-  peeves: 980, hagrid: 220, luna: 840, filch: 280,
+  peeves: 980, hagrid: 220, luna: 840, filch: 280, myrte: 1100,
 };
 
 export function playSfx(id: string, speaker?: string): void {

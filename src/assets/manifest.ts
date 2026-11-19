@@ -47,7 +47,7 @@ const OWN = { license: 'own work', credit: 'Drawn by the agent (scripts/draw-spr
 
 /** LPC walk sheets: rows up/left/down/right × 9 frames; frame 18 = facing the viewer. */
 export const IDLE_FRAME = 18;
-const LPC_NPCS = ['quill', 'ellis', 'theo', 'maren', 'grimsby', 'aldous', 'thornbury', 'wandmaker', 'peeves', 'pince', 'hermione', 'slughorn', 'neville', 'nick', 'friar', 'grey_lady', 'baron', 'filch', 'hagrid', 'luna'] as const;
+const LPC_NPCS = ['quill', 'ellis', 'theo', 'maren', 'grimsby', 'aldous', 'thornbury', 'wandmaker', 'peeves', 'pince', 'hermione', 'slughorn', 'neville', 'nick', 'friar', 'grey_lady', 'baron', 'filch', 'hagrid', 'luna', 'myrte'] as const;
 
 const npcs = Object.fromEntries(
   CHARACTERS.filter((id) => id !== 'player').map((id) => [
@@ -127,6 +127,7 @@ export const assets: Record<string, AssetDef> = {
   'puzzle.treat.gingerbread': { file: 'assets/puzzles/treat_gingerbread.png', w: 16, h: 16, ...OWN },
   'puzzle.p07': { file: 'assets/puzzles/p07.png', w: 256, h: 72, ...OWN },
   'puzzle.p13w': { file: 'assets/puzzles/p13w.png', w: 256, h: 96, ...OWN },
+  'puzzle.p14a': { file: 'assets/puzzles/p14a.png', w: 256, h: 80, ...OWN },
   'puzzle.p10': { file: 'assets/puzzles/p10.png', w: 256, h: 120, ...OWN },
   'puzzle.p10.key_a': { file: 'assets/puzzles/p10_key_a.png', w: 24, h: 24, ...OWN },
   'puzzle.p10.key_b': { file: 'assets/puzzles/p10_key_b.png', w: 24, h: 24, ...OWN },

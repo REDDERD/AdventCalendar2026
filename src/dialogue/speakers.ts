@@ -23,4 +23,5 @@ export const SPEAKER_NAMES: Record<string, string> = {
   filch: "Argus Filch",
   hagrid: "Hagrid",
   luna: "Luna",
+  myrte: "Die Maulende Myrte",
 };

@@ -273,6 +273,21 @@ export const NPCS: Record<string, Recipe> = {
       { id: 'earrings' },
     ],
   },
+  // Moaning Myrtle (cameo, days 14a, 19): school uniform, braid, round glasses, ghost
+  myrte: {
+    body: 'female',
+    ghost: true,
+    layers: [
+      { id: 'hair_braid_bg', colors: { hair: 'black' } },
+      { id: 'body', colors: { body: 'light' } },
+      { id: 'head_female', colors: { body: 'light', eye: 'gray' } },
+      { id: 'shoes', colors: { cloth: 'black' } },
+      { id: 'skirt', colors: { cloth: 'charcoal' } },
+      { id: 'sweater', colors: { cloth: 'gray' } },
+      { id: 'hair_braid', colors: { hair: 'black' } },
+      { id: 'glasses_round' },
+    ],
+  },
   // The wandmaker
   wandmaker: {
     body: 'female',

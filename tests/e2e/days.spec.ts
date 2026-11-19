@@ -219,3 +219,40 @@ test('day 13 (archive): Theo, the family tree and the letter to "my knight"', as
   await expect(page.getByText('Brief der Uhrmacherin an „meinen Ritter“')).toBeVisible();
   await choicesLogged('d13a.archivist.polite', 'd13a.theo.ask');
 });
+
+test('day 14 (forest): the spider web spiral and the golden gear', async ({ page }) => {
+  await startDayAsAdmin(page, 14, undefined, 'forest');
+  await choose(page, ['Freundlich grüßen.']);
+  await openPuzzle(page, 14);
+  const nodes: Record<string, [number, number]> = {
+    m: [128, 128], a1: [104, 104], a2: [152, 104], a3: [152, 152], a4: [104, 152], b1: [81, 81], b2: [175, 81],
+    b3: [175, 175], b4: [81, 175], c1: [59, 59], c2: [197, 59], c3: [197, 197], c4: [59, 197],
+  };
+  const box = (await page.locator('.path-board').boundingBox())!;
+  const at = (id: string) => ({ x: box.x + (nodes[id][0] * box.width) / 256, y: box.y + (nodes[id][1] * box.height) / 256 });
+  const spiral = ['c1', 'c2', 'c3', 'c4', 'b4', 'b1', 'b2', 'b3', 'a3', 'a4', 'a1', 'a2', 'm'];
+  await page.mouse.move(at('c1').x, at('c1').y);
+  await page.mouse.down();
+  for (const id of spiral.slice(1)) await page.mouse.move(at(id).x, at(id).y, { steps: 6 });
+  await page.mouse.up();
+  await page.getByRole('button', { name: 'Prüfen' }).click();
+  await expect(page.getByText('+50 Hauspunkte')).toBeVisible();
+  await page.getByRole('button', { name: 'Weiter' }).click();
+  await choose(page, ['Das Zahnrad vorsichtig mitnehmen.']);
+  await tapUntil(page, page.getByText('Kapitel 14 geschafft!'));
+  await expect(page.locator('.dayend-frame')).toContainText('Das goldene Zahnrad');
+  await choicesLogged('d14w.spider.greet', 'd14w.gear.take');
+});
+
+test('day 14 (archive): Moaning Myrtle and the mirrored PENDEL', async ({ page }) => {
+  await startDayAsAdmin(page, 14, undefined, 'archive');
+  await choose(page, ['Myrte um Hilfe bitten.', 'Sie klingt einsam.']);
+  await openPuzzle(page, 14);
+  await expect(page.locator('.input-figure')).toBeVisible();
+  for (const key of 'PENDEL') await page.getByRole('button', { name: key, exact: true }).click();
+  await page.getByRole('button', { name: 'OK' }).click();
+  await expect(page.getByText('+50 Hauspunkte')).toBeVisible();
+  await page.getByRole('button', { name: 'Weiter' }).click();
+  await tapUntil(page, page.getByText('Kapitel 14 geschafft!'));
+  await choicesLogged('d14a.myrtle.ask', 'd14a.tone.lonely');
+});

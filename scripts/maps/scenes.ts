@@ -544,6 +544,75 @@ export const SCENES: Record<string, (p: Picture) => void> = {
     p.snow(0, 0, 256, 512, 120, 34);
   },
 
+  forest_clearing: (p) => {
+    // a round clearing deep in the forest; a huge web between two trees, a nest in the middle
+    p.gradient(0, 320, '#0b1530', '#2a3a66');
+    p.stars(0, 0, 256, 120, 30, 51);
+    const rnd = random(52);
+    for (let i = 0; i < 18; i++) {
+      const x = rnd() * 256;
+      const h = 120 + rnd() * 80;
+      for (let k = 0; k < h; k++) p.rect(x - k / 4, 320 - h + k, k / 2 + 1, 1, i % 2 ? '#101a2e' : '#16233a');
+    }
+    p.fill('grass', 1, 3, 0, 316, 256, 512, 1, 1, { recolor: toSnow });
+    p.rect(0, 316, 256, 196, '#7a8aa8', 0.3);
+    p.ellipse(128, 420, 120, 60, '#c9d6e8', 0.5); // the round clearing
+    // trunks holding the web
+    p.rect(14, 90, 14, 240, '#3b2414');
+    p.rect(228, 90, 14, 240, '#3b2414');
+    // the web: spokes and rings around the nest at (128, 210)
+    const cx = 128;
+    const cy = 210;
+    for (let a = 0; a < 16; a++) {
+      const ang = (a / 16) * Math.PI * 2;
+      p.line(cx, cy, cx + Math.cos(ang) * 110, cy + Math.sin(ang) * 95, '#c9d6e8', 0.6);
+    }
+    for (const r of [24, 46, 68, 90]) {
+      let px = cx + r;
+      let py = cy;
+      for (let a = 1; a <= 32; a++) {
+        const ang = (a / 32) * Math.PI * 2;
+        const nx = cx + Math.cos(ang) * r * 1.15;
+        const ny = cy + Math.sin(ang) * r;
+        p.line(px, py, nx, ny, '#e4ecf6', 0.55);
+        px = nx;
+        py = ny;
+      }
+    }
+    // ice crystals on the threads, the nest with something golden
+    const ice = random(53);
+    for (let i = 0; i < 40; i++) p.dot(cx + (ice() - 0.5) * 200, cy + (ice() - 0.5) * 170, hex('#f4f8ff'));
+    p.ellipse(cx, cy, 16, 10, '#5a3a20');
+    p.ellipse(cx, cy - 2, 12, 6, '#7a4c2c');
+    p.ellipse(cx, cy - 3, 5, 5, '#d4a73a');
+    p.ellipse(cx - 1, cy - 4, 2, 2, '#f2d675');
+    p.snow(0, 0, 256, 512, 90, 54);
+  },
+
+  dungeon_corridor: (p) => {
+    // the dungeon corridor where Isolde's workshop once was: wet stone, pipes, puddles
+    p.rect(0, 0, 256, 512, '#2b2a33');
+    p.fill('dungeon', 0, 0, 0, 96, 256, 336, 3, 3);
+    p.rect(0, 96, 256, 240, '#1a1423', 0.45);
+    // pipes along the wall, one of them dripping (Myrtle comes out of it)
+    p.rect(0, 120, 256, 6, '#5a5866');
+    p.rect(0, 120, 256, 2, '#8a889a');
+    p.rect(40, 126, 6, 150, '#5a5866');
+    p.rect(40, 126, 2, 150, '#8a889a');
+    p.ellipse(43, 280, 5, 3, '#5d8fc7', 0.7);
+    torch(p, 120, 170);
+    torch(p, 214, 170);
+    // a strip of the wall where the mirrored line runs
+    p.rect(80, 220, 120, 14, '#4a4856', 0.6);
+    for (let i = 0; i < 6; i++) p.rect(88 + i * 18, 224, 10, 6, '#e8d5a6', 0.7);
+    p.fill('castlefloors', 5, 5, 0, FLOOR, 256, 512, 2, 2);
+    p.rect(0, FLOOR, 256, 512 - FLOOR, '#1a1423', 0.4);
+    for (const [x, y, w] of [[60, 370, 24], [180, 400, 30], [110, 440, 18]]) p.ellipse(x, y, w, w / 4, '#2e5a8f', 0.5);
+    // ice crystals in the corners
+    const ice = random(61);
+    for (let i = 0; i < 30; i++) p.dot(ice() < 0.5 ? ice() * 30 : 226 + ice() * 30, 96 + ice() * 60, hex('#a9cbe8'));
+  },
+
   archive: (p) => {
     // the archive in the east wing: drawer cabinets to the ceiling, a lectern with the card box
     p.gradient(0, 120, '#2b2a33', '#3b2414');
