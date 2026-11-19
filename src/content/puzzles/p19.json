@@ -1,0 +1,48 @@
+{
+  "id": "p19",
+  "number": 19,
+  "title": "Die Parade",
+  "points": 50,
+  "type": "arrange",
+  "prompt": "Die Geister wollen nach Alter antreten: links der Älteste, rechts der Jüngste. Jeder behauptet etwas anderes. Ordne die Reihe nach Quills Karte.",
+  "config": {
+    "mode": "row",
+    "items": [
+      { "id": "lady", "label": "GRAUE DAME" },
+      { "id": "baron", "label": "BARON" },
+      { "id": "friar", "label": "MÖNCH" },
+      { "id": "nick", "label": "NICK" },
+      { "id": "aldous", "label": "ALDOUS" },
+      { "id": "myrte", "label": "MYRTE" }
+    ],
+    "start": ["myrte", "nick", "baron", "aldous", "lady", "friar"],
+    "rules": [
+      { "type": "right_of", "item": "baron", "of": "lady" },
+      { "type": "next_to", "item": "friar", "of": "baron" },
+      { "type": "not_next_to", "item": "nick", "of": "myrte" },
+      { "type": "left_of", "item": "baron", "of": "nick", "gap": 2 },
+      { "type": "left_of", "item": "baron", "of": "myrte", "gap": 2 },
+      { "type": "right_of", "item": "myrte", "of": "aldous" }
+    ]
+  },
+  "solution": ["lady", "baron", "friar", "nick", "aldous", "myrte"],
+  "clues": [
+    "Der Baron starb direkt nach der Grauen Dame.",
+    "Der Mönch und der Baron stehen nebeneinander.",
+    "Nick und Myrte stehen nicht nebeneinander.",
+    "Der Baron ist mindestens zwei Plätze älter als Nick.",
+    "Der Baron ist mindestens zwei Plätze älter als Myrte.",
+    "Myrte starb direkt nach Aldous."
+  ],
+  "hints": [
+    "Der Baron kam direkt nach der Grauen Dame – die beiden stehen nebeneinander, die Dame links.",
+    "Der Mönch steht direkt neben dem Baron. Links von ihm steht schon die Dame, also steht der Mönch rechts.",
+    "Myrte kam direkt nach Aldous. Wo ist noch Platz für zwei nebeneinander, ohne dass Nick neben Myrte steht?"
+  ],
+  "superHint": "Graue Dame, Baron, Mönch, Nick, Aldous, Myrte.",
+  "solutionText": "Graue Dame, Baron, Mönch, Nick, Aldous, Myrte. Der Mönch muss hinter dem Baron stehen, und zwischen Nick und Myrte steht Aldous.",
+  "intro": {
+    "speaker": "grey_lady",
+    "text": "Die Älteren stehen vorn. Das ist keine Höflichkeit, sondern Geometrie."
+  }
+}

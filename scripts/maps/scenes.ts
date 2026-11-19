@@ -748,6 +748,33 @@ export const SCENES: Record<string, (p: Picture) => void> = {
     for (const x of [44, 212]) p.candle(x, 240);
   },
 
+  ghost_corridor: (p) => {
+    // a long cold corridor: arched windows, suits of armour, silver mist along the floor
+    p.gradient(0, WALL_TOP, '#0b1530', '#1b2a4e');
+    stoneWall(p, 60);
+    for (const x of [-30, 74, 178]) nightWindow(p, x, 100);
+    // suits of armour between the windows
+    for (const x of [62, 166]) {
+      const steel = ['#5a5866', '#8a889a', '#c0c8d0'];
+      p.ellipse(x + 12, 236, 7, 8, steel[1]); // helmet
+      p.rect(x + 7, 236, 10, 2, '#1a1423'); // visor
+      p.rect(x + 4, 246, 16, 26, steel[1]); // breastplate
+      p.rect(x + 4, 246, 4, 26, steel[2]);
+      p.rect(x, 248, 4, 22, steel[0]); // arms
+      p.rect(x + 20, 248, 4, 22, steel[0]);
+      p.rect(x + 6, 272, 5, 30, steel[0]); // legs
+      p.rect(x + 13, 272, 5, 30, steel[0]);
+      p.line(x + 26, 220, x + 26, 300, '#8a889a'); // halberd
+      p.rect(x + 23, 218, 7, 6, '#c0c8d0');
+    }
+    p.rect(0, 60, 256, FLOOR - 60, '#5d8fc7', 0.12); // cold blue light
+    stoneFloor(p);
+    p.rect(0, FLOOR, 256, 512 - FLOOR, '#1b2a4e', 0.3);
+    // silver mist drifting along the floor
+    const mist = random(111);
+    for (let i = 0; i < 26; i++) p.ellipse(mist() * 256, 340 + mist() * 70, 18 + mist() * 20, 4, '#e4ecf6', 0.18);
+  },
+
   archive: (p) => {
     // the archive in the east wing: drawer cabinets to the ceiling, a lectern with the card box
     p.gradient(0, 120, '#2b2a33', '#3b2414');

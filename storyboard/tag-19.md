@@ -52,8 +52,9 @@ nick: Wer trägt die erste Laterne? Ich wäre geeignet, aber mein Kopf hat Termi
         Die Laterne fällt, die Kerzen erlöschen, drei Geister fluchen im Chor.
     }
 - # show: grey_lady left
-Eine hohe Gestalt in Grau tritt dazu. Neben ihr ein finsterer Geist mit Blutflecken auf
-der Brust.
+Eine hohe Gestalt in Grau tritt dazu.
+# show: baron right
+Neben ihr ein finsterer Geist mit Blutflecken auf der Brust.
 grey_lady: Du bist die Assistenz. Wir sind die Älteren. Beide.
 baron: Ich bin älter. Ich habe es nicht eilig, es zu beweisen.
 grey_lady: Die Reihe ist durcheinander. Jeder behauptet, der Älteste zu sein.

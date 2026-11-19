@@ -350,3 +350,21 @@ async function finishDay18(page: Page): Promise<void> {
   await expect(page.locator('.dayend-frame')).toContainText('Porträt von 1726'); // [DEC-4] catch-up clue
   await choicesLogged('d18.token.skip', 'd18.wish.stay');
 }
+
+test('day 19: the ghost parade in order of age, the Grey Lady and Aldous', async ({ page }) => {
+  await startDayAsAdmin(page, 19, undefined, 'forest');
+  await choose(page, ['Nick führt die Parade an.']);
+  await openPuzzle(page, 19);
+  // start: Myrte, Nick, Baron, Aldous, Graue Dame, Mönch
+  await tapSwap(page, 'MYRTE', 'GRAUE DAME'); // Dame, Nick, Baron, Aldous, Myrte, Mönch
+  await tapSwap(page, 'NICK', 'BARON'); // Dame, Baron, Nick, Aldous, Myrte, Mönch
+  await tapSwap(page, 'NICK', 'MÖNCH'); // Dame, Baron, Mönch, Aldous, Myrte, Nick
+  await tapSwap(page, 'ALDOUS', 'NICK'); // Dame, Baron, Mönch, Nick, Myrte, Aldous
+  await tapSwap(page, 'MYRTE', 'ALDOUS'); // Dame, Baron, Mönch, Nick, Aldous, Myrte
+  await page.getByRole('button', { name: 'Prüfen' }).click();
+  await expect(page.getByText('+50 Hauspunkte')).toBeVisible();
+  await page.getByRole('button', { name: 'Weiter' }).click();
+  await choose(page, ['Aldous trösten.']);
+  await tapUntil(page, page.getByText('Kapitel 19 geschafft!'));
+  await choicesLogged('d19.parade.nick', 'd19.aldous.comfort');
+});
