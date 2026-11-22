@@ -78,8 +78,7 @@ ellis: Ich habe es nie aufgegeben.
 { pet == "owl": Deine Eule sitzt auf dem größten Rad. Sie dreht den Kopf im Takt, den es nicht gibt. }
 { pet == "cat": Deine Katze schnuppert am Reif. Sie niest. Es hört sich an wie ein Ticken. Fast. }
 { pet == "toad": Deine Kröte hüpft aufs Rad B und bleibt kleben. Sie quakt: „Linksrum, linksrum.“ }
-quill: Das erinnert mich an ein Rätsel, bei dem man den Anfang drehen muss, um das Ende
-quill: zu sehen.
+quill: Das erinnert mich an ein Rätsel: Man dreht den Anfang, um das Ende zu sehen.
 # puzzle: p21
 { last_puzzle_first_try: ellis: Beim ersten Mal! Rad F dreht sich. Ich war nie so stolz auf ein Rad. }
 { not last_puzzle_first_try: ellis: Rad F hat sich bewegt. Nicht lange. Aber sichtbar. Das zählt. }
@@ -100,7 +99,7 @@ quill: Wer eine Uhr einfriert, braucht keine Hände. Er braucht nur Kälte. Und 
 - **Hinweise:** 1) Zwei Räder, die ineinandergreifen, drehen sich immer gegensinnig. 2) Berühren die drei Räder unten links das Rad B wirklich? 3) Ein Riemen, der über Kreuz läuft, dreht die Richtung um.
 - **Super-Hinweis:** Die drei Räder unten links drehen sich nicht mit. Und der Riemen zwischen C und D ist gekreuzt.
 - **Lösungstext:** „Gegen den Uhrzeigersinn. A dreht rechts herum, B links, C rechts. Der gekreuzte Riemen kehrt die Richtung um: D links, E rechts, F links.“
-- **Haustier `[PLAN-2]`:** `petHint` fehlt noch im JSON. Ergänzen: Eule „Deine Eule hat die Räder lange studiert und dir Hinweis 1 aufgedeckt.“, Katze „Deine Katze pfotet nach dem Riemen. Hinweis 1 ist frei.“, Kröte „Deine Kröte quakt bei jedem Linksdreher. Hinweis 1 ist frei.“
+- **Haustier `[PLAN-2]`:** `petHint` im JSON (umgesetzt): Eule „Deine Eule hat die Räder lange studiert und dir Hinweis 1 aufgedeckt.“, Katze „Deine Katze pfotet nach dem Riemen. Hinweis 1 ist frei.“, Kröte „Deine Kröte quakt bei jedem Linksdreher. Hinweis 1 ist frei.“
 
 ## Setups und Payoffs
 

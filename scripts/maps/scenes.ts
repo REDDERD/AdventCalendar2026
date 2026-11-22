@@ -803,6 +803,51 @@ export const SCENES: Record<string, (p: Picture) => void> = {
     for (let i = 0; i < 30; i++) p.dot(sparkle() * 256, 90 + sparkle() * 220, hex('#fff1c2'), 0.8);
   },
 
+  clock_tower: (p) => {
+    // inside the clock tower: the back of the dial, huge gears frozen white, an empty axle
+    p.gradient(0, 512, '#1b2a4e', '#2b2a33');
+    stoneWall(p, 40);
+    p.rect(0, 40, 256, FLOOR - 40, '#0b1530', 0.35);
+    // the clock face seen from behind: light falling through the numerals
+    p.ellipse(128, 130, 66, 66, '#3a3440');
+    p.ellipse(128, 130, 60, 60, '#c9d6e8', 0.35);
+    for (let k = 0; k < 12; k++) {
+      const a = (k / 12) * Math.PI * 2;
+      p.rect(128 + Math.cos(a) * 50 - 3, 130 + Math.sin(a) * 50 - 4, 6, 8, '#fff1c2', 0.7);
+    }
+    p.rect(126, 74, 4, 58, '#3b2414'); // the hands' axle and shafts
+    p.rect(126, 128, 40, 4, '#3b2414');
+    const gear = (cx: number, cy: number, r: number, teeth: number) => {
+      p.ellipse(cx, cy, r, r, '#7a5a1c');
+      for (let k = 0; k < teeth; k++) {
+        const a = (k / teeth) * Math.PI * 2;
+        p.ellipse(cx + Math.cos(a) * r, cy + Math.sin(a) * r, 3.5, 3.5, '#7a5a1c');
+      }
+      p.ellipse(cx, cy, r - 5, r - 5, '#a8802a');
+      p.ellipse(cx, cy, r * 0.35, r * 0.35, '#7a5a1c');
+      // frost on the gear
+      p.ellipse(cx, cy, r + 3, r + 3, '#e4ecf6', 0.35);
+      for (let k = 0; k < r * 3; k++) {
+        const a = (k / (r * 3)) * Math.PI * 2;
+        p.dot(cx + Math.cos(a) * (r - 2), cy + Math.sin(a) * (r - 2), hex('#f4f8ff'));
+        if (k % 3 === 0) p.dot(cx + Math.cos(a) * (r - 6), cy + Math.sin(a) * (r - 6), hex('#e4ecf6'));
+      }
+    };
+    gear(52, 236, 38, 16);
+    gear(112, 270, 22, 10);
+    gear(196, 230, 30, 13);
+    gear(160, 292, 16, 8);
+    // the empty axle where gear no. 12 belongs
+    p.rect(222, 282, 6, 6, '#3b2414');
+    p.ellipse(225, 285, 14, 14, '#ffd27a', 0.12);
+    // floor boards and the top of the spiral stairs
+    planks(p, 0, FLOOR, 256, 176);
+    p.rect(0, FLOOR, 256, 176, '#1b2a4e', 0.3);
+    p.tile('stairs', 0, 3, -20, FLOOR + 10, 3, 2, { alpha: 0.6 });
+    const frost = random(131);
+    for (let i = 0; i < 60; i++) p.dot(frost() * 256, 40 + frost() * 290, hex('#e4ecf6'), 0.7);
+  },
+
   archive: (p) => {
     // the archive in the east wing: drawer cabinets to the ceiling, a lectern with the card box
     p.gradient(0, 120, '#2b2a33', '#3b2414');

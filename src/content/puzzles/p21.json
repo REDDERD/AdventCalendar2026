@@ -6,13 +6,24 @@
   "type": "choice",
   "prompt": "Quill dreht die Kurbel an Rad A in Pfeilrichtung. In welche Richtung dreht sich der Zeiger an Rad F?",
   "config": {
-    "figure": { "image": "puzzle.p21.gears", "height": 132 },
+    "figure": {
+      "image": "puzzle.p21.gears",
+      "height": 132
+    },
     "columns": 2,
     "options": [
-      { "label": "Im Uhrzeigersinn" },
-      { "label": "Gegen den Uhrzeigersinn" },
-      { "label": "Gar nicht, alles klemmt" },
-      { "label": "Mal so, mal so" }
+      {
+        "label": "Im Uhrzeigersinn"
+      },
+      {
+        "label": "Gegen den Uhrzeigersinn"
+      },
+      {
+        "label": "Gar nicht, alles klemmt"
+      },
+      {
+        "label": "Mal so, mal so"
+      }
     ]
   },
   "solution": 1,
@@ -26,5 +37,10 @@
   "intro": {
     "speaker": "quill",
     "text": "Zahnräder lügen nicht. Sie drehen sich, oder sie tun es nicht. Menschen sind da komplizierter."
+  },
+  "petHint": {
+    "owl": "Deine Eule hat die Räder lange studiert und dir Hinweis 1 aufgedeckt.",
+    "cat": "Deine Katze pfotet nach dem Riemen. Hinweis 1 ist frei.",
+    "toad": "Deine Kröte quakt bei jedem Linksdreher. Hinweis 1 ist frei."
   }
 }

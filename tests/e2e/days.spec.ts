@@ -387,3 +387,15 @@ test('day 20: Flitwick\'s spell wheel and Theo\'s confession', async ({ page }) 
   await tapUntil(page, page.getByText('Kapitel 20 geschafft!'));
   await choicesLogged('d20.lockhart.sign', 'd20.duel.wand');
 });
+
+test('day 21: the clock tower, frost in the works and the gears', async ({ page }) => {
+  await startDayAsAdmin(page, 21, undefined, 'forest');
+  await choose(page, ['Ihm die Hand reichen.', 'Still zuhören.']);
+  await openPuzzle(page, 21);
+  await expect(page.locator('.hint-open')).toContainText('gegensinnig'); // [PLAN-2] pet hint 3
+  await page.getByRole('button', { name: 'Hinweise schließen' }).click();
+  await page.locator('.answer-card', { hasText: 'Gegen den Uhrzeigersinn' }).click();
+  await finishDay(page, 21, 60);
+  await expect(page.locator('.dayend-frame')).toContainText('Raureif im Uhrwerk');
+  await choicesLogged('d21.climb.hand', 'd21.tone.listen');
+});
