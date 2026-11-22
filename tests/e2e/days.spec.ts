@@ -417,3 +417,28 @@ test('day 22: the pendulum, Roman sticks, CCC and Hermione\'s time-turner', asyn
   await expect(page.locator('.dayend-frame')).toContainText('Inschrift');
   await choicesLogged('d22.hermione.give', 'd22.ellis.tell');
 });
+
+test('day 23: the accusation and the pinboard of clues', async ({ page }) => {
+  await startDayAsAdmin(page, 23, undefined, 'archive');
+  await choose(page, ['Sir Aldous anklagen.']);
+  await openPuzzle(page, 23);
+  const card = (name: string) => page.getByRole('button', { name, exact: true });
+  // step 1: the Theo folder is open first; after each card the next empty folder opens
+  await card('Theos Notizbuch mit Zahnradskizzen').click();
+  await card('Knopf, der Niffler').click();
+  await card('Grimsbys Logbuch').click();
+  await expect(page.locator('.engine-status')).toContainText('Entlastet: 3 / 3');
+  // step 2: the evidence against Aldous
+  await page.getByRole('tab', { name: '2 · Beweise' }).click();
+  for (const name of ['Eiskalte Stelle vor der Uhr', 'Brief der Uhrmacherin an „meinen Ritter“', 'Porträt von 1726', 'Raureif im Uhrwerk', 'Inschrift „CCC“ im Pendel']) {
+    await card(name).click();
+  }
+  await expect(page.locator('.accuse-card.note')).not.toHaveCount(0); // clues not found yet show as Quill's notes
+  await page.getByRole('button', { name: 'Prüfen' }).click();
+  await expect(page.getByText('+70 Hauspunkte')).toBeVisible();
+  await page.getByRole('button', { name: 'Weiter' }).click();
+  await tapUntil(page, page.getByText('Dann nickt es.', { exact: false })); // the portrait nods: the right accusation
+  await choose(page, ['Danke, dass Sie es sagen.']);
+  await tapUntil(page, page.getByText('Kapitel 23 geschafft!'));
+  await choicesLogged('d23.accuse.aldous', 'd23.speech.gentle');
+});

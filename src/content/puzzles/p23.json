@@ -1,0 +1,33 @@
+{
+  "id": "p23",
+  "number": 23,
+  "title": "Wer war es?",
+  "points": 70,
+  "type": "custom",
+  "prompt": "Gib Theo, Maren und Grimsby je die Karte, die sie entlastet. Dann markiere alle Karten, die auf den Täter zeigen. Der Rest bleibt liegen.",
+  "config": {
+    "component": "accuse",
+    "suspects": [
+      { "id": "theo", "label": "Theo" },
+      { "id": "maren", "label": "Maren" },
+      { "id": "grimsby", "label": "Grimsby" }
+    ],
+    "cards": ["k01", "k02", "k03", "k04", "k05", "k06", "k07", "k08", "k09", "k10"],
+    "culprit": "Sir Aldous"
+  },
+  "solution": {
+    "clears": { "theo": "k03", "maren": "k05", "grimsby": "k08" },
+    "points": ["k02", "k06", "k07", "k09", "k10"]
+  },
+  "hints": [
+    "Entlaste zuerst, wen eine Karte freispricht: Wer repariert die Uhr? Wer hütet nur einen Sammler? Wer war gar nicht da?",
+    "Zwei Karten erklären den fehlenden Zahn im Werk, aber nicht den Frost. Die bleiben liegen.",
+    "Die fünf Karten, die übrig bleiben, haben alle mit Kälte, mit einem Ritter oder mit dreihundert zu tun."
+  ],
+  "superHint": "Theo ← Notizbuch, Maren ← Knopf, Grimsby ← Logbuch. Kratzspuren und Zahnrad bleiben liegen.",
+  "solutionText": "Theo repariert, Maren hütet einen Sammler, Grimsby war im Kerker. Die fünf übrigen Karten zeigen auf Sir Aldous: die Kälte vor der Uhr, der Brief an ihren Ritter, das Bild von 1726, der Reif im Werk und die dreihundert Jahre.",
+  "intro": {
+    "speaker": "quill",
+    "text": "Wer eine Anklage erhebt, schuldet Beweise. Nicht allen, aber sich selbst."
+  }
+}

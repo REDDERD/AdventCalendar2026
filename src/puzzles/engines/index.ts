@@ -1,4 +1,5 @@
 import type { Puzzle, PuzzleType } from '../schema';
+import { accuseEngine } from './Accuse';
 import { arrangeEngine } from './Arrange';
 import { choiceEngine } from './Choice';
 import { crossEngine } from './Cross';
@@ -29,6 +30,7 @@ const CUSTOM: Record<string, AnyEngine> = {
   pour: pourEngine,
   cross: crossEngine,
   nim: nimEngine,
+  accuse: accuseEngine,
 };
 
 /** Section 10: 8 engine types, configured only by JSON. */

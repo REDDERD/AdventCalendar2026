@@ -20,6 +20,7 @@ import { choiceLogic } from '../../src/puzzles/logic/choice';
 import { inputLogic } from '../../src/puzzles/logic/input';
 import { allPaths, extendPath, pathLogic, type PathConfig, type PathState } from '../../src/puzzles/logic/path';
 import { bankSafe, crossAttempt, crossLogic, crossOver, type CrossConfig, type CrossState } from '../../src/puzzles/logic/cross';
+import { accuseLogic, assignCard, togglePoint } from '../../src/puzzles/logic/accuse';
 import { nimLogic, nimSum, opponentMove, playRound, take, winningFirstMoves, type NimConfig } from '../../src/puzzles/logic/nim';
 import { pour, pourLogic, type PourConfig, type PourState } from '../../src/puzzles/logic/pour';
 import { slideLogic, slideTile } from '../../src/puzzles/logic/slide';
@@ -448,5 +449,37 @@ describe('custom: nim (p17)', () => {
     while (!lost.winner) lost = playRound(lost, lost.heaps.findIndex((h) => h > 0), 1)!;
     expect(lost.winner).toBe('opponent');
     expect(nimLogic.check(p, lost)).toBe(false);
+  });
+});
+
+describe('custom: accuse (p23)', () => {
+  const p = load('p23');
+  const start = accuseLogic.initial(p);
+
+  it('clears three suspects and points five cards at Aldous', () => {
+    let s = assignCard(start, 'theo', 'k03');
+    s = assignCard(s, 'maren', 'k05');
+    s = assignCard(s, 'grimsby', 'k08');
+    for (const k of ['k02', 'k06', 'k07', 'k09', 'k10']) s = togglePoint(s, k);
+    expect(accuseLogic.check(p, s)).toBe(true);
+    expect(accuseLogic.verify(p).errors).toEqual([]);
+  });
+
+  it('a card lives in one place only, and a wrong pick is not solved', () => {
+    let s = assignCard(start, 'theo', 'k03');
+    s = assignCard(s, 'maren', 'k03'); // moves from Theo to Maren
+    expect(s.clears).toEqual({ theo: null, maren: 'k03', grimsby: null });
+    s = togglePoint(s, 'k03'); // evidence now, out of the folder
+    expect(s.clears.maren).toBeNull();
+    expect(s.points).toEqual(['k03']);
+    expect(assignCard(s, 'maren', 'k03').points).toEqual([]);
+    expect(assignCard(assignCard(start, 'theo', 'k03'), 'theo', 'k03').clears.theo).toBeNull(); // tap again: unpin
+    expect(accuseLogic.check(p, s)).toBe(false);
+  });
+
+  it('pointing at a card that explains only the missing gear is wrong', () => {
+    let s = assignCard(assignCard(assignCard(start, 'theo', 'k03'), 'maren', 'k05'), 'grimsby', 'k08');
+    for (const k of ['k01', 'k02', 'k06', 'k07', 'k09', 'k10']) s = togglePoint(s, k);
+    expect(accuseLogic.check(p, s)).toBe(false);
   });
 });

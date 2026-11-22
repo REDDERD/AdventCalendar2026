@@ -747,6 +747,26 @@ img {
 .brawl-sym.s3 { left: 46px; top: 78px; color: var(--candle); animation-delay: -220ms; }
 @keyframes brawl-blink { 50% { opacity: 0; } }
 
+/* custom: accuse */
+.accuse { gap: 6px; }
+.accuse-steps { display: flex; width: 248px; }
+.accuse-steps button { flex: 1; padding: 2px; font: inherit; font-size: 14px; color: var(--parchment); background: var(--night-light); border: 2px solid var(--wood); }
+.accuse-steps button.active { background: var(--wood); color: var(--candle-light); }
+.accuse-folders { display: flex; gap: 4px; width: 248px; }
+.accuse-folder { flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: flex-start; min-height: 32px; padding: 3px 5px; font: inherit; font-size: 11px; line-height: 1.05; text-align: left; color: var(--ink); background: #d9b878; border: 2px solid var(--wood-dark); border-radius: 0 6px 0 0; }
+.accuse-folder strong { font-size: 13px; }
+.accuse-folder span { max-width: 100%; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.accuse-folder.selected { box-shadow: 0 0 0 2px var(--candle); background: #e8c98a; }
+.accuse-culprit { width: 248px; min-height: 32px; display: flex; align-items: center; font-size: 13px; color: var(--candle-light); }
+.accuse-board { display: grid; grid-template-columns: 1fr 1fr; gap: 3px; width: 248px; }
+.accuse-card { position: relative; display: flex; flex-direction: column; justify-content: center; min-height: 27px; padding: 2px 4px; font: inherit; font-size: 10px; line-height: 1; text-align: left; color: var(--ink); background: var(--parchment); border: 1px solid var(--wood); box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.4); }
+.accuse-card.note { background: repeating-linear-gradient(#f6ead0 0 7px, #c9d6e8 7px 8px); font-style: italic; }
+.accuse-card.cleared { background: #cfe8b8; border-color: #4f8a3c; }
+.accuse-card.pointed { background: #f2c0c0; border-color: var(--red); }
+.accuse-tag { font-size: 9px; font-style: normal; color: #24461a; }
+.accuse-tag.pin { color: #6e1a1a; }
+.accuse-tag.note-tag { color: #5d6f96; }
+
 /* custom: nim */
 .nim-heaps { display: flex; flex-direction: column; gap: 10px; width: 248px; padding: 8px; background: var(--wood-dark); border: 2px solid var(--wood); }
 .nim-heap { display: flex; align-items: center; gap: 6px; min-height: 30px; }

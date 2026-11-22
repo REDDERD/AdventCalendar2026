@@ -1,4 +1,5 @@
 import type { PuzzleType } from '../schema';
+import { accuseLogic } from './accuse';
 import { arrangeLogic } from './arrange';
 import { choiceLogic } from './choice';
 import { crossLogic } from './cross';
@@ -19,6 +20,7 @@ export const CUSTOM_LOGIC: Record<string, AnyEngineLogic> = {
   pour: pourLogic,
   cross: crossLogic,
   nim: nimLogic,
+  accuse: accuseLogic,
 };
 
 const LOGIC: Record<Exclude<PuzzleType, 'custom'>, AnyEngineLogic> = {
