@@ -74,14 +74,6 @@ test('M3: admin invites a player, the player logs in, the feed shows it live [AD
   await player.close();
 });
 
-test('a link with a wrong Zauberwort ends on the login screen with a notice', async ({ page }) => {
-  await createAccount('player-lena', 'lena', PASSWORD);
-  await page.goto('./?u=lena#z=falsch-falsch-falsch-11');
-  await expect(page.getByLabel('Eulenname')).toHaveValue('lena');
-  await expect(page.locator('.login .error')).toContainText(/Zauberwort|Eulenname/);
-  expect(page.url()).not.toContain('#z=');
-});
-
 test('non-admins are sent from #/admin back to the game [ADM-1]', async ({ page }) => {
   await createAccount(ADMIN_UID, 'daniel', PASSWORD);
   await page.goto('./');

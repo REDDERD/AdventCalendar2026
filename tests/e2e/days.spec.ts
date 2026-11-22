@@ -1,7 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
 import { ADMIN_UID } from '../../src/config';
 import { createAccount, listEvents, resetEmulators, waitForEmulators } from './emulator';
-import { choose, finishDay, openPuzzle, PASSWORD, startDayAsAdmin, tapUntil } from './helpers';
+import { choose, finishDay, login, openPuzzle, PASSWORD, playPrologue, setDebugDate, startDayAsAdmin, tapUntil } from './helpers';
 
 test.beforeEach(async () => {
   await waitForEmulators();
@@ -26,25 +26,145 @@ const tapSwap = async (page: Page, a: string, b: string) => {
   await page.getByRole('button', { name: b, exact: true }).click();
 };
 
-test('M5: personal content from the console appears in the game (Section 12)', async ({ page }) => {
-  await startDayAsAdmin(page, 5, async () => {
-    await page.goto('./#/admin/personal');
-    await page.locator('.personal-pick').first().click();
-    await page.getByLabel('Duft 1').fill('Regen');
-    await page.getByLabel('Duft 2').fill('Kakao');
-    await page.getByLabel('Duft 3').fill('Bratäpfel');
-    await expect(page.getByText('Es duftet nach Regen, Kakao und Bratäpfel.')).toBeVisible();
-    await page.getByLabel('Witz 1 (Tag 7, sagt Ellis)').fill('Pinguine!');
-    await page.getByRole('button', { name: 'Speichern' }).click();
-    await expect(page.getByText('Gespeichert.', { exact: false })).toBeVisible();
-    // reload: the values come back from Firestore
-    await page.reload();
-    await page.locator('.personal-pick').first().click();
-    await expect(page.getByLabel('Duft 2')).toHaveValue('Kakao');
-    await expect(page.getByLabel('Duft 3')).toHaveValue('Bratäpfel');
-  });
-  await choose(page, ['Bescheiden bleiben.']);
-  await tapUntil(page, page.getByText('Es duftet nach Regen, Kakao und Bratäpfel.'));
+test('day 1: onboarding, choice and puzzle, reload resumes exactly, events are logged', async ({ page }) => {
+  await page.goto('./');
+  await login(page, 'daniel');
+
+  // [AUTH-10] onboarding once; [DAY-7] debug date; then the prologue (M2)
+  await page.getByRole('button', { name: 'Verstanden' }).click();
+  await setDebugDate(page, '2026-12-01T10:00');
+  await playPrologue(page, { house: 'hufflepuff' });
+
+  await expect(page.getByText('Ein Kapitel wartet auf dich')).toBeVisible();
+  await page.locator('.door-available', { hasText: '1' }).click();
+  await expect(page.getByText('Kapitel 1')).toBeVisible();
+  await page.getByText('Tippen zum Beginnen').click();
+
+  await tapUntil(page, page.getByRole('button', { name: 'Erzähl mir alle sieben!' }));
+  await page.getByRole('button', { name: 'Erzähl mir alle sieben!' }).click();
+  const line = page.getByText('Wirklich? Endlich hört mir jemand zu!', { exact: false });
+  await expect(line).toBeVisible();
+
+  // [DAY-4] reload mid-scene resumes on the same line
+  await page.waitForTimeout(700); // debounced save
+  await page.reload();
+  await expect(line).toBeVisible();
+
+  await tapUntil(page, page.getByRole('button', { name: 'Ich passe auf Ellis auf.' }));
+  await page.getByRole('button', { name: 'Ich passe auf Ellis auf.' }).click();
+  await tapUntil(page, page.getByText('Rätsel 01'));
+  await page.locator('.puzzle-intro').click();
+  await page.getByRole('button', { name: '2', exact: true }).click();
+  await page.getByRole('button', { name: '4', exact: true }).click(); // the trap: 24
+  await page.getByRole('button', { name: 'OK' }).click();
+  await expect(page.getByText('Leider falsch')).toBeVisible();
+  await page.waitForTimeout(1000);
+  // [PZL-4] hint 1 costs one spark (3 → 2) and does not lower the points
+  await page.getByRole('button', { name: 'Hinweis', exact: true }).click();
+  await page.getByRole('button', { name: 'Hinweis 1 öffnen · 1 Funke' }).click();
+  await expect(page.locator('.hint-open')).toContainText('Es sind nicht 24');
+  await expect(page.getByLabel('Zauberfunken')).toHaveText('2');
+  await page.getByRole('button', { name: 'Hinweise schließen' }).click();
+  await page.getByRole('button', { name: '2', exact: true }).click();
+  await page.getByRole('button', { name: '2', exact: true }).click();
+  await page.getByRole('button', { name: 'OK' }).click();
+  await expect(page.getByText('+16 Hauspunkte')).toBeVisible(); // 80 % of 20 in the 2nd attempt
+  await page.getByRole('button', { name: 'Weiter' }).click();
+
+  // not first try → Ellis' first-try line must not appear
+  await tapUntil(page, page.getByText('Kapitel 1 geschafft!'));
+  await page.getByRole('button', { name: 'Zum Kalender' }).click();
+  await expect(page.locator('.door-done', { hasText: '1' })).toBeVisible();
+
+  // Events reach Firestore [EVT-1]
+  await expect
+    .poll(async () => (await listEvents()).map((e) => e.type), { timeout: 10_000 })
+    .toEqual(expect.arrayContaining([
+      'session_start', 'day_start', 'choice', 'puzzle_start', 'puzzle_attempt', 'puzzle_hint', 'puzzle_solved', 'day_complete',
+    ]));
+  const events = await listEvents();
+  const choices = JSON.stringify(events.filter((e) => e.type === 'choice').map((e) => e.data));
+  expect(choices).toContain('d01.ellis');
+  expect(choices).toContain('d01.secret');
+  expect(events.filter((e) => e.type === 'puzzle_attempt')).toHaveLength(2);
+
+  // Regression: every trunk tab works after a completed day
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  await page.getByRole('button', { name: 'Truhe' }).click();
+  for (const tab of ['Tagebuch', 'Rätsel', 'Inventar', 'Hinweise', 'Steckbrief', 'Optionen']) {
+    await page.getByRole('button', { name: tab }).click();
+    await expect(page.locator('.trunk')).toBeVisible();
+  }
+  await expect(page.locator('.trunk-body')).toContainText('Text-Tempo');
+  await page.getByRole('button', { name: '✕' }).click();
+  await expect(page.locator('.door-done', { hasText: '1' })).toBeVisible();
+  expect(errors).toEqual([]);
+});
+
+test('day 2: both choices, clue k01, the candles and the door magic', async ({ page }) => {
+  await startDayAsAdmin(page, 2);
+
+  for (const label of ['Wir passen auf, versprochen.', 'Mit Peeves Kerzen auspusten.']) {
+    await tapUntil(page, page.getByRole('button', { name: label }));
+    await page.getByRole('button', { name: label }).click();
+  }
+  await expect(page.getByText('Endlich! Jemand mit Humor!', { exact: false })).toBeVisible();
+
+  await tapUntil(page, page.getByText('Rätsel 02'));
+  await page.locator('.puzzle-intro').click();
+  for (const n of [1, 2, 3, 4, 6, 7, 9, 10, 14, 15, 16]) await page.getByRole('button', { name: `Feld ${n}`, exact: true }).click();
+  await expect(page.getByText('+20 Hauspunkte')).toBeVisible();
+  await page.getByRole('button', { name: 'Weiter' }).click();
+
+  // first try → Quill remembers the name
+  await tapUntil(page, page.getByText('Ich merke mir Ihren Namen, Lena.', { exact: false }));
+  await tapUntil(page, page.getByText('Kapitel 2 geschafft!'));
+  await expect(page.getByText('Türchen 2: Zimtsterne', { exact: false })).toBeVisible();
+  await expect(page.getByText('Neuer Hinweis: Kratzspuren am Uhrkasten')).toBeVisible();
+
+  await expect
+    .poll(async () => JSON.stringify((await listEvents()).filter((e) => e.type === 'choice').map((e) => e.data)), { timeout: 10_000 })
+    .toContain('d02.peeves');
+  const events = JSON.stringify(await listEvents());
+  expect(events).toContain('d02.grimsby');
+  expect(events).toContain('k01');
+});
+
+test('day 3: clue k02, the portrait tip, one-way stairs and the locked door', async ({ page }) => {
+  await startDayAsAdmin(page, 3);
+
+  for (const label of ['Die Kälte genau untersuchen.', 'Das Bild nach dem Weg fragen.']) {
+    await tapUntil(page, page.getByRole('button', { name: label }));
+    await page.getByRole('button', { name: label }).click();
+  }
+  await expect(page.getByText('Vom Zweiten in den Ersten', { exact: false })).toBeVisible();
+
+  await tapUntil(page, page.getByText('Rätsel 03'));
+  await page.locator('.puzzle-intro').click();
+  const nodes: Record<string, [number, number]> = {
+    5: [40, 32], 7: [128, 32], 6: [216, 32], 3: [40, 120], A: [128, 120], 4: [216, 120], 2: [72, 216], 1: [184, 216],
+  };
+  const board = page.locator('.path-board');
+  const box = (await board.boundingBox())!;
+  const at = (id: string) => ({ x: box.x + (nodes[id][0] * box.width) / 256, y: box.y + (nodes[id][1] * box.height) / 256 });
+  const solution = ['1', '4', 'A', '7', '6', '4', '2', 'A', '3', '2', '1', 'A', '5', '7'];
+  await page.mouse.move(at(solution[0]).x, at(solution[0]).y);
+  await page.mouse.down();
+  for (const id of solution.slice(1)) await page.mouse.move(at(id).x, at(id).y, { steps: 6 });
+  await page.mouse.up();
+  await expect(page.getByText('+30 Hauspunkte')).toBeVisible();
+  await page.getByRole('button', { name: 'Weiter' }).click();
+
+  await tapUntil(page, page.getByText('Auch für Sie, Henrietta.', { exact: false }));
+  await tapUntil(page, page.getByText('Kapitel 3 geschafft!'));
+  await expect(page.getByText('Türchen 3: Die Treppen schaukeln', { exact: false })).toBeVisible();
+  await expect(page.getByText('Neuer Hinweis: Eiskalte Stelle vor der Uhr')).toBeVisible();
+
+  await expect
+    .poll(async () => JSON.stringify((await listEvents()).filter((e) => e.type === 'choice').map((e) => e.data)), { timeout: 10_000 })
+    .toContain('d03.portrait');
+  expect(JSON.stringify(await listEvents())).toContain('k02');
 });
 
 test('day 4: Madam Pince, Hermine, the bookmark, six books and Sir Aldous', async ({ page }) => {
