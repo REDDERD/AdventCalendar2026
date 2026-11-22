@@ -186,3 +186,25 @@ export function unlockAudio(): void {
 store.subscribe((state, prev) => {
   if (state.save?.settings.music !== prev.save?.settings.music) startMusic();
 });
+
+/**
+ * Sound only while the app is in the foreground: switching tabs or apps, turning
+ * the screen off or closing the page pauses everything; coming back fades the
+ * music in again.
+ */
+function pause(): void {
+  if (!ctx) return;
+  if (timer) clearInterval(timer);
+  timer = null;
+  current = null; // so startMusic() restarts the track on return
+  void ctx.suspend();
+}
+function resume(): void {
+  if (!ctx || document.hidden) return;
+  void ctx.resume().then(startMusic);
+}
+if (typeof document !== 'undefined') {
+  document.addEventListener('visibilitychange', () => (document.hidden ? pause() : resume()));
+  window.addEventListener('pagehide', pause);
+  window.addEventListener('pageshow', resume);
+}
