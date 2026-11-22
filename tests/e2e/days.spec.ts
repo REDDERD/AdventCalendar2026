@@ -399,3 +399,21 @@ test('day 21: the clock tower, frost in the works and the gears', async ({ page 
   await expect(page.locator('.dayend-frame')).toContainText('Raureif im Uhrwerk');
   await choicesLogged('d21.climb.hand', 'd21.tone.listen');
 });
+
+test('day 22: the pendulum, Roman sticks, CCC and Hermione\'s time-turner', async ({ page }) => {
+  await startDayAsAdmin(page, 22, undefined, 'forest');
+  await openPuzzle(page, 22);
+  // the sticks board shows the view 0–256 × 40–220: take the upright stick of the plus, add it to the II
+  const box = (await page.locator('.sticks-board').boundingBox())!;
+  const at = (x: number, y: number) => ({ x: box.x + (x * box.height) / 180, y: box.y + ((y - 40) * box.height) / 180 });
+  await page.mouse.click(at(84, 120).x, at(84, 120).y);
+  await expect(page.locator('.engine-status')).toContainText('Wohin damit?');
+  await page.mouse.click(at(106, 104).x, at(106, 104).y);
+  await page.getByRole('button', { name: 'Prüfen' }).click();
+  await expect(page.getByText('+60 Hauspunkte')).toBeVisible();
+  await page.getByRole('button', { name: 'Weiter' }).click();
+  await choose(page, ['Ihr die Sanduhr zurückgeben.', 'Ihm sagen, was du vermutest.']);
+  await tapUntil(page, page.getByText('Kapitel 22 geschafft!'));
+  await expect(page.locator('.dayend-frame')).toContainText('Inschrift');
+  await choicesLogged('d22.hermione.give', 'd22.ellis.tell');
+});

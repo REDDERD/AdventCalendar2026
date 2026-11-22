@@ -848,6 +848,34 @@ export const SCENES: Record<string, (p: Picture) => void> = {
     for (let i = 0; i < 60; i++) p.dot(frost() * 256, 40 + frost() * 290, hex('#e4ecf6'), 0.7);
   },
 
+  pendulum_chamber: (p) => {
+    // a chamber as tall as a nave under the clockwork; the copper pendulum hangs still
+    p.gradient(0, 512, '#0b1530', '#2b2a33');
+    stoneWall(p, 0);
+    p.rect(0, 0, 256, FLOOR, '#0b1530', 0.45);
+    // tall arches on both sides
+    for (const x of [0, 208]) {
+      p.rect(x + 8, 60, 32, 260, '#1a1423', 0.5);
+      p.ellipse(x + 24, 60, 16, 16, '#1a1423', 0.5);
+    }
+    // the rod and the copper disc with the closed hatch
+    p.rect(126, 0, 4, 250, '#a8802a');
+    p.rect(126, 0, 1, 250, '#f2d675');
+    p.ellipse(128, 276, 44, 44, '#7a4a24');
+    p.ellipse(128, 276, 40, 40, '#b06a34');
+    p.ellipse(120, 266, 22, 22, '#c98a54', 0.6);
+    p.rect(114, 262, 28, 22, '#8a5a34'); // the hatch
+    p.rect(114, 262, 28, 1, '#d8a070');
+    p.rect(124, 284, 8, 2, '#3b2414');
+    // stick board lying on the disc
+    p.rect(98, 296, 60, 12, '#5a3a20');
+    for (let i = 0; i < 8; i++) p.rect(102 + i * 7, 298, 2, 8, '#e8d5a6');
+    // floor
+    stoneFloor(p);
+    p.rect(0, FLOOR, 256, 512 - FLOOR, '#0b1530', 0.4);
+    p.snow(0, 0, 256, 512, 50, 141);
+  },
+
   archive: (p) => {
     // the archive in the east wing: drawer cabinets to the ceiling, a lectern with the card box
     p.gradient(0, 120, '#2b2a33', '#3b2414');
