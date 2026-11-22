@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { BootGate } from '../../src/core/bootGate';
 import { evaluateEnding } from '../../src/core/ending';
 import { computeStage, MAX_H, MIN_H, STAGE_W } from '../../src/core/PixelStage';
 import { matchesAnswer, normalizeAnswer } from '../../src/puzzles/normalize';
@@ -124,5 +125,38 @@ describe('stage size [UI-1] (DECISIONS.md #32)', () => {
   it('uses an integer factor on DPR 1 when wide enough', () => {
     expect(computeStage(540, 1200, 1).scale).toBe(2);
     expect(computeStage(400, 1200, 1).scale).toBeCloseTo(400 / 256); // 256 px would be < 85 %
+  });
+});
+
+describe('boot film gate', () => {
+  it('holds screen changes until the film has ended', () => {
+    const gate = new BootGate();
+    expect(gate.hold('boot', 'calendar')).toBe(true);
+    expect(gate.target).toBe('calendar');
+    expect(gate.finish()).toBe('calendar');
+    expect(gate.hold('calendar', 'chapterCard')).toBe(false);
+  });
+
+  it('lets the latest target win and ignores changes elsewhere', () => {
+    const gate = new BootGate();
+    expect(gate.hold('login', 'blocked')).toBe(false);
+    gate.hold('boot', 'onboarding');
+    gate.hold('boot', 'scene');
+    expect(gate.finish()).toBe('scene');
+  });
+
+  it('plays again after returning to boot (e.g. after logging in)', () => {
+    const gate = new BootGate();
+    gate.finish();
+    expect(gate.hold('calendar', 'login')).toBe(false);
+    expect(gate.hold('login', 'boot')).toBe(false);
+    expect(gate.target).toBeNull();
+    expect(gate.hold('boot', 'calendar')).toBe(true);
+  });
+
+  it('passes straight through when the film ended before loading did', () => {
+    const gate = new BootGate();
+    expect(gate.finish()).toBeNull();
+    expect(gate.hold('boot', 'login')).toBe(false);
   });
 });

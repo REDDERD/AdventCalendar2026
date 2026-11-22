@@ -12,6 +12,8 @@ export default defineConfig({
   use: {
     ...devices['iPhone 13'],
     browserName: 'chromium',
+    // The boot film shows a still picture and gets out of the way quickly.
+    reducedMotion: 'reduce',
     baseURL: BASE,
     trace: 'retain-on-failure',
   },

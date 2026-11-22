@@ -1,3 +1,4 @@
+import { BootGate } from './bootGate';
 import { PROLOGUE_SCREENS, store, type Screen } from './store';
 
 /**
@@ -36,9 +37,23 @@ export function canGo(from: Screen, to: Screen): boolean {
   return ALWAYS.includes(to) || transitions[from].includes(to);
 }
 
+const bootGate = new BootGate();
+
 export function go(to: Screen): void {
   const from = store.getState().screen;
   if (from === to) return;
   if (!canGo(from, to)) console.warn(`[screen] unexpected transition ${from} → ${to}`);
+  if (bootGate.hold(from, to)) return;
   store.getState().setScreen(to);
+}
+
+/** Screen waiting for the boot film to end (null while still loading). */
+export function bootTarget(): Screen | null {
+  return bootGate.target;
+}
+
+/** Called by the boot film when it has played to the end. */
+export function finishBoot(): void {
+  const target = bootGate.finish();
+  if (target) store.getState().setScreen(target);
 }

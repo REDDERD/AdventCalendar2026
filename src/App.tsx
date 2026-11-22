@@ -13,6 +13,7 @@ import { isInviteLoginPending, runInviteLogin } from './services/inviteLogin';
 import { loadSave } from './services/SaveService';
 import { enableDebugDate, measureServerOffset } from './services/UnlockService';
 import { BlockedScreen, OrientationBlock } from './screens/Blocked';
+import { BootScreen } from './screens/boot/Boot';
 import { CalendarScreen } from './screens/Calendar';
 import { ChapterCardScreen } from './screens/ChapterCard';
 import { DayEndScreen } from './screens/DayEnd';
@@ -33,7 +34,6 @@ import { SceneScreen } from './screens/Scene';
 import { SolutionScreen } from './screens/Solution';
 import { Trunk } from './screens/trunk/Trunk';
 import { ErrorBoundary } from './ui/ErrorBoundary';
-import { Layout } from './ui/Layout';
 import { PixelButton } from './ui/PixelButton';
 
 const AdminApp = lazy(() => import('./admin/AdminApp'));
@@ -143,11 +143,7 @@ function useAuthFlow(): void {
 }
 
 const SCREENS: Record<Screen, () => ReactNode> = {
-  boot: () => (
-    <Layout bare>
-      <div className="center-msg">Die Eule fliegt los …</div>
-    </Layout>
-  ),
+  boot: () => <BootScreen />,
   login: () => <LoginScreen />,
   blocked: () => <BlockedScreen />,
   onboarding: () => <OnboardingScreen />,
