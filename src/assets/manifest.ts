@@ -111,6 +111,8 @@ export const assets: Record<string, AssetDef> = {
   ...backgrounds,
   ...npcs,
   ...portraits,
+  // Prof. Flitwick is small (DECISIONS.md #74): his head sits 10 px lower in the frame
+  'portrait.flitwick': { from: 'npc.flitwick', crop: [16, 152, 32, 32], scale: 2 },
   ...pets,
   ...wands,
   ...crests,

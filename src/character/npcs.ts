@@ -359,9 +359,10 @@ export const NPCS: Record<string, Recipe> = {
       { id: 'earrings' },
     ],
   },
-  // Filius Flitwick (cameo, day 20): duelling master, navy robes, white hair and beard
+  // Filius Flitwick (cameo, day 20): duelling master, navy robes, white hair and beard; small (`small`)
   flitwick: {
     body: 'male',
+    small: true,
     layers: [
       { id: 'cape_bg', colors: { cloth: 'navy' } },
       { id: 'body', colors: { body: 'light' } },

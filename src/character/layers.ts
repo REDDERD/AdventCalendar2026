@@ -75,6 +75,11 @@ export interface Recipe {
    * all over (Sir Aldous), a number 0–1 = how much of the own colours stays visible.
    */
   ghost?: boolean | number;
+  /**
+   * Short stature (Prof. Flitwick): the head keeps its size, the body is squashed (see
+   * `shrinkBody` in scripts/build-npcs.ts), so the figure stays LPC-sharp but is clearly smaller.
+   */
+  small?: boolean;
 }
 
 type LayerInfo = { z: number; recolor: Array<{ material: string; base: string }>; files: Partial<Record<Body | 'any', string>> };

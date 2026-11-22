@@ -16,6 +16,43 @@ function readPng(file: string): PNG {
   return PNG.sync.read(fs.readFileSync(path.resolve('public', file)));
 }
 
+/** Rows of head (with hair and beard) that stay untouched when a figure is made `small`. */
+const SMALL_HEAD_ROWS = 22;
+/** Of every 5 body rows, 3 stay: the body shrinks to 60 % while the pixel grid stays sharp. */
+const SMALL_KEEP = [3, 5] as const;
+const CELL = 64;
+
+/** Squash the body of every 64 × 64 frame, keep the head, keep the feet on the same line. */
+export function shrinkBody(sheet: PNG): PNG {
+  const out = new PNG({ width: sheet.width, height: sheet.height });
+  for (let cy = 0; cy < sheet.height / CELL; cy++) {
+    for (let cx = 0; cx < sheet.width / CELL; cx++) {
+      const at = (x: number, y: number) => ((cy * CELL + y) * sheet.width + cx * CELL + x) * 4;
+      let top = CELL;
+      let bottom = -1;
+      for (let y = 0; y < CELL; y++) {
+        for (let x = 0; x < CELL; x++) {
+          if (!sheet.data[at(x, y) + 3]) continue;
+          top = Math.min(top, y);
+          bottom = Math.max(bottom, y);
+        }
+      }
+      if (bottom < 0) continue;
+      const rows: number[] = [];
+      for (let y = top; y < Math.min(top + SMALL_HEAD_ROWS, bottom + 1); y++) rows.push(y);
+      for (let y = top + SMALL_HEAD_ROWS; y <= bottom; y++) if ((y - top - SMALL_HEAD_ROWS) % SMALL_KEEP[1] < SMALL_KEEP[0]) rows.push(y);
+      const drop = bottom - (top + rows.length - 1);
+      rows.forEach((sy, i) => {
+        for (let x = 0; x < CELL; x++) {
+          const di = ((cy * CELL + top + drop + i) * out.width + cx * CELL + x) * 4;
+          out.data.set(sheet.data.subarray(at(x, sy), at(x, sy) + 4), di);
+        }
+      });
+    }
+  }
+  return out;
+}
+
 export function composeRecipe(recipe: Recipe): PNG {
   const out = new PNG({ width: W, height: H });
   for (const layer of resolveRecipe(recipe)) {
@@ -29,7 +66,7 @@ export function composeRecipe(recipe: Recipe): PNG {
   }
   const keep = ghostKeep(recipe.ghost);
   if (keep !== null) ghostify(out.data, keep);
-  return out;
+  return recipe.small ? shrinkBody(out) : out;
 }
 
 fs.mkdirSync(OUT, { recursive: true });
