@@ -3,6 +3,7 @@ import { accuseLogic } from './accuse';
 import { arrangeLogic } from './arrange';
 import { choiceLogic } from './choice';
 import { crossLogic } from './cross';
+import { finaleLogic } from './finale';
 import { inputLogic } from './input';
 import { nimLogic } from './nim';
 import { pathLogic } from './path';
@@ -21,6 +22,7 @@ export const CUSTOM_LOGIC: Record<string, AnyEngineLogic> = {
   cross: crossLogic,
   nim: nimLogic,
   accuse: accuseLogic,
+  finale: finaleLogic,
 };
 
 const LOGIC: Record<Exclude<PuzzleType, 'custom'>, AnyEngineLogic> = {

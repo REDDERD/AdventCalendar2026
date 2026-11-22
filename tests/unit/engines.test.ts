@@ -21,6 +21,7 @@ import { inputLogic } from '../../src/puzzles/logic/input';
 import { allPaths, extendPath, pathLogic, type PathConfig, type PathState } from '../../src/puzzles/logic/path';
 import { bankSafe, crossAttempt, crossLogic, crossOver, type CrossConfig, type CrossState } from '../../src/puzzles/logic/cross';
 import { accuseLogic, assignCard, togglePoint } from '../../src/puzzles/logic/accuse';
+import { finaleLogic, finaleStart, placeGear, strikingCombinations, type FinaleConfig } from '../../src/puzzles/logic/finale';
 import { nimLogic, nimSum, opponentMove, playRound, take, winningFirstMoves, type NimConfig } from '../../src/puzzles/logic/nim';
 import { pour, pourLogic, type PourConfig, type PourState } from '../../src/puzzles/logic/pour';
 import { slideLogic, slideTile } from '../../src/puzzles/logic/slide';
@@ -481,5 +482,38 @@ describe('custom: accuse (p23)', () => {
     let s = assignCard(assignCard(assignCard(start, 'theo', 'k03'), 'maren', 'k05'), 'grimsby', 'k08');
     for (const k of ['k01', 'k02', 'k06', 'k07', 'k09', 'k10']) s = togglePoint(s, k);
     expect(accuseLogic.check(p, s)).toBe(false);
+  });
+});
+
+describe('custom: finale (p24)', () => {
+  const base = load('p24');
+  const a = resolveVariant(base, { profile: null, ending: 'A' } as unknown as SaveDoc);
+
+  it('variant B: exactly 36 / 27 / 72 strikes twelve', () => {
+    const config = base.config as FinaleConfig;
+    expect(strikingCombinations(config)).toEqual([{ w1: 36, p2: 27, w2: 72 }]);
+    let s = finaleLogic.initial(base);
+    s = placeGear(config, s, 'w1', 36);
+    s = placeGear(config, s, 'p2', 27);
+    expect(finaleLogic.check(base, s)).toBe(false); // W2 still empty
+    s = placeGear(config, s, 'w2', 72);
+    expect(finaleLogic.check(base, s)).toBe(true);
+    expect(placeGear(config, s, 'w2', 99)).toBe(s); // not on offer
+  });
+
+  it('variant A: the golden gear no. 12 is fixed as P2; 32 / 36 strikes', () => {
+    const config = a.config as FinaleConfig;
+    const s = finaleLogic.initial(a);
+    expect(s.p2).toBe(12);
+    expect(placeGear(config, s, 'p2', 12)).toBe(s); // the hinge cannot be removed
+    expect(finaleLogic.check(a, { w1: 32, p2: 12, w2: 36 })).toBe(true);
+    expect(strikingCombinations(config)).toEqual([{ w1: 32, p2: 12, w2: 36 }]);
+  });
+
+  it('Theo\'s wrench puts W1 in place and keeps it there', () => {
+    const config = a.config as FinaleConfig;
+    const s = finaleStart(config, true);
+    expect(s).toEqual({ w1: 32, p2: 12, w2: null });
+    expect(placeGear(config, s, 'w1', 27, true)).toBe(s);
   });
 });

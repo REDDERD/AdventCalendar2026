@@ -1,0 +1,79 @@
+{
+  "id": "p24",
+  "number": 24,
+  "title": "Der letzte Schlag",
+  "points": 100,
+  "type": "custom",
+  "prompt": "Das Ritzel am Minutenzeiger hat 8 Zähne und treibt Rad W1. Auf derselben Achse sitzt Ritzel P2, das Rad W2 am Stundenzeiger treibt. Die Uhr schlägt nur, wenn sich der Minutenzeiger genau zwölfmal dreht, während der Stundenzeiger einmal herumgeht. Setz die Räder ein.",
+  "config": {
+    "component": "finale",
+    "pinion": 8,
+    "ratio": 12,
+    "slots": {
+      "w1": [18, 30, 36, 54, 60],
+      "p2": [16, 18, 20, 27, 30],
+      "w2": [27, 40, 54, 60, 72]
+    },
+    "wrench": { "w1": 36 }
+  },
+  "solution": { "w1": 36, "p2": 27, "w2": 72 },
+  "hints": [
+    "Der Minutenzeiger muss sich zwölfmal drehen, bis sich der Stundenzeiger einmal gedreht hat.",
+    "Jede Stufe hat ihr eigenes Verhältnis: Rad geteilt durch Ritzel. Die beiden Verhältnisse werden multipliziert.",
+    "Es muss gelten: W1 mal W2 gleich 96 mal P2. Probier die Ritzel P2 einzeln durch."
+  ],
+  "superHint": "W1 = 36, P2 = 27, W2 = 72.",
+  "solutionText": "36, 27 und 72: (36 ÷ 8) × (72 ÷ 27) = 4,5 × 2⅔ = 12. Die Uhr schlägt Zwölf, und der Zeiger folgt den Rädern.",
+  "intro": {
+    "speaker": "quill",
+    "text": "Das letzte Rätsel besteht aus Zahnrädern und Zeigern. Und einer Frage, die niemand gestellt hat."
+  },
+  "variants": {
+    "A": {
+      "prompt": "Das Ritzel am Minutenzeiger hat 8 Zähne und treibt Rad W1. Auf derselben Achse sitzt das goldene Zahnrad Nr. 12 als Scharnier und treibt Rad W2 am Stundenzeiger. Die Uhr schlägt nur, wenn sich der Minutenzeiger zwölfmal dreht, während der Stundenzeiger einmal herumgeht.",
+      "config": {
+        "component": "finale",
+        "pinion": 8,
+        "ratio": 12,
+        "slots": {
+          "w1": [12, 27, 30, 32, 40, 45],
+          "p2": [12],
+          "w2": [24, 30, 32, 36, 40, 45]
+        },
+        "fixed": { "p2": 12 },
+        "wrench": { "w1": 32 }
+      },
+      "solution": { "w1": 32, "p2": 12, "w2": 36 },
+      "hints": [
+        "Der Minutenzeiger muss sich zwölfmal drehen, bis sich der Stundenzeiger einmal gedreht hat.",
+        "Jede Stufe hat ihr eigenes Verhältnis: Rad geteilt durch Ritzel. Die beiden Verhältnisse werden multipliziert.",
+        "Das goldene Zahnrad hat 12 Zähne. Dann muss W1 mal W2 genau 1152 ergeben."
+      ],
+      "superHint": "W1 = 32, W2 = 36.",
+      "solutionText": "32 und 36: (32 ÷ 8) × (36 ÷ 12) = 4 × 3 = 12. Das goldene Zahnrad Nr. 12 sitzt als Scharnier mitten im Werk. So bleibt die Tür einen Spalt offen."
+    },
+    "C_A": {
+      "prompt": "Das Ritzel am Minutenzeiger hat 8 Zähne und treibt Rad W1. Auf derselben Achse sitzt das goldene Zahnrad Nr. 12 als Scharnier und treibt Rad W2 am Stundenzeiger. Die Uhr schlägt nur, wenn sich der Minutenzeiger zwölfmal dreht, während der Stundenzeiger einmal herumgeht.",
+      "config": {
+        "component": "finale",
+        "pinion": 8,
+        "ratio": 12,
+        "slots": {
+          "w1": [12, 27, 30, 32, 40, 45],
+          "p2": [12],
+          "w2": [24, 30, 32, 36, 40, 45]
+        },
+        "fixed": { "p2": 12 },
+        "wrench": { "w1": 32 }
+      },
+      "solution": { "w1": 32, "p2": 12, "w2": 36 },
+      "hints": [
+        "Der Minutenzeiger muss sich zwölfmal drehen, bis sich der Stundenzeiger einmal gedreht hat.",
+        "Jede Stufe hat ihr eigenes Verhältnis: Rad geteilt durch Ritzel. Die beiden Verhältnisse werden multipliziert.",
+        "Das goldene Zahnrad hat 12 Zähne. Dann muss W1 mal W2 genau 1152 ergeben."
+      ],
+      "superHint": "W1 = 32, W2 = 36.",
+      "solutionText": "32 und 36: (32 ÷ 8) × (36 ÷ 12) = 4 × 3 = 12. Das goldene Zahnrad Nr. 12 sitzt als Scharnier mitten im Werk. So bleibt die Tür einen Spalt offen."
+    }
+  }
+}

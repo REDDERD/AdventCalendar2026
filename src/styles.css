@@ -767,6 +767,19 @@ img {
 .accuse-tag.pin { color: #6e1a1a; }
 .accuse-tag.note-tag { color: #5d6f96; }
 
+/* custom: finale */
+.finale { gap: 6px; }
+.finale-train { background: radial-gradient(circle at 50% 45%, #2a3a66, #0b1530); border: 2px solid var(--wood); }
+.finale-teeth { font-family: var(--pixel-font); font-size: 14px; fill: #fff1c2; stroke: #1a1423; stroke-width: 3px; paint-order: stroke; }
+.finale-caption { font-family: var(--pixel-font); font-size: 10px; fill: var(--parchment); }
+.finale-slots { display: flex; flex-direction: column; gap: 4px; width: 248px; }
+.finale-slot { display: flex; flex-direction: column; gap: 2px; }
+.finale-slot-name { font-size: 12px; color: var(--candle-light); }
+.finale-options { display: flex; gap: 3px; }
+.finale-option { flex: 1; min-height: 26px; padding: 0; font: inherit; font-size: 14px; color: var(--ink); background: var(--parchment); border: 2px solid var(--wood); border-radius: 50%; }
+.finale-option.selected { background: var(--gold); border-color: var(--wood-dark); box-shadow: 0 0 0 2px var(--candle); }
+.finale-locked { font-size: 12px; color: var(--gold-light); padding: 4px 0; }
+
 /* custom: nim */
 .nim-heaps { display: flex; flex-direction: column; gap: 10px; width: 248px; padding: 8px; background: var(--wood-dark); border: 2px solid var(--wood); }
 .nim-heap { display: flex; align-items: center; gap: 6px; min-height: 30px; }

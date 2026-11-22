@@ -1,13 +1,16 @@
 // content:simulate – random playthroughs per day (Section 15.3).
 // Every path must reach END; the longest path must stay within MAX_WORDS.
-// Full 1–24 runs with the ending distribution follow once Act III exists (M8).
+// Then full campaigns from day 1 to 24 carry the variables from day to day; every
+// ending of [END-1] must be reached (M8 acceptance).
 import fs from 'node:fs';
 import path from 'node:path';
+import { evaluateEnding } from '../src/core/ending';
 import { DialogueRunner } from '../src/dialogue/DialogueRunner';
 import { HOUSES, type InkVarValue } from '../src/types';
 import { dayFromFile, GENERATED_DIR, listStoryFiles } from './ink-compiler';
 
 const RUNS = 500;
+const CAMPAIGNS = 1500;
 const MAX_STEPS = 2000;
 const MAX_WORDS = 500; // DECISIONS.md #16
 const WORDS_PER_MIN = 200;
@@ -42,6 +45,33 @@ function randomState(): Record<string, InkVarValue> {
   };
 }
 
+/** [END-1] as the app evaluates it (DaySession.resolveEnding). */
+function endingOf(vars: Record<string, InkVarValue>): string {
+  return evaluateEnding({
+    accused: String(vars.accused ?? ''),
+    clues: Array.isArray(vars.clues) ? vars.clues : [],
+    trust_aldous: Number(vars.trust_aldous ?? 0),
+    bond_ellis: Number(vars.bond_ellis ?? 0),
+  });
+}
+
+/** Play one day with random choices; returns the variables afterwards, or null if it never reached END. */
+function playDay(json: string, stem: string, vars: Record<string, InkVarValue>): Record<string, InkVarValue> | null {
+  const solved = new Set<string>();
+  const runner = new DialogueRunner(json, { personal: (k) => `[${k}]`, isPuzzleResolved: (id) => solved.has(id) });
+  runner.start(stem, vars);
+  for (let step = 0; step < MAX_STEPS; step++) {
+    const s = runner.next();
+    if (s.kind === 'end') return runner.getVars();
+    if (s.kind === 'choices') runner.choose(int(0, s.options.length - 1));
+    else if (s.kind === 'puzzle') {
+      solved.add(s.puzzleId);
+      runner.setVar('last_puzzle_first_try', Math.random() < 0.5);
+    } else if (s.kind === 'ending') runner.setVar('ending', endingOf(runner.getVars()));
+  }
+  return null;
+}
+
 let failed = false;
 
 for (const stem of listStoryFiles()) {
@@ -69,7 +99,7 @@ for (const stem of listStoryFiles()) {
       else if (s.kind === 'puzzle') {
         solved.add(s.puzzleId);
         runner.setVar('last_puzzle_first_try', Math.random() < 0.5);
-      } else if (s.kind === 'ending') runner.setVar('ending', pick(['A', 'B', 'C_A', 'C_B']));
+      } else if (s.kind === 'ending') runner.setVar('ending', endingOf(runner.getVars()));
     }
     if (!ended) errors++;
     maxWords = Math.max(maxWords, words);
@@ -80,6 +110,33 @@ for (const stem of listStoryFiles()) {
   const status = errors || maxWords > MAX_WORDS ? 'FAIL' : 'ok  ';
   console.log(`${status} ${stem}: ${minWords}–${maxWords} words (longest ≈ ${minutes} min reading)${errors ? `, ${errors} runs without END` : ''}`);
   if (status === 'FAIL') failed = true;
+}
+
+// Full campaigns: the prologue's values, then days 1–24 in a row
+const stories = new Map(listStoryFiles().map((stem) => [dayFromFile(stem), stem] as const));
+const dayStems = Array.from({ length: 24 }, (_, i) => stories.get(i + 1)).filter((s): s is string => !!s);
+if (dayStems.length === 24) {
+  const jsons = dayStems.map((stem) => fs.readFileSync(path.join(GENERATED_DIR, `${stem}.json`), 'utf8'));
+  const endings: Record<string, number> = { A: 0, B: 0, C_A: 0, C_B: 0 };
+  let broken = 0;
+  for (let run = 0; run < CAMPAIGNS; run++) {
+    let vars: Record<string, InkVarValue> | null = {
+      name: 'Testi',
+      pronoun: pick(['f', 'm', 'n']),
+      house: pick(HOUSES),
+      hat_overruled: Math.random() < 0.3,
+      wand: pick(['phoenix', 'dragon', 'unicorn']),
+      pet: pick(['owl', 'cat', 'toad']),
+    };
+    for (let d = 0; d < 24 && vars; d++) vars = playDay(jsons[d], dayStems[d], vars);
+    if (!vars) broken++;
+    else endings[String(vars.ending)] = (endings[String(vars.ending)] ?? 0) + 1;
+  }
+  const missing = Object.keys(endings).filter((e) => !endings[e]);
+  const share = Object.entries(endings).map(([e, n]) => `${e} ${((n / CAMPAIGNS) * 100).toFixed(1)} %`).join(' · ');
+  const ok = !broken && !missing.length;
+  console.log(`${ok ? 'ok  ' : 'FAIL'} campaigns 1–24 (${CAMPAIGNS}): ${share}${missing.length ? `, never reached: ${missing.join(', ')}` : ''}${broken ? `, ${broken} broken` : ''}`);
+  if (!ok) failed = true;
 }
 
 process.exit(failed ? 1 : 0);

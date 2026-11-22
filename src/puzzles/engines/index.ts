@@ -3,6 +3,7 @@ import { accuseEngine } from './Accuse';
 import { arrangeEngine } from './Arrange';
 import { choiceEngine } from './Choice';
 import { crossEngine } from './Cross';
+import { finaleEngine } from './Finale';
 import { inputEngine } from './Input';
 import { nimEngine } from './Nim';
 import { pathEngine } from './Path';
@@ -31,6 +32,7 @@ const CUSTOM: Record<string, AnyEngine> = {
   cross: crossEngine,
   nim: nimEngine,
   accuse: accuseEngine,
+  finale: finaleEngine,
 };
 
 /** Section 10: 8 engine types, configured only by JSON. */

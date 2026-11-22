@@ -442,3 +442,21 @@ test('day 23: the accusation and the pinboard of clues', async ({ page }) => {
   await tapUntil(page, page.getByText('Kapitel 23 geschafft!'));
   await choicesLogged('d23.accuse.aldous', 'd23.speech.gentle');
 });
+
+test('day 24: the confession, the gear train and the last strike (ending C_B)', async ({ page }) => {
+  // jumping straight to day 24: nobody was accused and bond_ellis is low → ending C_B, puzzle variant B
+  await startDayAsAdmin(page, 24, undefined, 'forest');
+  await tapUntil(page, page.getByRole('button', { name: 'Ihn gehen lassen.' }));
+  await expect(page.getByRole('button', { name: 'Ihn fragen, was er will.' })).toHaveCount(0); // only for A / C_A
+  await page.getByRole('button', { name: 'Ihn gehen lassen.' }).click();
+  await openPuzzle(page, 24);
+  for (const [slot, teeth] of [['Rad W1', 36], ['Ritzel P2', 27], ['Rad W2', 72]] as const) {
+    await page.getByRole('radio', { name: `${slot}: ${teeth} Zähne` }).click();
+  }
+  await page.getByRole('button', { name: 'Prüfen' }).click();
+  await expect(page.getByText('+100 Hauspunkte')).toBeVisible();
+  await page.getByRole('button', { name: 'Weiter' }).click();
+  await choose(page, ['„Danke“ sagen.']);
+  await tapUntil(page, page.getByText('Kapitel 24 geschafft!'));
+  await choicesLogged('d24.fate.release', 'd24.last.thanks');
+});
