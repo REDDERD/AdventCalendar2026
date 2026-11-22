@@ -15,7 +15,10 @@ function InputEngine({ puzzle, state, setState, disabled, onSubmit }: EngineProp
   return (
     <div className="engine-input">
       {config.figure && <AssetImage id={config.figure.image} w={256} h={config.figure.height} className="input-figure" />}
-      <div className="input-display">{state || <span className="input-cursor">_</span>}</div>
+      <div className="input-display" aria-live="polite">
+        {state}
+        {state.length < config.maxLength && <span className="input-cursor">_</span>}
+      </div>
       <PixelKeyboard
         mode={config.inputMode}
         disabled={disabled}

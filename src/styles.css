@@ -525,12 +525,13 @@ img {
   padding: 0 8px;
   background: var(--parchment-light);
   border: 2px solid var(--wood-dark);
+  color: var(--ink); /* the puzzle area around it uses light text */
   font-size: 22px;
   line-height: 24px;
   text-align: center;
   letter-spacing: 2px;
 }
-.input-cursor { animation: blink 0.8s steps(2) infinite; }
+.input-cursor { color: var(--ember); animation: blink 0.8s steps(2) infinite; }
 .keyboard { display: flex; flex-direction: column; gap: 3px; }
 .keyboard-row { display: flex; justify-content: center; gap: 2px; }
 .key {
