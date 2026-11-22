@@ -29,4 +29,5 @@ export const SPEAKER_NAMES: Record<string, string> = {
   fred: "Fred",
   george: "George",
   rosmerta: "Madam Rosmerta",
+  flitwick: "Prof. Flitwick",
 };

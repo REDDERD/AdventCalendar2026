@@ -1,0 +1,35 @@
+{
+  "id": "p20",
+  "number": 20,
+  "title": "Zauberduell",
+  "points": 50,
+  "type": "choice",
+  "prompt": "Flitwick wirft fünf Sprüche nach einem festen Muster. Welchen Spruch musst du sprechen, um seinen sechsten Wurf zu schlagen? Rad und Würfe stehen auf der Karte.",
+  "config": {
+    "figure": { "image": "puzzle.p20", "height": 168 },
+    "columns": 2,
+    "options": [
+      { "label": "Schattennebel" },
+      { "label": "Windstoß" },
+      { "label": "Steinhagel" },
+      { "label": "Lichtsplitter" }
+    ]
+  },
+  "solution": 3,
+  "clues": [
+    "Das Rad im Uhrzeigersinn, oben beginnend: Funkenflug, Windstoß, Eisregen, Steinhagel, Schattennebel, Blitzkette, Lichtsplitter.",
+    "Jeder Spruch schlägt die drei, die im Uhrzeigersinn nach ihm kommen, und verliert gegen die drei davor.",
+    "Flitwicks Würfe: Funkenflug, Steinhagel, Lichtsplitter, Eisregen, Blitzkette, …"
+  ],
+  "hints": [
+    "Das Rad hat sieben Felder. Zähl, wie viele Felder zwischen zwei Würfen liegen.",
+    "Es sind immer drei Felder weiter. Nach Blitzkette kommt also Windstoß.",
+    "Windstoß verliert gegen die drei Sprüche vor ihm: Funkenflug, Lichtsplitter und Blitzkette. Nur einer davon liegt als Karte bereit."
+  ],
+  "superHint": "Lichtsplitter schlägt Windstoß.",
+  "solutionText": "Drei Felder weiter bei jedem Wurf: Nach Blitzkette kommt Windstoß. Windstoß verliert gegen die drei Sprüche davor – und von denen liegt nur Lichtsplitter als Karte bereit.",
+  "intro": {
+    "speaker": "flitwick",
+    "text": "Ein Duell ist ein Gespräch, in dem man nicht das letzte Wort spricht. Sondern das beste."
+  }
+}

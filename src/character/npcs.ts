@@ -359,6 +359,23 @@ export const NPCS: Record<string, Recipe> = {
       { id: 'earrings' },
     ],
   },
+  // Filius Flitwick (cameo, day 20): duelling master, navy robes, white hair and beard
+  flitwick: {
+    body: 'male',
+    layers: [
+      { id: 'cape_bg', colors: { cloth: 'navy' } },
+      { id: 'body', colors: { body: 'light' } },
+      { id: 'head_male_elderly', colors: { body: 'light', eye: 'brown' } },
+      { id: 'shoes', colors: { cloth: 'black' } },
+      { id: 'pants', colors: { cloth: 'navy' } },
+      { id: 'sweater', colors: { cloth: 'navy' } },
+      { id: 'cape', colors: { cloth: 'navy' } },
+      { id: 'cape_trim', colors: { cloth: 'tan' } },
+      { id: 'hair_balding', colors: { hair: 'white' } },
+      { id: 'beard_winter', colors: { hair: 'white' } },
+      { id: 'bowtie', colors: { cloth: 'tan' } },
+    ],
+  },
   // The wandmaker
   wandmaker: {
     body: 'female',

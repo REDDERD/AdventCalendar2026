@@ -63,8 +63,8 @@ theo: Ich brauche einen Gegner. Oder einen Partner. Ich entscheide mich nicht.
 theo: Ja. Ich repariere die Uhr. Jede Nacht. Und jedes Mal friert sie wieder ein.
 theo: Ich bin Isoldes Nachfahre. Wenn ich es nicht schaffe, wer dann?
 ellis: Das erklärt das Messingöl. Und die Ölflecken. Ich bin erleichtert. Und verwirrt.
-quill: Jemand friert sie wieder ein, kaum dass sie tickt. Das ist kein Defekt, Mr.
-quill: Ashcombe.
+quill: Jemand friert sie wieder ein, kaum dass sie tickt.
+quill: Das ist kein Defekt, Mr. Ashcombe.
 quill: Das ist ein Wille.
 theo: Ein Wille. Ja. Das habe ich auch gedacht. Ich wusste nur nicht, wessen.
 { trust_theo >= 1: theo: Den Turmschlüssel habe ich auch. Geliehen. Ich gebe ihn zurück. }

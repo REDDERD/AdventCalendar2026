@@ -775,6 +775,34 @@ export const SCENES: Record<string, (p: Picture) => void> = {
     for (let i = 0; i < 26; i++) p.ellipse(mist() * 256, 340 + mist() * 70, 18 + mist() * 20, 4, '#e4ecf6', 0.18);
   },
 
+  dueling_club: (p) => {
+    // a hall cleared for duelling: chalk diagrams on the walls, the long duelling stage, a stack of books
+    p.gradient(0, WALL_TOP, '#1b2a4e', '#2b2a33');
+    stoneWall(p, 60);
+    p.rect(0, 60, 256, FLOOR - 60, '#1a1423', 0.25);
+    HOUSES.forEach(([main, trim], i) => p.banner([8, 60, 180, 232][i], 90, 16, 40, main, trim));
+    // chalk: a spell wheel and wand arcs
+    p.ellipse(128, 150, 34, 34, '#e4ecf6', 0.55);
+    p.ellipse(128, 150, 31, 31, '#4a4856', 0.55);
+    for (let k = 0; k < 7; k++) {
+      const a = (k / 7) * Math.PI * 2 - Math.PI / 2;
+      p.line(128, 150, 128 + Math.cos(a) * 32, 150 + Math.sin(a) * 32, '#e4ecf6', 0.5);
+    }
+    for (const [x0, y0, x1, y1] of [[24, 210, 70, 180], [232, 210, 186, 180]]) p.line(x0, y0, x1, y1, '#e4ecf6', 0.5);
+    for (const x of [40, 216]) p.candle(x, 232);
+    // the duelling stage: a long raised platform with a gold edge
+    stoneFloor(p);
+    planks(p, 0, 318, 256, 30);
+    p.rect(0, 348, 256, 6, '#3b2414');
+    p.rect(0, 318, 256, 2, '#d4a73a');
+    // Flitwick's stack of books, centre back
+    const books = ['#8e1b1b', '#1d3f8a', '#1e6b3a', '#6b4226', '#5a3a6e'];
+    books.forEach((c, i) => p.rect(112 - (i % 2) * 3, 306 - i * 7, 32 + (i % 2) * 4, 7, c));
+    // sparkling wands
+    const sparkle = random(121);
+    for (let i = 0; i < 30; i++) p.dot(sparkle() * 256, 90 + sparkle() * 220, hex('#fff1c2'), 0.8);
+  },
+
   archive: (p) => {
     // the archive in the east wing: drawer cabinets to the ceiling, a lectern with the card box
     p.gradient(0, 120, '#2b2a33', '#3b2414');

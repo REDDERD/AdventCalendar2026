@@ -955,6 +955,103 @@ function portraits(): Canvas {
   return c;
 }
 
+/**
+ * p20 "Zauberduell" (256 × 168): the spell wheel. Seven wedges clockwise from the top:
+ * sparks, wind, ice rain, hail of stones, shadow mist, lightning chain, light shards.
+ */
+function spellWheel(): Canvas {
+  const c = new Canvas(256, 168);
+  for (let y = 0; y < 168; y++) for (let x = 0; x < 256; x++) c.set(x, y, (x * 3 + y * 5) % 19 === 0 ? '#2a3a66' : '#1b2a4e');
+  const cx = 128;
+  const cy = 84;
+  const R = 78;
+  const wedge = (x: number, y: number) => {
+    const a = (Math.atan2(y - cy, x - cx) + Math.PI / 2 + Math.PI * 2) % (Math.PI * 2);
+    return Math.floor((a / (Math.PI * 2)) * 7);
+  };
+  const tints = ['#e8d5a6', '#f6ead0'];
+  for (let y = cy - R; y <= cy + R; y++) for (let x = cx - R; x <= cx + R; x++) {
+    const d = Math.hypot(x - cx, y - cy);
+    if (d > R) continue;
+    c.set(x, y, d > R - 3 ? '#a8802a' : d < 14 ? '#3b2414' : tints[wedge(x, y) % 2]);
+  }
+  for (let k = 0; k < 7; k++) {
+    const a = (k / 7) * Math.PI * 2 - Math.PI / 2;
+    c.line(cx + Math.cos(a) * 14, cy + Math.sin(a) * 14, cx + Math.cos(a) * (R - 3), cy + Math.sin(a) * (R - 3), '#a8802a');
+  }
+  // clockwise arrow round the rim
+  for (let t = 0; t < 1; t += 0.004) {
+    const a = -Math.PI / 2 + 0.25 + t * 1.2;
+    c.set(cx + Math.cos(a) * (R + 5), cy + Math.sin(a) * (R + 5), '#f2d675');
+  }
+  const tip = -Math.PI / 2 + 1.45;
+  const tx = cx + Math.cos(tip) * (R + 5);
+  const ty = cy + Math.sin(tip) * (R + 5);
+  c.rect(tx - 2, ty - 3, 4, 2, '#f2d675');
+  c.rect(tx - 1, ty - 1, 4, 3, '#f2d675');
+  // the icons, each in the middle of its wedge
+  const at = (k: number) => {
+    const a = ((k + 0.5) / 7) * Math.PI * 2 - Math.PI / 2;
+    return [Math.round(cx + Math.cos(a) * 50), Math.round(cy + Math.sin(a) * 50)];
+  };
+  const icons: Array<(x: number, y: number) => void> = [
+    (x, y) => {
+      // sparks: an orange burst with flying dots
+      c.ellipse(x, y, 4, 4, '#ff9a3c');
+      c.ellipse(x, y, 2, 2, '#ffd27a');
+      for (const [dx, dy] of [[-8, -6], [7, -8], [9, 4], [-7, 7], [0, 10], [-10, 0]]) c.rect(x + dx, y + dy, 2, 2, '#c4512a');
+    },
+    (x, y) => {
+      // wind: three curling lines
+      for (const dy of [-6, 0, 6]) {
+        for (let i = -9; i < 6; i++) c.set(x + i, y + dy + Math.round(Math.sin(i / 2) * 1.5), '#5d8fc7');
+        c.ellipse(x + 7, y + dy - 2, 2, 2, '#5d8fc7');
+      }
+    },
+    (x, y) => {
+      // ice rain: falling icicles
+      for (const [dx, dy] of [[-7, -6], [0, -9], [7, -5], [-4, 4], [4, 3]]) for (let k = 0; k < 6; k++) c.rect(x + dx - (k < 3 ? 1 : 0), y + dy + k, k < 3 ? 3 : 1, 1, '#a9cbe8');
+    },
+    (x, y) => {
+      // hail of stones
+      for (const [dx, dy, r] of [[-6, -4, 4], [5, -6, 3], [3, 5, 5], [-7, 7, 3]]) {
+        c.ellipse(x + dx, y + dy, r, r, '#7a7788');
+        c.set(x + dx - 1, y + dy - 1, '#b4b2c2');
+      }
+    },
+    (x, y) => {
+      // shadow mist: a dark cloud
+      for (const [dx, dy, r] of [[-6, 2, 6], [2, -2, 7], [8, 3, 5], [0, 5, 6]]) c.ellipse(x + dx, y + dy, r, r * 0.7, '#3a3440');
+      c.ellipse(x - 2, y + 1, 3, 1.5, '#5a5060');
+    },
+    (x, y) => {
+      // lightning chain: a yellow zigzag
+      const pts = [[-6, -10], [2, -3], [-3, -1], [5, 8], [1, 1], [6, -1]];
+      for (let i = 0; i < pts.length - 1; i++) {
+        c.line(x + pts[i][0], y + pts[i][1], x + pts[i + 1][0], y + pts[i + 1][1], '#e0b320');
+        c.line(x + pts[i][0] + 1, y + pts[i][1], x + pts[i + 1][0] + 1, y + pts[i + 1][1], '#f2d675');
+      }
+    },
+    (x, y) => {
+      // light shards: a white star with rays
+      for (let k = 0; k < 8; k++) {
+        const a = (k / 8) * Math.PI * 2;
+        const len = k % 2 ? 6 : 10;
+        c.line(x, y, x + Math.cos(a) * len, y + Math.sin(a) * len, k % 2 ? '#fff1c2' : '#ffffff');
+      }
+      c.ellipse(x, y, 2.5, 2.5, '#ffffff');
+    },
+  ];
+  icons.forEach((draw, k) => {
+    const [x, y] = at(k);
+    draw(x, y);
+  });
+  // wand star in the middle
+  c.ellipse(cx, cy, 5, 5, '#f2d675');
+  c.set(cx, cy, '#ffffff');
+  return c;
+}
+
 /** A Christmas cracker (32 × 16) for p17: wrapped middle, twisted ends, a gold band. */
 function cracker(main: string, dark: string, light: string): Canvas {
   const c = new Canvas(32, 16);
@@ -1014,6 +1111,7 @@ mirrorWriting('QFOEFM').save(path.join(OUT, 'puzzles/p14a.png'));
 niffler().save(path.join(OUT, 'sprites/knopf.png'));
 hoard().save(path.join(OUT, 'puzzles/p15w.png'));
 portraits().save(path.join(OUT, 'puzzles/p15a.png'));
+spellWheel().save(path.join(OUT, 'puzzles/p20.png'));
 cracker('#c23b3b', '#8e1b1b', '#e86a6a').save(path.join(OUT, 'puzzles/cracker_red.png'));
 cracker('#4f8a3c', '#2e5a26', '#7ab84a').save(path.join(OUT, 'puzzles/cracker_green.png'));
 cracker('#5d8fc7', '#2e5a8f', '#a9cbe8').save(path.join(OUT, 'puzzles/cracker_blue.png'));

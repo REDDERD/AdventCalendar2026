@@ -368,3 +368,22 @@ test('day 19: the ghost parade in order of age, the Grey Lady and Aldous', async
   await tapUntil(page, page.getByText('Kapitel 19 geschafft!'));
   await choicesLogged('d19.parade.nick', 'd19.aldous.comfort');
 });
+
+test('day 20: Flitwick\'s spell wheel and Theo\'s confession', async ({ page }) => {
+  await startDayAsAdmin(page, 20, undefined, 'forest');
+  await choose(page, ['Die Luft mitunterschreiben.']);
+  await openPuzzle(page, 20);
+  await page.getByRole('button', { name: 'Karte', exact: true }).click();
+  await expect(page.getByText('Flitwicks Würfe', { exact: false })).toBeVisible();
+  await page.getByRole('button', { name: 'Karte schließen' }).click();
+  await page.locator('.answer-card', { hasText: 'Lichtsplitter' }).click();
+  await page.getByRole('button', { name: 'Prüfen' }).click();
+  await expect(page.getByText('+50 Hauspunkte')).toBeVisible();
+  await page.getByRole('button', { name: 'Weiter' }).click();
+  // without trust_theo the "ally" option stays hidden
+  await tapUntil(page, page.getByRole('button', { name: 'Den eigenen Stab sprechen lassen.' }));
+  await expect(page.getByRole('button', { name: 'An Theos Seite kämpfen.' })).toHaveCount(0);
+  await page.getByRole('button', { name: 'Den eigenen Stab sprechen lassen.' }).click();
+  await tapUntil(page, page.getByText('Kapitel 20 geschafft!'));
+  await choicesLogged('d20.lockhart.sign', 'd20.duel.wand');
+});
