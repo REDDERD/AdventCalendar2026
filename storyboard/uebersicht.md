@@ -53,8 +53,8 @@ Rätsel ab Tag 11 (Prüfung per Skript in der Prüfkopie, nicht im Repo):
 | `p13a` Der Stammbaum | 7 Karten, 6 Hinweise | genau eine von 120 Reihenfolgen |
 | `p14w` Das Spinnennetz | 13 Knoten, 21 Fäden | genau ein Weg, Zufall 0,45 % |
 | `p14a` Spiegelschrift | Spiegelbild plus Buchstabenverschiebung | `PENDEL` |
-| `p15w` Was glänzt? | 12 Fundstücke, Dreier-Regel | genau 4 echte Galleonen |
-| `p15a` Das Porträt | 5 Unterschiede | feste Hotspots |
+| `p15w` Die falsche Galleone | 9 Galleonen, 2 Wägungen | 3 gegen 3, dann 1 gegen 1 |
+| `p15a` Das Original | 8 redende Bildnisse, Wahrheit und Lüge | Bild 7 |
 | `p16` Die Tischordnung | 6 Gäste, 6 Hinweise | genau eine von 720 |
 | `p17` Knallbonbons | Nim 3/4/5 | genau ein Gewinnzug, Zufall gewinnt 0,7 % |
 | `p19` Die Parade | 6 Geister, 6 Hinweise | genau eine von 720 |

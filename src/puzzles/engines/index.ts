@@ -11,6 +11,7 @@ import { pourEngine } from './Pour';
 import { slideEngine } from './Slide';
 import { tapEngine } from './Tap';
 import { toggleEngine } from './Toggle';
+import { weighEngine } from './Weigh';
 import type { Engine } from './types';
 
 /** State types differ per engine; the registry erases them. */
@@ -33,6 +34,7 @@ const CUSTOM: Record<string, AnyEngine> = {
   nim: nimEngine,
   accuse: accuseEngine,
   finale: finaleEngine,
+  weigh: weighEngine,
 };
 
 /** Section 10: 8 engine types, configured only by JSON. */

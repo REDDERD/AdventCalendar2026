@@ -468,8 +468,8 @@ Alle Enden sind schön und keines bestraft.
 | 13a | `archive` | Mit `quill` ins Archiv. `k06`. Haustier-Hinweis 2 | `d13a.theo`: `ask` +trust\_theo · `alone` → `archive_key` | `p13a` Der Stammbaum: sieben Karteikarten nach Hinweisen von der ältesten bis zur jüngsten Generation ordnen, bis Theo (`arrange` Reihe) | 40 |
 | 14w | `forest_clearing` | Goldenes Zahnrad im Nest. `k04` | `d14w.gear`: `take` · `watch` Ton | `p14w` Das Spinnennetz: Weg ohne Fäden zu kreuzen (`path`) | 50 |
 | 14a | `dungeon_corridor` | Notizen in Spiegelschrift | `d14a.tone`: Ton | `p14a` Spiegelschrift entziffern (`input`) | 50 |
-| 15w | `niffler_burrow` | `knopf` gefunden. `k05`. Spur zu `maren` | `d15w.knopf`: `gentle` · `chase` | `p15w` Was glänzt?: echte Galleonen antippen, keine Fälschungen (`tap`) | 50 |
-| 15a | `portrait_gallery` | Porträt 1726: `aldous` lebend. `k07` | `d15a.aldous`: `ask` +trust\_aldous · `silent` | `p15a` Das Porträt: 5 Unterschiede (`tap`) | 50 |
+| 15w | `niffler_burrow` | `knopf` gefunden. `k05`. Spur zu `maren` | `d15w.knopf`: `gentle` · `chase` | `p15w` Die falsche Galleone: Schokotaler mit zwei Wägungen finden (`custom:weigh`) | 60 |
+| 15a | `portrait_gallery` | Porträt 1726: `aldous` lebend. `k07` | `d15a.aldous`: `ask` +trust\_aldous · `silent` | `p15a` Das Original: Wahrheit und Lüge unter acht Bildnissen (`tap`) | 60 |
 | 16 | `great_hall` | Ballvorbereitung, Routen treffen sich, `maren` gesteht | `d16.maren`: `cover` · `report` | `p16` Die Tischordnung: 6 Gäste nach Bedingungen (`arrange` Reihe) | 50 |
 | 17 | `hogsmeade` | Geschenke kaufen | `d17.gift`: `ellis` → `gift_scarf` · `aldous` → `gift_music_box` | `p17` Knallbonbons: Nim mit drei Haufen (3, 4, 5) gegen Fred und George, wer das letzte nimmt, gewinnt (`custom:nim`) | 40 |
 | 18 | `room_of_requirement` | Erinnerung der Uhrmacherin, `k07` falls fehlend, persönliches Foto (Abschnitt 12) | `d18.token`: `use` (nur mit `house_token`) Bonus-Szene · `skip` | `p18` Die Tür, die erscheint: Schiebepuzzle 3×3 (`slide`) | 50 |

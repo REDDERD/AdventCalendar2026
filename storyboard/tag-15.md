@@ -10,16 +10,16 @@ Eine Datei `day15.ink` mit drei Knoten: `day15` verzweigt nach `route`, `day15_f
 | **Entscheidungen** | `d15w.knopf` (`gentle` / `chase`, Ton) · `d15w.newt` (`stay` / `take`, Ton) | `d15a.aldous` (`ask` +1 `trust_aldous` / `silent`) · `d15a.dumbledore` (`take` / `decline`, Ton) |
 | **Hinweis** | `k05` Knopf, der Niffler | `k07` Porträt von 1726 mit Aldous lebend |
 | **Cameo** | **Newt Scamander** (Sprecher `newt`), Knopf (Sprecher `knopf`) | **Dumbledore-Porträt** (Sprecher `dumbledore`), Aldous (`aldous`) |
-| **Rätsel** | `p15w` Was glänzt? (`tap`, 50 Punkte) | `p15a` Das Porträt (`tap`, 50 Punkte) |
+| **Rätsel** | `p15w` Die falsche Galleone (`custom:weigh`, 60 Punkte) | `p15a` Das Original (`tap` mit `claims`, 60 Punkte) |
 | **Rückbezug** | Tag 13w `lantern` (+1 Funke) · Tag 11 (Hagrids zwölf Löffel) · Tag 14 (Zahnrad Nr. 12) · Tag 8 (Maren, Kekse, Schuppen) | Tag 13a `archive_key` (Abkürzungs-Dialog, +1 Funke) · `k06` („Mein Ritter“) · `k02` (Kälte) |
 | **Türchen-Zauber** | Schokotaler regnen vom Wurzelwerk | Schokotaler regnen in den Rahmen und werden von den Porträts aufgefangen |
 | **Wörter** | beide Routen zusammen 220–296 gemessen (`content:simulate`) | |
 
 ## Beats
 
-**Wald:** 1. Die Spur endet an einem Bau. Der Faden eines gelb-schwarzen Wollschals hängt an der Wurzel. 2. Knopf sitzt im Glitzer. `k05`. **Entscheidung 1:** sanft die Hand ausstrecken oder nach ihm greifen. 3. Newt steigt aus einem Koffer, erklärt Nifflers und die Kekse. **Entscheidung 2:** soll Knopf bei der Freundin bleiben oder mit Newt gehen? 4. Rätsel: unter dem Glitzerhaufen die echten Galleonen finden. 5. Schokotaler regnen. Hagrids zwölf Löffel liegen auch hier.
+**Wald:** 1. Die Spur endet an einem Bau. Der Faden eines gelb-schwarzen Wollschals hängt an der Wurzel. 2. Knopf sitzt im Glitzer. `k05`. **Entscheidung 1:** sanft die Hand ausstrecken oder nach ihm greifen. 3. Newt steigt aus einem Koffer, erklärt Nifflers und die Kekse. **Entscheidung 2:** soll Knopf bei der Freundin bleiben oder mit Newt gehen? 4. Rätsel: neun Galleonen, eine ist ein Schokotaler, zwei Wägungen. 5. Schokotaler regnen. Hagrids zwölf Löffel liegen auch hier.
 
-**Archiv:** 1. Die lange, kalte Galerie. Mit `archive_key` geht es ohne Umweg. 2. Dumbledores Porträt wundert sich laut. **Entscheidung 1:** ein Bonbon nehmen oder höflich ablehnen. 3. Das Ritterporträt von 1726. Aldous tritt davor. **Entscheidung 2:** ihn fragen oder schweigen. 4. Rätsel: fünf Unterschiede zwischen Original und Kopie. 5. `k07`.
+**Archiv:** 1. Die lange, kalte Galerie. Mit `archive_key` geht es ohne Umweg. 2. Dumbledores Porträt wundert sich laut. **Entscheidung 1:** ein Bonbon nehmen oder höflich ablehnen. 3. Das Ritterporträt von 1726. Aldous tritt davor. **Entscheidung 2:** ihn fragen oder schweigen. 4. Rätsel: acht redende Bildnisse, nur eines ist das Original. 5. `k07`.
 
 ## Skript
 
@@ -27,6 +27,7 @@ Eine Datei `day15.ink` mit drei Knoten: `day15` verzweigt nach `route`, `day15_f
 INCLUDE globals.ink
 
 // Tag 15 – Was glänzt (Akt II). Routen-Knoten day15_forest / day15_archive [STR-1]. Rätsel: p15w / p15a.
+// Quelle: storyboard/tag-15.md. Rätsel: p15w Waage mit neun Galleonen (custom:weigh), p15a acht Porträts, ein Original (tap mit claims).
 === day15 ===
 { route == "archive": -> day15_archive }
 -> day15_forest
@@ -73,14 +74,15 @@ newt: Wer ihn füttert, hat einen warmen Ofen.
     newt: Das dachte ich auch. Er schaut nicht mich an, wenn er an Kekse denkt.
 * [Newt soll ihn mitnehmen.] # cid: d15w.newt.take
     newt: Ich könnte. Aber er sucht jemanden. Das sehe ich an seinen Ohren. Ich lasse ihn.
-- newt: Er hat auch echte Galleonen gesammelt. Zwischen Schokotalern und Löffeln.
-newt: Helft ihr mir sortieren?
-newt: Eine echte hat alles drei:
-newt: goldener Glanz, geriffelter Rand und einen Drachen auf der Vorderseite.
+- newt: Er hat auch Galleonen gesammelt. Neun liegen hier in einer Reihe.
+newt: Acht sind aus Gold. Eine ist ein Schokotaler in Goldfolie.
+newt: Knopf riecht den Unterschied. Ich nicht.
+newt: Meine Waage ist geliehen. Sie klemmt nach zwei Wägungen.
+newt: Helft ihr mir?
 ellis: Zwölf Löffel. Das sind Hagrids. Ich habe nachgezählt. Zweimal. Drei Mal.
 # puzzle: p15w
-{ last_puzzle_first_try: newt: Vier von vier. Sie haben ein Händchen für Gold. Und für Zurückhaltung. }
-{ not last_puzzle_first_try: newt: Fast. Ein Schokotaler hat sich als Galleone verkleidet. Das tun sie gern. }
+{ last_puzzle_first_try: newt: Zwei Wägungen und der Schokotaler ist erwischt. Sie denken in Haufen wie ein Niffler. }
+{ not last_puzzle_first_try: newt: Der Schokotaler hat sich versteckt. Das tun sie gern. Aber Sie haben ihn gefunden. }
 # sfx: spark
 Vom Wurzelwerk regnet es Schokotaler. Knopf fängt jeden und schmatzt zufrieden.
 ellis: Wenn er sammelt und nicht stiehlt, wer hat das Zahnrad dann hingebracht?
@@ -130,13 +132,14 @@ aldous: Fürwahr. So sah ich aus. Ich weiß nicht, ob ich ihn vermisse. Oder ob 
     Aldous verbeugt sich knapp. Er wirkt erleichtert. Und ein wenig enttäuscht.
 - # hide: aldous
 Ein Hauch Frost bleibt am Rahmen zurück. Der Lack knistert leise.
-quill: Zwei Bildnisse hängen hier. Das Original von 1726 und eine Kopie aus späterer Zeit.
-quill: Jemand hat an der Kopie Dinge verändert. Fünf.
-quill: Finde sie, bevor der Lack wieder taut.
+quill: Acht Bildnisse des Ritters hängen hier. Nur eines ist von 1726.
+quill: Die Rahmen sprechen. Das Original sagt immer die Wahrheit, jede Kopie lügt.
+quill: Wer lügt, sagt etwas Falsches. Man muss es nur umdrehen.
 # puzzle: p15a
-{ last_puzzle_first_try: quill: Fünf von fünf. Man sieht, wie sich Ihr Blick sammelt. }
-{ not last_puzzle_first_try: quill: Sie haben einen halben Unterschied übersehen. Das ist nur menschlich. }
+{ last_puzzle_first_try: quill: Bild sieben. Beim ersten Versuch. Man sieht, wie sich Ihr Blick sammelt. }
+{ not last_puzzle_first_try: quill: Ein Irrtum auf dem Weg zum Original. Das ist nur menschlich. }
 # sfx: spark
+Das siebte Bildnis tritt im Rahmen vor. Die anderen sieben verstummen.
 # clue: k07
 quill: Das Band am Arm in Isoldes Farben. Der Uhrenschlüssel am Gürtel. Und das Jahr:
 quill: 1726.
@@ -147,51 +150,39 @@ Die Porträts fangen sie auf und tun, als sei nichts gewesen.
 -> END
 ```
 
-## Rätsel `p15w` – Was glänzt?
+## Rätsel `p15w` – Die falsche Galleone
 
-- **Engine:** `tap`, Bild `puzzle.p15w.hoard` (256 × 192): ein Haufen aus zwölf Fundstücken in 4 Spalten × 3 Reihen, alle gut erkennbar groß gezeichnet. Der Spieler tippt die **echten Galleonen** an (`maxMarks` 4, „Prüfen“ nach `[PZL-6]`).
-- **Regel** (Newts Satz im Dialog): Echt ist, was **alle drei** hat: goldener Glanz, geriffelter Rand und einen Drachen auf der Vorderseite.
+Ersetzt am 22.11.2026 das Antipp-Rätsel „Was glänzt?“ (zu leicht, DECISIONS #44 und #71). Layton-Klassiker mit der Waage.
 
-| Platz | Fundstück | Glanz | Rand | Wappen | echt? |
-| --- | --- | --- | --- | --- | --- |
-| c1 | Münze | Gold | glatt | Drache | nein (Rand) |
-| c2 | Münze | Gold | geriffelt | Drache | **ja** |
-| c3 | Löffel | – | – | – | nein |
-| c4 | Schokotaler (Goldfolie) | Gold | glatt | Drache | nein (Rand) |
-| c5 | Münze | Gold | geriffelt | Drache | **ja** |
-| c6 | Sickel | Silber | geriffelt | Drache | nein (Glanz) |
-| c7 | Knopf | Gold | geriffelt | keins | nein (Wappen) |
-| c8 | Münze | Gold | geriffelt | Drache | **ja** |
-| c9 | Münze | Gold | geriffelt | Greif | nein (Wappen) |
-| c10 | Löffel | – | – | – | nein |
-| c11 | Münze | Gold | geriffelt | Drache | **ja** |
-| c12 | Münze | Messing, stumpf | geriffelt | Drache | nein (Glanz) |
+- **Engine:** `custom:weigh`. Neun Galleonen sehen gleich aus, eine ist Newts Schokotaler in Goldfolie und damit leichter. Die Waage klemmt nach **zwei Wägungen**. In beiden Schalen müssen gleich viele Münzen liegen. Danach nennt man den Schokotaler („Benennen“).
+- **Bedienung:** Eine Münze antippen setzt sie von der Ablage nach links, dann nach rechts, dann zurück. „Wiegen“ lässt den Balken kippen (die leichtere Schale geht hoch), „Abräumen“ leert die Schalen. Unter der Waage steht ein Protokoll der Wägungen.
+- **Fairness:** Der Schokotaler steht nicht vorab fest. Die Waage antwortet so, dass möglichst viele Münzen verdächtig bleiben (bei Gleichstand: Gleichgewicht, dann links, dann rechts). Wer rät, verliert; eine falsch benannte Münze zählt als Fehlversuch und die Waage setzt sich zurück.
+- **Lösung:** Erst 3 gegen 3. Kippt es, liegt der Schokotaler in der leichteren Schale, bleibt es gerade, unter den drei übrigen. Dann 1 gegen 1 aus der verdächtigen Gruppe. Der einzige sichere erste Zug ist 3 gegen 3 (`solution: [3, 3]`); `puzzles:verify` beweist per Suche, dass zwei Wägungen reichen und eine weniger nicht.
+- **Bilder:** `puzzle.coin` (48 × 48), `puzzle.scale.stand`, `puzzle.scale.beam`, `puzzle.scale.pan`, gezeichnet in `scripts/draw-sprites.ts`.
+- **Intro (Newt):** „Gold ist schwer. Schokolade nicht. Das ist der ganze Trick.“
+- **Hinweise:** 1) Nicht jede Münze einzeln wiegen; auch „Gleichgewicht“ verrät etwas. 2) Drei Haufen zu drei, zwei kommen auf die Waage. 3) Drei gegen drei, dann zwei der drei verdächtigen gegeneinander.
+- **Lösungstext:** Jede Wägung kennt drei Ausgänge (links leichter, rechts leichter, gleich), also reichen zwei Wägungen für neun Münzen.
 
-- **Geprüft:** Genau **vier** Stücke erfüllen die Regel (c2, c5, c8, c11). Jede Fälschung verletzt mindestens eine der drei Bedingungen, die meisten genau eine. Wer nur auf Gold achtet, tippt zu viele an.
-- **Targets** (Raster, je 56 × 56 mit 6 px Abstand): c2 (68, 6) · c5 (6, 68) · c8 (192, 68) · c11 (130, 130). Alle zwölf Felder sind antippbar, nur diese vier sind richtig.
-- **Intro (Newt):** „Er sammelt alles, was glänzt. Das ist keine Eigenschaft. Das ist ein Beruf.“
-- **Hinweise:** 1) Echt ist, was alle drei Merkmale hat. Prüfe bei jedem Stück jedes Merkmal einzeln. 2) Gold allein reicht nicht: Ein Schokotaler glänzt auch. 3) Drache, geriffelter Rand und Goldglanz zugleich. Zähl die Münzen, bei denen eins fehlt.
-- **Super-Hinweis:** Die echten Galleonen liegen in der ersten Reihe an zweiter Stelle, in der zweiten Reihe links und rechts außen, in der dritten Reihe in der Mitte rechts.
-- **Lösungstext:** „Vier echte Galleonen: Gold, geriffelter Rand und Drache. Der Schokotaler hat einen glatten Rand, der Sickel ist silbern, das Messingstück stumpf, der Greif ist kein Drache.“
+## Rätsel `p15a` – Das Original
 
-## Rätsel `p15a` – Das Porträt
+Ersetzt am 22.11.2026 das Rätsel „Das Porträt“ (fünf Unterschiede, zu leicht). Layton-Klassiker mit Wahrheitssagern und Lügnern.
 
-- **Engine:** `tap`, Bild `puzzle.p15a.portraits` (256 × 232): oben das **Original** (1726), unten die **Kopie**. Fünf Stellen unterscheiden sich, getippt werden die **Abweichungen auf der Kopie**.
-- **Die fünf Unterschiede:**
-
-| Id | Original | Kopie | Bedeutung |
-| --- | --- | --- | --- |
-| `ribbon` | blaues Band am Schwertarm (Isoldes Farbe) | rotes Band | Isolde schenkte es ihm |
-| `key` | Uhrenschlüssel am Gürtel | kein Schlüssel | Er war an die Uhr gebunden |
-| `plate` | Messingschild „1726“ | Schild „1826“ | Das Original ist dreihundert Jahre alt |
-| `smile` | ein leichtes Lächeln | geschlossener Mund | Er war glücklich |
-| `gear` | ein winziges Zahnrad im Schwertgriff | ein glatter Griff | Isoldes Handwerk |
-
-- **Targets** (auf der Kopie, Raster 256 × 232, untere Hälfte ab y 120): `ribbon` (84, 168, 30, 24) · `key` (180, 186, 28, 28) · `plate` (100, 208, 56, 20) · `smile` (116, 148, 24, 14) · `gear` (60, 196, 22, 22). `maxMarks` 5.
-- **Intro (Quill):** „Ein Restaurator hat die Kopie geglättet. Wer glättet, nimmt etwas weg. Finde, was.“
-- **Hinweise:** 1) Fang mit dem Gesicht an, dann geh nach unten. 2) Zwei der Unterschiede liegen am Gürtel und am Schwertarm. 3) Auch das Schild und der Mund sind anders.
-- **Super-Hinweis:** Band, Schlüssel, Schild, Mund und ein Zahnrad im Schwertgriff fehlen oder sind verändert.
-- **Lösungstext:** „Band, Schlüssel, Jahr, Lächeln, Zahnrad: Der Restaurator hat alles Persönliche wegretuschiert. Das Original ist 1726 gemalt, der Ritter trägt Isoldes Farbe, den Uhrenschlüssel und ein Zahnrad im Schwertgriff.“
+- **Engine:** `tap` mit dem neuen Feld `claims`. Bild `puzzle.p15a` (256 × 232): acht gleich aussehende Bildnisse des Ritters, 4 × 2, nummeriert 1 bis 8 (erst die obere Reihe, dann die untere). Getippt wird das **Original**.
+- **Regel:** Genau ein Bildnis ist das Original von 1726 und sagt immer die Wahrheit. Jede Kopie sagt immer etwas Falsches. Die acht Aussagen stehen auf der „Karte“ (`clues`) und sind in `claims.statements` maschinenlesbar hinterlegt. Daraus erzeugt `portraitClaims.ts` den Text. `puzzles:verify` prüft, dass der Kartentext zur Regel passt und genau ein Bild möglich ist.
+- **Aussagen** (das Original ist Bild 7):
+  1. Das Original ist Bild 4 oder Bild 8.
+  2. Das Original hängt in der oberen Reihe.
+  3. Bild 2 und Bild 7 sind Kopien.
+  4. Das Original hängt weiter links als Bild 2.
+  5. Das Original hängt direkt neben mir.
+  6. Das Original ist Bild 3 oder Bild 8.
+  7. Das Original hängt weiter rechts als Bild 1.
+  8. Bild 2 ist das Original.
+- **Weg zur Lösung:** Bild 8 kann nicht stimmen (wäre es das Original, wäre es auch Bild 2), also ist Bild 2 eine Kopie und seine Aussage falsch: Das Original hängt unten. Damit lügt auch Bild 3, und weil Bild 2 keines ist, bleibt nur Bild 7. Jede falsche Annahme widerspricht mindestens zwei Aussagen.
+- **Targets:** Je Bildnis 56 × 100 (`b1` bis `b8`), `maxMarks` 3, damit die Zahl der Lösungen nicht verraten wird.
+- **Intro (Quill):** „Ein Bild, das immer die Wahrheit sagt, ist selten. Ein Bild, das immer lügt, ist ein Gewinn: Man muss nur umdrehen, was es sagt.“
+- **Hinweise:** 1) Annahme „Bild X ist das Original“ prüfen, mit einem Bild anfangen, dessen Aussage sich selbst verrät. 2) Bild 8 lügt, Bild 2 ist eine Kopie. 3) Das Original hängt nicht oben, also lügt Bild 3.
+- **Nach dem Rätsel:** Das siebte Bildnis tritt vor und die anderen verstummen. Quill nennt, was das Original zeigt: das Band in Isoldes Farben, den Uhrenschlüssel, das Jahr 1726 (`k07`).
 
 ## Setups und Payoffs
 

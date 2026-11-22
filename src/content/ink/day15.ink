@@ -1,7 +1,7 @@
 INCLUDE globals.ink
 
 // Tag 15 – Was glänzt (Akt II). Routen-Knoten day15_forest / day15_archive [STR-1]. Rätsel: p15w / p15a.
-// Quelle: storyboard/tag-15.md. Rätsel-Bilder: Galleonen mit Kerbenrand, Porträt mit Zahnrad im Schwertknauf.
+// Quelle: storyboard/tag-15.md. Rätsel: p15w Waage mit neun Galleonen (custom:weigh), p15a acht Porträts, ein Original (tap mit claims).
 === day15 ===
 { route == "archive": -> day15_archive }
 -> day15_forest
@@ -48,14 +48,15 @@ newt: Wer ihn füttert, hat einen warmen Ofen.
     newt: Das dachte ich auch. Er schaut nicht mich an, wenn er an Kekse denkt.
 * [Newt soll ihn mitnehmen.] # cid: d15w.newt.take
     newt: Ich könnte. Aber er sucht jemanden. Das sehe ich an seinen Ohren. Ich lasse ihn.
-- newt: Er hat auch echte Galleonen gesammelt. Zwischen Schokotalern und Löffeln.
-newt: Helft ihr mir sortieren?
-newt: Eine echte hat alles drei:
-newt: goldener Glanz, geriffelter Rand und einen Drachen auf der Vorderseite.
+- newt: Er hat auch Galleonen gesammelt. Neun liegen hier in einer Reihe.
+newt: Acht sind aus Gold. Eine ist ein Schokotaler in Goldfolie.
+newt: Knopf riecht den Unterschied. Ich nicht.
+newt: Meine Waage ist geliehen. Sie klemmt nach zwei Wägungen.
+newt: Helft ihr mir?
 ellis: Zwölf Löffel. Das sind Hagrids. Ich habe nachgezählt. Zweimal. Drei Mal.
 # puzzle: p15w
-{ last_puzzle_first_try: newt: Vier von vier. Sie haben ein Händchen für Gold. Und für Zurückhaltung. }
-{ not last_puzzle_first_try: newt: Fast. Ein Schokotaler hat sich als Galleone verkleidet. Das tun sie gern. }
+{ last_puzzle_first_try: newt: Zwei Wägungen und der Schokotaler ist erwischt. Sie denken in Haufen wie ein Niffler. }
+{ not last_puzzle_first_try: newt: Der Schokotaler hat sich versteckt. Das tun sie gern. Aber Sie haben ihn gefunden. }
 # sfx: spark
 Vom Wurzelwerk regnet es Schokotaler. Knopf fängt jeden und schmatzt zufrieden.
 ellis: Wenn er sammelt und nicht stiehlt, wer hat das Zahnrad dann hingebracht?
@@ -105,13 +106,14 @@ aldous: Fürwahr. So sah ich aus. Ich weiß nicht, ob ich ihn vermisse. Oder ob 
     Aldous verbeugt sich knapp. Er wirkt erleichtert. Und ein wenig enttäuscht.
 - # hide: aldous
 Ein Hauch Frost bleibt am Rahmen zurück. Der Lack knistert leise.
-quill: Zwei Bildnisse hängen hier. Das Original von 1726 und eine Kopie aus späterer Zeit.
-quill: Jemand hat an der Kopie Dinge verändert. Fünf.
-quill: Finde sie, bevor der Lack wieder taut.
+quill: Acht Bildnisse des Ritters hängen hier. Nur eines ist von 1726.
+quill: Die Rahmen sprechen. Das Original sagt immer die Wahrheit, jede Kopie lügt.
+quill: Wer lügt, sagt etwas Falsches. Man muss es nur umdrehen.
 # puzzle: p15a
-{ last_puzzle_first_try: quill: Fünf von fünf. Man sieht, wie sich Ihr Blick sammelt. }
-{ not last_puzzle_first_try: quill: Sie haben einen halben Unterschied übersehen. Das ist nur menschlich. }
+{ last_puzzle_first_try: quill: Bild sieben. Beim ersten Versuch. Man sieht, wie sich Ihr Blick sammelt. }
+{ not last_puzzle_first_try: quill: Ein Irrtum auf dem Weg zum Original. Das ist nur menschlich. }
 # sfx: spark
+Das siebte Bildnis tritt im Rahmen vor. Die anderen sieben verstummen.
 # clue: k07
 quill: Das Band am Arm in Isoldes Farben. Der Uhrenschlüssel am Gürtel. Und das Jahr:
 quill: 1726.

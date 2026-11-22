@@ -203,8 +203,8 @@ Gilt zusammen mit CONCEPT Abschnitt 9 und DECISIONS #50/#51. ✅ = Storyboard ge
 | 13a | `p13a` **Der Stammbaum** | `arrange` Reihe | Konzept, Spezifikation unten |
 | 14w | `p14w` Das Spinnennetz | `path` | Konzept |
 | 14a | `p14a` Spiegelschrift | `input` | Konzept |
-| 15w | `p15w` Was glänzt? | `tap` | Konzept |
-| 15a | `p15a` Das Porträt | `tap` | Konzept |
+| 15w | `p15w` Die falsche Galleone | `custom:weigh` | Konzept |
+| 15a | `p15a` Das Original | `tap` (mit `claims`) | Konzept |
 | 16 | `p16` Die Tischordnung | `arrange` Reihe | Konzept |
 | 17 | `p17` **Knallbonbons** (Nim) | `custom:nim` | Konzept, Spezifikation unten |
 | 18 | `p18` Die Tür, die erscheint | `slide` | Konzept |

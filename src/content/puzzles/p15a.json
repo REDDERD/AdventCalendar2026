@@ -1,32 +1,133 @@
 {
   "id": "p15a",
   "number": 15,
-  "title": "Das Porträt",
-  "points": 50,
+  "title": "Das Original",
+  "points": 60,
   "type": "tap",
-  "prompt": "Oben hängt das Original von 1726, unten eine spätere Kopie. Ein Restaurator hat an der Kopie fünf Dinge verändert. Tippe die fünf Stellen in der unteren Kopie an.",
+  "prompt": "Acht Bildnisse des Ritters hängen am Gangende, und sie reden. Nur eines ist das Original von 1726 und sagt immer die Wahrheit. Jede Kopie lügt immer. Tippe das Original an. Die Aussagen stehen auf der Karte.",
   "config": {
     "image": "puzzle.p15a",
     "height": 232,
     "targets": [
-      { "id": "smile", "x": 114, "y": 144, "w": 28, "h": 20 },
-      { "id": "ribbon", "x": 82, "y": 180, "w": 26, "h": 22 },
-      { "id": "key", "x": 158, "y": 202, "w": 20, "h": 24 },
-      { "id": "gear", "x": 70, "y": 208, "w": 20, "h": 20 },
-      { "id": "plate", "x": 102, "y": 212, "w": 52, "h": 20 }
+      {
+        "id": "b1",
+        "x": 4,
+        "y": 12,
+        "w": 56,
+        "h": 100
+      },
+      {
+        "id": "b2",
+        "x": 68,
+        "y": 12,
+        "w": 56,
+        "h": 100
+      },
+      {
+        "id": "b3",
+        "x": 132,
+        "y": 12,
+        "w": 56,
+        "h": 100
+      },
+      {
+        "id": "b4",
+        "x": 196,
+        "y": 12,
+        "w": 56,
+        "h": 100
+      },
+      {
+        "id": "b5",
+        "x": 4,
+        "y": 120,
+        "w": 56,
+        "h": 100
+      },
+      {
+        "id": "b6",
+        "x": 68,
+        "y": 120,
+        "w": 56,
+        "h": 100
+      },
+      {
+        "id": "b7",
+        "x": 132,
+        "y": 120,
+        "w": 56,
+        "h": 100
+      },
+      {
+        "id": "b8",
+        "x": 196,
+        "y": 120,
+        "w": 56,
+        "h": 100
+      }
     ],
-    "maxMarks": 7
+    "maxMarks": 3,
+    "claims": {
+      "columns": 4,
+      "statements": [
+        {
+          "type": "either",
+          "a": 4,
+          "b": 8
+        },
+        {
+          "type": "top_row"
+        },
+        {
+          "type": "both_copies",
+          "a": 2,
+          "b": 7
+        },
+        {
+          "type": "left_of",
+          "of": 2
+        },
+        {
+          "type": "next_to_me"
+        },
+        {
+          "type": "either",
+          "a": 3,
+          "b": 8
+        },
+        {
+          "type": "right_of",
+          "of": 1
+        },
+        {
+          "type": "is_original",
+          "of": 2
+        }
+      ]
+    }
   },
-  "solution": ["smile", "ribbon", "key", "gear", "plate"],
-  "hints": [
-    "Fang beim Gesicht an und geh dann langsam nach unten.",
-    "Zwei Unterschiede liegen am Schwertarm und an der rechten Hüfte.",
-    "Schau auch auf das Schild am Rahmen und ganz genau auf den Schwertknauf."
+  "solution": [
+    "b7"
   ],
-  "superHint": "Mund, Band am Arm, Schlüssel an der Hüfte, Jahreszahl und das Zahnrad im Schwertknauf.",
-  "solutionText": "Lächeln, Band, Schlüssel, Jahr und Zahnrad: Der Restaurator hat alles Persönliche wegretuschiert. Das Original ist 1726 gemalt, der Ritter trägt Isoldes Blau, den Uhrenschlüssel und ein Zahnrad im Schwertknauf.",
+  "clues": [
+    "Bild 1: „Das Original ist Bild 4 oder Bild 8.“",
+    "Bild 2: „Das Original hängt in der oberen Reihe.“",
+    "Bild 3: „Bild 2 und Bild 7 sind Kopien.“",
+    "Bild 4: „Das Original hängt weiter links als Bild 2.“",
+    "Bild 5: „Das Original hängt direkt neben mir.“",
+    "Bild 6: „Das Original ist Bild 3 oder Bild 8.“",
+    "Bild 7: „Das Original hängt weiter rechts als Bild 1.“",
+    "Bild 8: „Bild 2 ist das Original.“"
+  ],
+  "hints": [
+    "Nimm an, Bild 3 sei das Original, und lies dann alle acht Aussagen: Nur seine eigene darf stimmen. Fang lieber mit einem Bild an, dessen Aussage sich selbst verrät.",
+    "Bild 8 sagt, Bild 2 sei das Original. Wäre Bild 8 das Original, wäre Bild 2 es auch. Das geht nicht: Bild 8 lügt, und Bild 2 ist eine Kopie.",
+    "Bild 2 ist eine Kopie, also stimmt seine Aussage nicht: Das Original hängt nicht oben. Bild 3 ist damit auch eine Kopie. Was bedeutet das für seine Aussage über Bild 2 und Bild 7?"
+  ],
+  "superHint": "Bild 7. Bild 3 lügt, also ist Bild 2 oder Bild 7 das Original, und Bild 2 ist es nicht.",
+  "solutionText": "Bild 7 ist das Original. Bild 8 kann nicht stimmen, also ist Bild 2 eine Kopie und das Original hängt unten. Dann lügt auch Bild 3, und weil Bild 2 keines ist, bleibt nur Bild 7.",
   "intro": {
     "speaker": "quill",
-    "text": "Ein Restaurator hat die Kopie geglättet. Wer glättet, nimmt etwas weg. Finde, was."
+    "text": "Ein Bild, das immer die Wahrheit sagt, ist selten. Ein Bild, das immer lügt, ist ein Gewinn: Man muss nur umdrehen, was es sagt."
   }
 }

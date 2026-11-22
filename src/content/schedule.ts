@@ -65,7 +65,7 @@ const routeVariants: Record<number, Record<RouteId, RouteVariant>> = {
   },
   15: {
     forest: { title: 'Was glänzt', location: 'niffler_burrow', puzzleId: 'p15w' },
-    archive: { title: 'Das Porträt', location: 'portrait_gallery', puzzleId: 'p15a' },
+    archive: { title: 'Das Original', location: 'portrait_gallery', puzzleId: 'p15a' },
   },
 };
 

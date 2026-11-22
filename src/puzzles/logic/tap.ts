@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import type { Puzzle } from '../schema';
+import { claimLine, consistentOriginals, contradictions, portraitClaims } from './portraitClaims';
 import { result, type EngineLogic } from './types';
 
 /**
@@ -24,6 +25,11 @@ export const tapConfig = z.object({
     .min(1),
   /** How many marks may be set; default: as many as the solution has. */
   maxMarks: z.number().int().min(1).optional(),
+  /**
+   * Talking portraits (p15a): the target `i + 1` (in list order) speaks statement `i`. The original
+   * says only true things, every copy only false ones; the solution is the original's target id.
+   */
+  claims: portraitClaims.optional(),
 });
 export type TapConfig = z.infer<typeof tapConfig>;
 
@@ -79,6 +85,25 @@ export const tapLogic: EngineLogic<TapState> = {
       if (t.w < 20 || t.h < 20) errors.push(`target ${t.id} is smaller than 20 × 20 [UI-4]`);
     }
     if (maxMarks(puzzle) < wanted.length) errors.push('maxMarks is smaller than the solution');
-    return result(errors, [`${wanted.length} of ${ids.length} targets`]);
+    const info = [`${wanted.length} of ${ids.length} targets`];
+    if (config.claims) info.push(...verifyClaims(puzzle, config, errors));
+    return result(errors, info);
   },
 };
+
+/** Talking portraits: exactly one frame can be the original, it is the solution, and the card says what is checked. */
+function verifyClaims(puzzle: Puzzle, config: TapConfig, errors: string[]): string[] {
+  const claims = config.claims!;
+  const n = config.targets.length;
+  if (claims.statements.length !== n) errors.push(`${claims.statements.length} statements for ${n} frames`);
+  const fits = consistentOriginals(claims);
+  if (fits.length !== 1) errors.push(`${fits.length} frames fit the statements, expected exactly 1`);
+  else if (config.targets[fits[0] - 1]?.id !== (puzzle.solution as string[])[0]) {
+    errors.push(`the statements lead to frame ${fits[0]} (${config.targets[fits[0] - 1]?.id}), not the solution`);
+  }
+  claims.statements.forEach((claim, i) => {
+    if (puzzle.clues?.[i] !== claimLine(i + 1, claim)) errors.push(`clue ${i + 1} differs from the statement: ${claimLine(i + 1, claim)}`);
+  });
+  const rival = claims.statements.map((_, i) => contradictions(claims, i + 1)).filter((_, i) => !fits.includes(i + 1));
+  return [`1 of ${n} frames fits`, `wrong guesses clash with ${Math.min(...rival)}–${Math.max(...rival)} statements`];
+}

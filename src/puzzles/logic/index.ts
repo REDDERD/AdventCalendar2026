@@ -11,6 +11,7 @@ import { pourLogic } from './pour';
 import { slideLogic } from './slide';
 import { tapLogic } from './tap';
 import { toggleLogic } from './toggle';
+import { weighLogic } from './weigh';
 import type { EngineLogic } from './types';
 
 /** State types differ per engine; the registry erases them. */
@@ -23,6 +24,7 @@ export const CUSTOM_LOGIC: Record<string, AnyEngineLogic> = {
   nim: nimLogic,
   accuse: accuseLogic,
   finale: finaleLogic,
+  weigh: weighLogic,
 };
 
 const LOGIC: Record<Exclude<PuzzleType, 'custom'>, AnyEngineLogic> = {

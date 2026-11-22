@@ -800,6 +800,23 @@ img {
 .nim-empty { font-size: 12px; color: var(--stone-light); align-self: center; }
 .nim .pixel-btn { margin-top: 10px; }
 
+/* custom: weigh */
+.weigh { gap: 2px; }
+.weigh-stage { position: relative; flex: none; }
+.weigh-stand { position: absolute; left: 96px; top: 28px; }
+.weigh-beam { position: absolute; width: 176px; height: 12px; transition: transform 700ms steps(7); transform-origin: 50% 50%; }
+.weigh-pan { position: absolute; height: 48px; transition: top 700ms steps(7), left 700ms steps(7); }
+.weigh-pan > :first-child { position: absolute; left: 0; top: 0; }
+.weigh-pan-coins { position: absolute; left: 0; right: 0; bottom: 9px; display: flex; flex-wrap: wrap-reverse; justify-content: center; }
+.weigh-tray { display: flex; justify-content: center; height: 28px; width: 256px; }
+.weigh-gap { width: 26px; flex: none; }
+.weigh-coin { position: relative; flex: none; width: 26px; height: 26px; padding: 1px; border: 0; background: transparent; border-radius: 50%; }
+.weigh-coin.in-pan { width: 24px; height: 24px; padding: 0; }
+.weigh-coin.picked { background: rgba(255, 210, 122, 0.45); box-shadow: 0 0 0 2px var(--candle); }
+.weigh-num { position: absolute; left: 0; right: 0; bottom: -2px; font-size: 10px; line-height: 10px; color: var(--candle-light); text-shadow: 1px 1px 0 var(--wood-dark), -1px -1px 0 var(--wood-dark), 1px -1px 0 var(--wood-dark), -1px 1px 0 var(--wood-dark); pointer-events: none; }
+.weigh-buttons { display: flex; gap: 8px; margin-top: 2px; }
+.weigh-log { min-height: 14px; font-size: 12px; line-height: 13px; color: var(--candle-light); text-align: center; }
+
 /* ---------- Puzzle overlays: hints, notes, mentor help, practice ---------- */
 
 .puzzle-overlay { position: absolute; inset: 0; z-index: 4; overflow-y: auto; padding: 6px 8px; background: var(--parchment); color: var(--ink); border-top: 2px solid var(--wood-dark); }
