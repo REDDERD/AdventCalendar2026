@@ -1099,6 +1099,21 @@ img {
 .diary-text { padding: 4px 6px 2px; border-left: 2px solid var(--parchment-dark); margin-left: 3px; }
 .collection { margin: 0; padding-left: 12px; }
 .collection .missing { color: var(--stone-light); }
+.item-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; margin: 0 0 4px; padding: 0; list-style: none; }
+.item-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 4px 2px 3px;
+  text-align: center;
+  background: var(--parchment-light);
+  border: 1px solid var(--parchment-dark);
+}
+.item-picture { flex: none; }
+.item-name { font-size: 11px; line-height: 1.15; overflow-wrap: break-word; hyphens: auto; }
+.item-card.missing { color: var(--stone-light); }
+.item-unknown { display: flex; align-items: center; justify-content: center; width: 64px; height: 64px; font-size: 28px; background: var(--parchment-dark); }
 .puzzle-row { display: flex; align-items: center; gap: 6px; width: 100%; min-height: 24px; margin-bottom: 3px; padding: 2px 6px; text-align: left; background: var(--parchment-light); border: 1px solid var(--parchment-dark); }
 .puzzle-row-number { width: 26px; color: var(--ember); }
 .puzzle-row-title { flex: 1; }

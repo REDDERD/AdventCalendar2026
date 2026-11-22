@@ -23,3 +23,34 @@ export const ITEMS: Record<string, string> = {
   gift_music_box: 'Spieluhr für Aldous',
   theo_wrench: 'Theos Uhrmacherschlüssel',
 };
+
+/** Trunk picture (asset id) per item. The house token looks different in every house. */
+export const ITEM_ICONS: Record<string, string> = {
+  bookmark: 'item.bookmark',
+  anonymous_letter: 'item.anonymous_letter',
+  lantern: 'item.lantern',
+  archive_key: 'item.archive_key',
+  gift_scarf: 'item.gift_scarf',
+  gift_music_box: 'item.gift_music_box',
+  theo_wrench: 'item.theo_wrench',
+};
+
+/** What the house token is, per house (day 9): picture and name. */
+export const HOUSE_TOKENS: Record<string, { icon: string; name: string }> = {
+  gryffindor: { icon: 'item.house_token_gryffindor', name: 'Rote Löwenfeder' },
+  hufflepuff: { icon: 'item.house_token_hufflepuff', name: 'Honigtöpfchen' },
+  ravenclaw: { icon: 'item.house_token_ravenclaw', name: 'Adlerbrosche' },
+  slytherin: { icon: 'item.house_token_slytherin', name: 'Grüner Glücksstein' },
+};
+
+/**
+ * Clues that are physical objects: the "Hinweise" tab shows them as pictures like items.
+ * The others (scratches, cold spot, frost, inscription) are observations and stay text.
+ */
+export const CLUE_ICONS: Record<string, string> = {
+  k03: 'item.clue_notebook',
+  k04: 'item.clue_gear',
+  k06: 'item.clue_letter',
+  k07: 'item.clue_portrait',
+  k08: 'item.clue_logbook',
+};

@@ -69,7 +69,7 @@ Dieses Dokument ist die verbindliche Spezifikation. Es ist so aufgebaut, dass ei
 | Hilfe-Hinweis | `hint` | Rätselhilfe, kostet Funken |
 | Zauberfunken | `sparks` | Währung für Hilfe-Hinweise |
 | Hauspunkte | `housePoints` | Punkte für gelöste Rätsel |
-| Truhe | `trunk` | Hauptmenü: Tagebuch, Rätselsammlung, Inventar, Hinweise, Steckbrief, Einstellungen |
+| Truhe | `trunk` | Hauptmenü: Tagebuch, Rätselsammlung, Inventar (Gegenstände als Bilder mit Namen), Hinweise (Gegenstands-Hinweise als Bilder, Beobachtungen als Text), Steckbrief, Einstellungen |
 | Durchlauf | `runId` | Zähler pro Spieler, steigt beim Zurücksetzen des Spielstands |
 | Ereignis | `event` | Protokolleintrag für die Admin-Konsole |
 

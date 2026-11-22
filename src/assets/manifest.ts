@@ -84,6 +84,16 @@ const crests = Object.fromEntries(
   ]),
 );
 
+/** Trunk pictures of items and object clues (32 × 32), ids as in `ITEM_ICONS` (src/content/catalog.ts). */
+const ITEM_IMAGES = [
+  'bookmark', 'anonymous_letter', 'lantern', 'archive_key', 'gift_scarf', 'gift_music_box', 'theo_wrench',
+  'house_token_gryffindor', 'house_token_hufflepuff', 'house_token_ravenclaw', 'house_token_slytherin',
+  'clue_notebook', 'clue_gear', 'clue_letter', 'clue_portrait', 'clue_logbook',
+] as const;
+const itemImages = Object.fromEntries(
+  ITEM_IMAGES.map((id) => [`item.${id}`, { file: `assets/items/${id}.png`, w: 32, h: 32, ...OWN } satisfies FileAsset]),
+);
+
 const EMOTES = ['!', '?', 'heart', 'sweat', 'note', 'dots'] as const;
 const emoteFile: Record<(typeof EMOTES)[number], string> = {
   '!': 'exclaim', '?': 'question', heart: 'heart', sweat: 'sweat', note: 'note', dots: 'dots',
@@ -104,6 +114,7 @@ export const assets: Record<string, AssetDef> = {
   ...pets,
   ...wands,
   ...crests,
+  ...itemImages,
   // The sorting hat is a single 64 × 64 image (no walk sheet) [GFX-4]
   'npc.hat': { file: 'assets/sprites/hat.png', w: 64, h: 64, ...OWN },
   'portrait.hat': { from: 'npc.hat', crop: [16, 20, 32, 32], scale: 2 },

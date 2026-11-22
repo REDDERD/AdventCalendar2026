@@ -1110,6 +1110,280 @@ function mirrorWriting(word: string): Canvas {
   return c;
 }
 
+// ---------- Trunk: inventory items and object clues (32 × 32, shown at 64 px) ----------
+const INK = '#1a1423';
+const lit = (light: string, mid: string, dark: string) => (u: number, v: number) => (u + v < -0.5 ? light : u + v > 0.6 ? dark : mid);
+
+function blit(dst: Canvas, src: Canvas, ox: number, oy: number): void {
+  for (let y = 0; y < src.h; y++) for (let x = 0; x < src.w; x++) if (src.filled(x, y)) dst.set(ox + x, oy + y, src.get(x, y));
+}
+
+/** Thick line: `t` pixels wide, round-ish. */
+function thickLine(c: Canvas, x0: number, y0: number, x1: number, y1: number, t: number, hex: string): void {
+  const n = Math.max(Math.abs(x1 - x0), Math.abs(y1 - y0), 1);
+  for (let i = 0; i <= n; i++) {
+    const x = x0 + ((x1 - x0) * i) / n;
+    const y = y0 + ((y1 - y0) * i) / n;
+    for (let j = 0; j < t; j++) for (let k = 0; k < t; k++) c.set(x - (t - 1) / 2 + j, y - (t - 1) / 2 + k, hex);
+  }
+}
+
+function envelope(paper: [string, string], seal: 'wax' | 'heart', sealColor: string): Canvas {
+  const c = new Canvas(32, 32);
+  c.rect(4, 9, 24, 16, paper[0]);
+  c.rect(4, 22, 24, 3, paper[1]);
+  c.line(4, 9, 16, 20, paper[1]);
+  c.line(27, 9, 16, 20, paper[1]);
+  c.outline(INK);
+  if (seal === 'wax') {
+    c.ellipse(16, 20, 3.5, 3.5, lit('#7a7488', sealColor, '#1a1423'));
+    c.set(16, 20, '#e8d5a6');
+    c.rect(15, 19, 1, 3, '#e8d5a6');
+    c.set(16, 18, '#e8d5a6');
+  } else {
+    for (let y = 16; y < 24; y++) {
+      for (let x = 11; x < 22; x++) {
+        const u = (x - 16) / 5.2;
+        const v = (19.5 - y) / 5;
+        if ((u * u + v * v - 0.6) ** 3 - u * u * v * v * v < 0) c.set(x, y, v > 0.3 && u < -0.1 ? '#e86a6a' : sealColor);
+      }
+    }
+  }
+  c.outline(INK);
+  return c;
+}
+
+function bookmark(): Canvas {
+  const c = new Canvas(32, 32);
+  for (let y = 3; y < 29; y++) for (let x = 11; x < 21; x++) if (!(y > 24 && Math.abs(x - 15.5) < y - 24)) c.set(x, y, x < 13 ? '#4a7ab8' : x > 18 ? '#2e5a8f' : '#3a68a8');
+  c.rect(11, 3, 10, 2, '#d4a73a');
+  c.rect(11, 6, 10, 1, '#f2d675');
+  c.ellipse(16, 14, 3.5, 3.5, '#d4a73a'); // a small gear in gold
+  c.ellipse(16, 14, 1.5, 1.5, '#2e5a8f');
+  for (const [x, y] of [[16, 9], [16, 19], [11, 14], [21, 14]] as const) c.set(Math.min(Math.max(x, 12), 19), y, '#d4a73a');
+  c.outline(INK);
+  return c;
+}
+
+function feather(): Canvas {
+  const c = new Canvas(32, 32);
+  for (let i = 0; i <= 22; i++) {
+    const x = 7 + i * 0.75;
+    const y = 26 - i * 0.95;
+    const w = Math.sin((i / 22) * Math.PI) * 5.5 + 1;
+    for (let k = -w; k <= w; k += 0.5) c.set(x + k * 0.85, y + k * 0.55, k < 0 ? '#e0524a' : '#a8222a');
+  }
+  c.line(6, 28, 24, 5, '#f2d675');
+  c.outline(INK);
+  return c;
+}
+
+function honeyPot(): Canvas {
+  const c = new Canvas(32, 32);
+  c.ellipse(16, 19, 9.5, 8.5, lit('#f0c25a', '#d4a73a', '#8a5a1c'));
+  c.rect(10, 8, 12, 4, '#c98a2a'); // neck
+  c.rect(9, 7, 14, 2, '#f2d675'); // rim
+  c.rect(10, 4, 12, 4, '#f4f8ff'); // cloth lid
+  c.rect(10, 4, 12, 1, '#e8d5a6');
+  c.rect(14, 8, 4, 1, '#c23b3b'); // string
+  c.rect(12, 18, 8, 6, '#fff1c2'); // label
+  c.rect(14, 19, 1, 4, '#8a5a1c');
+  c.rect(17, 19, 1, 4, '#8a5a1c');
+  c.rect(15, 21, 2, 1, '#8a5a1c');
+  c.rect(24, 12, 2, 6, '#f0c25a'); // a drip
+  c.set(24, 18, '#f0c25a');
+  c.outline(INK);
+  return c;
+}
+
+function eagleBrooch(): Canvas {
+  const c = new Canvas(32, 32);
+  c.ellipse(16, 16, 11, 11, lit('#e2d6b4', '#b08850', '#6a4a20'));
+  c.ellipse(16, 16, 8.5, 8.5, lit('#4a6fbf', '#1d3f8a', '#12285a'));
+  for (let i = 0; i < 7; i++) {
+    c.set(16 - 2 - i, 13 + Math.floor(i / 2), '#e8f0ff'); // wings spread
+    c.set(16 + 2 + i, 13 + Math.floor(i / 2), '#e8f0ff');
+    c.set(16 - 2 - i, 14 + Math.floor(i / 2), '#a9cbe8');
+    c.set(16 + 2 + i, 14 + Math.floor(i / 2), '#a9cbe8');
+  }
+  c.rect(15, 12, 2, 8, '#e8f0ff'); // body
+  c.rect(15, 10, 2, 2, '#f4f8ff'); // head
+  c.set(17, 11, '#f2d675'); // beak
+  c.set(16, 11, INK); // eye
+  c.rect(15, 20, 2, 2, '#a9cbe8'); // tail
+  c.outline(INK);
+  return c;
+}
+
+function luckStone(): Canvas {
+  const c = new Canvas(32, 32);
+  c.ellipse(16, 17, 11, 9, lit('#6ac28a', '#1e6b3a', '#0e3a20'));
+  c.ellipse(11, 12, 3, 2, '#a8e8c0'); // glint
+  c.set(15, 10, '#f4fff8');
+  c.rect(12, 21, 10, 1, '#14522c');
+  c.outline(INK);
+  return c;
+}
+
+function lantern(): Canvas {
+  const c = new Canvas(32, 32);
+  c.rect(12, 3, 8, 1, '#5a5866'); // handle
+  c.rect(11, 4, 1, 4, '#5a5866');
+  c.rect(20, 4, 1, 4, '#5a5866');
+  c.rect(9, 8, 14, 3, '#3a3440'); // cap
+  c.rect(11, 6, 10, 2, '#5a5866');
+  c.rect(10, 11, 12, 15, '#f2d675'); // glass with a glow
+  c.ellipse(16, 18, 4.5, 6, '#fff1c2');
+  c.ellipse(16, 19, 2, 3.5, '#ff9a3c'); // flame
+  c.rect(16, 16, 1, 3, '#fff8ea');
+  for (const x of [10, 15, 21]) c.rect(x, 11, 1, 15, '#3a3440'); // cage bars
+  c.rect(9, 26, 14, 3, '#3a3440');
+  c.rect(9, 26, 14, 1, '#5a5866');
+  c.outline(INK);
+  return c;
+}
+
+function archiveKey(): Canvas {
+  const c = new Canvas(32, 32);
+  const key = keySprite('square', 2, 'brass');
+  blit(c, key, 4, 4);
+  return c;
+}
+
+function scarf(): Canvas {
+  const c = new Canvas(32, 32);
+  const stripe = (x: number, y: number) => ((x + y) % 6 < 3 ? '#c23b3b' : '#f4f8ff');
+  for (let y = 8; y < 16; y++) for (let x = 4; x < 27; x++) c.set(x, y, stripe(x, 0));
+  for (let y = 16; y < 28; y++) for (let x = 6; x < 13; x++) c.set(x, y, y % 6 < 3 ? '#c23b3b' : '#f4f8ff');
+  for (let x = 6; x < 13; x += 2) c.rect(x, 28, 1, 2, '#e8d5a6'); // fringe
+  c.rect(4, 8, 23, 1, '#e86a6a');
+  c.rect(6, 15, 21, 1, '#8e1b1b');
+  c.outline(INK);
+  return c;
+}
+
+function musicBox(): Canvas {
+  const c = new Canvas(32, 32);
+  c.rect(5, 17, 22, 11, lit('#c98a4a', '#9a6a3c', '#6b4226')(0, 0));
+  c.rect(5, 17, 22, 2, '#c98a4a');
+  c.rect(5, 12, 22, 5, '#6b4226'); // lid
+  c.rect(5, 12, 22, 1, '#9a6a3c');
+  c.rect(14, 15, 4, 4, '#d4a73a'); // clasp
+  c.rect(15, 17, 2, 1, INK);
+  c.rect(7, 25, 18, 1, '#6b4226');
+  c.line(27, 21, 30, 21, '#d4a73a'); // winding crank
+  c.rect(30, 19, 1, 5, '#d4a73a');
+  c.ellipse(11, 5, 2, 1.5, '#f2d675'); // a note over the lid
+  c.rect(12, 1, 1, 5, '#f2d675');
+  c.rect(12, 1, 3, 1, '#f2d675');
+  c.outline(INK);
+  return c;
+}
+
+function wrench(): Canvas {
+  const c = new Canvas(32, 32);
+  thickLine(c, 6, 26, 21, 11, 4, '#5a5866');
+  thickLine(c, 5, 25, 20, 10, 1, '#8a889a'); // highlight along the handle
+  c.ellipse(23, 9, 6, 6, lit('#8a889a', '#5a5866', '#2b2a33'));
+  for (let y = 0; y < 16; y++) {
+    for (let x = 16; x < 32; x++) {
+      const dx = x + 0.5 - 23;
+      const dy = y + 0.5 - 9;
+      if ((dx - dy) * 0.707 > 1.5 && Math.abs((dx + dy) * 0.707) < 2.3) c.set(x, y, null); // open jaw, facing away from the handle
+    }
+  }
+  c.ellipse(10, 22, 1, 1, '#2b2a33');
+  c.outline(INK);
+  return c;
+}
+
+function notebook(): Canvas {
+  const c = new Canvas(32, 32);
+  c.rect(7, 4, 19, 24, lit('#9a6a3c', '#6b4226', '#4a2c16')(0, 0));
+  c.rect(7, 4, 3, 24, '#4a2c16'); // spine
+  c.rect(24, 5, 2, 22, '#e8d5a6'); // page edge
+  c.rect(20, 4, 2, 24, '#c9a66b'); // elastic band
+  // a gear sketch on the cover
+  c.ellipse(15, 14, 4, 4, '#d4a73a');
+  c.ellipse(15, 14, 2, 2, '#6b4226');
+  for (const [x, y] of [[15, 9], [15, 19], [10, 14], [20, 14]] as const) c.rect(x - 1 + (x === 10 ? 1 : 0), y - (y === 9 ? 1 : 0), 2, 1, '#d4a73a');
+  c.rect(11, 22, 8, 1, '#c9a66b');
+  c.rect(11, 24, 6, 1, '#c9a66b');
+  c.outline(INK);
+  return c;
+}
+
+function goldenGear(): Canvas {
+  const c = new Canvas(32, 32);
+  for (let y = 0; y < 32; y++) {
+    for (let x = 0; x < 32; x++) {
+      const dx = x + 0.5 - 16;
+      const dy = y + 0.5 - 16;
+      const r = Math.hypot(dx, dy);
+      const tooth = 10.5 + 3.5 * (Math.cos(8 * Math.atan2(dy, dx)) > 0.15 ? 1 : 0);
+      if (r <= tooth && r >= 4.5) c.set(x, y, lit('#f2d675', '#d4a73a', '#7a5a1c')(dx / 14, dy / 14));
+    }
+  }
+  c.outline(INK);
+  return c;
+}
+
+function portraitOf1726(): Canvas {
+  const c = new Canvas(32, 32);
+  c.rect(4, 1, 24, 21, '#a8802a'); // gilded frame
+  c.rect(4, 1, 24, 2, '#f2d675');
+  c.rect(7, 4, 18, 15, '#3a2a4a'); // canvas
+  c.ellipse(16, 11, 4, 4.5, lit('#f0c8a0', '#e2b48e', '#b07850')); // face
+  c.rect(11, 5, 10, 4, '#8a889a'); // helmet
+  c.rect(11, 5, 10, 1, '#c0c8d0');
+  c.rect(12, 9, 2, 5, '#8a889a'); // cheek plates
+  c.rect(18, 9, 2, 5, '#8a889a');
+  c.rect(14, 11, 1, 1, INK);
+  c.rect(17, 11, 1, 1, INK);
+  c.rect(9, 16, 14, 3, '#c0c8d0'); // breastplate
+  c.rect(9, 16, 14, 1, '#f4f8ff');
+  c.rect(7, 23, 18, 7, '#d4a73a'); // name plate
+  c.rect(7, 23, 18, 1, '#f2d675');
+  digits(c, '1726', 16, 24.5, '#1a1423', 1);
+  c.outline(INK);
+  return c;
+}
+
+function logbook(): Canvas {
+  const c = new Canvas(32, 32);
+  c.rect(5, 6, 22, 20, lit('#5a7a5c', '#3a4a3c', '#26332a')(0, 0));
+  c.rect(5, 23, 22, 3, '#e8d5a6'); // pages
+  c.rect(5, 24, 22, 1, '#c9a66b');
+  c.rect(5, 6, 3, 17, '#26332a'); // spine
+  c.rect(11, 9, 12, 8, '#e8d5a6'); // label
+  c.rect(13, 11, 8, 1, '#3a3440');
+  c.rect(13, 13, 6, 1, '#3a3440');
+  c.rect(13, 15, 7, 1, '#3a3440');
+  for (const [x, y] of [[24, 7], [24, 21]] as const) c.rect(x, y, 2, 2, '#a8802a'); // brass corners
+  c.outline(INK);
+  return c;
+}
+
+const ITEM_SPRITES: Record<string, () => Canvas> = {
+  bookmark,
+  anonymous_letter: () => envelope(['#d8d4c8', '#a8a498'], 'wax', '#3a3440'),
+  house_token_gryffindor: feather,
+  house_token_hufflepuff: honeyPot,
+  house_token_ravenclaw: eagleBrooch,
+  house_token_slytherin: luckStone,
+  lantern,
+  archive_key: archiveKey,
+  gift_scarf: scarf,
+  gift_music_box: musicBox,
+  theo_wrench: wrench,
+  clue_notebook: notebook,
+  clue_gear: goldenGear,
+  clue_letter: () => envelope(['#f4e8c8', '#d8c898'], 'heart', '#c23b3b'),
+  clue_portrait: portraitOf1726,
+  clue_logbook: logbook,
+};
+for (const [id, make] of Object.entries(ITEM_SPRITES)) make().save(path.join(OUT, `items/${id}.png`));
+
 hippogriff().save(path.join(OUT, 'puzzles/hippogriff.png'));
 mirrorWriting('QFOEFM').save(path.join(OUT, 'puzzles/p14a.png'));
 niffler().save(path.join(OUT, 'sprites/knopf.png'));
