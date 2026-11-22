@@ -282,7 +282,8 @@ export const SCENES: Record<string, (p: Picture) => void> = {
     longTable(p, 8, 352, 56, 150, 3);
     longTable(p, 192, 352, 56, 150, 4);
     const rnd = random(5);
-    for (let i = 0; i < 22; i++) p.candle(8 + rnd() * 240, 110 + rnd() * 140);
+    // floating candles only under the enchanted sky: a candle is 13 px tall, the wall starts at WALL_TOP + 8
+    for (let i = 0; i < 22; i++) p.candle(8 + rnd() * 240, 100 + rnd() * (WALL_TOP + 8 - 100 - 16));
   },
 
   staircases: (p) => {
