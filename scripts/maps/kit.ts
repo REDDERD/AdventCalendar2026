@@ -35,6 +35,8 @@ interface BlitOptions {
 
 export class Picture {
   readonly png: PNG;
+  /** While set, nothing is painted outside this rectangle [x0, y0, x1, y1) – see withClip. */
+  private clip: [number, number, number, number] | null = null;
   constructor(readonly w = 256, readonly h = 512) {
     this.png = new PNG({ width: w, height: h });
   }
@@ -44,6 +46,7 @@ export class Picture {
     x = Math.floor(x);
     y = Math.floor(y);
     if (x < 0 || y < 0 || x >= this.w || y >= this.h || alpha <= 0) return;
+    if (this.clip && (x < this.clip[0] || y < this.clip[1] || x >= this.clip[2] || y >= this.clip[3])) return;
     const i = (y * this.w + x) * 4;
     const d = this.png.data;
     const a = Math.min(1, alpha);
@@ -174,6 +177,17 @@ export class Picture {
     this.rect(x, y + 2, 1, h, trim);
     this.rect(x + w - 1, y + 2, 1, h, trim);
     this.ellipse(x + w / 2, y + 2 + h / 2, w / 4, w / 4, trim);
+  }
+
+  /** Paint only inside the rectangle while `draw` runs (e.g. everything inside a picture frame). */
+  withClip(x: number, y: number, w: number, h: number, draw: () => void): void {
+    const before = this.clip;
+    this.clip = [Math.floor(x), Math.floor(y), Math.floor(x + w), Math.floor(y + h)];
+    try {
+      draw();
+    } finally {
+      this.clip = before;
+    }
   }
 
   save(id: string): void {

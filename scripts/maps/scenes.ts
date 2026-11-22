@@ -93,31 +93,25 @@ function carpet(p: Picture, x: number, w: number, y0 = FLOOR, y1 = 512): void {
 }
 
 /** A framed portrait on the wall; `who` picks a simple painted figure. */
-function portrait(p: Picture, x: number, y: number, w: number, h: number, coat: string, seed: number): void {
+function portrait(p: Picture, x: number, y: number, w: number, h: number, coat: string, seed: number, extra?: () => void): void {
   p.rect(x - 3, y - 3, w + 6, h + 6, '#a8802a');
   p.rect(x - 2, y - 2, w + 4, h + 4, '#f2d675');
   p.rect(x - 1, y - 1, w + 2, h + 2, '#7a5a1c');
-  p.gradient(y, y + h, '#3a3440', '#1b2a4e', x, x + w);
   const rnd = random(seed);
   const skin = rnd() < 0.5 ? '#e8c39e' : '#c9956a';
   const hair = rnd() < 0.5 ? '#3b2414' : '#9aa0b0';
   const cx = x + w / 2;
-  // Shoulders: the upper half of a wide ellipse, clipped to the canvas so nothing sticks out of the frame.
-  const rx = w * 0.42;
-  const ry = h * 0.36;
-  const coatRgb = hex(coat);
-  for (let py = y + h - Math.ceil(ry); py < y + h; py++) {
-    for (let px = Math.floor(cx - rx); px <= cx + rx; px++) {
-      if (px < x || px >= x + w) continue;
-      const u = (px + 0.5 - cx) / rx;
-      const v = (py + 0.5 - (y + h)) / ry;
-      if (u * u + v * v <= 1) p.dot(px, py, coatRgb);
-    }
-  }
-  const headY = y + h * 0.44;
-  p.rect(Math.round(cx - w / 12), Math.round(headY), Math.round(w / 6), Math.round(y + h - ry - headY) + 2, skin); // neck
-  p.ellipse(cx, headY, w / 5, w / 5, skin);
-  p.rect(cx - w / 5, headY - w / 5 - 1, (w / 5) * 2, 3, hair);
+  // Everything painted inside the frame stays inside it: body, head, hair and any extra (a pet, …)
+  p.withClip(x, y, w, h, () => {
+    p.gradient(y, y + h, '#3a3440', '#1b2a4e', x, x + w);
+    const ry = h * 0.36;
+    p.ellipse(cx, y + h, w * 0.42, ry, coat); // shoulders: the frame cuts the lower half
+    const headY = y + h * 0.44;
+    p.rect(Math.round(cx - w / 12), Math.round(headY), Math.round(w / 6), Math.round(y + h - ry - headY) + 2, skin); // neck
+    p.ellipse(cx, headY, w / 5, w / 5, skin);
+    p.rect(cx - w / 5, headY - w / 5 - 1, (w / 5) * 2, 3, hair);
+    extra?.();
+  });
 }
 
 /** Torch with flame and warm glow. */
@@ -293,8 +287,7 @@ export const SCENES: Record<string, (p: Picture) => void> = {
     p.tile('stairs', 0, 5, 40, 150, 8, 2, { alpha: 0.6 });
     portrait(p, 14, 120, 34, 44, '#8e1b1b', 1);
     portrait(p, 200, 104, 38, 50, '#1e6b3a', 2);
-    portrait(p, 196, 196, 30, 38, '#5a3a6e', 3); // the lady with the poodle
-    p.ellipse(203, 228, 5, 4, '#f4f8ff');
+    portrait(p, 196, 196, 30, 38, '#5a3a6e', 3, () => p.ellipse(203, 228, 5, 4, '#f4f8ff')); // the lady with the poodle
     portrait(p, 20, 220, 30, 40, '#1d3f8a', 4);
     torch(p, 70, 250);
     torch(p, 186, 250);
