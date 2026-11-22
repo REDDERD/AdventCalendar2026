@@ -18,24 +18,27 @@ ellis: Die Zimtkrümel hören hier auf. Mitten auf der Lichtung. Das ist unhöfl
 In der Mitte ein Nest aus Zweigen und Zwirn.
 Darin glänzt etwas Goldenes. Rund. Gezahnt.
 ellis: Ein Zahnrad! Ein goldenes! Aus einer Uhr! Ich muss mich setzen. Es ist Schnee. Ich stehe.
+# show: spider center
 Von einem Ast klackt es. Eine Spinne, so groß wie ein Schaf, lässt sich am Faden herab.
-„Aragogs Urenkelin“, klackt sie. „Ich habe keine Lust, jemanden zu essen.
-„Nur einen Namen, der es behauptet.“
+spider: Aragogs Urenkelin. Ich habe keine Lust, jemanden zu essen.
+spider: Nur einen Namen, der es behauptet.
 # choice_point: d14w.spider Die Spinne mustert euch mit acht Augen.
 * [Freundlich grüßen.] # cid: d14w.spider.greet
-    „Höflich“, klackt sie. „Der Kleine mit dem Glitzer kommt jede Nacht. Er bringt Zimtkekse.“
+    spider: Höflich. Der Kleine mit dem Glitzer kommt jede Nacht. Er bringt Zimtkekse.
     ellis: Der Kleine füttert die Spinne. Mit Keksen. Die Welt ist sehr seltsam.
 * [Schweigend nicken.] # cid: d14w.spider.nod
     Sie nickt zurück. Acht Augen blinzeln nicht im Gleichschritt.
     Es ist gruselig, aber höflich gemeint.
-- „Zum Nest geht es nur über das Netz. Betretet jeden Knoten einmal. Drei Fäden sind gerissen.“
+- spider: Zum Nest geht es nur über das Netz. Betretet jeden Knoten einmal.
+spider: Drei Fäden sind gerissen. Dort hält das Netz niemanden.
 { pet == "owl": Deine Eule sitzt auf dem Netz. Sie läuft eine Spirale ab und blickt dich stolz an. }
 { pet == "cat": Deine Katze beäugt das Netz. Sie will hinauf. Sie weiß nicht, dass sie es sollte. }
 { pet == "toad": Deine Kröte hüpft auf einen Knoten und bleibt dort kleben. Sie nimmt das persönlich. }
 ellis: Quill würde etwas über Spiralen sagen. Ich sage: Mir wird schon vom Zusehen schwindlig.
 # puzzle: p14w
-{ last_puzzle_first_try: Die Spinne klackt anerkennend. „Selten so sauber gelaufen.“ }
-{ not last_puzzle_first_try: Die Spinne klackt. „Du hast mein Netz zweimal berührt. Ich verzeihe dir einmal.“ }
+{ last_puzzle_first_try: spider: Selten so sauber gelaufen. }
+{ not last_puzzle_first_try: spider: Du hast mein Netz zweimal berührt. Ich verzeihe dir einmal. }
+# hide: spider
 # sfx: spark
 Im Nest liegt das Zahnrad, warm wie Brot.
 Auf der Rückseite: eine 12 und ein winziges Herz.

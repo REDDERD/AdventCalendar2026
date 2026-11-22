@@ -30,4 +30,5 @@ export const SPEAKER_NAMES: Record<string, string> = {
   george: "George",
   rosmerta: "Madam Rosmerta",
   flitwick: "Prof. Flitwick",
+  spider: "Aragogs Urenkelin",
 };

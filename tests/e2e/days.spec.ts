@@ -221,6 +221,8 @@ test('day 13 (archive): Theo, the family tree and the letter to "my knight"', as
 
 test('day 14 (forest): the spider web spiral and the golden gear', async ({ page }) => {
   await startDayAsAdmin(page, 14, undefined, 'forest');
+  // Aragog's great-granddaughter abseils from above, hangs while she talks …
+  await tapUntil(page, page.locator('.actor.hanging'));
   await choose(page, ['Freundlich grüßen.']);
   await openPuzzle(page, 14);
   const nodes: Record<string, [number, number]> = {
@@ -236,6 +238,9 @@ test('day 14 (forest): the spider web spiral and the golden gear', async ({ page
   await page.mouse.up();
   await expect(page.getByText('+50 Hauspunkte')).toBeVisible();
   await page.getByRole('button', { name: 'Weiter' }).click();
+  await tapUntil(page, page.getByRole('button', { name: 'Das Zahnrad vorsichtig mitnehmen.' }));
+  // … and is gone once she has nothing more to say
+  await expect(page.locator('.actor.hanging')).toHaveCount(0);
   await choose(page, ['Das Zahnrad vorsichtig mitnehmen.']);
   await tapUntil(page, page.getByText('Kapitel 14 geschafft!'));
   await expect(page.locator('.dayend-frame')).toContainText('Das goldene Zahnrad');

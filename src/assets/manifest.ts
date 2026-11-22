@@ -110,6 +110,9 @@ export const assets: Record<string, AssetDef> = {
   // Knopf the niffler, a single 64 × 64 image as well
   'npc.knopf': { file: 'assets/sprites/knopf.png', w: 64, h: 64, ...OWN },
   'portrait.knopf': { from: 'npc.knopf', crop: [16, 32, 32, 32], scale: 2 },
+  // Aragog's great-granddaughter hangs from her thread (64 × 64, SceneRenderer HANGING)
+  'npc.spider': { file: 'assets/sprites/spider.png', w: 64, h: 64, ...OWN },
+  'portrait.spider': { from: 'npc.spider', crop: [16, 12, 32, 32], scale: 2 },
   ...emotes,
   'ui.clock': { file: 'assets/ui/clock.png', w: 96, h: 120, ...OWN },
   'ui.frame.parchment': { file: 'assets/ui/parchment.png', nineSlice: [8, 8, 8, 8] },

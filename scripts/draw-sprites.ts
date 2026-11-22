@@ -762,6 +762,36 @@ function centaurClearing(): Canvas {
   return c;
 }
 
+/**
+ * Aragog's great-granddaughter (64 × 64), hanging head down from her thread: a big hairy
+ * abdomen on top, the head with eight eyes below, eight bent legs.
+ */
+function spider(): Canvas {
+  const c = new Canvas(64, 64);
+  const hair = (u: number, v: number) => (u + v < -0.8 ? '#5a4a3a' : (Math.round(u * 9) + Math.round(v * 7)) % 3 === 0 ? '#2b2018' : '#3b2e22');
+  c.rect(31, 0, 2, 10, '#e4ecf6'); // the thread
+  // legs: four on each side, bent at the knee, hanging down
+  for (const side of [-1, 1]) {
+    [[14, 6], [20, 10], [27, 12], [33, 10]].forEach(([y, reach], k) => {
+      const x0 = 32 + side * 6;
+      const kx = 32 + side * (12 + reach);
+      const ky = y - 6 + k * 2;
+      c.line(x0, y + 8, kx, ky, '#2b2018');
+      c.line(x0, y + 9, kx, ky + 1, '#2b2018');
+      c.line(kx, ky, kx + side * 3, ky + 14 + k * 3, '#2b2018');
+      c.line(kx + side, ky, kx + side * 4, ky + 14 + k * 3, '#3b2e22');
+    });
+  }
+  c.ellipse(32, 20, 11, 12, hair); // abdomen
+  c.rect(27, 14, 10, 2, '#7a2a2a'); // a red mark
+  c.ellipse(32, 38, 8, 7, hair); // head
+  for (const [x, y] of [[28, 39], [31, 40], [34, 40], [37, 39], [29, 42], [35, 42], [30, 37], [34, 37]]) c.set(x, y, '#ffd27a'); // eight eyes
+  c.rect(29, 45, 2, 3, '#1a1423'); // pincers
+  c.rect(34, 45, 2, 3, '#1a1423');
+  c.outline('#120c08');
+  return c;
+}
+
 /** Knopf the niffler (64 × 64, standing at the bottom like the LPC figures): black fur, duck bill, a gold coin. */
 function niffler(): Canvas {
   // small: about half the height of a person on the stage
@@ -1129,6 +1159,7 @@ function mirrorWriting(word: string): Canvas {
 hippogriff().save(path.join(OUT, 'puzzles/hippogriff.png'));
 mirrorWriting('QFOEFM').save(path.join(OUT, 'puzzles/p14a.png'));
 niffler().save(path.join(OUT, 'sprites/knopf.png'));
+spider().save(path.join(OUT, 'sprites/spider.png'));
 hoard().save(path.join(OUT, 'puzzles/p15w.png'));
 portraits().save(path.join(OUT, 'puzzles/p15a.png'));
 spellWheel().save(path.join(OUT, 'puzzles/p20.png'));

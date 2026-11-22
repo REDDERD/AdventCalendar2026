@@ -13,6 +13,10 @@ export const WORLD_H = 512;
 export const ACTOR_SCALE = 2;
 const ACTOR_SIZE = 64 * ACTOR_SCALE;
 const ACTOR_X = { left: 60, center: 128, right: 196 } as const;
+/** Actors that hang from a thread instead of standing: they abseil from the top and stay there. */
+const HANGING = new Set(['spider']);
+/** How high above the feet line a hanging actor's body sits. */
+const HANG_ABOVE = 150;
 /** Default distance of the actors' feet from the scene bottom: just above the dialogue box. */
 export const DEFAULT_FLOOR = 104;
 
@@ -42,7 +46,11 @@ export function SceneRenderer({ stage, emotes, onSpark, floor = DEFAULT_FLOOR }:
         {stage.photo === 'mirror' && <MirrorPhoto />}
       </div>
       {stage.actors.map((actor) => (
-        <div key={actor.id} className="actor" style={{ left: ACTOR_X[actor.pos] - ACTOR_SIZE / 2, bottom: floor }}>
+        <div
+          key={actor.id}
+          className={`actor ${HANGING.has(actor.id) ? 'hanging' : ''}`}
+          style={{ left: ACTOR_X[actor.pos] - ACTOR_SIZE / 2, bottom: floor + (HANGING.has(actor.id) ? HANG_ABOVE : 0) }}
+        >
           {actor.id === 'player' && look ? (
             <CharacterSprite look={look} house={house} scale={ACTOR_SCALE} />
           ) : (

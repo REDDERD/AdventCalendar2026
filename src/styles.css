@@ -377,6 +377,11 @@ img {
 /* ---------- Scene actors (2×), emotes, sparks ---------- */
 
 .actor { position: absolute; width: 128px; height: 128px; }
+/* hanging actors (the spider): a thread up to the top of the scene, abseiling in and swaying a little */
+.actor.hanging { animation: abseil 1.4s ease-out both, sway 3s ease-in-out 1.4s infinite; transform-origin: 50% -400px; }
+.actor.hanging::before { content: ""; position: absolute; left: 63px; bottom: 120px; width: 2px; height: 600px; background: rgba(228, 236, 246, 0.85); }
+@keyframes abseil { from { transform: translateY(-420px); } }
+@keyframes sway { 50% { transform: rotate(1.2deg); } }
 .emote { position: absolute; left: 68px; top: 2px; animation: emote-pop 1.6s steps(4) both; }
 .emote-portrait { left: 46px; top: 2px; }
 @keyframes emote-pop {
