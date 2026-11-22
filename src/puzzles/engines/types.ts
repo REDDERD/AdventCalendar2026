@@ -17,4 +17,9 @@ export interface Engine<S = never> {
   Component: ComponentType<EngineProps<S>>;
   /** `check`: the action bar's "Prüfen" submits; `direct`: the engine submits itself. */
   submit: 'check' | 'direct';
+  /**
+   * Solve as soon as the state is right, without "Prüfen" – for puzzles whose goal is a
+   * state you build (lights, slide, pour, crossing, a path, the mandrake bed), not an answer.
+   */
+  autoSolve?: (puzzle: Puzzle) => boolean;
 }

@@ -3,7 +3,9 @@ import { AssetImage } from '../../ui/AssetImage';
 import {
   arrangeLogic,
   boardChar,
+  gridConflicts,
   gridPieces,
+  gridRows,
   gridSize,
   placeGrid,
   swapRow,
@@ -104,6 +106,8 @@ function GridArrange({ config, state, setState, disabled }: ModeProps<GridConfig
   const pieces = gridPieces(config);
   const kindOf = new Map(pieces.map((p) => [p.id, p.kind]));
   const tray = pieces.filter((p) => !state.cells.includes(p.id));
+  // pieces that break a rule show it: the screaming mandrake
+  const conflicts = gridConflicts(config.rules, gridRows(config, state));
 
   const place = (pieceId: string, target: number | null) => {
     setSelected(null);
@@ -123,21 +127,22 @@ function GridArrange({ config, state, setState, disabled }: ModeProps<GridConfig
     },
   });
 
-  const token = (kind: string, size: number) => {
+  const token = (kind: string, size: number, alarm = false) => {
     const def = config.kinds[kind];
-    return def?.sprite ? <AssetImage id={def.sprite} w={size} h={size} /> : <span className="grid-token">{def?.label.charAt(0) ?? kind}</span>;
+    const sprite = alarm && def?.alarm ? def.alarm : def?.sprite;
+    return sprite ? <AssetImage id={sprite} w={size} h={size} /> : <span className="grid-token">{def?.label.charAt(0) ?? kind}</span>;
   };
-  const piece = (id: string) => (
+  const piece = (id: string, alarm = false) => (
     <button
       key={id}
       type="button"
-      className={`piece-btn grid-piece ${selected === id ? 'selected' : ''} ${ghost?.id === id ? 'dragging' : ''}`}
+      className={`piece-btn grid-piece ${selected === id ? 'selected' : ''} ${ghost?.id === id ? 'dragging' : ''} ${alarm ? 'alarm' : ''}`}
       aria-label={config.kinds[kindOf.get(id)!]?.label ?? id}
       aria-pressed={selected === id}
       disabled={disabled}
       {...itemProps(id, disabled)}
     >
-      {token(kindOf.get(id)!, tokenSize)}
+      {token(kindOf.get(id)!, tokenSize, alarm)}
     </button>
   );
 
@@ -179,7 +184,7 @@ function GridArrange({ config, state, setState, disabled }: ModeProps<GridConfig
                   else if (selected) place(selected, i);
                 }}
               >
-                {pieceId && piece(pieceId)}
+                {pieceId && piece(pieceId, conflicts.has(i))}
               </div>
             );
           })}
@@ -259,4 +264,14 @@ function SticksArrange({ config, state, setState, disabled }: ModeProps<SticksCo
   );
 }
 
-export const arrangeEngine: Engine<ArrangeState> = { logic: arrangeLogic, Component: ArrangeEngine, submit: 'check' };
+export const arrangeEngine: Engine<ArrangeState> = {
+  logic: arrangeLogic,
+  Component: ArrangeEngine,
+  submit: 'check',
+  // A rule grid (the mandrake bed) solves itself: its only conflict-free full board is the solution.
+  // Logic grids, rows and sticks are answers and keep "Prüfen" – no free trial and error.
+  autoSolve: (puzzle) => {
+    const config = puzzle.config as ArrangeConfig;
+    return config.mode === 'grid' && !config.logic;
+  },
+};

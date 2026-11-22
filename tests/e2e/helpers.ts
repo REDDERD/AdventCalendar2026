@@ -127,9 +127,10 @@ export async function openPuzzle(page: Page, number: number): Promise<void> {
   await page.locator('.puzzle-intro').click();
 }
 
-/** Check, accept the solution and play to the end of the day. */
+/** Check (self-solving puzzles have no "Prüfen"), accept the solution and play to the end of the day. */
 export async function finishDay(page: Page, day: number, points: number): Promise<void> {
-  await page.getByRole('button', { name: 'Prüfen' }).click();
+  const check = page.getByRole('button', { name: 'Prüfen' });
+  if (await check.count()) await check.click();
   await expect(page.getByText(`+${points} Hauspunkte`)).toBeVisible();
   await page.getByRole('button', { name: 'Weiter' }).click();
   await tapUntil(page, page.getByText(`Kapitel ${day} geschafft!`));

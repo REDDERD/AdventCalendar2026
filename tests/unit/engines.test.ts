@@ -3,6 +3,7 @@ import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import {
   arrangeLogic,
+  gridConflicts,
   placeGrid,
   swapRow,
   tapStick,
@@ -515,5 +516,17 @@ describe('custom: finale (p24)', () => {
     const s = finaleStart(config, true);
     expect(s).toEqual({ w1: 32, p2: 12, w2: null });
     expect(placeGear(config, s, 'w1', 27, true)).toBe(s);
+  });
+});
+
+describe('arrange grid: screaming mandrakes (p08)', () => {
+  const rules = (load('p08').config as GridConfig).rules;
+  it('marks every piece that shares a row or column with another or touches it', () => {
+    // (0,0) and (1,1) touch diagonally; (3,4) stands alone
+    expect([...gridConflicts(rules, ['M.....', '.M....', '......', '....M.'])].sort((a, b) => a - b)).toEqual([0, 7]);
+    // same column, far apart
+    expect([...gridConflicts(rules, ['..M...', '......', '..M...'])].sort((a, b) => a - b)).toEqual([2, 14]);
+    // the solution is quiet
+    expect(gridConflicts(rules, load('p08').solution as string[]).size).toBe(0);
   });
 });

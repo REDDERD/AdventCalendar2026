@@ -33,4 +33,4 @@ function SlideEngine({ puzzle, state, setState, disabled }: EngineProps<SlideSta
   );
 }
 
-export const slideEngine: Engine<SlideState> = { logic: slideLogic, Component: SlideEngine, submit: 'check' };
+export const slideEngine: Engine<SlideState> = { logic: slideLogic, Component: SlideEngine, submit: 'check', autoSolve: () => true };

@@ -119,4 +119,4 @@ function PathEngine({ puzzle, state, setState, disabled }: EngineProps<PathState
   );
 }
 
-export const pathEngine: Engine<PathState> = { logic: pathLogic, Component: PathEngine, submit: 'check' };
+export const pathEngine: Engine<PathState> = { logic: pathLogic, Component: PathEngine, submit: 'check', autoSolve: () => true };

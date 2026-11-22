@@ -17,6 +17,8 @@ import type { Puzzle } from './schema';
 import { helpDueAt, hintCost, nextHint, pointsFor, SUPER_HINT } from './scoring';
 
 const STAMP_MS = 900;
+/** Pause between the solving move and the stamp for self-solving engines. */
+const AUTO_SOLVE_MS = 450;
 
 interface Props {
   puzzle: Puzzle;
@@ -152,6 +154,14 @@ function PuzzleRun({ puzzle, practice, engine }: Props & { engine: Engine<unknow
     setTimeout(finish, STAMP_MS);
   };
 
+  // Engines whose goal is a state solve themselves the moment it is reached (a short pause lets the last move show)
+  const autoSolve = engine.submit === 'check' && (engine.autoSolve?.(puzzle) ?? false);
+  useEffect(() => {
+    if (!autoSolve || !engine.logic.check(puzzle, state)) return;
+    const t = setTimeout(() => submit(state), AUTO_SOLVE_MS);
+    return () => clearTimeout(t);
+  }, [autoSolve, state]);
+
   const buyHint = (level: number) => {
     if (nextHint(bought) !== level) return;
     playSfx('select');
@@ -276,9 +286,11 @@ function PuzzleRun({ puzzle, practice, engine }: Props & { engine: Engine<unknow
             <PixelButton small aria-label="Zurücksetzen" disabled={busy} onClick={() => setState(engine.logic.initial(puzzle))}>
               ↺
             </PixelButton>
-            <PixelButton small variant="wax" className="check-btn" disabled={busy} onClick={() => submit(state)}>
-              Prüfen
-            </PixelButton>
+            {!autoSolve && (
+              <PixelButton small variant="wax" className="check-btn" disabled={busy} onClick={() => submit(state)}>
+                Prüfen
+              </PixelButton>
+            )}
           </>
         )}
       </div>

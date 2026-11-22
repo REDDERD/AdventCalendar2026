@@ -302,6 +302,26 @@ function mandrake(): Canvas {
   return c;
 }
 
+/** The same pot when its mandrake screams: pulled up, red face, wide open mouth, leaves on end. */
+function mandrakeScream(): Canvas {
+  const c = new Canvas(16, 16);
+  for (let y = 10; y < 15; y++) {
+    const inset = Math.floor((y - 10) / 3);
+    for (let x = 3 + inset; x < 13 - inset; x++) c.set(x, y, x < 6 ? '#a8502c' : x > 10 - inset ? '#7a3420' : '#c4683c');
+  }
+  c.rect(2, 9, 12, 2, '#d47a48');
+  c.ellipse(8, 6, 3.5, 3, '#e8946a'); // head pulled out of the soil, flushed
+  c.set(6, 5, '#3a3440'); // squeezed eyes
+  c.set(10, 5, '#3a3440');
+  c.ellipse(8, 7.5, 1.5, 1.5, '#5a1a1a'); // the scream
+  for (const [x0, lean] of [[6, -2], [8, 0], [10, 2]]) {
+    for (let i = 0; i < 3; i++) c.set(x0 + Math.round((lean * i) / 2), 3 - i, '#7ab84a'); // leaves on end
+  }
+  c.outline('#2b1a10');
+  for (const [x, y] of [[0, 5], [1, 3], [15, 5], [14, 3]]) c.set(x, y, '#ffd27a'); // noise lines
+  return c;
+}
+
 /** p18 "Die Tür, die erscheint" (105 × 105 = 3 × 3 tiles of 35 px, shown at 2×). */
 function door(): Canvas {
   const c = new Canvas(105, 105);
@@ -1132,6 +1152,7 @@ gearTrain().save(path.join(OUT, 'puzzles/p21_gears.png'));
 candle(true).save(path.join(OUT, 'puzzles/candle_on.png'));
 candle(false).save(path.join(OUT, 'puzzles/candle_off.png'));
 mandrake().save(path.join(OUT, 'puzzles/mandrake.png'));
+mandrakeScream().save(path.join(OUT, 'puzzles/mandrake_scream.png'));
 
 sortingHat().save(path.join(OUT, 'sprites/hat.png'));
 owl().save(path.join(OUT, 'sprites/pet_owl.png'));

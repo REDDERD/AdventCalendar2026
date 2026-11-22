@@ -33,7 +33,6 @@ test('day 2: both choices, clue k01, the candles and the door magic', async ({ p
   await tapUntil(page, page.getByText('Rätsel 02'));
   await page.locator('.puzzle-intro').click();
   for (const n of [1, 2, 3, 4, 6, 7, 9, 10, 14, 15, 16]) await page.getByRole('button', { name: `Feld ${n}`, exact: true }).click();
-  await page.getByRole('button', { name: 'Prüfen' }).click();
   await expect(page.getByText('+20 Hauspunkte')).toBeVisible();
   await page.getByRole('button', { name: 'Weiter' }).click();
 

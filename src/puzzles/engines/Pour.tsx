@@ -60,4 +60,4 @@ function PourEngine({ puzzle, state, setState, disabled }: EngineProps<PourState
   );
 }
 
-export const pourEngine: Engine<PourState> = { logic: pourLogic, Component: PourEngine, submit: 'check' };
+export const pourEngine: Engine<PourState> = { logic: pourLogic, Component: PourEngine, submit: 'check', autoSolve: () => true };

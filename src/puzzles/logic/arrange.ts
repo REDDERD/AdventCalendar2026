@@ -36,7 +36,8 @@ const gridConfig = z.object({
   board: z.array(z.string().min(2).max(6)).min(2).max(6),
   /** Movable pieces per kind, e.g. { "M": 3 }. */
   pieces: z.record(z.string().length(1), z.number().int().min(1).max(8)),
-  kinds: z.record(z.string().length(1), z.object({ label: z.string(), sprite: z.string().optional() })),
+  /** `alarm`: sprite shown while this piece breaks a rule (the screaming mandrake). */
+  kinds: z.record(z.string().length(1), z.object({ label: z.string(), sprite: z.string().optional(), alarm: z.string().optional() })),
   rules: z.array(z.enum(['distinct_rows', 'distinct_cols', 'no_touch'])).optional(),
   /** Labels above the columns (text) and icons left of the rows (asset ids). */
   colHeads: z.array(z.string()).optional(),
@@ -166,6 +167,29 @@ export function gridRows(config: GridConfig, state: GridState): string[] {
       return piece ? kindOf.get(piece)! : '.';
     }).join(''),
   );
+}
+
+/** Cells (row * cols + col) of pieces that break a rule with another piece – shown as alarms. */
+export function gridConflicts(rules: GridConfig['rules'], rows: readonly string[]): Set<number> {
+  const cols = rows[0]?.length ?? 0;
+  const filled: Array<[number, number]> = [];
+  rows.forEach((row, r) => [...row].forEach((ch, c) => ch !== '.' && ch !== '#' && filled.push([r, c])));
+  const out = new Set<number>();
+  for (let i = 0; i < filled.length; i++) {
+    for (let j = i + 1; j < filled.length; j++) {
+      const [r1, c1] = filled[i];
+      const [r2, c2] = filled[j];
+      const clash =
+        (rules?.includes('distinct_rows') && r1 === r2) ||
+        (rules?.includes('distinct_cols') && c1 === c2) ||
+        (rules?.includes('no_touch') && Math.abs(r1 - r2) <= 1 && Math.abs(c1 - c2) <= 1);
+      if (clash) {
+        out.add(r1 * cols + c1);
+        out.add(r2 * cols + c2);
+      }
+    }
+  }
+  return out;
 }
 
 export function gridRulesHold(rules: GridConfig['rules'], rows: readonly string[]): boolean {

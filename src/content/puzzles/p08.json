@@ -10,7 +10,7 @@
     "board": ["....#.", "....##", "......", ".##...", ".##...", "..#..."],
     "pieces": { "M": 6 },
     "kinds": {
-      "M": { "label": "Alraune", "sprite": "puzzle.mandrake" }
+      "M": { "label": "Alraune", "sprite": "puzzle.mandrake", "alarm": "puzzle.mandrake_scream" }
     },
     "rules": ["distinct_rows", "distinct_cols", "no_touch"]
   },

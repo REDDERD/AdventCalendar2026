@@ -26,7 +26,9 @@ async function play(page: Page, title: string): Promise<void> {
 }
 
 async function expectSolved(page: Page): Promise<void> {
-  await page.getByRole('button', { name: 'Prüfen' }).click();
+  // self-solving engines stamp on their own; the others need "Prüfen"
+  const check = page.getByRole('button', { name: 'Prüfen' });
+  if (await check.count()) await check.click();
   await expect(page.locator('.stamp')).toHaveText('Richtig!');
   await expect(page.getByRole('button', { name: 'Nochmal' })).toBeVisible();
   await page.getByRole('button', { name: 'Zur Sammlung' }).click();
@@ -111,6 +113,13 @@ test('M4: the workshop lists every puzzle and each engine can be played', async 
 
   // arrange grid with one kind: tap a cell to place a pot
   await play(page, 'Alraunen');
+  // two neighbours break the rules: both scream until one is taken back
+  await page.getByLabel('Feld 1-1').click();
+  await page.getByLabel('Feld 1-2').click();
+  await expect(page.locator('.grid-piece.alarm')).toHaveCount(2);
+  await page.locator('.grid-piece').first().click();
+  await page.locator('.grid-piece').first().click();
+  await expect(page.locator('.grid-piece')).toHaveCount(0);
   for (const cell of ['1-6', '2-3', '3-5', '4-1', '5-4', '6-2']) await page.getByLabel(`Feld ${cell}`).click();
   await expect(page.locator('.engine-status')).toContainText('noch 0');
   await expectSolved(page);
@@ -131,14 +140,14 @@ test('M4: the workshop lists every puzzle and each engine can be played', async 
   await page.mouse.click(place.x, place.y);
   await expectSolved(page);
 
-  // slide: a tile next to the gap moves, a wrong check stamps "Leider falsch"
+  // slide: a tile next to the gap moves; the puzzle solves itself, so there is no "Prüfen"
   await play(page, 'Die Tür, die erscheint');
   const tile = page.getByRole('button', { name: 'Teil 3', exact: true });
   const before = await tile.boundingBox();
   await tile.click();
   await expect.poll(async () => (await tile.boundingBox())!.y).not.toBe(before!.y);
-  await page.getByRole('button', { name: 'Prüfen' }).click();
-  await expect(page.locator('.stamp')).toHaveText('Leider falsch');
+  await expect(page.getByRole('button', { name: 'Prüfen' })).toHaveCount(0);
+  await expect(page.locator('.stamp')).toHaveCount(0);
   // practice hints are free and open in order
   await page.getByRole('button', { name: 'Hinweis', exact: true }).click();
   await page.getByRole('button', { name: 'Hinweis 1 öffnen' }).click();

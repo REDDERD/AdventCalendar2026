@@ -121,6 +121,7 @@ export const assets: Record<string, AssetDef> = {
   'puzzle.candle_on': { file: 'assets/puzzles/candle_on.png', w: 32, h: 32, ...OWN },
   'puzzle.candle_off': { file: 'assets/puzzles/candle_off.png', w: 32, h: 32, ...OWN },
   'puzzle.mandrake': { file: 'assets/puzzles/mandrake.png', w: 16, h: 16, ...OWN },
+  'puzzle.mandrake_scream': { file: 'assets/puzzles/mandrake_scream.png', w: 16, h: 16, ...OWN },
   'puzzle.p18.door': { file: 'assets/puzzles/p18_door.png', w: 105, h: 105, frameW: 35, frameH: 35, ...OWN },
   'puzzle.p21.gears': { file: 'assets/puzzles/p21_gears.png', w: 256, h: 132, ...OWN },
   'puzzle.treat.star': { file: 'assets/puzzles/treat_star.png', w: 16, h: 16, ...OWN },

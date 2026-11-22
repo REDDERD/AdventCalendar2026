@@ -42,7 +42,6 @@ test('day 3: clue k02, the portrait tip, one-way stairs and the locked door', as
   await page.mouse.down();
   for (const id of solution.slice(1)) await page.mouse.move(at(id).x, at(id).y, { steps: 6 });
   await page.mouse.up();
-  await page.getByRole('button', { name: 'Prüfen' }).click();
   await expect(page.getByText('+30 Hauspunkte')).toBeVisible();
   await page.getByRole('button', { name: 'Weiter' }).click();
 

@@ -183,7 +183,6 @@ test('day 12: Luna, the knight in one stroke and the route choice', async ({ pag
   await page.mouse.down();
   for (const id of stroke.slice(1)) await page.mouse.move(at(id).x, at(id).y, { steps: 6 });
   await page.mouse.up();
-  await page.getByRole('button', { name: 'Prüfen' }).click();
   await expect(page.getByText('+40 Hauspunkte')).toBeVisible();
   await page.getByRole('button', { name: 'Weiter' }).click();
   await choose(page, ['Mit Ellis den Pfoten in den Wald.']);
@@ -235,7 +234,6 @@ test('day 14 (forest): the spider web spiral and the golden gear', async ({ page
   await page.mouse.down();
   for (const id of spiral.slice(1)) await page.mouse.move(at(id).x, at(id).y, { steps: 6 });
   await page.mouse.up();
-  await page.getByRole('button', { name: 'Prüfen' }).click();
   await expect(page.getByText('+50 Hauspunkte')).toBeVisible();
   await page.getByRole('button', { name: 'Weiter' }).click();
   await choose(page, ['Das Zahnrad vorsichtig mitnehmen.']);
@@ -334,7 +332,6 @@ test('day 18: the door that appears, Isolde\'s memory and the mirror', async ({ 
 });
 
 async function finishDay18(page: Page): Promise<void> {
-  await page.getByRole('button', { name: 'Prüfen' }).click();
   await expect(page.getByText('+50 Hauspunkte')).toBeVisible();
   await page.getByRole('button', { name: 'Weiter' }).click();
   await choose(page, ['Weitergehen.']); // no house token when jumping straight to day 18

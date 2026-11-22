@@ -196,4 +196,4 @@ function Brawl() {
   );
 }
 
-export const crossEngine: Engine<CrossState> = { logic: crossLogic, Component: CrossEngine, submit: 'check' };
+export const crossEngine: Engine<CrossState> = { logic: crossLogic, Component: CrossEngine, submit: 'check', autoSolve: () => true };

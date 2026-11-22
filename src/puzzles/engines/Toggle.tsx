@@ -32,4 +32,4 @@ function ToggleEngine({ puzzle, state, setState, disabled }: EngineProps<ToggleS
   );
 }
 
-export const toggleEngine: Engine<ToggleState> = { logic: toggleLogic, Component: ToggleEngine, submit: 'check' };
+export const toggleEngine: Engine<ToggleState> = { logic: toggleLogic, Component: ToggleEngine, submit: 'check', autoSolve: () => true };
