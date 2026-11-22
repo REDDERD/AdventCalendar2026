@@ -459,4 +459,24 @@ test('day 24: the confession, the gear train and the last strike (ending C_B)', 
   await choose(page, ['„Danke“ sagen.']);
   await tapUntil(page, page.getByText('Kapitel 24 geschafft!'));
   await choicesLogged('d24.fate.release', 'd24.last.thanks');
+
+  // the closing sequence: end card, house cup, epilogue, letter, credits [PLAN-1]
+  await page.getByRole('button', { name: 'Weiter zum Abspann' }).click();
+  await expect(page.locator('.ending-card')).toContainText('Der Geist gesteht');
+  await page.getByRole('button', { name: 'Weiter', exact: true }).click();
+  await expect(page.locator('.house-cup')).toContainText('Hufflepuff gewinnt');
+  await page.getByRole('button', { name: 'Weiter', exact: true }).click();
+  await expect(page.locator('.epilogue')).toContainText('Die Uhr tickt.');
+  await page.getByRole('button', { name: 'Ein Brief für dich' }).click();
+  await expect(page.locator('.letter-paper')).toContainText('Frohe Weihnachten!'); // default letter, signed by the admin
+  await expect(page.locator('.letter-sign')).toHaveText('Daniel');
+  await expect.poll(async () => (await listEvents()).some((e) => e.type === 'letter_opened')).toBe(true);
+  await page.getByRole('button', { name: 'Weiter', exact: true }).click();
+  await expect(page.locator('.credits-roll')).toContainText('Zeitgäste');
+  await page.getByRole('button', { name: 'Zum Kalender' }).click();
+  await expect(page.getByRole('button', { name: 'Brief lesen' })).toBeVisible(); // calendar after day 24
+  // [PRS-2] the letter stays readable in the trunk
+  await page.getByRole('button', { name: 'Truhe' }).click();
+  await page.getByRole('button', { name: 'Brief', exact: true }).click();
+  await expect(page.locator('.trunk-body .letter-paper')).toContainText('vierundzwanzig Türchen');
 });

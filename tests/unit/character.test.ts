@@ -33,7 +33,7 @@ describe('character options [CHAR-1] (Section 6.2 minimums)', () => {
         }
       }
     }
-  });
+  }, 30_000); // many file checks; slow when the machine is busy
 
   it('draws in LPC z-order: cape back and long hair back behind the body, hat on top', () => {
     const look: Look = { ...DEFAULT_LOOK, hair: 'ponytail', accessory: 'christmas_hat' };

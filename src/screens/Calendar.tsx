@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { HOUSE_COLORS } from '../assets/palette';
 import { LAST_DAY } from '../content/schedule';
 import { startDay } from '../core/flow';
+import { go } from '../core/ScreenMachine';
 import { startPrologue } from './prologue/prologueFlow';
 import { useStore } from '../core/store';
 import { doorState, formatCountdown, isPlayable, nextPlayableDay, unlockAtMs, waitingChapters } from '../core/time';
@@ -91,6 +92,17 @@ export function CalendarScreen() {
           )}
         </div>
       ) : (
+        <>
+        {completed.includes(LAST_DAY) && (
+          <div className="calendar-finale">
+            <PixelButton small onClick={() => go('letter')}>
+              Brief lesen
+            </PixelButton>
+            <PixelButton small onClick={() => go('ending')}>
+              Abspann
+            </PixelButton>
+          </div>
+        )}
         <div className="doors">
           {Array.from({ length: LAST_DAY }, (_, i) => i + 1).map((day) => {
             const state = doorState(day, t, completed);
@@ -107,6 +119,7 @@ export function CalendarScreen() {
             );
           })}
         </div>
+        </>
       )}
     </Layout>
   );

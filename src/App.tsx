@@ -16,6 +16,9 @@ import { BlockedScreen, OrientationBlock } from './screens/Blocked';
 import { CalendarScreen } from './screens/Calendar';
 import { ChapterCardScreen } from './screens/ChapterCard';
 import { DayEndScreen } from './screens/DayEnd';
+import { CreditsScreen } from './screens/Credits';
+import { EndingScreen } from './screens/Ending';
+import { PersonalLetterScreen } from './screens/Letter';
 import { LoginScreen } from './screens/Login';
 import { OnboardingScreen } from './screens/Onboarding';
 import { LetterScreen } from './screens/prologue/Letter';
@@ -162,9 +165,9 @@ const SCREENS: Record<Screen, () => ReactNode> = {
   puzzle: () => <PuzzleScreen />,
   solution: () => <SolutionScreen />,
   dayEnd: () => <DayEndScreen />,
-  ending: () => <CalendarScreen />,
-  letter: () => <CalendarScreen />,
-  credits: () => <CalendarScreen />,
+  ending: () => <EndingScreen />,
+  letter: () => <PersonalLetterScreen />,
+  credits: () => <CreditsScreen />,
 };
 
 /** [SND-3] Audio may only start after a touch. */

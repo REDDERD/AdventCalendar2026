@@ -3,12 +3,13 @@ import { useStore } from '../../core/store';
 import { PuzzleHost } from '../../puzzles/PuzzleHost';
 import type { Puzzle } from '../../puzzles/schema';
 import { Collection } from './Collection';
+import { LetterView } from '../Letter';
 import { Diary } from './Diary';
 import { Profile } from './Profile';
 import { PuzzleCollection } from './PuzzleCollection';
 import { SettingsPanel } from './Settings';
 
-type Tab = 'diary' | 'puzzles' | 'inventory' | 'clues' | 'profile' | 'settings';
+type Tab = 'diary' | 'puzzles' | 'inventory' | 'clues' | 'profile' | 'letter' | 'settings';
 
 const TABS: Array<[Tab, string]> = [
   ['diary', 'Tagebuch'],
@@ -24,6 +25,9 @@ export function Trunk() {
   const setTrunkOpen = useStore((s) => s.setTrunkOpen);
   const [tab, setTab] = useState<Tab>('diary');
   const [practice, setPractice] = useState<Puzzle | null>(null);
+  // [PRS-2] once the letter has been opened it stays readable here
+  const letterOpen = useStore((s) => s.save?.progress.completedDays.includes(24) ?? false);
+  const tabs = letterOpen ? [...TABS.slice(0, 5), ['letter', 'Brief'] as [Tab, string], ...TABS.slice(5)] : TABS;
 
   if (practice) {
     return (
@@ -42,7 +46,7 @@ export function Trunk() {
         </button>
       </div>
       <div className="trunk-tabs">
-        {TABS.map(([id, label]) => (
+        {tabs.map(([id, label]) => (
           <button key={id} type="button" className={`trunk-tab ${tab === id ? 'active' : ''}`} onClick={() => setTab(id)}>
             {label}
           </button>
@@ -54,6 +58,7 @@ export function Trunk() {
         {tab === 'inventory' && <Collection kind="items" />}
         {tab === 'clues' && <Collection kind="clues" />}
         {tab === 'profile' && <Profile />}
+        {tab === 'letter' && <LetterView animate={false} />}
         {tab === 'settings' && <SettingsPanel />}
       </div>
     </div>

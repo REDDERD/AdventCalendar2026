@@ -38,9 +38,15 @@ export function DayEndScreen() {
               : `Kapitel ${nextDay} wartet schon auf dich.`}
           </Frame>
         )}
-        <PixelButton variant="wax" onClick={() => go('calendar')}>
-          Zum Kalender
-        </PixelButton>
+        {day === LAST_DAY ? (
+          <PixelButton variant="wax" onClick={() => go('ending')}>
+            Weiter zum Abspann
+          </PixelButton>
+        ) : (
+          <PixelButton variant="wax" onClick={() => go('calendar')}>
+            Zum Kalender
+          </PixelButton>
+        )}
       </div>
     </Layout>
   );
