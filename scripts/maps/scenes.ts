@@ -114,6 +114,47 @@ function portrait(p: Picture, x: number, y: number, w: number, h: number, coat: 
   });
 }
 
+/**
+ * A flight of stairs seen from the side: stepped treads on top, a straight stringer
+ * underneath, a banister with posts. It climbs from (xLow, yLow) to (xHigh, yHigh);
+ * `alpha` fades flights further back into the shaft.
+ */
+function flight(p: Picture, xLow: number, yLow: number, xHigh: number, yHigh: number, thick: number, alpha = 1): void {
+  const x0 = Math.min(xLow, xHigh);
+  const x1 = Math.max(xLow, xHigh);
+  const run = x1 - x0;
+  const climb = yLow - yHigh;
+  const steps = Math.max(3, Math.round(run / 8));
+  const stepW = run / steps;
+  const rise = climb / steps;
+  const up = xHigh > xLow; // climbs to the right
+  const along = (x: number) => (up ? x - x0 : x1 - x); // distance from the low end
+  for (let x = Math.floor(x0); x < x1; x++) {
+    const d = along(x + 0.5);
+    const k = Math.min(steps - 1, Math.floor(d / stepW));
+    const top = yLow - (k + 1) * rise;
+    const under = yLow - (d / run) * climb + thick; // the stringer's straight underside
+    const edge = Math.abs(d - (k + 1) * stepW) < 1; // the riser at the front of each step
+    p.rect(x, top, 1, 2, '#c99a5c', alpha); // tread
+    p.rect(x, top + 2, 1, Math.max(0, under - top - 2), edge ? '#4e2f18' : '#6b4226', alpha); // body
+    p.rect(x, under, 1, 1, '#2b1a10', alpha);
+    if (Math.floor(d) % 6 === 0) p.rect(x, top - 9, 1, 9, '#9a6a3c', alpha); // banister posts
+  }
+  // the handrail follows the slope
+  const yAt = (x: number) => yLow - (along(x) / run) * climb - 10;
+  p.line(x0, yAt(x0), x1, yAt(x1), '#c99a5c', alpha);
+  p.line(x0, yAt(x0) + 1, x1, yAt(x1) + 1, '#6b4226', alpha);
+}
+
+/** A stone landing jutting from a wall, with a short balustrade. */
+function landing(p: Picture, x: number, y: number, w: number, alpha = 1): void {
+  p.rect(x, y, w, 6, '#7a7788', alpha);
+  p.rect(x, y, w, 1, '#b4b2c2', alpha);
+  p.rect(x, y + 6, w, 3, '#3a3440', alpha);
+  for (let i = 2; i < w; i += 5) p.rect(x + i, y - 8, 2, 8, '#9a96a8', alpha);
+  p.rect(x, y - 9, w, 2, '#b4b2c2', alpha);
+}
+
 /** Torch with flame and warm glow. */
 function torch(p: Picture, x: number, y: number): void {
   p.ellipse(x + 3, y - 2, 14, 14, '#ffd27a', 0.12);
@@ -281,21 +322,45 @@ export const SCENES: Record<string, (p: Picture) => void> = {
   },
 
   staircases: (p) => {
-    // the tall stairwell: dark depth with moving staircases and portraits
-    p.gradient(0, 512, '#1b2a4e', '#2b2a33');
-    p.tile('stairs', 0, 0, -16, 60, 8, 3, { alpha: 0.45 });
-    p.tile('stairs', 0, 5, 40, 150, 8, 2, { alpha: 0.6 });
-    portrait(p, 14, 120, 34, 44, '#8e1b1b', 1);
-    portrait(p, 200, 104, 38, 50, '#1e6b3a', 2);
-    portrait(p, 196, 196, 30, 38, '#5a3a6e', 3, () => p.ellipse(203, 228, 5, 4, '#f4f8ff')); // the lady with the poodle
-    portrait(p, 20, 220, 30, 40, '#1d3f8a', 4);
-    torch(p, 70, 250);
-    torch(p, 186, 250);
-    // the landing and the staircase in front
-    p.tile('stairs', 0, 3, 0, 256, 8, 3);
-    stoneFloor(p, 352);
-    p.rect(0, 352, 256, 2, '#4a4856');
+    // the great stairwell: a deep shaft, flights of stairs at three depths, stone walls left and right
+    p.gradient(0, 512, '#0b1530', '#1b2a4e');
+    const rnd = random(301);
+    for (let i = 0; i < 40; i++) p.dot(40 + rnd() * 176, rnd() * 320, hex('#2a3a66')); // dust in the dark
+    // far back: small, faded flights crossing the shaft
+    flight(p, 48, 170, 120, 118, 5, 0.3);
+    flight(p, 208, 150, 138, 96, 5, 0.3);
+    flight(p, 60, 296, 130, 250, 5, 0.3);
+    landing(p, 120, 118, 24, 0.3);
+    // middle: bigger flights between landings on the walls
+    landing(p, 36, 200, 34, 0.65);
+    flight(p, 214, 268, 70, 200, 8, 0.65);
+    landing(p, 186, 140, 34, 0.65);
+    flight(p, 40, 140 + 64, 186, 140, 8, 0.65);
+    // the side walls with portraits and torches
+    p.withClip(0, 0, 36, FLOOR, () => stoneWall(p, 0, FLOOR));
+    p.withClip(220, 0, 36, FLOOR, () => stoneWall(p, 0, FLOOR));
+    p.rect(36, 0, 2, FLOOR, '#3a3440');
+    p.rect(218, 0, 2, FLOOR, '#3a3440');
+    portrait(p, 5, 112, 26, 34, '#8e1b1b', 1);
+    portrait(p, 5, 214, 26, 34, '#1d3f8a', 4);
+    portrait(p, 225, 100, 26, 34, '#1e6b3a', 2);
+    portrait(p, 225, 196, 26, 34, '#5a3a6e', 3, () => p.ellipse(231, 222, 4, 3, '#f4f8ff')); // the lady with the poodle
+    torch(p, 18, 172);
+    torch(p, 238, 160);
+    // in front: the landing we stand on, its balustrade, and a flight going up on the right
+    flight(p, 150, 336, 218, 268, 12);
+    landing(p, 186, 262, 34);
+    stoneFloor(p, FLOOR);
+    p.rect(0, FLOOR, 256, 3, '#b4b2c2');
+    p.rect(0, FLOOR + 3, 256, 2, '#3a3440');
+    for (let x = 4; x < 146; x += 9) {
+      p.rect(x, FLOOR - 16, 4, 16, '#9a96a8'); // balusters
+      p.rect(x, FLOOR - 16, 1, 16, '#c0c8d0');
+    }
+    p.rect(0, FLOOR - 19, 150, 4, '#b4b2c2'); // the rail
+    p.rect(0, FLOOR - 15, 150, 1, '#5a5866');
   },
+
 
   library: (p) => {
     p.gradient(0, 120, '#3b2414', '#5a3a20');
