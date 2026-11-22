@@ -180,7 +180,7 @@ Jeder Tag folgt demselben Ablauf aus Bildschirmen (`screen`). Die Zeitangaben si
 - `[DAY-2]` MUSS: „jetzt“ = Geräteuhr + gemessene Abweichung zur Serverzeit. Messung beim App-Start: `lastSeenAt: serverTimestamp()` in `users/{uid}` schreiben, zurücklesen, Differenz speichern. Offline: Geräteuhr.
 - `[DAY-3]` MUSS: Verpasste Tage werden nacheinander nachgeholt. Kalender zeigt „3 Kapitel warten auf dich“.
 - `[DAY-4]` MUSS: Spielstand wird nach jedem Schritt gespeichert (jede Entscheidung, jeder Rätselversuch, jeder Bildschirmwechsel). Ein abgebrochener Tag wird am letzten Ink-Zustand bzw. am Rätsel fortgesetzt.
-- `[DAY-5]` MUSS: Entscheidungen sind endgültig. Ein Tag kann nicht neu gespielt werden. Rätsel sind in Truhe → Rätselsammlung ohne Punkte wiederholbar. Gelesene Dialoge stehen in Truhe → Tagebuch.
+- `[DAY-5]` MUSS: Entscheidungen sind endgültig. Ein Tag kann nicht neu gespielt werden. Rätsel sind in Truhe → Rätselsammlung ohne Punkte wiederholbar. Gelesene Dialoge stehen in Truhe → Tagebuch, nach Kapiteln geordnet: pro gelesenem Tag (und Prolog) eine aufklappbare Schaltfläche, es ist immer nur ein Kapitel offen, das neueste beim Öffnen.
 - `[DAY-6]` MUSS: Nach dem 24.12. bleibt die App nutzbar: Truhe, Rätselsammlung, erreichtes Ende, Brief.
 - `[DAY-7]` MUSS: Admin kann in der App ein Debug-Datum setzen und Tage direkt starten (nur eigener Spielstand). Debug-Funktionen sind für `player` nicht erreichbar.
 

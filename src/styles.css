@@ -1081,6 +1081,22 @@ img {
 }
 .trunk-body h3 { margin: 8px 0 4px; font-size: 14px; color: var(--wood); }
 .diary-line { margin: 0 0 4px; }
+.diary-chapter { margin-bottom: 3px; }
+.diary-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  width: 100%;
+  min-height: 24px;
+  padding: 2px 6px;
+  text-align: left;
+  background: var(--parchment-light);
+  border: 1px solid var(--parchment-dark);
+}
+.diary-chapter.open .diary-toggle { background: var(--wood); border-color: var(--wood-dark); color: var(--candle-light); }
+.diary-toggle-title { flex: 1; }
+.diary-text { padding: 4px 6px 2px; border-left: 2px solid var(--parchment-dark); margin-left: 3px; }
 .collection { margin: 0; padding-left: 12px; }
 .collection .missing { color: var(--stone-light); }
 .puzzle-row { display: flex; align-items: center; gap: 6px; width: 100%; min-height: 24px; margin-bottom: 3px; padding: 2px 6px; text-align: left; background: var(--parchment-light); border: 1px solid var(--parchment-dark); }
