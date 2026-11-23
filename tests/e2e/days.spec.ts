@@ -92,7 +92,7 @@ test('day 1: onboarding, choice and puzzle, reload resumes exactly, events are l
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));
   await page.getByRole('button', { name: 'Truhe' }).click();
-  for (const tab of ['Tagebuch', 'Rätsel', 'Inventar', 'Hinweise', 'Steckbrief', 'Rangliste', 'Optionen']) {
+  for (const tab of ['Tagebuch', 'Rätsel', 'Inventar', 'Hinweise', 'Steckbrief', 'Figuren', 'Rangliste', 'Optionen']) {
     await page.getByRole('button', { name: tab }).click();
     await expect(page.locator('.trunk')).toBeVisible();
   }
@@ -612,8 +612,12 @@ test('day 24: the confession, the gear train and the last strike (ending C_B)', 
   await expect(page.locator('.credits-roll')).toContainText('Zeitgäste');
   await page.getByRole('button', { name: 'Zum Kalender' }).click();
   await expect(page.getByRole('button', { name: 'Brief lesen' })).toBeVisible(); // calendar after day 24
-  // [PRS-2] the letter stays readable in the trunk
+  // [PRS-2] the letter stays readable from the calendar; the trunk has no letter tab any more (DECISIONS.md #80)
+  await page.getByRole('button', { name: 'Brief lesen' }).click();
+  await expect(page.locator('.letter-paper')).toContainText('vierundzwanzig Türchen');
+  await page.getByRole('button', { name: 'Weiter', exact: true }).click();
+  await page.getByRole('button', { name: 'Zum Kalender' }).click();
   await page.getByRole('button', { name: 'Truhe' }).click();
-  await page.getByRole('button', { name: 'Brief', exact: true }).click();
-  await expect(page.locator('.trunk-body .letter-paper')).toContainText('vierundzwanzig Türchen');
+  await expect(page.locator('.trunk-tab')).toHaveCount(8);
+  await expect(page.getByRole('button', { name: 'Brief', exact: true })).toHaveCount(0);
 });

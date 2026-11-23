@@ -3,14 +3,14 @@ import { useStore } from '../../core/store';
 import { PuzzleHost } from '../../puzzles/PuzzleHost';
 import type { Puzzle } from '../../puzzles/schema';
 import { Collection } from './Collection';
-import { LetterView } from '../Letter';
 import { Diary } from './Diary';
+import { Figures } from './Figures';
 import { Leaderboard } from './Leaderboard';
 import { Profile } from './Profile';
 import { PuzzleCollection } from './PuzzleCollection';
 import { SettingsPanel } from './Settings';
 
-type Tab = 'diary' | 'puzzles' | 'inventory' | 'clues' | 'profile' | 'ranking' | 'letter' | 'settings';
+type Tab = 'diary' | 'puzzles' | 'inventory' | 'clues' | 'profile' | 'figures' | 'ranking' | 'settings';
 
 const TABS: Array<[Tab, string]> = [
   ['diary', 'Tagebuch'],
@@ -18,6 +18,7 @@ const TABS: Array<[Tab, string]> = [
   ['inventory', 'Inventar'],
   ['clues', 'Hinweise'],
   ['profile', 'Steckbrief'],
+  ['figures', 'Figuren'],
   ['ranking', 'Rangliste'],
   ['settings', 'Optionen'],
 ];
@@ -27,9 +28,6 @@ export function Trunk() {
   const setTrunkOpen = useStore((s) => s.setTrunkOpen);
   const [tab, setTab] = useState<Tab>('diary');
   const [practice, setPractice] = useState<Puzzle | null>(null);
-  // [PRS-2] once the letter has been opened it stays readable here
-  const letterOpen = useStore((s) => s.save?.progress.completedDays.includes(24) ?? false);
-  const tabs = letterOpen ? [...TABS.slice(0, 6), ['letter', 'Brief'] as [Tab, string], ...TABS.slice(6)] : TABS;
 
   if (practice) {
     return (
@@ -48,7 +46,7 @@ export function Trunk() {
         </button>
       </div>
       <div className="trunk-tabs">
-        {tabs.map(([id, label]) => (
+        {TABS.map(([id, label]) => (
           <button key={id} type="button" className={`trunk-tab ${tab === id ? 'active' : ''}`} onClick={() => setTab(id)}>
             {label}
           </button>
@@ -61,7 +59,7 @@ export function Trunk() {
         {tab === 'clues' && <Collection kind="clues" />}
         {tab === 'profile' && <Profile />}
         {tab === 'ranking' && <Leaderboard />}
-        {tab === 'letter' && <LetterView animate={false} />}
+        {tab === 'figures' && <Figures />}
         {tab === 'settings' && <SettingsPanel />}
       </div>
     </div>

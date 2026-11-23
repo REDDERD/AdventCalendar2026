@@ -1151,6 +1151,56 @@ img {
 .rank-points { flex: none; display: flex; align-items: center; gap: 3px; color: var(--wood-dark); }
 .rank-houses .cup-row { gap: 4px; margin: 4px 0; }
 .rank-count { flex: none; width: 28px; font-size: 12px; color: var(--wood); text-align: right; }
+/* Figuren: everyone met so far (DECISIONS.md #80) */
+.figures-count { margin: 0 0 4px; font-size: 13px; color: var(--wood); }
+.figures-count strong { font-weight: normal; color: var(--ink); }
+.figure-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; margin: 0; padding: 0; list-style: none; }
+.figure {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  width: 100%;
+  padding: 3px 2px 2px;
+  background: var(--parchment-light);
+  border: 1px solid var(--parchment-dark);
+}
+.figure-portrait { flex: none; }
+.figure.unknown { background: var(--parchment-dark); }
+.figure.unknown .figure-portrait,
+.figure-card.unknown .figure-portrait { filter: brightness(0); opacity: 0.55; }
+.figure-name { width: 100%; font-size: 11px; line-height: 1.1; min-height: 24px; overflow-wrap: break-word; hyphens: auto; }
+.figure.unknown .figure-name { color: var(--wood); }
+.figure-card-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: rgba(26, 20, 35, 0.6);
+  animation: pixel-fade 150ms steps(3) both;
+}
+.figure-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+  max-width: 220px;
+  padding: 10px 10px 6px;
+  text-align: center;
+  color: var(--ink);
+  background: var(--parchment-light);
+  border: 2px solid var(--wood);
+  box-shadow: 0 0 0 1px var(--ink);
+}
+.figure-card h3 { margin: 2px 0 0; font-size: 16px; color: var(--wood-dark); }
+.figure-card p { margin: 0; font-size: 13px; }
+.figure-met { color: var(--wood); }
+.figure-close { margin-top: 4px; font-size: 11px; color: var(--stone-light); }
+
 /* Steckbrief: a Hogwarts student ID (DECISIONS.md #79) */
 .student-id {
   position: relative;

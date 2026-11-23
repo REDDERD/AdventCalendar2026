@@ -122,3 +122,46 @@ test('Steckbrief: student ID with progress and badges', async ({ page }) => {
   await expect(page.locator('.badge-caption')).toContainText('Ein Geheimnis.');
   if (process.env.SHOTS) await page.screenshot({ path: `${process.env.SHOTS}/steckbrief.png` });
 });
+
+test('Figuren: met characters with their card, everyone else as a silhouette', async ({ page }) => {
+  await createAccount(ADMIN_UID, 'daniel', PASSWORD);
+  await page.goto('./');
+  await login(page, 'daniel');
+  await page.getByRole('button', { name: 'Verstanden' }).click();
+  await setDebugDate(page, '2026-12-01T10:00');
+  await playPrologue(page, { house: 'hufflepuff' });
+
+  // The archive route: Myrte is met on day 14, Newt (forest route) never is.
+  await page.evaluate(async () => {
+    const url = '/AdventCalendar2026/src/core/store.ts';
+    const { store } = await import(/* @vite-ignore */ url);
+    store.getState().updateSave((s: { diary: Array<{ day: number; speaker: string; text: string }>; vars: Record<string, string> }) => {
+      s.diary.push({ day: 4, speaker: 'aldous', text: 'Fürwahr.' }, { day: 14, speaker: 'myrte', text: 'Huhu.' });
+      s.vars.route = 'archive';
+    });
+  });
+
+  await page.getByRole('button', { name: 'Truhe' }).click();
+  await page.getByRole('button', { name: 'Figuren' }).click();
+  await expect(page.locator('.figures-count')).toHaveText('Getroffen: 5 von 30'); // wandmaker, Quill, hat, Aldous, Myrte
+  await expect(page.locator('.figure.known')).toHaveCount(5);
+  await expect(page.getByRole('button', { name: 'Unbekannte Figur' })).toHaveCount(25);
+  await expect(page.locator('.placeholder')).toHaveCount(0);
+
+  await page.getByRole('button', { name: 'Sir Aldous' }).click();
+  await expect(page.locator('.figure-card')).toContainText('Federhelm');
+  await expect(page.locator('.figure-card')).toContainText('Zuerst getroffen: Tag 4 · Die Bibliothek');
+  await page.locator('.figure-card-overlay').click();
+  await page.getByRole('button', { name: 'Die Maulende Myrte' }).click();
+  await expect(page.locator('.figure-card')).toContainText('Tag 14 · Spiegelschrift');
+  await page.locator('.figure-card-overlay').click();
+  await page.getByRole('button', { name: 'Prof. Quill' }).click();
+  await expect(page.locator('.figure-card')).toContainText('Zuerst getroffen: im Prolog');
+  await page.locator('.figure-card-overlay').click();
+  await page.getByRole('button', { name: 'Unbekannte Figur' }).first().click();
+  await expect(page.locator('.figure-card')).toContainText('Noch nicht getroffen.');
+  if (process.env.SHOTS) await page.screenshot({ path: `${process.env.SHOTS}/figuren-card.png` });
+  await page.locator('.figure-card-overlay').click();
+  await expect(page.locator('.figure-card-overlay')).toHaveCount(0);
+  if (process.env.SHOTS) await page.screenshot({ path: `${process.env.SHOTS}/figuren.png` });
+});
