@@ -86,3 +86,39 @@ test('trunk diary: one collapsible chapter per day, only one open at a time', as
   await toggles.nth(1).click();
   await expect(page.locator('.diary-text')).toHaveCount(0);
 });
+
+test('Steckbrief: student ID with progress and badges', async ({ page }) => {
+  await createAccount(ADMIN_UID, 'daniel', PASSWORD);
+  await page.goto('./');
+  await login(page, 'daniel');
+  await page.getByRole('button', { name: 'Verstanden' }).click();
+  await setDebugDate(page, '2026-12-01T10:00');
+  await playPrologue(page, { house: 'hufflepuff' });
+
+  await page.evaluate(async () => {
+    const url = '/AdventCalendar2026/src/core/store.ts';
+    const { store } = await import(/* @vite-ignore */ url);
+    store.getState().updateSave((s: { foundSparks: string[]; progress: { completedDays: number[] }; housePoints: number }) => {
+      s.foundSparks = Array.from({ length: 11 }, (_, i) => `d0${(i % 7) + 1}.s${i}`);
+      s.progress.completedDays = [1, 2, 3, 4, 5, 6, 7, 8];
+      s.housePoints = 230;
+    });
+  });
+
+  await page.getByRole('button', { name: 'Truhe' }).click();
+  await page.getByRole('button', { name: 'Steckbrief' }).click();
+  const card = page.locator('.student-id');
+  await expect(card).toContainText('Schülerausweis');
+  await expect(card).toContainText('Hufflepuff');
+  await expect(page.locator('.student-stats')).toContainText('230 Hauspunkte');
+  await expect(page.locator('.student-place')).toHaveCount(0); // the admin test account has no place
+  await expect(page.locator('.student-progress').first()).toContainText('8/24');
+  await expect(page.locator('.badge.earned')).toHaveCount(2); // Funkenfinder, Erste Woche
+  await expect(page.locator('.placeholder')).toHaveCount(0);
+
+  await page.getByRole('button', { name: 'Funkenjäger' }).click();
+  await expect(page.locator('.badge-caption')).toContainText('Funkenjäger – 30 versteckte Funken gefunden (11/30)');
+  await page.getByRole('button', { name: 'Geheimes Abzeichen' }).click();
+  await expect(page.locator('.badge-caption')).toContainText('Ein Geheimnis.');
+  if (process.env.SHOTS) await page.screenshot({ path: `${process.env.SHOTS}/steckbrief.png` });
+});

@@ -27,10 +27,10 @@ test('M2: prologue from letter to house, resumable, all events logged [HAT-3]', 
   await expect(page.getByText('Dein Brief ist angekommen!')).toHaveCount(0);
   await page.getByRole('button', { name: 'Truhe' }).click();
   await page.getByRole('button', { name: 'Steckbrief' }).click();
-  await expect(page.locator('.profile')).toContainText('Lena');
-  await expect(page.locator('.profile')).toContainText('Ravenclaw');
-  await expect(page.locator('.profile')).toContainText('Phönixfeder');
-  await expect(page.locator('.profile')).toContainText('Katze');
+  await expect(page.locator('.student-id')).toContainText('Lena');
+  await expect(page.locator('.student-id')).toContainText('Ravenclaw');
+  await expect(page.locator('.student-id')).toContainText('Phönixfeder');
+  await expect(page.locator('.student-id')).toContainText('Katze');
 
   await expect
     .poll(async () => (await listEvents()).filter((e) => e.day === 0).map((e) => e.type).sort(), { timeout: 10_000 })

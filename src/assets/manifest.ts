@@ -128,6 +128,13 @@ export const assets: Record<string, AssetDef> = {
   'portrait.spider': { from: 'npc.spider', crop: [16, 12, 32, 32], scale: 2 },
   ...emotes,
   'ui.clock': { file: 'assets/ui/clock.png', w: 96, h: 120, ...OWN },
+  // Steckbrief badges (DECISIONS.md #79), 20 × 20 medals shown at 40
+  ...Object.fromEntries(
+    ['sparks10', 'sparks30', 'firsttry', 'nohint', 'week', 'half', 'all', 'ownway'].map((id) => [
+      `ui.badge.${id}`,
+      { file: `assets/ui/badge_${id}.png`, w: 20, h: 20, ...OWN } satisfies FileAsset,
+    ]),
+  ),
   'ui.frame.parchment': { file: 'assets/ui/parchment.png', nineSlice: [8, 8, 8, 8] },
   'ui.frame.wood': { file: 'assets/ui/wood.png', nineSlice: [8, 8, 8, 8] },
   'ui.seal': { file: 'assets/ui/seal.png', w: 24, h: 24 },

@@ -1427,6 +1427,47 @@ crest('#8e1b1b', '#d9a425', 'G').save(path.join(OUT, 'ui/crest_gryffindor.png'))
 crest('#e0b320', '#2b2620', 'H').save(path.join(OUT, 'ui/crest_hufflepuff.png'));
 crest('#1d3f8a', '#b08850', 'R').save(path.join(OUT, 'ui/crest_ravenclaw.png'));
 crest('#1e6b3a', '#c0c8d0', 'S').save(path.join(OUT, 'ui/crest_slytherin.png'));
+// ---------- Steckbrief badges (DECISIONS.md #79) ----------
+
+const BADGE_GLYPHS: Record<string, string[]> = {
+  spark: ['...#...', '...#...', '..###..', '#######', '..###..', '...#...', '...#...'],
+  sparks: ['..#....', '.###...', '..#..#.', '....###', '.#...#.', '###....', '.#.....'],
+  target: ['..###..', '.#...#.', '#..#..#', '#.###.#', '#..#..#', '.#...#.', '..###..'],
+  idea: ['..###..', '.#...#.', '.#.#.#.', '.#...#.', '..#.#..', '..###..', '..###..'],
+  week: ['.#####.', '.....#.', '....#..', '...#...', '..#....', '..#....', '..#....'],
+  half: ['#######', '.#...#.', '..#.#..', '...#...', '..###..', '.#####.', '#######'],
+  clock: ['..###..', '.#.#.#.', '#..#..#', '#..##.#', '#.....#', '.#...#.', '..###..'],
+  hat: ['...#...', '..##...', '..###..', '.####..', '.#####.', '#######', '.......'],
+};
+
+function badge(face: string, glyph: string[]): Canvas {
+  const c = new Canvas(20, 20);
+  // ribbon
+  c.rect(5, 0, 4, 6, '#c23b3b');
+  c.rect(11, 0, 4, 6, '#2e5a8f');
+  c.line(8, 1, 8, 5, '#8e1b1b');
+  c.line(14, 1, 14, 5, '#1d3f8a');
+  // medal: gold rim, coloured face
+  c.ellipse(10, 12, 7.5, 7.5, (u, v) => ramp(GOLD.slice().reverse(), (u + v + 2) / 4));
+  c.ellipse(10, 12, 5.8, 5.8, face);
+  glyph.forEach((row, y) => [...row].forEach((ch, x) => ch === '#' && c.set(7 + x, 9 + y, '#f6ead0')));
+  c.set(6, 8, '#f2d675');
+  c.outline(INK);
+  return c;
+}
+
+const BADGES: Record<string, [string, string]> = {
+  sparks10: ['#7a3b8a', 'spark'],
+  sparks30: ['#5a2a6a', 'sparks'],
+  firsttry: ['#8e1b1b', 'target'],
+  nohint: ['#1d3f8a', 'idea'],
+  week: ['#2e5a26', 'week'],
+  half: ['#1f6b6b', 'half'],
+  all: ['#2b2620', 'clock'],
+  ownway: ['#3a3440', 'hat'],
+};
+for (const [id, [face, glyph]] of Object.entries(BADGES)) badge(face, BADGE_GLYPHS[glyph]).save(path.join(OUT, `ui/badge_${id}.png`));
+
 console.log('Drew hat, pets, wands and crests.');
 
 // Preview for review: everything on one sheet, ×4
