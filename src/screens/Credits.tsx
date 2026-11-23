@@ -40,7 +40,7 @@ export function CreditsScreen() {
           <h3>Schrift</h3>
           <p>Jersey 10 – Sarah Cadigan-Fried</p>
           <h3>Musik und Klänge</h3>
-          <p>Eigene Chiptune-Melodien</p>
+          <p>Eigene Orchesterstücke, im Gerät gespielt</p>
           <p className="credits-small">Lizenzen: CC-BY-SA 3.0, GPL 3.0, OGA-BY 3.0, CC0, SIL OFL 1.1 – Details in CREDITS.md</p>
           <h2 className="credits-end">Frohe Weihnachten!</h2>
         </div>

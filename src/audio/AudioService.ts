@@ -1,26 +1,31 @@
 import { store } from '../core/store';
-import { noteFrequency, parseVoice, trackLength, TRACKS, type Wave } from './tracks';
+import { compileTrack, createMusicChain, playStep, type MusicEvent } from './music';
+import { noteFrequency, TRACKS } from './tracks';
 
 /**
- * [SND-1–3] Chiptune music and sound effects, synthesised with WebAudio
- * (DECISIONS.md #52). Nothing plays before the first touch; music and effects
- * follow the two switches in Truhe → Optionen.
+ * [SND-1–3] Orchestral music and chiptune sound effects, synthesised with
+ * WebAudio (DECISIONS.md #52, #77). Nothing plays before the first touch; music
+ * and effects follow the two switches in Truhe → Optionen.
  */
 
+type Wave = 'pulse25' | 'pulse12' | 'square' | 'triangle';
+
 let ctx: AudioContext | null = null;
-let musicGain: GainNode | null = null;
+let musicIn: GainNode | null = null;
 let sfxGain: GainNode | null = null;
 const waves = new Map<string, PeriodicWave>();
 
 let current: string | null = null;
 let wanted: string | null = null;
 let timer: ReturnType<typeof setInterval> | null = null;
+let bus: GainNode | null = null;
 let nextStep = 0;
 let nextTime = 0;
 
-const MUSIC_VOLUME = 0.09;
 const SFX_VOLUME = 0.22;
-const LOOKAHEAD = 0.15;
+const LOOKAHEAD = 0.2;
+const FADE_IN = 1.2;
+const FADE_OUT = 0.9;
 
 const settings = () => store.getState().save?.settings ?? { music: true, sfx: true, textSpeed: 'normal' as const };
 
@@ -72,37 +77,45 @@ function noise(out: AudioNode, start: number, length: number, volume: number): v
 
 // ---------- Music ----------
 
+const compiled = new Map<string, MusicEvent[][]>();
+
 function schedule(): void {
-  if (!ctx || !musicGain || !current) return;
+  if (!ctx || !bus || !current) return;
   const track = TRACKS[current];
+  if (!compiled.has(current)) compiled.set(current, compileTrack(track));
+  const steps = compiled.get(current)!;
   const stepLength = 60 / track.bpm / 2;
-  const total = trackLength(track);
   while (nextTime < ctx.currentTime + LOOKAHEAD) {
-    for (const voice of track.voices) {
-      for (const n of parseVoice(voice.steps)) {
-        if (n.step === nextStep) tone(musicGain, voice.wave, noteFrequency(n.note), nextTime, n.length * stepLength * 0.95, voice.volume);
-      }
-    }
-    nextStep = (nextStep + 1) % total;
+    playStep(ctx, bus, steps[nextStep], nextTime, stepLength);
+    nextStep = (nextStep + 1) % steps.length;
     nextTime += stepLength;
   }
 }
 
+/** Fade the playing track out on its own bus and start the wanted one on a fresh bus. */
 function startMusic(): void {
-  if (!ctx || !musicGain) return;
+  if (!ctx || !musicIn) return;
   const target = settings().music ? wanted : null;
   if (target === current) return;
   if (timer) clearInterval(timer);
   timer = null;
-  // short fade so tracks don't cut hard
-  musicGain.gain.cancelScheduledValues(ctx.currentTime);
-  musicGain.gain.setValueAtTime(0, ctx.currentTime);
-  musicGain.gain.linearRampToValueAtTime(MUSIC_VOLUME, ctx.currentTime + 0.4);
+  if (bus) {
+    const old = bus;
+    old.gain.cancelScheduledValues(ctx.currentTime);
+    old.gain.setValueAtTime(old.gain.value, ctx.currentTime);
+    old.gain.linearRampToValueAtTime(0, ctx.currentTime + FADE_OUT);
+    setTimeout(() => old.disconnect(), (FADE_OUT + 4) * 1000);
+    bus = null;
+  }
   current = target && TRACKS[target] ? target : null;
   if (!current) return;
+  bus = ctx.createGain();
+  bus.gain.setValueAtTime(0, ctx.currentTime);
+  bus.gain.linearRampToValueAtTime(1, ctx.currentTime + FADE_IN);
+  bus.connect(musicIn);
   nextStep = 0;
   nextTime = ctx.currentTime + 0.05;
-  timer = setInterval(schedule, 25);
+  timer = setInterval(schedule, 40);
   schedule();
 }
 
@@ -171,9 +184,7 @@ export function unlockAudio(): void {
     const Ctor = window.AudioContext ?? (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
     if (!Ctor) return;
     ctx = new Ctor();
-    musicGain = ctx.createGain();
-    musicGain.gain.value = MUSIC_VOLUME;
-    musicGain.connect(ctx.destination);
+    musicIn = createMusicChain(ctx, ctx.destination);
     sfxGain = ctx.createGain();
     sfxGain.gain.value = SFX_VOLUME;
     sfxGain.connect(ctx.destination);
@@ -197,6 +208,8 @@ function pause(): void {
   if (timer) clearInterval(timer);
   timer = null;
   current = null; // so startMusic() restarts the track on return
+  bus?.disconnect();
+  bus = null;
   void ctx.suspend();
 }
 function resume(): void {

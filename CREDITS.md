@@ -79,4 +79,4 @@ Die NPC-Sprites in `public/assets/sprites/` (Quill, Ellis, Theo, Maren, Grimsby,
 
 ## Musik und Effekte
 
-Keine fremden Dateien: Musik und Effekte werden in der App per WebAudio erzeugt (`src/audio/`, DECISIONS.md #52), Melodien sind eigene Kompositionen.
+Keine fremden Dateien: Musik und Effekte werden in der App per WebAudio erzeugt (`src/audio/`, DECISIONS.md #52, #77): ein kleines Orchester aus Streichern, Celesta, Harfe, Holzbläsern, Horn und Pauke. Alle Melodien sind eigene Kompositionen.
