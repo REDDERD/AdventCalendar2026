@@ -1,33 +1,237 @@
 import { store } from '../core/store';
-import { compileTrack, createMusicChain, playStep, type MusicEvent } from './music';
-import { noteFrequency, TRACKS } from './tracks';
+import { gapSeconds, nextPiece, PLAYLISTS } from './recordings';
+import { createRoom, type RoomChain } from './room';
 
 /**
- * [SND-1–3] Orchestral music and chiptune sound effects, synthesised with
- * WebAudio (DECISIONS.md #52, #77). Nothing plays before the first touch; music
- * and effects follow the two switches in Truhe → Optionen.
+ * [SND-1–3] Music from real recordings of classical pieces (DECISIONS.md #81),
+ * chiptune sound effects synthesised with WebAudio (#52). Nothing plays before
+ * the first touch; music and effects follow the two switches in Truhe → Optionen.
  */
 
 type Wave = 'pulse25' | 'pulse12' | 'square' | 'triangle';
 
 let ctx: AudioContext | null = null;
-let musicIn: GainNode | null = null;
+let room: RoomChain | null = null;
 let sfxGain: GainNode | null = null;
 const waves = new Map<string, PeriodicWave>();
 
-let current: string | null = null;
-let wanted: string | null = null;
-let timer: ReturnType<typeof setInterval> | null = null;
-let bus: GainNode | null = null;
-let nextStep = 0;
-let nextTime = 0;
-
 const SFX_VOLUME = 0.22;
-const LOOKAHEAD = 0.2;
-const FADE_IN = 1.2;
-const FADE_OUT = 0.9;
+const FADE_IN = 1.5;
+const FADE_OUT = 1.2;
 
 const settings = () => store.getState().save?.settings ?? { music: true, sfx: true, textSpeed: 'normal' as const };
+
+// ---------- Music: playlists of recordings ----------
+
+/** One player; two of them crossfade when the music changes. */
+interface Deck {
+  el: HTMLAudioElement;
+  gain: GainNode;
+  list: string | null;
+  piece: string | null;
+}
+
+let decks: Deck[] = [];
+let active: Deck | null = null;
+let current: string | null = null;
+let wanted: string | null = null;
+/** bumps on every change of music, so stale async work drops out */
+let generation = 0;
+let gapTimer: ReturnType<typeof setTimeout> | null = null;
+let failures = 0;
+/** where each playlist was left, to carry on from there on return */
+const positions = new Map<string, { piece: string; time: number }>();
+const lastPiece = new Map<string, string>();
+const upcoming = new Map<string, string>();
+
+const MUSIC_CACHE = 'music-v1';
+const KEEP_URLS = 3;
+const objectUrls = new Map<string, Promise<string>>();
+
+const fileUrl = (piece: string) => `${import.meta.env.BASE_URL}audio/music/${piece}.m4a`;
+
+async function download(url: string): Promise<Response> {
+  // Cache Storage keeps each file after its first download (not available on plain http)
+  try {
+    const cache = await caches.open(MUSIC_CACHE);
+    const hit = await cache.match(url);
+    if (hit) return hit;
+    const res = await fetch(url);
+    if (res.ok) await cache.put(url, res.clone());
+    return res;
+  } catch {
+    return fetch(url);
+  }
+}
+
+/** A blob URL for a piece; at most a few are kept in memory. */
+function pieceUrl(piece: string): Promise<string> {
+  let url = objectUrls.get(piece);
+  if (!url) {
+    url = download(fileUrl(piece)).then(async (res) => {
+      if (!res.ok) throw new Error(`music ${piece}: HTTP ${res.status}`);
+      return URL.createObjectURL(await res.blob());
+    });
+    url.catch(() => objectUrls.delete(piece));
+    objectUrls.set(piece, url);
+  }
+  // forget the oldest ones that no deck is holding
+  const busy = new Set(decks.map((d) => d.piece));
+  for (const [id, old] of objectUrls) {
+    if (objectUrls.size <= KEEP_URLS) break;
+    if (busy.has(id) || id === piece) continue;
+    objectUrls.delete(id);
+    void old.then((u) => URL.revokeObjectURL(u), () => undefined);
+  }
+  return url;
+}
+
+function rampGain(gain: GainNode, to: number, seconds: number): void {
+  const t = ctx!.currentTime;
+  gain.gain.cancelScheduledValues(t);
+  gain.gain.setValueAtTime(gain.gain.value, t);
+  gain.gain.linearRampToValueAtTime(to, t + seconds);
+}
+
+function clearGap(): void {
+  if (gapTimer) clearTimeout(gapTimer);
+  gapTimer = null;
+}
+
+function remember(deck: Deck): void {
+  if (!deck.list || !deck.piece || deck.el.ended || !deck.el.currentSrc) return;
+  positions.set(deck.list, { piece: deck.piece, time: Math.max(0, deck.el.currentTime - 1.5) });
+}
+
+function fadeOut(deck: Deck): void {
+  remember(deck);
+  rampGain(deck.gain, 0, FADE_OUT);
+  setTimeout(() => {
+    if (deck !== active) deck.el.pause();
+  }, FADE_OUT * 1000 + 100);
+}
+
+async function play(deck: Deck, list: string, piece: string, at: number, gen: number): Promise<void> {
+  deck.list = list;
+  deck.piece = piece;
+  lastPiece.set(list, piece);
+  const after = nextPiece(PLAYLISTS[list], piece);
+  upcoming.set(list, after);
+  let src: string;
+  try {
+    src = await pieceUrl(piece);
+  } catch {
+    if (gen === generation) next(deck, list, gen, true);
+    return;
+  }
+  if (gen !== generation || deck !== active) return;
+  const el = deck.el;
+  el.src = src;
+  if (at > 0) el.addEventListener('loadedmetadata', () => (el.currentTime = at), { once: true });
+  deck.gain.gain.cancelScheduledValues(ctx!.currentTime);
+  deck.gain.gain.setValueAtTime(0, ctx!.currentTime);
+  try {
+    await el.play();
+  } catch {
+    if (gen === generation) next(deck, list, gen, true);
+    return;
+  }
+  if (gen !== generation) return;
+  failures = 0;
+  rampGain(deck.gain, 1, at > 0 ? FADE_IN : 0.3);
+  // fetch the following piece while this one plays, so the gap stays short
+  if (after !== piece) void pieceUrl(after).catch(() => undefined);
+}
+
+/** After a piece (or a failed one): a short pause, then the next. */
+function next(deck: Deck, list: string, gen: number, failed = false): void {
+  if (failed && ++failures >= PLAYLISTS[list].pieces.length + 1) return; // nothing plays here; stay silent
+  clearGap();
+  gapTimer = setTimeout(() => {
+    gapTimer = null;
+    if (gen !== generation || deck !== active) return;
+    const piece = upcoming.get(list) ?? nextPiece(PLAYLISTS[list], lastPiece.get(list) ?? null);
+    void play(deck, list, piece, 0, gen);
+  }, gapSeconds() * 1000);
+}
+
+/** Fade the playing music out and start the wanted playlist on the other deck. */
+function startMusic(): void {
+  if (!ctx || !room || !decks.length) return;
+  const target = settings().music && wanted && PLAYLISTS[wanted] ? wanted : null;
+  if (target === current) return;
+  generation++;
+  failures = 0;
+  clearGap();
+  if (active) fadeOut(active);
+  current = target;
+  if (!current) {
+    active = null;
+    return;
+  }
+  const list = PLAYLISTS[current];
+  room.set(list.room);
+  const deck = decks.find((d) => d !== active) ?? decks[0];
+  active = deck;
+  const resume = positions.get(current);
+  positions.delete(current);
+  const piece = resume?.piece ?? nextPiece(list, lastPiece.get(current) ?? null);
+  void play(deck, current, piece, resume?.time ?? 0, generation);
+}
+
+/** Ask for music ("castle", "puzzle" …); `null` = silence. Plays once audio is unlocked. */
+export function playMusic(id: string | null): void {
+  wanted = id;
+  startMusic();
+}
+
+/** A few samples of silence: playing it inside the first touch unlocks the players on iOS. */
+function silence(): string {
+  const samples = 64;
+  const bytes = new Uint8Array(44 + samples * 2);
+  const v = new DataView(bytes.buffer);
+  const text = (at: number, s: string) => [...s].forEach((c, i) => v.setUint8(at + i, c.charCodeAt(0)));
+  text(0, 'RIFF');
+  v.setUint32(4, 36 + samples * 2, true);
+  text(8, 'WAVEfmt ');
+  v.setUint32(16, 16, true);
+  v.setUint16(20, 1, true);
+  v.setUint16(22, 1, true);
+  v.setUint32(24, 8000, true);
+  v.setUint32(28, 16000, true);
+  v.setUint16(32, 2, true);
+  v.setUint16(34, 16, true);
+  text(36, 'data');
+  v.setUint32(40, samples * 2, true);
+  return `data:audio/wav;base64,${btoa(String.fromCharCode(...bytes))}`;
+}
+
+function createDecks(context: AudioContext, out: AudioNode): Deck[] {
+  const blank = silence();
+  return [0, 1].map(() => {
+    const el = new Audio();
+    el.preload = 'auto';
+    const gain = context.createGain();
+    gain.gain.value = 0;
+    context.createMediaElementSource(el).connect(gain).connect(out);
+    const deck: Deck = { el, gain, list: null, piece: null };
+    el.addEventListener('ended', () => {
+      if (deck === active && deck.list === current && current) next(deck, current, generation);
+    });
+    el.src = blank;
+    void el.play().catch(() => undefined);
+    return deck;
+  });
+}
+
+// ---------- Sound effects [SND-2] ----------
+
+const NOTE_INDEX: Record<string, number> = { C: -9, D: -7, E: -5, F: -4, G: -2, A: 0, B: 2 };
+
+/** "E6" → Hz (A4 = 440); naturals are enough for the effects. */
+function note(name: string): number {
+  return 440 * 2 ** ((NOTE_INDEX[name[0]] + (Number(name.slice(1)) - 4) * 12) / 12);
+}
 
 function pulseWave(context: AudioContext, duty: number): PeriodicWave {
   const n = 32;
@@ -75,58 +279,6 @@ function noise(out: AudioNode, start: number, length: number, volume: number): v
   src.start(start);
 }
 
-// ---------- Music ----------
-
-const compiled = new Map<string, MusicEvent[][]>();
-
-function schedule(): void {
-  if (!ctx || !bus || !current) return;
-  const track = TRACKS[current];
-  if (!compiled.has(current)) compiled.set(current, compileTrack(track));
-  const steps = compiled.get(current)!;
-  const stepLength = 60 / track.bpm / 2;
-  while (nextTime < ctx.currentTime + LOOKAHEAD) {
-    playStep(ctx, bus, steps[nextStep], nextTime, stepLength);
-    nextStep = (nextStep + 1) % steps.length;
-    nextTime += stepLength;
-  }
-}
-
-/** Fade the playing track out on its own bus and start the wanted one on a fresh bus. */
-function startMusic(): void {
-  if (!ctx || !musicIn) return;
-  const target = settings().music ? wanted : null;
-  if (target === current) return;
-  if (timer) clearInterval(timer);
-  timer = null;
-  if (bus) {
-    const old = bus;
-    old.gain.cancelScheduledValues(ctx.currentTime);
-    old.gain.setValueAtTime(old.gain.value, ctx.currentTime);
-    old.gain.linearRampToValueAtTime(0, ctx.currentTime + FADE_OUT);
-    setTimeout(() => old.disconnect(), (FADE_OUT + 4) * 1000);
-    bus = null;
-  }
-  current = target && TRACKS[target] ? target : null;
-  if (!current) return;
-  bus = ctx.createGain();
-  bus.gain.setValueAtTime(0, ctx.currentTime);
-  bus.gain.linearRampToValueAtTime(1, ctx.currentTime + FADE_IN);
-  bus.connect(musicIn);
-  nextStep = 0;
-  nextTime = ctx.currentTime + 0.05;
-  timer = setInterval(schedule, 40);
-  schedule();
-}
-
-/** Ask for a music track ("castle", "puzzle" …); `null` = silence. Plays once audio is unlocked. */
-export function playMusic(id: string | null): void {
-  wanted = id;
-  startMusic();
-}
-
-// ---------- Sound effects [SND-2] ----------
-
 /** Pitch of the text blip per speaker; narration is a soft middle tone. */
 const VOICE_PITCH: Record<string, number> = {
   quill: 620, ellis: 880, theo: 520, maren: 760, grimsby: 300, aldous: 240, thornbury: 400, hat: 200,
@@ -146,19 +298,19 @@ export function playSfx(id: string, speaker?: string): void {
       tone(out, 'pulse25', 990, t + 0.05, 0.06, 0.5);
       break;
     case 'correct':
-      ['C5', 'E5', 'G5', 'C6'].forEach((n, i) => tone(out, 'pulse25', noteFrequency(n), t + i * 0.08, 0.12, 0.6));
+      ['C5', 'E5', 'G5', 'C6'].forEach((n, i) => tone(out, 'pulse25', note(n), t + i * 0.08, 0.12, 0.6));
       break;
     case 'wrong':
       tone(out, 'square', 220, t, 0.15, 0.4);
       tone(out, 'square', 165, t + 0.16, 0.25, 0.4);
       break;
     case 'spark':
-      ['E6', 'B6', 'E7'].forEach((n, i) => tone(out, 'pulse12', noteFrequency(n), t + i * 0.05, 0.08, 0.45));
+      ['E6', 'B6', 'E7'].forEach((n, i) => tone(out, 'pulse12', note(n), t + i * 0.05, 0.08, 0.45));
       break;
     case 'door':
       noise(out, t, 0.12, 0.35);
       tone(out, 'triangle', 110, t, 0.2, 0.9);
-      tone(out, 'pulse25', noteFrequency('G5'), t + 0.18, 0.15, 0.4);
+      tone(out, 'pulse25', note('G5'), t + 0.18, 0.15, 0.4);
       break;
     case 'stamp':
       noise(out, t, 0.08, 0.6);
@@ -184,7 +336,8 @@ export function unlockAudio(): void {
     const Ctor = window.AudioContext ?? (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
     if (!Ctor) return;
     ctx = new Ctor();
-    musicIn = createMusicChain(ctx, ctx.destination);
+    room = createRoom(ctx, ctx.destination);
+    decks = createDecks(ctx, room.input);
     sfxGain = ctx.createGain();
     sfxGain.gain.value = SFX_VOLUME;
     sfxGain.connect(ctx.destination);
@@ -201,15 +354,20 @@ store.subscribe((state, prev) => {
 /**
  * Sound only while the app is in the foreground: switching tabs or apps, turning
  * the screen off or closing the page pauses everything; coming back fades the
- * music in again.
+ * music in again where it stopped.
  */
 function pause(): void {
   if (!ctx) return;
-  if (timer) clearInterval(timer);
-  timer = null;
-  current = null; // so startMusic() restarts the track on return
-  bus?.disconnect();
-  bus = null;
+  generation++;
+  clearGap();
+  if (active) remember(active);
+  for (const d of decks) {
+    d.el.pause();
+    d.gain.gain.cancelScheduledValues(ctx.currentTime);
+    d.gain.gain.setValueAtTime(0, ctx.currentTime);
+  }
+  active = null;
+  current = null; // so startMusic() picks the playlist up again on return
   void ctx.suspend();
 }
 function resume(): void {

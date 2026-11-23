@@ -22,7 +22,7 @@ Wörter = längster und kürzester Pfad laut `content:simulate`-Logik (500 Zufal
 | [16](tag-16.md) | Die Tischordnung | `great_hall` | `d16.maren` (`maren_covered`), `d16.seating` (`kept_chair`) | `k04`/`k05` bei `trust_maren ≥ 2` (Nachholer) | Hermine, Slughorn, Neville, Hagrid, Luna, Newt | `p16` Die Tischordnung (50) | 282–317 |
 | [17](tag-17.md) | Hogsmeade | `hogsmeade` | `d17.treat`, `d17.gift` (`gift_scarf` / `gift_music_box`) | – | Rosmerta, Fred und George, Harry und Ron, Hermine | `p17` Knallbonbons / Nim (40) | 268–289 |
 | [18](tag-18.md) | Der Raum der Wünsche | `room_of_requirement` | `d18.token` (`house_token`), `d18.wish` | `k07` bei Bedarf (Nachholer) | Dobby (Socke) | `p18` Die Tür, die erscheint (50) | 321–361 |
-| [19](tag-19.md) | Die Geisterparade | `ghost_corridor` | `d19.parade`, `d19.aldous` (+`trust_aldous`) | – | Nick, Graue Dame, Baron, Mönch, Peeves, Myrte, Aldous | `p19` Die Parade (50) | 256–282 |
+| [19](tag-19.md) | Die Geisterparade | `ghost_corridor` | `d19.parade`, `d19.aldous` (+`trust_aldous`) | – | Nick, Graue Dame, Baron, Mönch, Peeves, Myrte, Aldous | `p19` Die Parade (50) | 371–397 |
 | [20](tag-20.md) | Der Duellierclub | `dueling_club` | `d20.lockhart`, `d20.duel` (`theo_wrench`) | `k06` bei `trust_theo ≥ 2` (Nachholer) | Flitwick, Lockhart | `p20` Zauberduell (50) | 231–279 |
 | [21](tag-21.md) | Im Uhrturm | `clock_tower` | `d21.climb`, `d21.tone` | `k09` | Fawkes (nur `phoenix`) | `p21` Zahnräder (60) | 289–317 |
 | [22](tag-22.md) | Die Pendelkammer | `pendulum_chamber` | `d22.hermione`, `d22.ellis` (+`bond_ellis`) | `k10` | Hermine (Zeitumkehrer) | `p22` Römische Stäbe (60) | 328–345 |

@@ -3,6 +3,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { assets, isCrop } from '../src/assets/manifest';
+import { RECORDINGS } from '../src/audio/recordings';
 
 const PUBLIC = path.resolve('public');
 const strict = process.argv.includes('--strict');
@@ -33,6 +34,14 @@ for (const [id, def] of Object.entries(assets)) {
   const exists = fs.existsSync(path.join(PUBLIC, def.file));
   if (!exists) missing.push(`${id} → public/${def.file}`);
   else if (!def.license) unlicensed.push(`${id} → public/${def.file}`);
+}
+
+// Music recordings (DECISIONS.md #81): every file needs performer, licence and source page.
+for (const r of RECORDINGS) {
+  const file = `audio/music/${r.id}.m4a`;
+  referenced.add(file);
+  if (!fs.existsSync(path.join(PUBLIC, file))) missing.push(`music ${r.id} → public/${file}`);
+  else if (!r.licence || !r.page || !r.performer) unlicensed.push(`music ${r.id} → public/${file}`);
 }
 
 const unused = [...walk(path.join(PUBLIC, 'assets')), ...walk(path.join(PUBLIC, 'audio'))]

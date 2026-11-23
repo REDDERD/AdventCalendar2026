@@ -1,3 +1,4 @@
+import { RECORDINGS } from '../audio/recordings';
 import { useMusic } from '../audio/useMusic';
 import { ADMIN_NAME } from '../config';
 import credits from '../content/credits.generated.json';
@@ -39,9 +40,20 @@ export function CreditsScreen() {
           ))}
           <h3>Schrift</h3>
           <p>Jersey 10 – Sarah Cadigan-Fried</p>
-          <h3>Musik und Klänge</h3>
-          <p>Eigene Orchesterstücke, im Gerät gespielt</p>
-          <p className="credits-small">Lizenzen: CC-BY-SA 3.0, GPL 3.0, OGA-BY 3.0, CC0, SIL OFL 1.1 – Details in CREDITS.md</p>
+          <h3>Musik</h3>
+          {RECORDINGS.map((r) => (
+            <div key={r.id} className="credits-piece">
+              <p>
+                {r.composer}: {r.title}
+              </p>
+              <p className="credits-small">
+                {r.performer}, {r.year}
+              </p>
+            </div>
+          ))}
+          <h3>Klänge</h3>
+          <p>Eigene Effekte, im Gerät erzeugt</p>
+          <p className="credits-small">Lizenzen: CC-BY-SA 3.0, GPL 3.0, OGA-BY 3.0, CC0, gemeinfrei, SIL OFL 1.1 – Details in CREDITS.md</p>
           <h2 className="credits-end">Frohe Weihnachten!</h2>
         </div>
         <PixelButton variant="wax" onClick={() => go('calendar')}>

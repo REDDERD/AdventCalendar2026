@@ -63,5 +63,20 @@ aldous: Gestattet. Ich muss nachdenken.
     quill: Er hat nicht Nein gesagt. Das ist erwähnenswert.
 - # hide: aldous
 Ein Hauch Frost bleibt in der Luft. Die Geister stellen sich neu auf und singen leiser.
+Dann, vom Ende des Korridors: ein Klavier. Leise, wie an jedem Abend.
+# show: ellis left
+ellis: Das höre ich seit dem ersten Dezember. Überall. Und nie sitzt jemand am Klavier.
+# show: quill right
+quill: Dann sehen wir heute nach. Auf Zehenspitzen.
+# music: aldous
+Hinter einer angelehnten Tür steht ein verstaubter Flügel. Die Tasten bewegen sich.
+Auf dem Hocker schimmert es silbern.
+# show: aldous center
+aldous: Oh. Ihr habt mich gefunden.
+aldous: Ein Franzose hat es geschrieben, Debussy. „Mondschein“. Vor gut hundert Jahren.
+aldous: In dreihundert Jahren lernt man viele Stücke. Dieses spiele ich für Isolde.
+aldous: Sie hat es nie gehört. Ich spiele es trotzdem jeden Abend.
+ellis: Dann waren Sie das. Die Musik in den Fluren. Die ganze Zeit.
+Aldous lächelt und spielt weiter. Ihr bleibt bis zum letzten Ton.
 # spark: d19.s2 214 140
 -> END

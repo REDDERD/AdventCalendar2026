@@ -1,56 +1,62 @@
+import fs from 'node:fs';
+import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { MUSIC_IDS } from '../../src/assets/manifest';
-import { compileTrack } from '../../src/audio/music';
-import { noteFrequency, parseVoice, trackLength, TRACKS } from '../../src/audio/tracks';
+import { gapSeconds, MAX_GAP, nextPiece, PLAYLISTS, RECORDINGS } from '../../src/audio/recordings';
 
-describe('orchestral tracks [SND-1]', () => {
-  it('there is a track for every music id Ink may use', () => {
-    for (const id of MUSIC_IDS) expect(TRACKS[id], id).toBeDefined();
+const file = (id: string) => path.resolve('public/audio/music', `${id}.m4a`);
+
+describe('music from recordings [SND-1]', () => {
+  it('there is a playlist for every music id Ink may use, and no other', () => {
+    expect(Object.keys(PLAYLISTS).sort()).toEqual([...MUSIC_IDS].sort());
   });
 
-  it('every note is a valid pitch in a pleasant range', () => {
-    for (const [id, track] of Object.entries(TRACKS)) {
-      for (const voice of track.voices) {
-        for (const n of parseVoice(voice.bars)) {
-          for (const note of n.notes) {
-            const f = noteFrequency(note);
-            expect(f, `${id} ${note}`).toBeGreaterThan(60);
-            expect(f, `${id} ${note}`).toBeLessThan(2700);
-          }
+  it('every playlist plays known recordings, and every recording is played', () => {
+    const ids = new Set(RECORDINGS.map((r) => r.id));
+    const used = new Set<string>();
+    for (const [list, p] of Object.entries(PLAYLISTS)) {
+      expect(p.pieces.length, list).toBeGreaterThan(0);
+      for (const piece of p.pieces) {
+        expect(ids.has(piece), `${list}: ${piece}`).toBe(true);
+        used.add(piece);
+      }
+    }
+    expect([...ids].filter((id) => !used.has(id))).toEqual([]);
+  });
+
+  it('the puzzle music plays only in puzzles', () => {
+    const puzzle = PLAYLISTS.puzzle.pieces;
+    for (const [list, p] of Object.entries(PLAYLISTS)) {
+      if (list !== 'puzzle') expect(p.pieces.filter((x) => puzzle.includes(x)), list).toEqual([]);
+    }
+  });
+
+  it('every recording is credited, licensed and encoded small enough', () => {
+    for (const r of RECORDINGS) {
+      expect(r.id, r.id).toMatch(/^[a-z0-9_]+$/);
+      for (const field of [r.title, r.composer, r.performer, r.year, r.licence, r.page, r.source]) expect(field, r.id).toBeTruthy();
+      expect(fs.existsSync(file(r.id)), `public/audio/music/${r.id}.m4a – run npm run music:import`).toBe(true);
+      expect(fs.statSync(file(r.id)).size, r.id).toBeLessThan(7_000_000);
+    }
+  });
+
+  it('never plays the same piece twice in a row when there is a choice', () => {
+    for (const p of Object.values(PLAYLISTS)) {
+      for (const last of p.pieces) {
+        for (const r of [0, 0.3, 0.5, 0.99]) {
+          const next = nextPiece(p, last, () => r);
+          expect(p.pieces).toContain(next);
+          if (p.pieces.length > 1) expect(next).not.toBe(last);
         }
       }
     }
   });
 
-  it('every bar has the right number of steps and all voices loop together', () => {
-    for (const [id, track] of Object.entries(TRACKS)) {
-      expect([6, 8], id).toContain(track.bar);
-      for (const [v, voice] of track.voices.entries()) {
-        expect(voice.bars.length, `${id} voice ${v}`).toBe(track.voices[0].bars.length);
-        voice.bars.forEach((bar, b) => {
-          expect(bar.split(/\s+/).filter(Boolean).length, `${id} voice ${v} bar ${b + 1}: ${bar}`).toBe(track.bar);
-        });
-      }
-      expect(trackLength(track), id).toBeGreaterThanOrEqual(8 * track.bar);
+  it('pauses between pieces are short: at most five seconds', () => {
+    expect(MAX_GAP).toBeLessThanOrEqual(5);
+    for (const r of [0, 0.5, 0.999]) {
+      expect(gapSeconds(() => r)).toBeGreaterThan(0);
+      expect(gapSeconds(() => r)).toBeLessThanOrEqual(5);
     }
-  });
-
-  it('every track has a melody voice that actually plays', () => {
-    for (const [id, track] of Object.entries(TRACKS)) {
-      const steps = compileTrack(track);
-      expect(steps.length, id).toBe(trackLength(track));
-      expect(steps.filter((s) => s.length > 0).length, id).toBeGreaterThan(trackLength(track) / 4);
-    }
-  });
-
-  it('reads holds, rests and chords', () => {
-    expect(parseVoice(['A4 - - . C5 -', 'D3+F#3+A3 - . . . .'])).toEqual([
-      { step: 0, length: 3, notes: ['A4'] },
-      { step: 4, length: 2, notes: ['C5'] },
-      { step: 6, length: 2, notes: ['D3', 'F#3', 'A3'] },
-    ]);
-    expect(noteFrequency('A4')).toBeCloseTo(440);
-    expect(noteFrequency('A5')).toBeCloseTo(880);
-    expect(noteFrequency('C4')).toBeCloseTo(261.63, 1);
   });
 });
