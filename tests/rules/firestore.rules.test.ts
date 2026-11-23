@@ -180,6 +180,13 @@ describe('[SEC-1] users', () => {
     await assertFails(setDoc(doc(as('alice'), 'usernames', 'alice2'), { uid: 'alice' }));
     await assertFails(getDoc(doc(as('alice'), 'usernames', 'alice')));
   });
+
+  it('keeps the stored Zauberwort away from players, including their own [ADM-6]', async () => {
+    await assertFails(getDoc(doc(as('alice'), 'secrets', 'alice')));
+    await assertFails(getDoc(doc(as('alice'), 'secrets', 'bob')));
+    await assertFails(setDoc(doc(as('alice'), 'secrets', 'alice'), { password: 'x' }));
+    await assertFails(getDocs(collection(as('alice'), 'secrets')));
+  });
 });
 
 describe('[SEC-1] personal', () => {
@@ -204,6 +211,8 @@ describe('[SEC-1] admin', () => {
     const db = as(ADMIN);
     await assertSucceeds(setDoc(doc(db, 'users', 'erin'), user('erin')));
     await assertSucceeds(setDoc(doc(db, 'usernames', 'erin'), { uid: 'erin' }));
+    await assertSucceeds(setDoc(doc(db, 'secrets', 'erin'), { password: 'zimt-eule-lumos-47' }));
+    await assertSucceeds(getDoc(doc(db, 'secrets', 'erin')));
     await assertSucceeds(updateDoc(doc(db, 'users', 'alice'), { active: false, runId: 2 }));
     await assertSucceeds(deleteDoc(doc(db, 'saves', 'alice')));
     await assertSucceeds(setDoc(doc(db, 'personal', 'alice'), { letter: 'Hallo' }));

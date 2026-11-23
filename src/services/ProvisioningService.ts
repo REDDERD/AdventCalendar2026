@@ -22,11 +22,18 @@ export interface ProvisionedPlayer {
   uid: string;
   username: string;
   displayName: string;
-  /** Shown once on the invitation, never stored [ADM-6]. */
+  /** Shown on the invitation; also kept in `secrets/{uid}` (admin only) [ADM-6]. */
   password: string;
 }
 
 export class ProvisionError extends Error {}
+
+/** The Zauberwort stored for a player, or `undefined` for accounts created before it was kept. */
+export async function loadStoredPassword(uid: string): Promise<string | undefined> {
+  const snap = await getDoc(doc(db, 'secrets', uid));
+  const password = snap.data()?.password;
+  return typeof password === 'string' && password ? password : undefined;
+}
 
 export async function isUsernameTaken(username: string): Promise<boolean> {
   return (await getDoc(doc(db, 'usernames', username))).exists();
@@ -79,6 +86,7 @@ export async function provisionPlayer(input: NewPlayer): Promise<ProvisionedPlay
       ...(input.note?.trim() ? { note: input.note.trim() } : {}),
     });
     tx.set(nameRef, { uid });
+    tx.set(doc(db, 'secrets', uid), { password });
   });
 
   return { uid, username, displayName, password };

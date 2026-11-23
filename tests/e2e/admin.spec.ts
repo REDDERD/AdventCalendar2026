@@ -50,6 +50,14 @@ test('M3: admin invites a player, the player logs in, the feed shows it live [AD
   // [ADM-12] live feed without reloading
   await expect(page.getByText(/Lena Müller hat das Spiel geöffnet/)).toBeVisible({ timeout: 15_000 });
 
+  // [ADM-9] The Zauberwort is kept: re-issuing the invitation shows it again
+  await page.getByRole('link', { name: 'Mehr' }).click();
+  await page.getByRole('link', { name: /Spieler verwalten/ }).click();
+  await page.locator('.user-row', { hasText: '@lena' }).locator('.user-summary').click();
+  await page.getByRole('button', { name: 'Einladung erneut erzeugen' }).click();
+  await expect(page.getByTestId('new-password')).toHaveText(password);
+  await page.getByRole('button', { name: 'Fertig' }).click();
+
   // Overview card
   await page.getByRole('link', { name: 'Übersicht' }).click();
   await expect(page.locator('.player-card', { hasText: 'Lena Müller' })).toContainText('noch nicht gestartet');

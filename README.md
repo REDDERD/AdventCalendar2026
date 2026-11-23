@@ -63,8 +63,8 @@ Die Web-App „Hogwarts Adventskalender“ ist im Projekt bereits registriert; i
 
 Mit dem Admin-Konto einloggen, dann Truhe → Optionen → „Admin-Konsole öffnen“ (oder direkt `<app-url>/#/admin`).
 
-- **Spieler einladen:** Mehr → Spieler verwalten → „Neuen Spieler einladen“. Das Zauberwort erscheint nur in diesem Moment, zusammen mit dem Einladungsbild (Teilen/Speichern). Der QR-Code (und der Direktlink) loggt sofort ein; bei neu erzeugten Einladungen ist nur der Eulenname vorausgefüllt.
-- **Zauberwort vergessen:** `npm run admin:set-password -- <eulenname> <neues-zauberwort>` (braucht den Service-Account, siehe oben), danach „Einladung erneut erzeugen“.
+- **Spieler einladen:** Mehr → Spieler verwalten → „Neuen Spieler einladen“. Das Zauberwort erscheint zusammen mit dem Einladungsbild (Teilen/Speichern) und wird für dich gespeichert (`secrets/<uid>`, nur der Admin kann es lesen). Der QR-Code (und der Direktlink) loggt sofort ein; bei neu erzeugten Einladungen ist nur der Eulenname vorausgefüllt.
+- **Zauberwort vergessen:** Spieler verwalten → Spieler öffnen → „Einladung erneut erzeugen“ zeigt das gespeicherte Zauberwort samt Direktlink und Einladungsbild wieder an. Für Konten ohne gespeichertes Zauberwort (vor dieser Änderung angelegt) und fürs Admin-Konto: `npm run admin:set-password -- <eulenname> <neues-zauberwort>` (braucht den Service-Account, siehe oben; speichert das Wort gleich mit), danach „Einladung erneut erzeugen“. Nach dem Ausrollen einmal `firebase deploy --only firestore:rules` ausführen.
 - **Eulenpost:** die letzten 100 Ereignisse aller Spieler, live.
 
 ## GitHub Pages

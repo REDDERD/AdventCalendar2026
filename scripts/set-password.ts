@@ -4,6 +4,7 @@
 import fs from 'node:fs';
 import { cert, initializeApp } from 'firebase-admin/app';
 import { getAuth } from 'firebase-admin/auth';
+import { getFirestore } from 'firebase-admin/firestore';
 import { usernameToEmail } from '../src/services/username';
 
 const KEY_FILE = '.secrets/service-account.json';
@@ -26,4 +27,6 @@ initializeApp({ credential: cert(JSON.parse(fs.readFileSync(KEY_FILE, 'utf8'))) 
 const auth = getAuth();
 const user = await auth.getUserByEmail(usernameToEmail(username));
 await auth.updateUser(user.uid, { password });
-console.log(`Zauberwort for "${username}" (${user.uid}) updated.`);
+// Keep it where the admin console can show it again (DECISIONS.md #76).
+await getFirestore().doc(`secrets/${user.uid}`).set({ password });
+console.log(`Zauberwort for "${username}" (${user.uid}) updated and stored.`);

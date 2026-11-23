@@ -1,6 +1,6 @@
 import { useEffect, useState, type FormEvent } from 'react';
 import { suggestUsername } from '../../services/password';
-import { provisionPlayer, ProvisionError, type ProvisionedPlayer } from '../../services/ProvisioningService';
+import { loadStoredPassword, provisionPlayer, ProvisionError, type ProvisionedPlayer } from '../../services/ProvisioningService';
 import { resetProgress } from '../../services/ResetService';
 import { Avatar, Chip } from '../components';
 import { updateUser, type AdminPlayer } from '../data';
@@ -141,7 +141,7 @@ function InviteResult({ invite, onClose }: { invite: InviteData; onClose: () => 
           <br />
           Zauberwort <code data-testid="new-password">{invite.password}</code>
           <br />
-          <small>Das Zauberwort wird nur jetzt angezeigt und nirgends gespeichert.</small>
+          <small>Das Zauberwort bleibt für dich gespeichert: „Einladung erneut erzeugen“ zeigt es wieder an.</small>
         </p>
       )}
       {/* Not a clickable link: opening it here would sign the admin in as the player. */}
@@ -264,7 +264,16 @@ function UserRow({ player, onChanged, onReinvite }: { player: AdminPlayer; onCha
               <button type="button" className="admin-btn" onClick={() => setEditing(true)}>
                 Bearbeiten
               </button>
-              <button type="button" className="admin-btn" onClick={() => onReinvite({ displayName: user.displayName, username: user.username })}>
+              <button
+                type="button"
+                className="admin-btn"
+                disabled={busy}
+                onClick={() => run(async () => {
+                  // [ADM-9] With the stored Zauberwort the invitation can be re-issued completely.
+                  const password = await loadStoredPassword(user.uid);
+                  onReinvite({ displayName: user.displayName, username: user.username, password });
+                })}
+              >
                 Einladung erneut erzeugen
               </button>
               {!isAdmin && (

@@ -138,7 +138,7 @@ Es gibt genau zwei Rollen: `admin` (der Auftraggeber) und `player` (alle Eingela
 - `[AUTH-8]` MUSS: Login-Bildschirm im Pixel-Stil: Felder „Eulenname“ und „Zauberwort“, Knopf „Eintreten“. Der Parameter `?u=` füllt den Eulennamen vor. Freundliche Fehlermeldungen („Diese Eule kenne ich nicht.“, „Das Zauberwort stimmt nicht.“).
 - `[AUTH-9]` MUSS: Deaktivierte Spieler (`active == false`) sehen „Deine Eule macht gerade Pause. Melde dich bei {adminName}.“
 - `[AUTH-10]` MUSS: Nach dem ersten Login erscheint einmalig eine Anleitung „Zum Home-Bildschirm hinzufügen“ (getrennt für iOS und Android). Hinweis für den Agenten: Auf iOS hat die Home-Bildschirm-App einen eigenen Speicher, dort ist ein zweiter Login nötig. Das ist erwünscht und muss in der Anleitung stehen.
-- `[AUTH-11]` MUSS: Zauberwort vergessen: Lokales Node-Skript `npm run admin:set-password -- <username> <neues-zauberwort>` mit Firebase Admin SDK und Service-Account-Schlüssel (liegt nur lokal, `.gitignore`). Die App selbst bietet kein Zurücksetzen an.
+- `[AUTH-11]` MUSS: Zauberwort vergessen: Lokales Node-Skript `npm run admin:set-password -- <username> <neues-zauberwort>` mit Firebase Admin SDK und Service-Account-Schlüssel (liegt nur lokal, `.gitignore`). Das Skript legt das neue Zauberwort zusätzlich in `secrets/{uid}` ab. Die App selbst bietet kein Zurücksetzen an; der Admin kann das gespeicherte Zauberwort aber über `[ADM-9]` wieder anzeigen.
 - `[AUTH-12]` MUSS: Bootstrap des Admins: Admin-Konto wird einmalig in der Firebase-Konsole angelegt. Seine UID steht als Konstante `ADMIN_UID` in `src/config.ts` und in `firestore.rules`. Beim ersten Login legt die App `users/{ADMIN_UID}` mit `role: 'admin'` an, falls es fehlt.
 - `[AUTH-13]` SOLL: Der Spielstand des Admins trägt `isTest: true` und wird in Statistiken der Admin-Konsole standardmäßig ausgeblendet.
 
@@ -594,10 +594,10 @@ Die Admin-Konsole ist Teil derselben App, liegt unter `#/admin`, ist nur für `r
 
 ### 11.4 Aktionen
 
-- `[ADM-6]` MUSS: **Spieler einladen:** Formular (Anzeigename, Eulenname mit Vorschlag aus dem Anzeigenamen, Notiz) → Zauberwort wird generiert `[AUTH-6]` → Konto anlegen `[AUTH-5]` → `users/{uid}` + `usernames/{username}` schreiben → Einladungsbild anzeigen `[AUTH-7]` mit „Teilen“ und „Speichern“. Das Zauberwort wird nur in diesem Moment angezeigt und nicht gespeichert.
+- `[ADM-6]` MUSS: **Spieler einladen:** Formular (Anzeigename, Eulenname mit Vorschlag aus dem Anzeigenamen, Notiz) → Zauberwort wird generiert `[AUTH-6]` → Konto anlegen `[AUTH-5]` → `users/{uid}` + `usernames/{username}` schreiben → Einladungsbild anzeigen `[AUTH-7]` mit „Teilen“ und „Speichern“. Das Zauberwort wird in `secrets/{uid}` abgelegt (nur der Admin darf lesen und schreiben, siehe DECISIONS.md #76) und lässt sich über `[ADM-9]` wieder anzeigen.
 - `[ADM-7]` MUSS: **Deaktivieren/Aktivieren** (setzt `active`).
 - `[ADM-8]` MUSS: **Spielstand zurücksetzen:** Bestätigung durch Eintippen des Anzeigenamens. Setzt `runId + 1` und löscht `saves/{uid}`. Alte Ereignisse bleiben erhalten, die Konsole zeigt standardmäßig nur den aktuellen Durchlauf (Umschalter „alle Durchläufe“).
-- `[ADM-9]` MUSS: **Einladung erneut erzeugen** ohne Zauberwort (nur Eulenname + QR-Code), für den Fall, dass jemand den Link verloren hat.
+- `[ADM-9]` MUSS: **Einladung erneut erzeugen** mit dem gespeicherten Zauberwort (Direktlink, QR-Code, Einladungsbild), für den Fall, dass jemand das Zauberwort oder den Link verloren hat. Gibt es kein gespeichertes Zauberwort (Konto aus der Zeit davor), enthält die Einladung nur Eulenname + QR-Code.
 - `[ADM-10]` SOLL: **Anzeigename und Notiz** bearbeiten.
 
 ### 11.5 Datenbeschaffung

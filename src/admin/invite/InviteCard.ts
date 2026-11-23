@@ -6,7 +6,7 @@ export const INVITE_H = 1350;
 export interface InviteData {
   displayName: string;
   username: string;
-  /** Omitted when re-issuing an invitation [ADM-9]. */
+  /** Omitted when re-issuing for an account whose Zauberwort was never stored [ADM-9]. */
   password?: string;
 }
 
