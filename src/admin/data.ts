@@ -17,6 +17,7 @@ import { parseUserDoc } from '../services/AuthService';
 import { db, toMillis } from '../services/firebase';
 import { toPatch, type PersonalForm } from './personal';
 import type { PersonalDoc } from '../services/PersonalService';
+import { removeFromLeaderboard } from '../services/LeaderboardService';
 import { parseSave } from '../services/SaveService';
 import type { EventDoc, EventType, SaveDoc, UserDoc } from '../types';
 
@@ -90,8 +91,10 @@ export async function exportAll(): Promise<Record<string, unknown>> {
 }
 
 /** [ADM-7] [ADM-10] */
-export function updateUser(uid: string, patch: Partial<Pick<UserDoc, 'active' | 'displayName' | 'note'>>): Promise<void> {
-  return updateDoc(doc(db, 'users', uid), patch);
+/** Deactivating also takes the player off the Rangliste (DECISIONS.md #78); the line comes back with their next save. */
+export async function updateUser(uid: string, patch: Partial<Pick<UserDoc, 'active' | 'displayName' | 'note'>>): Promise<void> {
+  await updateDoc(doc(db, 'users', uid), patch);
+  if (patch.active === false) await removeFromLeaderboard(uid);
 }
 
 /** Section 12 */

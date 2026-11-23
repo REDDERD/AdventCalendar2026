@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { syncLeaderboard } from '../services/LeaderboardService';
 import { saveNow, scheduleSave } from '../services/SaveService';
 import type { SaveDoc, UserDoc } from '../types';
 
@@ -69,7 +70,10 @@ export const useStore = create<GameStore>((set, get) => ({
 
   setScreen: (screen) => set({ screen }),
   setUser: (user) => set({ user }),
-  setSave: (save) => set({ save }),
+  setSave: (save) => {
+    set({ save });
+    if (save) syncLeaderboard(save, get().user);
+  },
   setBlocked: (blocked) => set({ blocked }),
   setTrunkOpen: (trunkOpen) => set({ trunkOpen }),
   setLoginNotice: (loginNotice) => set({ loginNotice }),
@@ -84,6 +88,7 @@ export const useStore = create<GameStore>((set, get) => ({
     set({ save: next });
     if (opts?.immediate) saveNow(next);
     else scheduleSave(next);
+    syncLeaderboard(next, get().user);
   },
   showToast: (text) => {
     const id = ++toastId;

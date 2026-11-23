@@ -5,11 +5,12 @@ import type { Puzzle } from '../../puzzles/schema';
 import { Collection } from './Collection';
 import { LetterView } from '../Letter';
 import { Diary } from './Diary';
+import { Leaderboard } from './Leaderboard';
 import { Profile } from './Profile';
 import { PuzzleCollection } from './PuzzleCollection';
 import { SettingsPanel } from './Settings';
 
-type Tab = 'diary' | 'puzzles' | 'inventory' | 'clues' | 'profile' | 'letter' | 'settings';
+type Tab = 'diary' | 'puzzles' | 'inventory' | 'clues' | 'profile' | 'ranking' | 'letter' | 'settings';
 
 const TABS: Array<[Tab, string]> = [
   ['diary', 'Tagebuch'],
@@ -17,6 +18,7 @@ const TABS: Array<[Tab, string]> = [
   ['inventory', 'Inventar'],
   ['clues', 'Hinweise'],
   ['profile', 'Steckbrief'],
+  ['ranking', 'Rangliste'],
   ['settings', 'Optionen'],
 ];
 
@@ -27,7 +29,7 @@ export function Trunk() {
   const [practice, setPractice] = useState<Puzzle | null>(null);
   // [PRS-2] once the letter has been opened it stays readable here
   const letterOpen = useStore((s) => s.save?.progress.completedDays.includes(24) ?? false);
-  const tabs = letterOpen ? [...TABS.slice(0, 5), ['letter', 'Brief'] as [Tab, string], ...TABS.slice(5)] : TABS;
+  const tabs = letterOpen ? [...TABS.slice(0, 6), ['letter', 'Brief'] as [Tab, string], ...TABS.slice(6)] : TABS;
 
   if (practice) {
     return (
@@ -58,6 +60,7 @@ export function Trunk() {
         {tab === 'inventory' && <Collection kind="items" />}
         {tab === 'clues' && <Collection kind="clues" />}
         {tab === 'profile' && <Profile />}
+        {tab === 'ranking' && <Leaderboard />}
         {tab === 'letter' && <LetterView animate={false} />}
         {tab === 'settings' && <SettingsPanel />}
       </div>

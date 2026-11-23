@@ -74,3 +74,13 @@ export async function listEvents(): Promise<EventSummary[]> {
     data: d.fields.data as Record<string, unknown>,
   }));
 }
+
+/** Read a document's plain field values (strings and integers), or null if it does not exist. */
+export async function getDocument(path: string): Promise<Record<string, string | number> | null> {
+  const res = await fetch(`${FIRESTORE}/v1/projects/${PROJECT}/databases/(default)/documents/${path}`, { headers: OWNER });
+  if (res.status === 404) return null;
+  const json = (await res.json()) as { fields: Record<string, { stringValue?: string; integerValue?: string }> };
+  return Object.fromEntries(
+    Object.entries(json.fields).map(([k, v]) => [k, v.integerValue !== undefined ? Number(v.integerValue) : String(v.stringValue ?? '')]),
+  );
+}

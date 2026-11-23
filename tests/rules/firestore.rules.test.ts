@@ -197,6 +197,41 @@ describe('[SEC-1] personal', () => {
   });
 });
 
+describe('Rangliste (DECISIONS.md #78)', () => {
+  const line = (points = 120) => ({ name: 'Lena', house: 'hufflepuff', points, updatedAt: serverTimestamp() });
+
+  it('a real player writes the own line and every active player reads the list', async () => {
+    await assertSucceeds(setDoc(doc(as('alice'), 'leaderboard', 'alice'), line()));
+    await assertSucceeds(getDocs(collection(as('bob'), 'leaderboard')));
+    await assertSucceeds(getDocs(collection(as(ADMIN), 'leaderboard')));
+  });
+
+  it('denies writing someone else’s line, other fields, odd values or client time', async () => {
+    await assertFails(setDoc(doc(as('alice'), 'leaderboard', 'bob'), line()));
+    await assertFails(setDoc(doc(as('alice'), 'leaderboard', 'alice'), { ...line(), sparks: 3 }));
+    await assertFails(setDoc(doc(as('alice'), 'leaderboard', 'alice'), { ...line(), house: 'durmstrang' }));
+    await assertFails(setDoc(doc(as('alice'), 'leaderboard', 'alice'), line(-5)));
+    await assertFails(setDoc(doc(as('alice'), 'leaderboard', 'alice'), line(99999)));
+    await assertFails(setDoc(doc(as('alice'), 'leaderboard', 'alice'), { ...line(), name: '' }));
+    await assertFails(setDoc(doc(as('alice'), 'leaderboard', 'alice'), { ...line(), updatedAt: Timestamp.fromMillis(Date.now() - 60_000) }));
+  });
+
+  it('keeps test accounts, deactivated players and outsiders off the list', async () => {
+    await setDoc(doc(client('owner'), 'users', 'tess'), { ...user('tess'), isTest: true });
+    await assertFails(setDoc(doc(as('tess'), 'leaderboard', 'tess'), line()));
+    await assertFails(setDoc(doc(as('carl'), 'leaderboard', 'carl'), line()));
+    await assertFails(getDocs(collection(as('carl'), 'leaderboard')));
+    await assertFails(getDocs(collection(as('dave'), 'leaderboard')));
+    await assertFails(getDocs(collection(client(null), 'leaderboard')));
+  });
+
+  it('only the admin deletes lines', async () => {
+    await setDoc(doc(client('owner'), 'leaderboard', 'alice'), { name: 'Lena', house: 'hufflepuff', points: 10 });
+    await assertFails(deleteDoc(doc(as('alice'), 'leaderboard', 'alice')));
+    await assertSucceeds(deleteDoc(doc(as(ADMIN), 'leaderboard', 'alice')));
+  });
+});
+
 describe('[SEC-1] admin', () => {
   it('reads everything', async () => {
     const db = as(ADMIN);

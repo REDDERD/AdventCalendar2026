@@ -92,7 +92,7 @@ test('day 1: onboarding, choice and puzzle, reload resumes exactly, events are l
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));
   await page.getByRole('button', { name: 'Truhe' }).click();
-  for (const tab of ['Tagebuch', 'Rätsel', 'Inventar', 'Hinweise', 'Steckbrief', 'Optionen']) {
+  for (const tab of ['Tagebuch', 'Rätsel', 'Inventar', 'Hinweise', 'Steckbrief', 'Rangliste', 'Optionen']) {
     await page.getByRole('button', { name: tab }).click();
     await expect(page.locator('.trunk')).toBeVisible();
   }

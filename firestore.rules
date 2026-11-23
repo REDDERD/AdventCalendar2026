@@ -34,6 +34,21 @@ service cloud.firestore {
       allow read: if isAdmin() || (isSelf(uid) && isActiveMember());
       allow write: if isAdmin();
     }
+    // DECISIONS.md #78: the Rangliste. One public line per real player (character
+    // name, house, house points); test accounts, including the admin, never get one.
+    match /leaderboard/{uid} {
+      allow read: if isAdmin() || isActiveMember();
+      allow create, update: if isSelf(uid) && isActiveMember()
+        && get(/databases/$(database)/documents/users/$(uid)).data.isTest != true
+        && request.resource.data.keys().hasOnly(['name', 'house', 'points', 'updatedAt'])
+        && request.resource.data.name is string
+        && request.resource.data.name.size() > 0 && request.resource.data.name.size() <= 40
+        && request.resource.data.house in ['gryffindor', 'hufflepuff', 'ravenclaw', 'slytherin']
+        && request.resource.data.points is int
+        && request.resource.data.points >= 0 && request.resource.data.points <= 10000
+        && request.resource.data.updatedAt == request.time;
+      allow delete: if isAdmin();
+    }
     match /events/{eventId} {
       allow create: if isActiveMember()
         && request.resource.data.uid == request.auth.uid
