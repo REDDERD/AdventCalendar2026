@@ -79,22 +79,4 @@ Die NPC-Sprites in `public/assets/sprites/` (Quill, Ellis, Theo, Maren, Grimsby,
 
 ## Musik und Effekte
 
-Die Musik in `public/audio/music/` sind echte Aufnahmen (DECISIONS.md #81), mit `npm run music:import` aus den Quellen in `src/audio/recordings.ts` geladen, gekürzt, in der Lautheit angeglichen und als AAC kodiert. Aufnahmen, die vor 1963 erschienen sind, sind in Deutschland gemeinfrei (§ 85 Abs. 3 UrhG in der bis 2013 geltenden Fassung).
-
-| Datei | Stück | Aufnahme | Lizenz | Quelle |
-|---|---|---|---|---|
-| `clair_de_lune.m4a` | Claude Debussy: Suite bergamasque, L. 75: III. Clair de lune | Victor Borge, 1947 | Gemeinfrei | [Quelle](https://archive.org/details/JV-26158-1947-QmZxCF5R4RNSnaZ4CHrtxysvqFYEw1Yj4RoSf9i1TpBQS4.mp3) |
-| `chopin_nocturne.m4a` | Frédéric Chopin: Nocturne Es-Dur, op. 9 Nr. 2 | Frank Lévy (Musopen), 2014 | Gemeinfrei | [Quelle](https://commons.wikimedia.org/wiki/File:Chopin_-_Nocturne_No._2_in_E-flat_major%2C_Op._9_No._2_(Frank_Levy).flac) |
-| `bach_prelude.m4a` | Johann Sebastian Bach: Präludium C-Dur, BWV 846 | Kimiko Ishizaka, 2015 | CC0 | [Quelle](https://archive.org/details/bach-well-tempered-clavier-book-1) |
-| `chopin_waltz.m4a` | Frédéric Chopin: Walzer cis-Moll, op. 64 Nr. 2 | Olga Gurevich (Musopen), 2014 | Gemeinfrei | [Quelle](https://commons.wikimedia.org/wiki/File:Chopin_-_Waltz_No._7_in_C-sharp_minor%2C_Op._64_No._2_(Olga_Gurevich).flac) |
-| `tchaikovsky_waltz.m4a` | Pjotr Iljitsch Tschaikowsky: Dornröschen, op. 66: Walzer | Marek Weber und sein Orchester, 1938 | Gemeinfrei | [Quelle](https://archive.org/details/78_waltz-from-the-sleeping-beauty_marek-weber-and-his-orchestra-tchaikovsky_gbia3042385a) |
-| `boccherini_minuet.m4a` | Luigi Boccherini: Streichquintett E-Dur, op. 13 Nr. 5: Menuett | Philadelphia Orchestra, Leopold Stokowski, 1929 | Gemeinfrei | [Quelle](https://archive.org/details/boccherini-minuet) |
-| `pachelbel_canon.m4a` | Johann Pachelbel: Kanon D-Dur | Collegium musicum, Hermann Diener, 1939 | Gemeinfrei | [Quelle](https://archive.org/details/hmv-eh-1231-torelli-concerto-op6-no10-pachelbel-canon-collegium-musicum-diener) |
-| `grieg_morning.m4a` | Edvard Grieg: Peer Gynt, Suite Nr. 1: Morgenstimmung | Tschechisches Nationalsinfonieorchester (Musopen), 2012 | Gemeinfrei | [Quelle](https://archive.org/details/MusopenCollectionAsFlac) |
-| `mozart_lacrimosa.m4a` | Wolfgang Amadeus Mozart: Requiem d-Moll, KV 626: Lacrimosa | Wiener Hofmusikkapelle, Josef Krips, 1950 | Gemeinfrei | [Quelle](https://archive.org/details/lp_requiem-k626_wolfgang-amadeus-mozart-hofmusikkapelle-wi) |
-| `grieg_ase.m4a` | Edvard Grieg: Peer Gynt, Suite Nr. 1: Åses Tod | Tschechisches Nationalsinfonieorchester (Musopen), 2012 | Gemeinfrei | [Quelle](https://archive.org/details/MusopenCollectionAsFlac) |
-| `grieg_anitra.m4a` | Edvard Grieg: Peer Gynt, Suite Nr. 1: Anitras Tanz | Tschechisches Nationalsinfonieorchester (Musopen), 2012 | Gemeinfrei | [Quelle](https://archive.org/details/MusopenCollectionAsFlac) |
-| `mozart_magic_flute.m4a` | Wolfgang Amadeus Mozart: Die Zauberflöte, KV 620: Ouvertüre | Tschechisches Nationalsinfonieorchester (Musopen), 2012 | Gemeinfrei | [Quelle](https://archive.org/details/MusopenCollectionAsFlac) |
-| `bach_aria.m4a` | Johann Sebastian Bach: Goldberg-Variationen, BWV 988: Aria | Kimiko Ishizaka (Open Goldberg Variations), 2012 | Gemeinfrei | [Quelle](https://archive.org/details/MusopenCollectionAsFlac) |
-
-Die Effekte (Klicks, Glocken, Fanfaren) werden in der App per WebAudio erzeugt (`src/audio/AudioService.ts`, DECISIONS.md #52) und sind eigene Arbeit.
+Keine fremden Dateien: Musik und Effekte werden in der App per WebAudio erzeugt (`src/audio/`, DECISIONS.md #52, #77): ein kleines Orchester aus Streichern, Celesta, Harfe, Holzbläsern, Horn und Pauke. Alle Melodien sind eigene Kompositionen.

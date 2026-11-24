@@ -10,4 +10,4 @@ ui-debug.log
 test-results/
 playwright-report/
 .env.local
-music-src/
+music-preview/

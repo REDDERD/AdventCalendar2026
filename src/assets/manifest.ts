@@ -102,11 +102,10 @@ const emotes = Object.fromEntries(
   EMOTES.map((id) => [`emote.${id}`, { file: `assets/emotes/${emoteFile[id]}.png`, w: 16, h: 16, ...OWN } satisfies FileAsset]),
 );
 
-// Effects are synthesised by src/audio (DECISIONS.md #52), music comes from recordings
-// (src/audio/recordings.ts, #81); these ids are what Ink may name in # sfx / # music.
+// Audio is synthesised by src/audio (DECISIONS.md #52); these ids are what Ink may name in # sfx / # music.
 const SFX = ['blip', 'select', 'correct', 'wrong', 'spark', 'door', 'stamp', 'brawl'] as const;
 
-const MUSIC = ['title', 'castle', 'outdoor', 'dungeon', 'puzzle', 'finale', 'letter', 'aldous'] as const;
+const MUSIC = ['title', 'castle', 'outdoor', 'dungeon', 'puzzle', 'finale', 'letter'] as const;
 
 export const assets: Record<string, AssetDef> = {
   ...backgrounds,

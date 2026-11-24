@@ -1,16 +1,16 @@
 # Tag 19 – Die Geisterparade
 
-> Akt III · Die letzte Stunde · Ort `ghost_corridor` · Musik `castle`, am Ende `aldous` (Clair de lune, nah)
+> Akt III · Die letzte Stunde · Ort `ghost_corridor` · Musik `castle`
 
 | | |
 | --- | --- |
-| **Kurz** | Im Geisterkorridor probt die Schule ihre Parade für den Ball. Jeder Geist behauptet, der Älteste zu sein, und Quill soll die Reihe ordnen. Aldous steht am Ende, still. Die Graue Dame sagt ihm den klügsten Satz des Abends. Danach folgen alle der Klaviermusik, die seit dem 1. Dezember durch die Flure klingt: Aldous spielt Debussys „Clair de lune“ für Isolde. |
+| **Kurz** | Im Geisterkorridor probt die Schule ihre Parade für den Ball. Jeder Geist behauptet, der Älteste zu sein, und Quill soll die Reihe ordnen. Aldous steht am Ende, still. Die Graue Dame sagt ihm den klügsten Satz des Abends. |
 | **Entscheidungen** | `d19.parade` (`nick` / `peeves`, Ton; mit `peeves_friend` ist Peeves brav) · `d19.aldous` (`comfort` +1 `trust_aldous` / `press`, Ton) |
 | **Cameo** | **Fast Kopfloser Nick** (`nick`), **Die Graue Dame** (`grey_lady`), **Der Blutige Baron** (`baron`), **Peeves** (`peeves`), Aldous (`aldous`); der **Fette Mönch** und die **Maulende Myrte** (nur Erzählzeilen und Rätsel) |
 | **Rätsel** | `p19` Die Parade (`arrange` Reihe, 50 Punkte) |
 | **Rückbezug** | `peeves_friend` (Tag 2) · `kept_chair` (Tag 16) · Tag 9 (die Hausgeister) · Tag 14a (Myrte) · `trust_aldous` (Tag 15a, 17) · Tag 15a (Aldous: „Bleiben als Verdienst“) |
 | **Türchen-Zauber** | Die Geister singen im Chor |
-| **Wörter** | 371–397 gemessen (`content:simulate`) |
+| **Wörter** | 256–282 gemessen (`content:simulate`) |
 
 ## Beats
 
@@ -18,7 +18,6 @@
 2. Die Graue Dame und der Blutige Baron: jeder will der Älteste sein. Die Reihe ist in Unordnung. Der Mönch rollt heran, Myrte schaut aus dem Rohr. Rätsel: Die Geister nach Jahrhundert ordnen.
 3. Die Geister singen im Chor. Aldous steht am Ende und singt nicht. Ellis erinnert ihn an den freien Stuhl (oder lädt ihn nachträglich ein).
 4. Die Graue Dame: „Das Gefängnis ist nicht das Bleiben. Es ist, dass dich niemand fragt, ob du willst.“ **Entscheidung 2:** trösten oder zur Rede stellen.
-5. Vom Ende des Korridors klingt Klavier, wie jeden Abend. Ellis und Quill gehen nach: Hinter einer angelehnten Tür spielt Aldous „Clair de lune“. Die Musik wechselt von „aus dem Nebenraum“ zu „direkt daneben“ (`# music: aldous`, DECISIONS #81). Er spielt es jeden Abend für Isolde, die es nie gehört hat.
 
 ## Skript
 
@@ -87,21 +86,6 @@ aldous: Gestattet. Ich muss nachdenken.
     quill: Er hat nicht Nein gesagt. Das ist erwähnenswert.
 - # hide: aldous
 Ein Hauch Frost bleibt in der Luft. Die Geister stellen sich neu auf und singen leiser.
-Dann, vom Ende des Korridors: ein Klavier. Leise, wie an jedem Abend.
-# show: ellis left
-ellis: Das höre ich seit dem ersten Dezember. Überall. Und nie sitzt jemand am Klavier.
-# show: quill right
-quill: Dann sehen wir heute nach. Auf Zehenspitzen.
-# music: aldous
-Hinter einer angelehnten Tür steht ein verstaubter Flügel. Die Tasten bewegen sich.
-Auf dem Hocker schimmert es silbern.
-# show: aldous center
-aldous: Oh. Ihr habt mich gefunden.
-aldous: Ein Franzose hat es geschrieben, Debussy. „Mondschein“. Vor gut hundert Jahren.
-aldous: In dreihundert Jahren lernt man viele Stücke. Dieses spiele ich für Isolde.
-aldous: Sie hat es nie gehört. Ich spiele es trotzdem jeden Abend.
-ellis: Dann waren Sie das. Die Musik in den Fluren. Die ganze Zeit.
-Aldous lächelt und spielt weiter. Ihr bleibt bis zum letzten Ton.
 # spark: d19.s2 214 140
 -> END
 ```
@@ -139,5 +123,4 @@ Aldous lächelt und spielt weiter. Ihr bleibt bis zum letzten Ton.
 | `peeves_friend` und die Laterne | Tag 24: Peeves wirft zum Abschied Konfetti statt Kerzen |
 | Nick: „Mein Kopf hat Termine“ | Tag 24: Nick verabschiedet sich als Erster, der Kopf folgt später |
 | `trust_aldous` +1 (`comfort`) | Tag 24: Bedingung für Ende A (`trust_aldous ≥ 1`) |
-| Die Klaviermusik in den Fluren (Tag 1–18, `castle`) | Tag 19: Aldous ist der Pianist. „Clair de lune“ spielt er für Isolde |
 | Aldous weicht aus (`press`) | Tag 23: Quill hält die Szene in der Anklage fest |
